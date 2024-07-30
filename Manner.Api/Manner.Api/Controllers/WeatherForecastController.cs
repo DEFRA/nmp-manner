@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using Manner.Api;
 namespace Manner.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
@@ -24,6 +24,7 @@ namespace Manner.Api.Controllers
         [Authorize]
         public IEnumerable<WeatherForecast> Get()
         {
+            //var text = Resource.MsgSwaggerSecurityDescription;
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
