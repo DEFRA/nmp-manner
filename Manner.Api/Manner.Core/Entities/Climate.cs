@@ -10,8 +10,8 @@ public class Climate
     public int ID { get; set; }
     public string Territory { get; set; }
     public string PostCode { get; set; }
-    public string East { get; set; }
-    public string North { get; set; }
+    public int East { get; set; }
+    public int North { get; set; }
     public decimal Altitude { get; set; }
     public decimal MeanMinJan { get; set; }
     public decimal MeanMinFeb { get; set; }

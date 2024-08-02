@@ -1,7 +1,7 @@
-﻿using Manner.Core.Entities;
+﻿using Manner.Application.DTOs;
 
 namespace Manner.Application.Interfaces;
 
-public interface IManureTypeCategoryService : IService<ManureTypeCategory>
+public interface IManureTypeCategoryService : IService<ManureTypeCategoryDto>
 {
 }

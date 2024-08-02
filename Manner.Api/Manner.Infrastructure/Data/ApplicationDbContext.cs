@@ -27,6 +27,6 @@ namespace Manner.Infrastructure.Data
         public DbSet<RainType> RainTypes { get; set; }
         public DbSet<SubSoil> SubSoils { get; set; }
         public DbSet<TopSoil> TopSoils { get; set; }
-        public DbSet<WindSpeed> WindSpeeds { get; set; }
+        public DbSet<Windspeed> Windspeeds { get; set; }
     }
 }

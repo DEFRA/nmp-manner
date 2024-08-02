@@ -3,6 +3,8 @@ using Manner.Core.Entities;
 using Manner.Application.Interfaces;
 using Manner.Core.Attributes;
 using Microsoft.Extensions.DependencyInjection;
+using Manner.Application.DTOs;
+using AutoMapper;
 
 namespace Manner.Application.Services;
 
@@ -10,18 +12,20 @@ namespace Manner.Application.Services;
 public class ManureTypeService : IManureTypeService
 {
     private readonly IManureTypeRepository _manureTypeRepository;
-    public ManureTypeService(IManureTypeRepository manureTypeRepository)
+    private readonly IMapper _mapper;
+    public ManureTypeService(IManureTypeRepository manureTypeRepository, IMapper mapper)
     {
         _manureTypeRepository = manureTypeRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<ManureType>?> FetchAllAsync()
+    public async Task<IEnumerable<ManureTypeDto>?> FetchAllAsync()
     {
-        return await _manureTypeRepository.FetchAllAsync();
+        return _mapper.Map<IEnumerable<ManureTypeDto>>(await _manureTypeRepository.FetchAllAsync());
     }
 
-    public async Task<ManureType?> FetchByIdAsync(int id)
+    public async Task<ManureTypeDto?> FetchByIdAsync(int id)
     {
-        return await _manureTypeRepository.FetchByIdAsync(id);
+        return _mapper.Map<ManureTypeDto>(await _manureTypeRepository.FetchByIdAsync(id));
     }
 }

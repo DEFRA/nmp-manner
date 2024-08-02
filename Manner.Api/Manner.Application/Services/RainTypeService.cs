@@ -1,4 +1,6 @@
-﻿using Manner.Application.Interfaces;
+﻿using AutoMapper;
+using Manner.Application.DTOs;
+using Manner.Application.Interfaces;
 using Manner.Core.Attributes;
 using Manner.Core.Entities;
 using Manner.Core.Interfaces;
@@ -10,18 +12,20 @@ namespace Manner.Application.Services;
 public class RainTypeService : IRainTypeService
 {
     private readonly IRainTypeRepository _rainTypeRepository;
-    public RainTypeService(IRainTypeRepository rainTypeRepository)
+    private readonly IMapper _mapper;
+    public RainTypeService(IRainTypeRepository rainTypeRepository, IMapper mapper)
     {
         _rainTypeRepository = rainTypeRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<RainType>?> FetchAllAsync()
+    public async Task<IEnumerable<RainTypeDto>?> FetchAllAsync()
     {
-        return await _rainTypeRepository.FetchAllAsync();
+        return _mapper.Map<IEnumerable<RainTypeDto>>(await _rainTypeRepository.FetchAllAsync());
     }
 
-    public async Task<RainType?> FetchByIdAsync(int id)
+    public async Task<RainTypeDto?> FetchByIdAsync(int id)
     {
-        return await _rainTypeRepository.FetchByIdAsync(id);
+        return _mapper.Map<RainTypeDto>(await _rainTypeRepository.FetchByIdAsync(id));
     }
 }

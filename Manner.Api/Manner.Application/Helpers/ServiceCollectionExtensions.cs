@@ -18,8 +18,7 @@ namespace Manner.Api.Helpers
         private static IServiceCollection AddServices(IServiceCollection services, IConfiguration configuration)
         {
 
-            Assembly assembly = Assembly.GetExecutingAssembly();  //Assembly.LoadFrom(assemblyPath);
-
+            Assembly assembly = Assembly.GetExecutingAssembly(); 
 
             var typesWithAttribute = assembly.GetTypes()
                 .Where(type => type.GetCustomAttribute<ServiceAttribute>() != null)
@@ -42,6 +41,8 @@ namespace Manner.Api.Helpers
                     services.Add(new ServiceDescriptor(type, type, attribute.Lifetime));
                 }
             }
+
+            services.AddAutoMapper(assembly);
 
             return services;
         }

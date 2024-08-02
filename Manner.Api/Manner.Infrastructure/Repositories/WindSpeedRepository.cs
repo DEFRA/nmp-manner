@@ -7,21 +7,21 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Manner.Infrastructure.Repositories;
 [Repository(ServiceLifetime.Scoped)]
-public class WindSpeedRepository : IWindSpeedRepository
+public class WindspeedRepository : IWindspeedRepository
 {
     private readonly ApplicationDbContext _context;
-    public WindSpeedRepository(ApplicationDbContext applicationDbContext)
+    public WindspeedRepository(ApplicationDbContext applicationDbContext)
     {
         _context = applicationDbContext;
     }
 
-    public async Task<IEnumerable<WindSpeed>?> FetchAllAsync()
+    public async Task<IEnumerable<Windspeed>?> FetchAllAsync()
     {
-        return await _context.WindSpeeds.ToListAsync();
+        return await _context.Windspeeds.ToListAsync();
     }
 
-    public async Task<WindSpeed?> FetchByIdAsync(int id)
+    public async Task<Windspeed?> FetchByIdAsync(int id)
     {
-        return await _context.WindSpeeds.FirstOrDefaultAsync(a => a.ID == id);
+        return await _context.Windspeeds.FirstOrDefaultAsync(a => a.ID == id);
     }
 }

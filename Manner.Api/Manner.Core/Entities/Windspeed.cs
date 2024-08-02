@@ -1,5 +1,5 @@
 ﻿namespace Manner.Core.Entities;
-public class WindSpeed
+public class Windspeed
 {
     public int ID { get; set; }
     public string Name { get; set; }

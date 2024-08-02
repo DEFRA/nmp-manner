@@ -1,8 +1,9 @@
 ﻿using Manner.Core.Interfaces;
-using Manner.Core.Entities;
 using Manner.Application.Interfaces;
 using Manner.Core.Attributes;
 using Microsoft.Extensions.DependencyInjection;
+using Manner.Application.DTOs;
+using AutoMapper;
 
 namespace Manner.Application.Services;
 
@@ -10,18 +11,20 @@ namespace Manner.Application.Services;
 public class ManureTypeCategoryService : IManureTypeCategoryService
 {
     private readonly IManureTypeCategoryRepository _manureTypeCategoryRepository;
-    public ManureTypeCategoryService(IManureTypeCategoryRepository manureTypeCategoryRepository)
+    private readonly IMapper _mapper;
+    public ManureTypeCategoryService(IManureTypeCategoryRepository manureTypeCategoryRepository, IMapper mapper)
     {
         _manureTypeCategoryRepository = manureTypeCategoryRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<ManureTypeCategory>?> FetchAllAsync()
+    public async Task<IEnumerable<ManureTypeCategoryDto>?> FetchAllAsync()
     {
-        return await _manureTypeCategoryRepository.FetchAllAsync();
+        return _mapper.Map<IEnumerable<ManureTypeCategoryDto>>(await _manureTypeCategoryRepository.FetchAllAsync());
     }
 
-    public async Task<ManureTypeCategory?> FetchByIdAsync(int id)
+    public async Task<ManureTypeCategoryDto?> FetchByIdAsync(int id)
     {
-        return await _manureTypeCategoryRepository.FetchByIdAsync(id);
+        return _mapper.Map<ManureTypeCategoryDto>(await _manureTypeCategoryRepository.FetchByIdAsync(id));
     }
 }

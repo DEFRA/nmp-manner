@@ -1,7 +1,7 @@
-﻿using Manner.Core.Entities;
+﻿using Manner.Application.DTOs;
 
 namespace Manner.Application.Interfaces;
 
-public interface IIncorporationDelayService : IService<IncorporationDelay>
+public interface IIncorporationDelayService : IService<IncorporationDelayDto>
 {
 }

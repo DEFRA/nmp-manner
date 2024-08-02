@@ -1,27 +1,30 @@
-﻿using Manner.Application.Interfaces;
+﻿using AutoMapper;
+using Manner.Application.DTOs;
+using Manner.Application.Interfaces;
 using Manner.Core.Attributes;
-using Manner.Core.Entities;
 using Manner.Core.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Manner.Application.Services;
 
 [Service(ServiceLifetime.Transient)]
-public class WindSpeedService : IWindSpeedService
+public class WindspeedService : IWindspeedService
 {
-    private readonly IWindSpeedRepository _windSpeedRepository;
-    public WindSpeedService(IWindSpeedRepository windSpeedRepository)
+    private readonly IWindspeedRepository _windspeedRepository;
+    private readonly IMapper _mapper;
+    public WindspeedService(IWindspeedRepository windspeedRepository, IMapper mapper)
     {
-        _windSpeedRepository = windSpeedRepository;
+        _windspeedRepository = windspeedRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<WindSpeed>?> FetchAllAsync()
+    public async Task<IEnumerable<WindspeedDto>?> FetchAllAsync()
     {
-        return await _windSpeedRepository.FetchAllAsync();
+        return _mapper.Map<IEnumerable<WindspeedDto>>(await _windspeedRepository.FetchAllAsync());
     }
 
-    public async Task<WindSpeed?> FetchByIdAsync(int id)
+    public async Task<WindspeedDto?> FetchByIdAsync(int id)
     {
-        return await _windSpeedRepository.FetchByIdAsync(id);
+        return _mapper.Map<WindspeedDto>(await _windspeedRepository.FetchByIdAsync(id));
     }
 }
