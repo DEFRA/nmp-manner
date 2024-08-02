@@ -1,4 +1,6 @@
-﻿using Manner.Application.Interfaces;
+﻿using AutoMapper;
+using Manner.Application.DTOs;
+using Manner.Application.Interfaces;
 using Manner.Core.Attributes;
 using Manner.Core.Entities;
 using Manner.Core.Interfaces;
@@ -10,18 +12,20 @@ namespace Manner.Application.Services;
 public class IncorporationDelayService : IIncorporationDelayService
 {
     private readonly IIncorporationDelayRepository _incorporationDelayRepository;
-    public IncorporationDelayService(IIncorporationDelayRepository incorporationDelayRepository)
+    private readonly IMapper _mapper;
+    public IncorporationDelayService(IIncorporationDelayRepository incorporationDelayRepository, IMapper mapper)
     {
         _incorporationDelayRepository = incorporationDelayRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<IncorporationDelay>?> FetchAllAsync()
+    public async Task<IEnumerable<IncorporationDelayDto>?> FetchAllAsync()
     {
-        return await _incorporationDelayRepository.FetchAllAsync();
+        return _mapper.Map<IEnumerable<IncorporationDelayDto>>(await _incorporationDelayRepository.FetchAllAsync());
     }
 
-    public async Task<IncorporationDelay?> FetchByIdAsync(int id)
+    public async Task<IncorporationDelayDto?> FetchByIdAsync(int id)
     {
-        return await _incorporationDelayRepository.FetchByIdAsync(id);
+        return _mapper.Map<IncorporationDelayDto>(await _incorporationDelayRepository.FetchByIdAsync(id));
     }
 }

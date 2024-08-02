@@ -3,6 +3,8 @@ using Manner.Core.Entities;
 using Manner.Application.Interfaces;
 using Manner.Core.Attributes;
 using Microsoft.Extensions.DependencyInjection;
+using Manner.Application.DTOs;
+using AutoMapper;
 
 namespace Manner.Application.Services;
 
@@ -10,18 +12,20 @@ namespace Manner.Application.Services;
 public class MoistureTypeService : IMoistureTypeService
 {
     private readonly IMoistureTypeRepository _moistureTypeRepository;
-    public MoistureTypeService(IMoistureTypeRepository moistureTypeRepository)
+    private readonly IMapper _mapper;
+    public MoistureTypeService(IMoistureTypeRepository moistureTypeRepository, IMapper mapper)
     {
         _moistureTypeRepository = moistureTypeRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<MoistureType>?> FetchAllAsync()
+    public async Task<IEnumerable<MoistureTypeDto>?> FetchAllAsync()
     {
-        return await _moistureTypeRepository.FetchAllAsync();
+        return _mapper.Map<IEnumerable<MoistureTypeDto>>(await _moistureTypeRepository.FetchAllAsync());
     }
 
-    public async Task<MoistureType?> FetchByIdAsync(int id)
+    public async Task<MoistureTypeDto?> FetchByIdAsync(int id)
     {
-        return await _moistureTypeRepository.FetchByIdAsync(id);
+        return _mapper.Map<MoistureTypeDto>(await _moistureTypeRepository.FetchByIdAsync(id));
     }
 }

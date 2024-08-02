@@ -1,4 +1,6 @@
-﻿using Manner.Application.Interfaces;
+﻿using AutoMapper;
+using Manner.Application.DTOs;
+using Manner.Application.Interfaces;
 using Manner.Core.Attributes;
 using Manner.Core.Entities;
 using Manner.Core.Interfaces;
@@ -10,18 +12,20 @@ namespace Manner.Application.Services;
 public class TopSoilService: ITopSoilService
 {
     private readonly ITopSoilRepository _topSoilRepository;
-    public TopSoilService(ITopSoilRepository topSoilRepository)
+    private readonly IMapper _mapper;
+    public TopSoilService(ITopSoilRepository topSoilRepository, IMapper mapper)
     {
         _topSoilRepository = topSoilRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<TopSoil>?> FetchAllAsync()
+    public async Task<IEnumerable<TopSoilDto>?> FetchAllAsync()
     {
-        return await _topSoilRepository.FetchAllAsync();
+        return _mapper.Map<IEnumerable<TopSoilDto>>(await _topSoilRepository.FetchAllAsync());
     }
 
-    public async Task<TopSoil?> FetchByIdAsync(int id)
+    public async Task<TopSoilDto?> FetchByIdAsync(int id)
     {
-        return await _topSoilRepository.FetchByIdAsync(id);
+        return _mapper.Map<TopSoilDto>(await _topSoilRepository.FetchByIdAsync(id));
     }
 }

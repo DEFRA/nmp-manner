@@ -2,6 +2,6 @@
 
 namespace Manner.Core.Interfaces;
 
-public interface IWindSpeedRepository : IRepository<WindSpeed>
+public interface IWindspeedRepository : IRepository<Windspeed>
 {
 }

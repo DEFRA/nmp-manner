@@ -1,4 +1,6 @@
-﻿using Manner.Application.Interfaces;
+﻿using AutoMapper;
+using Manner.Application.DTOs;
+using Manner.Application.Interfaces;
 using Manner.Core.Attributes;
 using Manner.Core.Entities;
 using Manner.Core.Interfaces;
@@ -10,18 +12,20 @@ namespace Manner.Application.Services;
 public class CountryService : ICountryService
 {
     private readonly ICountryRepository _countryRepository;
-    public CountryService(ICountryRepository countryRepository)
+    private readonly IMapper _mapper;
+    public CountryService(ICountryRepository countryRepository, IMapper mapper)
     {
         _countryRepository = countryRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<Country>?> FetchAllAsync()
+    public async Task<IEnumerable<CountryDto>?> FetchAllAsync()
     {
-        return await _countryRepository.FetchAllAsync();
+        return _mapper.Map<IEnumerable<CountryDto>>(await _countryRepository.FetchAllAsync());
     }
 
-    public async Task<Country?> FetchByIdAsync(int id)
+    public async Task<CountryDto?> FetchByIdAsync(int id)
     {
-        return await _countryRepository.FetchByIdAsync(id);
+        return _mapper.Map<CountryDto>(await _countryRepository.FetchByIdAsync(id));
     }
 }

@@ -1,4 +1,6 @@
-﻿using Manner.Application.Interfaces;
+﻿using AutoMapper;
+using Manner.Application.DTOs;
+using Manner.Application.Interfaces;
 using Manner.Core.Attributes;
 using Manner.Core.Entities;
 using Manner.Core.Interfaces;
@@ -10,18 +12,20 @@ namespace Manner.Application.Services;
 public class CropTypeService : ICropTypeService
 {
     private readonly ICropTypeRepository _cropTypeRepository;
-    public CropTypeService(ICropTypeRepository cropTypeRepository)
+    private readonly IMapper _mapper;
+    public CropTypeService(ICropTypeRepository cropTypeRepository, IMapper mapper)
     {
         _cropTypeRepository = cropTypeRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<CropType>?> FetchAllAsync()
+    public async Task<IEnumerable<CropTypeDto>?> FetchAllAsync()
     {
-        return await _cropTypeRepository.FetchAllAsync();
+        return _mapper.Map<IEnumerable<CropTypeDto>>(await _cropTypeRepository.FetchAllAsync());
     }
 
-    public async Task<CropType?> FetchByIdAsync(int id)
+    public async Task<CropTypeDto?> FetchByIdAsync(int id)
     {
-        return await _cropTypeRepository.FetchByIdAsync(id);
+        return _mapper.Map<CropTypeDto>(await _cropTypeRepository.FetchByIdAsync(id));
     }
 }

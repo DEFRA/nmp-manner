@@ -1,7 +1,6 @@
-﻿using Manner.Core.Entities;
-
+﻿using Manner.Application.DTOs;
 namespace Manner.Application.Interfaces;
 
-public interface ISubSoilService : IService<SubSoil>
+public interface ISubSoilService : IService<SubSoilDto>
 {
 }

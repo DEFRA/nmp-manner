@@ -1,7 +1,7 @@
-﻿using Manner.Core.Entities;
+﻿using Manner.Application.DTOs;
 
 namespace Manner.Application.Interfaces;
 
-public interface ICountryService : IService<Country>
+public interface ICountryService : IService<CountryDto>
 {
 }

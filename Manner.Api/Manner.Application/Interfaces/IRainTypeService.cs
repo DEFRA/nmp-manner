@@ -1,7 +1,6 @@
-﻿using Manner.Core.Entities;
-
+﻿using Manner.Application.DTOs;
 namespace Manner.Application.Interfaces;
 
-public interface IRainTypeService : IService<RainType>
+public interface IRainTypeService : IService<RainTypeDto>
 {
 }

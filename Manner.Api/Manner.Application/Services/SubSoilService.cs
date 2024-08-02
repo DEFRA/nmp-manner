@@ -1,4 +1,6 @@
-﻿using Manner.Application.Interfaces;
+﻿using AutoMapper;
+using Manner.Application.DTOs;
+using Manner.Application.Interfaces;
 using Manner.Core.Attributes;
 using Manner.Core.Entities;
 using Manner.Core.Interfaces;
@@ -10,18 +12,20 @@ namespace Manner.Application.Services;
 public class SubSoilService :ISubSoilService
 {
     private readonly ISubSoilRepository _subSoilRepository;
-    public SubSoilService(ISubSoilRepository subSoilRepository)
+    private readonly IMapper _mapper;
+    public SubSoilService(ISubSoilRepository subSoilRepository, IMapper mapper)
     {
         _subSoilRepository = subSoilRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<SubSoil>?> FetchAllAsync()
+    public async Task<IEnumerable<SubSoilDto>?> FetchAllAsync()
     {
-        return await _subSoilRepository.FetchAllAsync();
+        return _mapper.Map<IEnumerable<SubSoilDto>>(await _subSoilRepository.FetchAllAsync());
     }
 
-    public async Task<SubSoil?> FetchByIdAsync(int id)
+    public async Task<SubSoilDto?> FetchByIdAsync(int id)
     {
-        return await _subSoilRepository.FetchByIdAsync(id);
+        return _mapper.Map<SubSoilDto>(await _subSoilRepository.FetchByIdAsync(id));
     }
 }
