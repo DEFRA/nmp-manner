@@ -10,7 +10,7 @@ namespace Manner.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-   // [Authorize]
+    [Authorize]
     public class MannerController : ControllerBase
     {
         private readonly ILogger<MannerController> _logger;
