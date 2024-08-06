@@ -16,6 +16,11 @@ public class ClimateRepository : IClimateRepository
         _context = applicationDbContext;
     }
 
+    public async Task<Climate?> FetchByPostcodeAsync(string postcode)
+    {
+        return await _context.Climates.FirstOrDefaultAsync(c=>c.PostCode == postcode);
+    }
+
     public async Task<IEnumerable<Climate>?> FetchAllAsync()
     {
         return await _context.Climates.ToListAsync();

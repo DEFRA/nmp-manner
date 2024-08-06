@@ -7,5 +7,6 @@ using System.Threading.Tasks;
 
 namespace Manner.Core.Interfaces;
 public interface IClimateRepository : IRepository<Climate>
-{    
+{
+    Task<Climate?> FetchByPostcodeAsync(string postcode);
 }

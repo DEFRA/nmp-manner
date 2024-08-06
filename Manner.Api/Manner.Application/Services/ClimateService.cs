@@ -20,13 +20,21 @@ public class ClimateService : IClimateService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<ClimateDto>?> FetchAllAsync()
+    public Task<IEnumerable<ClimateDto>?> FetchAllAsync()
     {
-        return _mapper.Map<IEnumerable<ClimateDto>>( await _climateRepository.FetchAllAsync());
+        //return _mapper.Map<IEnumerable<ClimateDto>>( await _climateRepository.FetchAllAsync());
+         throw new NotImplementedException();
     }
+
+    public async Task<ClimateDto?> FetchByPostcodeAsync(string postcode)
+    {
+        var climate = await _climateRepository.FetchByPostcodeAsync(postcode);
+        return _mapper.Map<ClimateDto?>(climate);
+    }
+
 
     public async Task<ClimateDto?> FetchByIdAsync(int id)
     {
         return _mapper.Map< ClimateDto>( await _climateRepository.FetchByIdAsync(id));
-    }
+    }   
 }

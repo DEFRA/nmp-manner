@@ -2,16 +2,16 @@
 using Manner.Application.DTOs;
 using Manner.Application.Interfaces;
 using Manner.Core.Attributes;
-using Manner.Core.Entities;
 using Manner.Core.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Manner.Application.Services;
 
 [Service(ServiceLifetime.Transient)]
 public class CropTypeService : ICropTypeService
 {
-    private readonly ICropTypeRepository _cropTypeRepository;
+    private readonly ICropTypeRepository _cropTypeRepository;    
     private readonly IMapper _mapper;
     public CropTypeService(ICropTypeRepository cropTypeRepository, IMapper mapper)
     {
@@ -27,5 +27,22 @@ public class CropTypeService : ICropTypeService
     public async Task<CropTypeDto?> FetchByIdAsync(int id)
     {
         return _mapper.Map<CropTypeDto>(await _cropTypeRepository.FetchByIdAsync(id));
+    }
+
+    public async Task<int> FetchCropUptakeFactorDefault(AutumnCropNitrogenUptakeRequest autumnCropNitrogenUptakeRequest)
+    {
+        int ret = 0;
+
+        if(autumnCropNitrogenUptakeRequest.ApplicationMonth >=8 && autumnCropNitrogenUptakeRequest.ApplicationMonth <= 10)
+        {
+            var croptype = await _cropTypeRepository.FetchByIdAsync(autumnCropNitrogenUptakeRequest.CropTypeId);
+            if (croptype != null)
+            {
+                ret = croptype.CropUptakeFactor;
+            }
+        }        
+
+        return ret;
+
     }
 }
