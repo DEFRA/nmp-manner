@@ -8,5 +8,6 @@ using System.Threading.Tasks;
 
 namespace Manner.Application.Interfaces;
 public interface IClimateService : IService<ClimateDto>
-{    
+{
+   Task<ClimateDto?> FetchByPostcodeAsync(string postcode);
 }
