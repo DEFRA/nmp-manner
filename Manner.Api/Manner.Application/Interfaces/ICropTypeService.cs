@@ -3,5 +3,5 @@ namespace Manner.Application.Interfaces;
 
 public interface ICropTypeService : IService<CropTypeDto>
 {
-    Task<int> FetchCropUptakeFactorDefault(AutumnCropNitrogenUptakeRequest autumnCropNitrogenUptakeRequest);
+    Task<AutumnCropNitrogenUptakeResponse> FetchCropUptakeFactorDefault(AutumnCropNitrogenUptakeRequest autumnCropNitrogenUptakeRequest);
 }

@@ -51,7 +51,7 @@ namespace Manner.Api.Controllers
 
         //Get Autumn Crop Nitrogen Uptake
         [HttpPost("autumn-crop-nitrogen-uptake")]
-        public async Task<ActionResult<int>> GetAutumnCropNitrogenUptake(AutumnCropNitrogenUptakeRequest autumnCropNitrogenUptakeRequest)
+        public async Task<ActionResult<AutumnCropNitrogenUptakeResponse>> GetAutumnCropNitrogenUptake(AutumnCropNitrogenUptakeRequest autumnCropNitrogenUptakeRequest)
         {
             return Ok(await _cropTypeService.FetchCropUptakeFactorDefault(autumnCropNitrogenUptakeRequest));
         }

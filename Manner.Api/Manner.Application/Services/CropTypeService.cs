@@ -29,16 +29,18 @@ public class CropTypeService : ICropTypeService
         return _mapper.Map<CropTypeDto>(await _cropTypeRepository.FetchByIdAsync(id));
     }
 
-    public async Task<int> FetchCropUptakeFactorDefault(AutumnCropNitrogenUptakeRequest autumnCropNitrogenUptakeRequest)
+    public async Task<AutumnCropNitrogenUptakeResponse> FetchCropUptakeFactorDefault(AutumnCropNitrogenUptakeRequest autumnCropNitrogenUptakeRequest)
     {
-        int ret = 0;
+        AutumnCropNitrogenUptakeResponse ret = new();
+        ret.CropTypeId = autumnCropNitrogenUptakeRequest.CropTypeId;    
 
-        if(autumnCropNitrogenUptakeRequest.ApplicationMonth >=8 && autumnCropNitrogenUptakeRequest.ApplicationMonth <= 10)
+        if (autumnCropNitrogenUptakeRequest.ApplicationMonth >=8 && autumnCropNitrogenUptakeRequest.ApplicationMonth <= 10)
         {
             var croptype = await _cropTypeRepository.FetchByIdAsync(autumnCropNitrogenUptakeRequest.CropTypeId);
             if (croptype != null)
             {
-                ret = croptype.CropUptakeFactor;
+                ret.CropType= croptype.Name;
+                ret.NitrogenUptake.Value = croptype.CropUptakeFactor;
             }
         }        
 
