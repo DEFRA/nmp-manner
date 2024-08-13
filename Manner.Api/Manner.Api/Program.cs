@@ -58,6 +58,7 @@ builder.Services.AddSwaggerGen(c =>
         new List<string>()
        }
      });
+    c.EnableAnnotations();
 });
 
 builder.Services.RegisterServices(builder.Configuration);

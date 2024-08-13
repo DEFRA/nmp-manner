@@ -28,4 +28,10 @@ public class IncorporationDelayService : IIncorporationDelayService
     {
         return _mapper.Map<IncorporationDelayDto>(await _incorporationDelayRepository.FetchByIdAsync(id));
     }
+
+    public async Task<IEnumerable<IncorporationDelayDto>?> FetchByIncorpMethodIdAsync(int methodId)
+    {
+        var delays = await _incorporationDelayRepository.FetchByIncorpMethodIdAsync(methodId);
+        return _mapper.Map<IEnumerable<IncorporationDelayDto>>(delays);
+    }
 }
