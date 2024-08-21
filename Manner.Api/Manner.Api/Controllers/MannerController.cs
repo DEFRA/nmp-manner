@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlTypes;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Manner.Api.Controllers
 {
     [ApiController]
-    [Route("api/manner")]
+    [Route("api/[Controller]")]
     //[Authorize]
     public class MannerController : ControllerBase
     {
@@ -32,9 +33,30 @@ namespace Manner.Api.Controllers
         }
          
         [HttpGet("climates/{postcode}")]
-        public async Task<ActionResult<ClimateDto?>> Climates(string postcode)
-        {           
-            return Ok(await _climateService.FetchByPostcodeAsync(postcode));
+        public async Task<ActionResult<StandardResponse?>> Climates(string postcode)
+        {
+            StandardResponse ret = new StandardResponse();
+            try
+            {
+                (ret.Data, ret.Errors) = await _climateService.FetchByPostcodeAsync(postcode);
+                if(ret.Data != null && !ret.Errors.Any()) {
+                    ret.Success = true;
+                }
+                else
+                {
+                    ret.Success = false;
+                    ret.Errors.AddRange(ret.Errors);
+                }                
+
+                return Ok(ret);
+            }
+            catch (Exception ex)
+            {
+                ret.Success = false;
+                ret.Errors.Add(ex.Message);
+
+                return BadRequest(ex.Message);
+            }                        
         }
 
         [HttpGet("application-methods")]
@@ -55,5 +77,12 @@ namespace Manner.Api.Controllers
         {
             return Ok(await _cropTypeService.FetchCropUptakeFactorDefault(autumnCropNitrogenUptakeRequest));
         }
+
+        [HttpPost("effective-rainfall")]
+        public async Task<ActionResult<EffectiveRainfallResponse>> GetEffectiveRainfall(EffectiveRainfallRequest effectiveRainfallRequest)
+        {
+            return Ok(await _climateService.FetchEffectiveRainFall(effectiveRainfallRequest));
+        }
+        
     }
 }

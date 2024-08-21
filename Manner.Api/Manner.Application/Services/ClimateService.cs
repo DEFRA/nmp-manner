@@ -26,15 +26,41 @@ public class ClimateService : IClimateService
          throw new NotImplementedException();
     }
 
-    public async Task<ClimateDto?> FetchByPostcodeAsync(string postcode)
+    public async Task<(ClimateDto?, List<string>)> FetchByPostcodeAsync(string postcode)
     {
+       List<string> errors = new List<string>();
+
+
+        if(postcode == null)
+        {
+            errors.Add("Postcode should not be empty");
+
+        }
+        if (postcode != null)
+        {
+            if (postcode.Length < 3)
+            {
+                errors.Add("Invalid post code. Post code should be 3 or 4 length");
+            }
+        }
+
+        if(errors.Any())
+        {
+            return (null, errors);
+        }
+
         var climate = await _climateRepository.FetchByPostcodeAsync(postcode);
-        return _mapper.Map<ClimateDto?>(climate);
+        return (_mapper.Map<ClimateDto?>(climate), errors);
     }
 
 
     public async Task<ClimateDto?> FetchByIdAsync(int id)
     {
         return _mapper.Map< ClimateDto>( await _climateRepository.FetchByIdAsync(id));
-    }   
+    }
+
+    public Task<object?> FetchEffectiveRainFall(EffectiveRainfallRequest effectiveRainfallRequest)
+    {
+        throw new NotImplementedException();
+    }
 }
