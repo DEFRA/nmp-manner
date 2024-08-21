@@ -6,12 +6,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations; // Add this namespace for Swagger annotations
+using System;
 using System.Data.SqlTypes;
+using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Manner.Api.Controllers
 {
     [ApiController]
-    [Route("api/manner")]
+    [Route("api/[Controller]")]
     //[Authorize]
     public class MannerController : ControllerBase
     {
@@ -68,14 +71,31 @@ namespace Manner.Api.Controllers
         [SwaggerOperation(Summary = "Retrieve climate data by postcode", Description = "Fetches climate information for a given postcode.")]
         [ProducesResponseType(typeof(ClimateDto), 200)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<ClimateDto?>> Climates(string postcode)
+        public async Task<ActionResult<StandardResponse?>> Climates(string postcode)
         {
-            var climate = await _climateService.FetchByPostcodeAsync(postcode);
-            if (climate == null)
+            StandardResponse ret = new StandardResponse();
+            try
             {
-                return NotFound();
+                (ret.Data, ret.Errors) = await _climateService.FetchByPostcodeAsync(postcode);
+                if (ret.Data != null && !ret.Errors.Any())
+                {
+                    ret.Success = true;
+                }
+                else
+                {
+                    ret.Success = false;
+                    ret.Errors.AddRange(ret.Errors);
+                }
+
+                return Ok(ret);
             }
-            return Ok(climate);
+            catch (Exception ex)
+            {
+                ret.Success = false;
+                ret.Errors.Add(ex.Message);
+
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("application-methods")]
@@ -452,5 +472,12 @@ namespace Manner.Api.Controllers
 
 
 
+
+        [HttpPost("effective-rainfall")]
+        public async Task<ActionResult<EffectiveRainfallResponse>> GetEffectiveRainfall(EffectiveRainfallRequest effectiveRainfallRequest)
+        {
+            return Ok(await _climateService.FetchEffectiveRainFall(effectiveRainfallRequest));
+        }
+        
     }
 }
