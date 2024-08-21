@@ -1,15 +1,10 @@
 ﻿using Manner.Core.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Manner.Infrastructure.Data
 {
     public class ApplicationDbContext : DbContext
-    {        
+    {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
@@ -20,6 +15,12 @@ namespace Manner.Infrastructure.Data
         public DbSet<CropType> CropTypes { get; set; }
         public DbSet<IncorporationDelay> IncorporationDelays { get; set; }
         public DbSet<IncorporationMethod> IncorporationMethods { get; set; }
+
+        // Define the IncorpMethodsIncorpDelays as keyless
+        public DbSet<IncorpMethodsIncorpDelays> IncorpMethodsIncorpDelays { get; set; }
+
+        public DbSet<ApplicationMethodsIncorpMethods> ApplicationMethodsIncorpMethods { get; set; }
+
         public DbSet<ManureGroup> ManureGroups { get; set; }
         public DbSet<ManureType> ManureTypes { get; set; }
         public DbSet<ManureTypeCategory> ManureTypeCategories { get; set; }
@@ -28,5 +29,18 @@ namespace Manner.Infrastructure.Data
         public DbSet<SubSoil> SubSoils { get; set; }
         public DbSet<TopSoil> TopSoils { get; set; }
         public DbSet<Windspeed> Windspeeds { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Mark IncorpMethodsIncorpDelays as keyless
+            modelBuilder.Entity<IncorpMethodsIncorpDelays>()
+                .HasNoKey();
+
+            // Mark ApplicationMethodsIncorpMethods as keyless
+
+            modelBuilder.Entity<ApplicationMethodsIncorpMethods>()
+                .HasNoKey();
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

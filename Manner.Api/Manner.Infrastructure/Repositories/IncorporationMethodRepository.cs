@@ -4,24 +4,39 @@ using Manner.Core.Interfaces;
 using Manner.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Manner.Infrastructure.Repositories;
-[Repository(ServiceLifetime.Scoped)]
-public class IncorporationMethodRepository : IIncorporationMethodRepository
+namespace Manner.Infrastructure.Repositories
 {
-    private readonly ApplicationDbContext _context;
-    public IncorporationMethodRepository(ApplicationDbContext applicationDbContext)
+    [Repository(ServiceLifetime.Scoped)]
+    public class IncorporationMethodRepository : IIncorporationMethodRepository
     {
-        _context = applicationDbContext;
-    }
+        private readonly ApplicationDbContext _context;
 
-    public async Task<IEnumerable<IncorporationMethod>?> FetchAllAsync()
-    {
-        return await _context.IncorporationMethods.ToListAsync();
-    }
+        public IncorporationMethodRepository(ApplicationDbContext applicationDbContext)
+        {
+            _context = applicationDbContext;
+        }
 
-    public async Task<IncorporationMethod?> FetchByIdAsync(int id)
-    {
-        return await _context.IncorporationMethods.FirstOrDefaultAsync(a => a.ID == id);
+        public async Task<IEnumerable<IncorporationMethod>?> FetchAllAsync()
+        {
+            return await _context.IncorporationMethods.ToListAsync();
+        }
+
+        public async Task<IncorporationMethod?> FetchByIdAsync(int id)
+        {
+            return await _context.IncorporationMethods.FirstOrDefaultAsync(a => a.ID == id);
+        }
+
+        public async Task<IEnumerable<IncorporationMethod>?> FetchByAppMethodIdAsync(int methodId)
+        {
+            return await _context.IncorporationMethods
+                .Where(im => _context.ApplicationMethodsIncorpMethods
+                    .Any(link => link.ApplicationMethodID == methodId && link.IncorporationMethodID == im.ID))
+                .ToListAsync();
+        }
+
     }
 }

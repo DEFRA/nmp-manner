@@ -24,4 +24,13 @@ public class IncorporationDelayRepository : IIncorporationDelayRepository
     {
         return await _context.IncorporationDelays.FirstOrDefaultAsync(a => a.ID == id);
     }
+
+    public async Task<IEnumerable<IncorporationDelay>?> FetchByIncorpMethodIdAsync(int methodId)
+    {
+        return await _context.IncorporationDelays
+            .Where(d => _context.Set<IncorpMethodsIncorpDelays>()
+                .Any(link => link.IncorporationMethodID == methodId && link.IncorporationDelayID == d.ID))
+            .ToListAsync();
+    }
+
 }
