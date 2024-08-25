@@ -56,11 +56,13 @@ public class ClimateService : IClimateService
 
     public async Task<ClimateDto?> FetchByIdAsync(int id)
     {
-        return _mapper.Map< ClimateDto>( await _climateRepository.FetchByIdAsync(id));
+        return _mapper.Map<ClimateDto>( await _climateRepository.FetchByIdAsync(id));
     }
 
-    public Task<object?> FetchEffectiveRainFall(EffectiveRainfallRequest effectiveRainfallRequest)
+    public Task<EffectiveRainfallResponse> FetchEffectiveRainFall(EffectiveRainfallRequest effectiveRainfallRequest)
     {
         throw new NotImplementedException();
     }
+
+    
 }

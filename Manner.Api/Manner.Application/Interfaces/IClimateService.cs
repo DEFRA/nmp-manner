@@ -10,5 +10,7 @@ namespace Manner.Application.Interfaces;
 public interface IClimateService : IService<ClimateDto>
 {
     Task<(ClimateDto?, List<string>)> FetchByPostcodeAsync(string postcode);
-    Task<object?> FetchEffectiveRainFall(EffectiveRainfallRequest effectiveRainfallRequest);
+
+    Task<ClimateDto?> FetchByIdAsync(int id);
+    Task<EffectiveRainfallResponse> FetchEffectiveRainFall(EffectiveRainfallRequest effectiveRainfallRequest);
 }

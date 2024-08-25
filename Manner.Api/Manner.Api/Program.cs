@@ -1,5 +1,7 @@
+using Manner.Api.Exceptions;
 using Manner.Api.Helpers;
 using Manner.Api.Security;
+using Manner.Api.Validations;
 using Manner.Infrastructure.Configuration;
 using Manner.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,16 +17,21 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 {
                     options.Authority = $"{builder.Configuration["CustomerIdentityInstance"]}{builder.Configuration["CustomerIdentityDomain"]}/{builder.Configuration["CustomerIdentityPolicyId"]}/v2.0/";
                     options.Audience = builder.Configuration["CustomerIdentityClientId"];
+
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        NameClaimType = "name"
+                        NameClaimType = "name",
+                        ValidateIssuer = false
                     };
 
                     options.Events = new CustomJwtBearerEvents();
                 });
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<CustomExceptionFilter>();
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -65,15 +72,21 @@ builder.Services.RegisterServices(builder.Configuration);
 builder.Services.RegisterRepositories(builder.Configuration);
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Manner API V1");
 });
+
+
+// Configure the HTTP request pipeline.
+//if (app.Environment.IsDevelopment())
+//{
+//}
+app.UseMiddleware<ValidationMiddleware>();
+
+// Register the exception handling middleware
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseRouting();

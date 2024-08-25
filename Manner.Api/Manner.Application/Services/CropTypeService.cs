@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Manner.Application.DTOs;
+using Manner.Application.Exceptions;
 using Manner.Application.Interfaces;
+using Manner.Application.Validators;
 using Manner.Core.Attributes;
 using Manner.Core.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,21 +32,20 @@ public class CropTypeService : ICropTypeService
     }
 
     public async Task<AutumnCropNitrogenUptakeResponse> FetchCropUptakeFactorDefault(AutumnCropNitrogenUptakeRequest autumnCropNitrogenUptakeRequest)
-    {
+    {        
         AutumnCropNitrogenUptakeResponse ret = new();
-        ret.CropTypeId = autumnCropNitrogenUptakeRequest.CropTypeId;    
-
-        if (autumnCropNitrogenUptakeRequest.ApplicationMonth >=8 && autumnCropNitrogenUptakeRequest.ApplicationMonth <= 10)
+        ret.CropTypeId = autumnCropNitrogenUptakeRequest.CropTypeId;
+        ret.CropType = "Others";
+        if (autumnCropNitrogenUptakeRequest.ApplicationMonth >= 8 && autumnCropNitrogenUptakeRequest.ApplicationMonth <= 10)
         {
             var croptype = await _cropTypeRepository.FetchByIdAsync(autumnCropNitrogenUptakeRequest.CropTypeId);
             if (croptype != null)
             {
-                ret.CropType= croptype.Name;
+                ret.CropType = croptype.Name;
                 ret.NitrogenUptake.Value = croptype.CropUptakeFactor;
             }
-        }        
+        }      
 
         return ret;
-
     }
 }
