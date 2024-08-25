@@ -1,4 +1,7 @@
-﻿using Manner.Core.Attributes;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Manner.Application.Validators;
+using Manner.Core.Attributes;
 using Manner.Core.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,6 +46,10 @@ namespace Manner.Api.Helpers
             }
 
             services.AddAutoMapper(assembly);
+
+            // Register FluentValidation
+            services.AddFluentValidationAutoValidation();
+            services.AddValidatorsFromAssemblyContaining<AutumnCropNitrogenUptakeValodator>();
 
             return services;
         }
