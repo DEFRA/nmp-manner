@@ -1,8 +1,12 @@
 ﻿using Manner.Application.DTOs;
+using Manner.Application.Interfaces;
+using Manner.Core.Attributes;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Manner.Application.Calculators;
 
-public class RainfallCalculator
+[Service(ServiceLifetime.Transient)]
+public class RainfallCalculator : IRainfallCalculator
 {
     public decimal CalculateRainfallPostApplication(ClimateDto climate, DateOnly applicationDate, DateOnly endSoilDrainageDate)
     {

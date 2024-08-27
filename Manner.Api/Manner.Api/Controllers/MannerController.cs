@@ -466,7 +466,7 @@ public class MannerController : ControllerBase
     }
 
 
-    [HttpPost("post-application-rainfall")]
+    [HttpPost("effective-rainfall")]
     [SwaggerOperation(Summary = "Calculates Rainfall Post Applicaiton of Manure", Description = "Calculates the effective rainfall based on application date and end of soil drainage date.")]
     [ProducesResponseType(typeof(EffectiveRainfallResponse), 200)]
     [ProducesResponseType(400)]

@@ -15,12 +15,12 @@ public class ClimateService : IClimateService
 {
     private readonly IClimateRepository _climateRepository;
     private readonly IMapper _mapper;
-    private readonly RainfallCalculator _rainfallCalculator;
-    public ClimateService(IClimateRepository climateRepository, IMapper mapper)
+    private readonly IRainfallCalculator _rainfallCalculator;
+    public ClimateService(IClimateRepository climateRepository, IMapper mapper, IRainfallCalculator rainfallCalculator)
     {
         _climateRepository = climateRepository;
         _mapper = mapper;
-        _rainfallCalculator = new RainfallCalculator();
+        _rainfallCalculator = rainfallCalculator;
     }
 
     public Task<IEnumerable<ClimateDto>?> FetchAllAsync()
