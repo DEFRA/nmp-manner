@@ -123,5 +123,100 @@ namespace Manner.Tests.Calculators
             // Assert
             result.Should().Be(205); // Based on output of old tool.
         }
+
+        [Fact]
+        public void CalculateRainfallPostApplication_PreviousYearToNextYear_ShouldReturnCorrectRainfall_BB10()
+        {
+            // Arrange
+            var climate = new ClimateDto
+            {
+                PostCode = "BB10",
+                MeanTotalRainFallOct = 147.038808600m,
+                MeanTotalRainFallNov = 138.823611600m,
+                MeanTotalRainFallDec = 164.330885400m,
+                MeanTotalRainFallJan = 148.321984300m,
+                MeanTotalRainFallFeb = 110.597997900m,
+                MeanTotalRainFallMar = 100.401203100m,
+                MeanTotalRainFallApr = 86.786013080m
+            };
+            var applicationDate = new DateOnly(2023, 10, 15);
+            var endSoilDrainageDate = new DateOnly(2024, 4, 15);
+
+            // Act
+            var result = _calculator.CalculateRainfallPostApplication(climate, applicationDate, endSoilDrainageDate);
+
+            // Assert
+            result.Should().Be(782);  // Adjust this value based on the exact proportional calculation.
+        }
+
+        [Fact]
+        public void CalculateRainfallPostApplication_PreviousYearToNextYear_ShouldReturnCorrectRainfall_BB11()
+        {
+            // Arrange
+            var climate = new ClimateDto
+            {
+                PostCode = "BB11",
+                MeanTotalRainFallNov = 132.528806400m,
+                MeanTotalRainFallDec = 155.132262700m,
+                MeanTotalRainFallJan = 143.774361400m,
+                MeanTotalRainFallFeb = 108.131827100m,
+                MeanTotalRainFallMar = 99.394843070m
+            };
+            var applicationDate = new DateOnly(2023, 11, 1);
+            var endSoilDrainageDate = new DateOnly(2024, 3, 31);
+
+            // Act
+            var result = _calculator.CalculateRainfallPostApplication(climate, applicationDate, endSoilDrainageDate);
+
+            // Assert
+            result.Should().Be(635);  // Adjust this value based on the exact proportional calculation.
+        }
+
+        [Fact]
+        public void CalculateRainfallPostApplication_PreviousYearToNextYear_ShouldReturnCorrectRainfall_BB12()
+        {
+            // Arrange
+            var climate = new ClimateDto
+            {
+                PostCode = "BB12",
+                MeanTotalRainFallDec = 139.704101100m,
+                MeanTotalRainFallJan = 121.728579200m,
+                MeanTotalRainFallFeb = 92.499074490m
+            };
+            var applicationDate = new DateOnly(2023, 12, 15);
+            var endSoilDrainageDate = new DateOnly(2024, 2, 15);
+
+            // Act
+            var result = _calculator.CalculateRainfallPostApplication(climate, applicationDate, endSoilDrainageDate);
+
+            // Assert
+            result.Should().Be(242);  // Adjust this value based on the exact proportional calculation.
+        }
+
+        [Fact]
+        public void CalculateRainfallPostApplication_PreviousYearToNextYear_ShouldReturnCorrectRainfall_BB11_WholeMonths()
+        {
+            // Arrange
+            var climate = new ClimateDto
+            {
+                MeanTotalRainFallOct = 146.216752100m,
+                MeanTotalRainFallNov = 132.528806400m,
+                MeanTotalRainFallDec = 155.132262700m,
+                MeanTotalRainFallJan = 143.774361400m,
+                MeanTotalRainFallFeb = 108.131827100m,
+                MeanTotalRainFallMar = 99.394843070m,
+                MeanTotalRainFallApr = 85.703282570m
+            };
+            var applicationDate = new DateOnly(2023, 10, 1);
+            var endSoilDrainageDate = new DateOnly(2024, 4, 30);
+
+            // Act
+            var result = _calculator.CalculateRainfallPostApplication(climate, applicationDate, endSoilDrainageDate);
+
+            // Assert
+            result.Should().Be(867);  // Adjusted to the correct total rainfall value based on BB11 data.
+        }
+
+
     }
 }

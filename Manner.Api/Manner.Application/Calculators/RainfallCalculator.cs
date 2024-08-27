@@ -17,24 +17,37 @@ public class RainfallCalculator : IRainfallCalculator
 
         decimal totalRainfall = 0;
 
+        // Calculate proportional rainfall for the start and end months
         decimal startMonthRainfall = CalculateProportionalRainfall(applicationDate, true, climate);
         decimal endMonthRainfall = CalculateProportionalRainfall(endSoilDrainageDate, false, climate);
 
         totalRainfall += startMonthRainfall + endMonthRainfall;
 
+        // Get the month and year of the application and end dates
         int startMonthIndex = applicationDate.Month;
         int endMonthIndex = endSoilDrainageDate.Month;
+        int startYear = applicationDate.Year;
+        int endYear = endSoilDrainageDate.Year;
 
-        if (endMonthIndex > startMonthIndex)
+        // Handle if the start and end dates are in different years
+        if (endYear > startYear || (endYear == startYear && endMonthIndex > startMonthIndex))
         {
-            for (int i = startMonthIndex; i < endMonthIndex - 1; i++)
+            // Add rainfall for the months between the application date and end soil drainage date
+            for (int year = startYear; year <= endYear; year++)
             {
-                totalRainfall += GetMonthlyRainfall(i + 1, climate);
+                int monthStart = (year == startYear) ? startMonthIndex + 1 : 1;
+                int monthEnd = (year == endYear) ? endMonthIndex - 1 : 12;
+
+                for (int month = monthStart; month <= monthEnd; month++)
+                {
+                    totalRainfall += GetMonthlyRainfall(month, climate);
+                }
             }
         }
 
         return Math.Ceiling(totalRainfall);
     }
+
 
     private decimal CalculateProportionalRainfall(DateOnly date, bool isStartMonth, ClimateDto climate)
     {
