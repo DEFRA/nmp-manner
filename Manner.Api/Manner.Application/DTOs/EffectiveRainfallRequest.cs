@@ -8,5 +8,5 @@ public class EffectiveRainfallRequest
 
     public DateOnly EndOfDrainageDate { get; set; }
 
-    public string ClimateDataPostcode {  get; set; }= string.Empty;
+    public string Postcode {  get; set; } = string.Empty;
 }
