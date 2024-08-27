@@ -15,7 +15,7 @@ namespace Manner.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/")]
-[Authorize]
+//[Authorize]
 public class MannerController : ControllerBase
 {
     private readonly ILogger<MannerController> _logger;
@@ -466,17 +466,27 @@ public class MannerController : ControllerBase
     }
 
 
-
-
-
-
-
-
-
-    [HttpPost("effective-rainfall")]
+    [HttpPost("post-application-rainfall")]
+    [SwaggerOperation(Summary = "Calculates Rainfall Post Applicaiton of Manure", Description = "Calculates the effective rainfall based on application date and end of soil drainage date.")]
+    [ProducesResponseType(typeof(EffectiveRainfallResponse), 200)]
+    [ProducesResponseType(400)]
     public async Task<ActionResult<EffectiveRainfallResponse>> GetEffectiveRainfall(EffectiveRainfallRequest effectiveRainfallRequest)
     {
-        return Ok(await _climateService.FetchEffectiveRainFall(effectiveRainfallRequest));
+        try
+        {
+            var response = await _climateService.FetchEffectiveRainFall(effectiveRainfallRequest);
+            return Ok(response);
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogWarning(ex, "Validation error: {Message}", ex.Message);
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error calculating effective rainfall");
+            return BadRequest("An unexpected error occurred while calculating effective rainfall.");
+        }
     }
-    
+
 }
