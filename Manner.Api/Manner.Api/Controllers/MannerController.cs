@@ -467,26 +467,45 @@ public class MannerController : ControllerBase
 
 
     [HttpPost("effective-rainfall")]
-    [SwaggerOperation(Summary = "Calculates Rainfall Post Applicaiton of Manure", Description = "Calculates the effective rainfall based on application date and end of soil drainage date.")]
-    [ProducesResponseType(typeof(EffectiveRainfallResponse), 200)]
+    [SwaggerOperation(Summary = "Calculates Rainfall Post Application of Manure", Description = "Calculates the effective rainfall based on application date and end of soil drainage date.")]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(400)]
-    public async Task<ActionResult<EffectiveRainfallResponse>> GetEffectiveRainfall(EffectiveRainfallRequest effectiveRainfallRequest)
+    public async Task<ActionResult<StandardResponse?>> GetEffectiveRainfall(EffectiveRainfallRequest effectiveRainfallRequest)
     {
+        StandardResponse ret = new StandardResponse();
         try
         {
-            var response = await _climateService.FetchEffectiveRainFall(effectiveRainfallRequest);
-            return Ok(response);
+            (ret.Data, ret.Errors) = await _climateService.FetchEffectiveRainFall(effectiveRainfallRequest);
+
+            if (ret.Data != null && !ret.Errors.Any())
+            {
+                ret.Success = true;
+                ret.Message = "Effective rainfall calculated successfully.";
+            }
+            else
+            {
+                ret.Success = false;
+                ret.Message = "Validation errors occurred.";
+            }
+
+            return Ok(ret);
         }
         catch (ArgumentException ex)
         {
-            _logger.LogWarning(ex, "Validation error: {Message}", ex.Message);
-            return BadRequest(ex.Message);
+            ret.Success = false;
+            ret.Errors.Add(ex.Message);
+            return BadRequest(ret);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error calculating effective rainfall");
-            return BadRequest("An unexpected error occurred while calculating effective rainfall.");
+            ret.Success = false;
+            ret.Errors.Add("An unexpected error occurred while calculating effective rainfall.");
+            ret.Errors.Add(ex.Message);
+            return BadRequest(ret);
         }
     }
+
+
+
 
 }

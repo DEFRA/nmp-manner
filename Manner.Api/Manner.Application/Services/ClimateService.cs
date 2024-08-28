@@ -7,6 +7,8 @@ using Manner.Core.Entities;
 using Manner.Core.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
+using System.Net;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Manner.Application.Services;
 
@@ -62,20 +64,27 @@ public class ClimateService : IClimateService
         return _mapper.Map<ClimateDto>( await _climateRepository.FetchByIdAsync(id));
     }
 
-    public async Task<EffectiveRainfallResponse> FetchEffectiveRainFall(EffectiveRainfallRequest effectiveRainfallRequest)
+    public async Task<(EffectiveRainfallResponse?, List<string>)> FetchEffectiveRainFall(EffectiveRainfallRequest effectiveRainfallRequest)
     {
+        List<string> errors = new();
         // Validate EndSoilDrainageDate is between 01/01 and 30/04
         if (effectiveRainfallRequest.EndSoilDrainageDate.DayOfYear < 1 || effectiveRainfallRequest.EndSoilDrainageDate.DayOfYear > 120)
         {
-            throw new ArgumentException($"EndSoilDrainageDate must be between 01/01 and 30/04, but was {effectiveRainfallRequest.EndSoilDrainageDate:dd/MM/yyyy}");
+            errors.Add($"EndSoilDrainageDate must be between 01/01 and 30/04, but was {effectiveRainfallRequest.EndSoilDrainageDate:dd/MM/yyyy}");
         }
 
         var climate = await _climateRepository.FetchByPostcodeAsync(effectiveRainfallRequest.Postcode);
 
         if (climate == null)
         {
-            throw new ArgumentException("Climate data not found for the given postcode");
+            errors.Add("Climate data not found for the given postcode");
         }
+
+        if (errors.Any())
+        {
+            return (null, errors);
+        }
+
 
         var climateDto = _mapper.Map<ClimateDto>(climate);
 
@@ -94,7 +103,7 @@ public class ClimateService : IClimateService
             }
         };
 
-        return response;
+        return (response, errors);
     }
 
 
