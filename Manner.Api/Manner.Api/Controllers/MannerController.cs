@@ -468,44 +468,11 @@ public class MannerController : ControllerBase
 
     [HttpPost("effective-rainfall")]
     [SwaggerOperation(Summary = "Calculates Rainfall Post Application of Manure", Description = "Calculates the effective rainfall based on application date and end of soil drainage date.")]
-    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(typeof(EffectiveRainfallResponse), 200)]
     [ProducesResponseType(400)]
-    public async Task<ActionResult<StandardResponse?>> GetEffectiveRainfall(EffectiveRainfallRequest effectiveRainfallRequest)
+    public async Task<ActionResult<EffectiveRainfallResponse>> GetEffectiveRainfall(EffectiveRainfallRequest effectiveRainfallRequest)
     {
-        StandardResponse ret = new StandardResponse();
-        try
-        {
-            (ret.Data, ret.Errors) = await _climateService.FetchEffectiveRainFall(effectiveRainfallRequest);
-
-            if (ret.Data != null && !ret.Errors.Any())
-            {
-                ret.Success = true;
-                ret.Message = "Effective rainfall calculated successfully.";
-            }
-            else
-            {
-                ret.Success = false;
-                ret.Message = "Validation errors occurred.";
-            }
-
-            return Ok(ret);
-        }
-        catch (ArgumentException ex)
-        {
-            ret.Success = false;
-            ret.Errors.Add(ex.Message);
-            return BadRequest(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Errors.Add("An unexpected error occurred while calculating effective rainfall.");
-            ret.Errors.Add(ex.Message);
-            return BadRequest(ret);
-        }
+        return Ok(await _climateService.FetchEffectiveRainFall(effectiveRainfallRequest));
     }
-
-
-
 
 }

@@ -64,47 +64,39 @@ public class ClimateService : IClimateService
         return _mapper.Map<ClimateDto>( await _climateRepository.FetchByIdAsync(id));
     }
 
-    public async Task<(EffectiveRainfallResponse?, List<string>)> FetchEffectiveRainFall(EffectiveRainfallRequest effectiveRainfallRequest)
+    public async Task<EffectiveRainfallResponse> FetchEffectiveRainFall(EffectiveRainfallRequest effectiveRainfallRequest)
     {
-        List<string> errors = new();
-        // Validate EndSoilDrainageDate is between 01/01 and 30/04
-        if (effectiveRainfallRequest.EndSoilDrainageDate.DayOfYear < 1 || effectiveRainfallRequest.EndSoilDrainageDate.DayOfYear > 120)
-        {
-            errors.Add($"EndSoilDrainageDate must be between 01/01 and 30/04, but was {effectiveRainfallRequest.EndSoilDrainageDate:dd/MM/yyyy}");
-        }
-
         var climate = await _climateRepository.FetchByPostcodeAsync(effectiveRainfallRequest.Postcode);
 
-        if (climate == null)
-        {
-            errors.Add("Climate data not found for the given postcode");
-        }
-
-        if (errors.Any())
-        {
-            return (null, errors);
-        }
-
-
-        var climateDto = _mapper.Map<ClimateDto>(climate);
-
-        decimal rainfall = _rainfallCalculator.CalculateRainfallPostApplication(
-            climateDto,
-            effectiveRainfallRequest.ApplicationDate,
-            effectiveRainfallRequest.EndSoilDrainageDate
-        );
-
-        var response = new EffectiveRainfallResponse
+        // Default to 0 mm rainfall if no climate data is found
+        EffectiveRainfallResponse response = new()
         {
             EffectiveRainfall = new EffectiveRainfall
             {
-                Value = (int)Math.Round(rainfall),
+                Value = 0,
                 Unit = "mm"
             }
         };
 
-        return (response, errors);
+        if (climate != null)
+        {
+            var climateDto = _mapper.Map<ClimateDto>(climate);
+
+            // Calculate rainfall only if climate data is found
+            decimal rainfall = _rainfallCalculator.CalculateRainfallPostApplication(
+                climateDto,
+                effectiveRainfallRequest.ApplicationDate,
+                effectiveRainfallRequest.EndSoilDrainageDate
+            );
+
+            // Set the calculated rainfall value in the response
+            response.EffectiveRainfall.Value = (int)Math.Round(rainfall);
+        }
+
+        return response;
     }
+
+
 
 
 
