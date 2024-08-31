@@ -8,9 +8,9 @@ namespace Manner.Application.Calculators;
 [Service(ServiceLifetime.Transient)]
 public class RainfallCalculator : IRainfallCalculator
 {
-    public decimal CalculateRainfallPostApplication(ClimateDto climate, DateOnly applicationDate, DateOnly endSoilDrainageDate)
+    public decimal CalculateRainfallPostApplication(ClimateDto climate, DateOnly applicationDate, DateOnly endOfSoilDrainageDate)
     {
-        if (endSoilDrainageDate <= applicationDate)
+        if (endOfSoilDrainageDate <= applicationDate)
         {
             return 0;
         }
@@ -19,15 +19,15 @@ public class RainfallCalculator : IRainfallCalculator
 
         // Calculate proportional rainfall for the start and end months
         decimal startMonthRainfall = CalculateProportionalRainfall(applicationDate, true, climate);
-        decimal endMonthRainfall = CalculateProportionalRainfall(endSoilDrainageDate, false, climate);
+        decimal endMonthRainfall = CalculateProportionalRainfall(endOfSoilDrainageDate, false, climate);
 
         totalRainfall += startMonthRainfall + endMonthRainfall;
 
         // Get the month and year of the application and end dates
         int startMonthIndex = applicationDate.Month;
-        int endMonthIndex = endSoilDrainageDate.Month;
+        int endMonthIndex = endOfSoilDrainageDate.Month;
         int startYear = applicationDate.Year;
-        int endYear = endSoilDrainageDate.Year;
+        int endYear = endOfSoilDrainageDate.Year;
 
         // Handle if the start and end dates are in different years
         if (endYear > startYear || (endYear == startYear && endMonthIndex > startMonthIndex))

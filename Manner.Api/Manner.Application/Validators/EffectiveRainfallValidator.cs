@@ -1,5 +1,10 @@
 ﻿using FluentValidation;
 using Manner.Application.DTOs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Manner.Application.Validators
 {
@@ -7,8 +12,8 @@ namespace Manner.Application.Validators
     {
         public EffectiveRainfallRequestValidator()
         {
-            // Validate EndSoilDrainageDate to be between 01/01 and 30/04
-            RuleFor(x => x.EndSoilDrainageDate)
+            // Validate EndOfSoilDrainageDate to be between 01/01 and 30/04
+            RuleFor(x => x.EndOfSoilDrainageDate)
                 .Must(BeWithinValidRange)
                 .WithMessage("End of soil drainage date must be between 01/01 and 30/04, but was {PropertyValue:dd/MM/yyyy}");
 

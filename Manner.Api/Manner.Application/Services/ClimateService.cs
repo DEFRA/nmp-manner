@@ -86,7 +86,7 @@ public class ClimateService : IClimateService
             decimal rainfall = _rainfallCalculator.CalculateRainfallPostApplication(
                 climateDto,
                 effectiveRainfallRequest.ApplicationDate,
-                effectiveRainfallRequest.EndSoilDrainageDate
+                effectiveRainfallRequest.EndOfSoilDrainageDate
             );
 
             // Set the calculated rainfall value in the response

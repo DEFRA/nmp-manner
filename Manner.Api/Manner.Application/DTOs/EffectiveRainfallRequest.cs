@@ -2,10 +2,11 @@
 
 public class EffectiveRainfallRequest
 {        
-    public string Postcode { get; set; }
+    public int CropTypeId { get; set; }
 
     public DateOnly ApplicationDate { get; set; }
 
-    public DateOnly EndSoilDrainageDate { get; set; }
+    public DateOnly EndOfSoilDrainageDate { get; set; }
 
+    public string Postcode {  get; set; }= string.Empty;
 }
