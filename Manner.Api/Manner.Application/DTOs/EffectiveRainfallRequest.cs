@@ -6,7 +6,7 @@ public class EffectiveRainfallRequest
 
     public DateOnly ApplicationDate { get; set; }
 
-    public DateOnly EndOfDrainageDate { get; set; }
+    public DateOnly EndOfSoilDrainageDate { get; set; }
 
-    public string Postcode {  get; set; } = string.Empty;
+    public string Postcode {  get; set; }= string.Empty;
 }

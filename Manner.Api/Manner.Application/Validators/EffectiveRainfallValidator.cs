@@ -8,24 +8,28 @@ using System.Threading.Tasks;
 
 namespace Manner.Application.Validators
 {
-    public class EffectiveRainfallValidator : AbstractValidator<EffectiveRainfallRequest>
+    public class EffectiveRainfallRequestValidator : AbstractValidator<EffectiveRainfallRequest>
     {
-        public EffectiveRainfallValidator()
+        public EffectiveRainfallRequestValidator()
         {
-            RuleFor(x => x.CropTypeId)
-                .GreaterThanOrEqualTo(0).WithMessage("CropTypeId must be greater than or equal to 0")
-                .NotNull().WithMessage("CropTypeId is required.");
-            RuleFor(x => x.ApplicationDate)
-                .NotNull().WithMessage("Application Month number is required.")
-                .LessThan(x=>x.EndOfDrainageDate).WithMessage("Application Date should be less than end of drainage date.");
-            RuleFor(x => x.EndOfDrainageDate)
-                .NotNull().WithMessage("End of Drainage Date is required.")
-                .GreaterThan(x => x.ApplicationDate).WithMessage("End of Drainage Date should be greater than application date.");
+            // Validate EndOfSoilDrainageDate to be between 01/01 and 30/04
+            RuleFor(x => x.EndOfSoilDrainageDate)
+                .Must(BeWithinValidRange)
+                .WithMessage("End of soil drainage date must be between 01/01 and 30/04, but was {PropertyValue:dd/MM/yyyy}");
+
+            // Validate that Postcode is not null or empty
             RuleFor(x => x.Postcode)
-                .NotNull().WithMessage("Postcode should not be null.")
-                .Empty().WithMessage("Postcode should not be empty.")
-                .MaximumLength(4).WithMessage("Postcode must not exceed 4 characters.")
-                .MinimumLength(3).WithMessage("Postcode should have at least 3 characters.");            
+                .NotEmpty().WithMessage("Postcode is required.")
+                .MinimumLength(3).WithMessage("Postcode must be at least 3 characters long.");
+        }
+
+        private bool BeWithinValidRange(DateOnly date)
+        {
+            // Validates that the date is between 1st Jan and 30th Apr of any year accouting for leap years.
+            return (date.Month == 1) ||
+                   (date.Month == 2) ||
+                   (date.Month == 3) ||
+                   (date.Month == 4 && date.Day <= 30);
         }
     }
 }

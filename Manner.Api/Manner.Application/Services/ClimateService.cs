@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Manner.Application.Calculators;
 using Manner.Application.DTOs;
 using Manner.Application.Interfaces;
 using Manner.Core.Attributes;
@@ -6,6 +7,8 @@ using Manner.Core.Entities;
 using Manner.Core.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
+using System.Net;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Manner.Application.Services;
 
@@ -14,10 +17,12 @@ public class ClimateService : IClimateService
 {
     private readonly IClimateRepository _climateRepository;
     private readonly IMapper _mapper;
-    public ClimateService(IClimateRepository climateRepository, IMapper mapper)
+    private readonly IRainfallCalculator _rainfallCalculator;
+    public ClimateService(IClimateRepository climateRepository, IMapper mapper, IRainfallCalculator rainfallCalculator)
     {
         _climateRepository = climateRepository;
         _mapper = mapper;
+        _rainfallCalculator = rainfallCalculator;
     }
 
     public Task<IEnumerable<ClimateDto>?> FetchAllAsync()
@@ -59,10 +64,40 @@ public class ClimateService : IClimateService
         return _mapper.Map<ClimateDto>( await _climateRepository.FetchByIdAsync(id));
     }
 
-    public Task<EffectiveRainfallResponse> FetchEffectiveRainFall(EffectiveRainfallRequest effectiveRainfallRequest)
+    public async Task<EffectiveRainfallResponse> FetchEffectiveRainFall(EffectiveRainfallRequest effectiveRainfallRequest)
     {
-        throw new NotImplementedException();
+        var climate = await _climateRepository.FetchByPostcodeAsync(effectiveRainfallRequest.Postcode);
+
+        // Default to 0 mm rainfall if no climate data is found
+        EffectiveRainfallResponse response = new()
+        {
+            EffectiveRainfall = new EffectiveRainfall
+            {
+                Value = 0,
+                Unit = "mm"
+            }
+        };
+
+        if (climate != null)
+        {
+            var climateDto = _mapper.Map<ClimateDto>(climate);
+
+            // Calculate rainfall only if climate data is found
+            decimal rainfall = _rainfallCalculator.CalculateRainfallPostApplication(
+                climateDto,
+                effectiveRainfallRequest.ApplicationDate,
+                effectiveRainfallRequest.EndOfSoilDrainageDate
+            );
+
+            // Set the calculated rainfall value in the response
+            response.EffectiveRainfall.Value = (int)Math.Round(rainfall);
+        }
+
+        return response;
     }
 
-    
+
+
+
+
 }

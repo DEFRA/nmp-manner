@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Manner.Application.Validators
 {
-    public class AutumnCropNitrogenUptakeValodator : AbstractValidator<AutumnCropNitrogenUptakeRequest>
+    public class AutumnCropNitrogenUptakeValidator : AbstractValidator<AutumnCropNitrogenUptakeRequest>
     {
-        public AutumnCropNitrogenUptakeValodator()
+        public AutumnCropNitrogenUptakeValidator()
         {
             RuleFor(x => x.CropTypeId)
                 .GreaterThanOrEqualTo(0).WithMessage("CropTypeId must be greater than or equal to 0")

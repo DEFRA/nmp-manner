@@ -15,7 +15,7 @@ namespace Manner.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/")]
-[Authorize]
+//[Authorize]
 public class MannerController : ControllerBase
 {
     private readonly ILogger<MannerController> _logger;
@@ -466,17 +466,13 @@ public class MannerController : ControllerBase
     }
 
 
-
-
-
-
-
-
-
     [HttpPost("effective-rainfall")]
+    [SwaggerOperation(Summary = "Calculates Rainfall Post Application of Manure", Description = "Calculates the effective rainfall based on application date and end of soil drainage date.")]
+    [ProducesResponseType(typeof(EffectiveRainfallResponse), 200)]
+    [ProducesResponseType(400)]
     public async Task<ActionResult<EffectiveRainfallResponse>> GetEffectiveRainfall(EffectiveRainfallRequest effectiveRainfallRequest)
     {
         return Ok(await _climateService.FetchEffectiveRainFall(effectiveRainfallRequest));
     }
-    
+
 }

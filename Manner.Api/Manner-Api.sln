@@ -19,7 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{53CC858D-C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{589C8C0E-4477-4250-85F6-8CB13AA5BBD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manner.Infrastructure.Configuration", "Manner.Infrastructure.Configuration\Manner.Infrastructure.Configuration.csproj", "{E37A1B75-9DAB-40DE-836C-11606C502F5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manner.Infrastructure.Configuration", "Manner.Infrastructure.Configuration\Manner.Infrastructure.Configuration.csproj", "{E37A1B75-9DAB-40DE-836C-11606C502F5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manner.Tests", "Manner.Tests\Manner.Tests.csproj", "{E3A04277-9D7A-4909-B463-1D24218D691E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +55,10 @@ Global
 		{E37A1B75-9DAB-40DE-836C-11606C502F5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E37A1B75-9DAB-40DE-836C-11606C502F5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E37A1B75-9DAB-40DE-836C-11606C502F5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3A04277-9D7A-4909-B463-1D24218D691E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3A04277-9D7A-4909-B463-1D24218D691E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3A04277-9D7A-4909-B463-1D24218D691E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3A04277-9D7A-4909-B463-1D24218D691E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
