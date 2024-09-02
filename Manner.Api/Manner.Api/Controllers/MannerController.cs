@@ -71,6 +71,7 @@ public class MannerController : ControllerBase
     [SwaggerOperation(Summary = "Retrieve climate data by postcode", Description = "Fetches climate information for a given postcode.")]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse?>> Climates(string postcode)
     {
         StandardResponse ret = new StandardResponse();
@@ -84,7 +85,7 @@ public class MannerController : ControllerBase
             else
             {
                 ret.Success = false;
-                ret.Errors.AddRange(ret.Errors);
+                ret.Message = "No climate data found for the provided postcode.";
             }
 
             return Ok(ret);
@@ -92,387 +93,902 @@ public class MannerController : ControllerBase
         catch (Exception ex)
         {
             ret.Success = false;
+            ret.Message = "An error occurred while fetching climate data.";
             ret.Errors.Add(ex.Message);
-
-            return BadRequest(ex.Message);
+            return StatusCode(500, ret);
         }
     }
 
     [HttpGet("application-methods")]
     [SwaggerOperation(Summary = "Retrieve all application methods", Description = "Fetches a list of all application methods available.")]
-    [ProducesResponseType(typeof(IEnumerable<ApplicationMethodDto>), 200)]
-    public async Task<ActionResult<IEnumerable<ApplicationMethodDto>?>> ApplicationMethods()
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> ApplicationMethods()
     {
-        return Ok(await _applicationMethodService.FetchAllAsync());
+        var ret = new StandardResponse();
+        try
+        {
+            var data = await _applicationMethodService.FetchAllAsync();
+            if (data != null && data.Any())
+            {
+                ret.Success = true;
+                ret.Data = data;
+            }
+            else
+            {
+                ret.Success = false;
+                ret.Message = "No application methods found.";
+            }
+
+            return Ok(ret);
+        }
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching application methods.";
+            ret.Errors.Add(ex.Message);
+
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("application-methods/{id}")]
     [SwaggerOperation(Summary = "Retrieve application method by ID", Description = "Fetches a specific application method by its unique ID.")]
-    [ProducesResponseType(typeof(ApplicationMethodDto), 200)]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<ApplicationMethodDto>?> ApplicationMethods(int id)
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> ApplicationMethodById(int id)
     {
-        var method = await _applicationMethodService.FetchByIdAsync(id);
-        if (method == null)
+        var ret = new StandardResponse();
+        try
         {
-            return NotFound();
+            var method = await _applicationMethodService.FetchByIdAsync(id);
+            if (method != null)
+            {
+                ret.Success = true;
+                ret.Data = method;
+            }
+            else
+            {
+                ret.Success = false;
+                ret.Message = "Application method not found.";
+                return NotFound(ret);
+            }
+
+            return Ok(ret);
         }
-        return Ok(method);
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching the application method.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
+
+
 
     [HttpGet("crop-types")]
     [SwaggerOperation(Summary = "Retrieve all crop types", Description = "Fetches a list of all crop types available.")]
-    [ProducesResponseType(typeof(IEnumerable<CropTypeDto>), 200)]
-    public async Task<ActionResult<IEnumerable<CropTypeDto>?>> CropTypes()
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> CropTypes()
     {
-        return Ok(await _cropTypeService.FetchAllAsync());
+        var ret = new StandardResponse();
+        try
+        {
+            var data = await _cropTypeService.FetchAllAsync();
+            if (data != null && data.Any())
+            {
+                ret.Success = true;
+                ret.Data = data;
+            }
+            else
+            {
+                ret.Success = false;
+                ret.Message = "No crop types found.";
+            }
+
+            return Ok(ret);
+        }
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching crop types.";
+            ret.Errors.Add(ex.Message);
+
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("crop-types/{id}")]
     [SwaggerOperation(Summary = "Retrieve crop type by ID", Description = "Fetches a specific crop type by its unique ID.")]
-    [ProducesResponseType(typeof(CropTypeDto), 200)]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<CropTypeDto>?> CropTypes(int id)
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> CropTypes(int id)
     {
-        var cropType = await _cropTypeService.FetchByIdAsync(id);
-        if (cropType == null)
+        var ret = new StandardResponse();
+        try
         {
-            return NotFound();
+            var cropType = await _cropTypeService.FetchByIdAsync(id);
+            if (cropType != null)
+            {
+                ret.Success = true;
+                ret.Data = cropType;
+            }
+            else
+            {
+                ret.Success = false;
+                ret.Message = "Crop type not found.";
+                return NotFound(ret);
+            }
+
+            return Ok(ret);
         }
-        return Ok(cropType);
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching the crop type.";
+            ret.Errors.Add(ex.Message);
+
+            return StatusCode(500, ret);
+        }
     }
+
 
     [HttpGet("countries")]
     [SwaggerOperation(Summary = "Retrieve all countries", Description = "Fetches a list of all countries available.")]
-    [ProducesResponseType(typeof(IEnumerable<CountryDto>), 200)]
-    public async Task<ActionResult<IEnumerable<CountryDto>?>> Countries()
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> Countries()
     {
-        return Ok(await _countryService.FetchAllAsync());
+        var ret = new StandardResponse();
+        try
+        {
+            var data = await _countryService.FetchAllAsync();
+            if (data != null && data.Any())
+            {
+                ret.Success = true;
+                ret.Data = data;
+            }
+            else
+            {
+                ret.Success = false;
+                ret.Message = "No countries found.";
+            }
+
+            return Ok(ret);
+        }
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching countries.";
+            ret.Errors.Add(ex.Message);
+
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("countries/{id}")]
     [SwaggerOperation(Summary = "Retrieve country by ID", Description = "Fetches a specific country by its unique ID.")]
-    [ProducesResponseType(typeof(CountryDto), 200)]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<CountryDto>?> Countries(int id)
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> Countries(int id)
     {
-        var country = await _countryService.FetchByIdAsync(id);
-        if (country == null)
+        var ret = new StandardResponse();
+        try
         {
-            return NotFound();
+            var country = await _countryService.FetchByIdAsync(id);
+            if (country != null)
+            {
+                ret.Success = true;
+                ret.Data = country;
+            }
+            else
+            {
+                ret.Success = false;
+                ret.Message = "Country not found.";
+                return NotFound(ret);
+            }
+
+            return Ok(ret);
         }
-        return Ok(country);
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching the country.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
+
 
     [HttpPost("autumn-crop-nitrogen-uptake")]
     [SwaggerOperation(Summary = "Get Autumn Crop Nitrogen Uptake", Description = "Calculates and retrieves the nitrogen uptake for autumn crops based on the provided request data.")]
-    [ProducesResponseType(typeof(AutumnCropNitrogenUptakeResponse), 200)]
-    public async Task<ActionResult<AutumnCropNitrogenUptakeResponse>> GetAutumnCropNitrogenUptake(AutumnCropNitrogenUptakeRequest autumnCropNitrogenUptakeRequest)
-    {  
-        return Ok(await _cropTypeService.FetchCropUptakeFactorDefault(autumnCropNitrogenUptakeRequest));
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> GetAutumnCropNitrogenUptake([FromBody] AutumnCropNitrogenUptakeRequest autumnCropNitrogenUptakeRequest)
+    {
+        var ret = new StandardResponse();
+        try
+        {
+            var uptakeResponse = await _cropTypeService.FetchCropUptakeFactorDefault(autumnCropNitrogenUptakeRequest);
+
+            ret.Success = true;
+            ret.Data = uptakeResponse;
+
+            return Ok(ret);
+        }
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while calculating nitrogen uptake.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("incorporation-delays")]
     [SwaggerOperation(Summary = "Retrieve all incorporation delays", Description = "Fetches a list of all incorporation delays available.")]
-    [ProducesResponseType(typeof(IEnumerable<IncorporationDelayDto>), 200)]
-    public async Task<ActionResult<IEnumerable<IncorporationDelayDto>?>> IncorporationDelays()
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> IncorporationDelays()
     {
-        var delays = await _incorporationDelayService.FetchAllAsync();
-        return Ok(delays);
+        var ret = new StandardResponse();
+        try
+        {
+            var delays = await _incorporationDelayService.FetchAllAsync();
+            ret.Success = true;
+            ret.Data = delays;
+            return Ok(ret);
+        }
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching incorporation delays.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("incorporation-delays/{id}")]
     [SwaggerOperation(Summary = "Retrieve incorporation delay by ID", Description = "Fetches a specific incorporation delay by its unique ID.")]
-    [ProducesResponseType(typeof(IncorporationDelayDto), 200)]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<IncorporationDelayDto?>> IncorporationDelays(int id)
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> IncorporationDelays(int id)
     {
-        var delay = await _incorporationDelayService.FetchByIdAsync(id);
-        if (delay == null)
+        var ret = new StandardResponse();
+        try
         {
-            return NotFound();
+            var delay = await _incorporationDelayService.FetchByIdAsync(id);
+            if (delay == null)
+            {
+                ret.Success = false;
+                ret.Message = "Incorporation delay not found.";
+                return NotFound(ret);
+            }
+            ret.Success = true;
+            ret.Data = delay;
+            return Ok(ret);
         }
-        return Ok(delay);
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching the incorporation delay.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("incorporation-delays/by-incorp-method/{methodId}")]
     [SwaggerOperation(Summary = "Retrieve incorporation delays by incorporation method ID", Description = "Fetches incorporation delays associated with a specific incorporation method.")]
-    [ProducesResponseType(typeof(IEnumerable<IncorporationDelayDto>), 200)]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<IEnumerable<IncorporationDelayDto>?>> IncorporationDelaysByMethod(int methodId)
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> IncorporationDelaysByMethod(int methodId)
     {
-        var delays = await _incorporationDelayService.FetchByIncorpMethodIdAsync(methodId);
-        if (delays == null || !delays.Any())
+        var ret = new StandardResponse();
+        try
         {
-            return NotFound();
+            var delays = await _incorporationDelayService.FetchByIncorpMethodIdAsync(methodId);
+            if (delays == null || !delays.Any())
+            {
+                ret.Success = false;
+                ret.Message = "No incorporation delays found for the given method ID.";
+                return NotFound(ret);
+            }
+            ret.Success = true;
+            ret.Data = delays;
+            return Ok(ret);
         }
-        return Ok(delays);
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching incorporation delays.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
+
 
     [HttpGet("incorporation-methods")]
     [SwaggerOperation(Summary = "Retrieve all incorporation methods", Description = "Fetches a list of all incorporation methods available.")]
-    [ProducesResponseType(typeof(IEnumerable<IncorporationMethodDto>), 200)]
-    public async Task<ActionResult<IEnumerable<IncorporationMethodDto>?>> IncorporationMethods()
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> IncorporationMethods()
     {
-        var methods = await _incorporationMethodService.FetchAllAsync();
-        return Ok(methods);
+        var ret = new StandardResponse();
+        try
+        {
+            var methods = await _incorporationMethodService.FetchAllAsync();
+            ret.Success = true;
+            ret.Data = methods;
+            return Ok(ret);
+        }
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching incorporation methods.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("incorporation-methods/{id}")]
     [SwaggerOperation(Summary = "Retrieve incorporation method by ID", Description = "Fetches a specific incorporation method by its unique ID.")]
-    [ProducesResponseType(typeof(IncorporationMethodDto), 200)]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<IncorporationMethodDto?>> IncorporationMethods(int id)
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> IncorporationMethods(int id)
     {
-        var method = await _incorporationMethodService.FetchByIdAsync(id);
-        if (method == null)
+        var ret = new StandardResponse();
+        try
         {
-            return NotFound();
+            var method = await _incorporationMethodService.FetchByIdAsync(id);
+            if (method == null)
+            {
+                ret.Success = false;
+                ret.Message = "Incorporation method not found.";
+                return NotFound(ret);
+            }
+            ret.Success = true;
+            ret.Data = method;
+            return Ok(ret);
         }
-        return Ok(method);
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching the incorporation method.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("incorporation-methods/by-app-method/{methodId}")]
     [SwaggerOperation(Summary = "Retrieve incorporation methods by application method ID", Description = "Fetches incorporation methods associated with a specific application method ID.")]
-    [ProducesResponseType(typeof(IEnumerable<IncorporationMethodDto>), 200)]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<IEnumerable<IncorporationMethodDto>?>> IncorporationMethodsByMethodId(int methodId)
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> IncorporationMethodsByMethodId(int methodId)
     {
-        var methods = await _incorporationMethodService.FetchByAppMethodIdAsync(methodId);
-        if (methods == null || !methods.Any())
+        var ret = new StandardResponse();
+        try
         {
-            return NotFound();
+            var methods = await _incorporationMethodService.FetchByAppMethodIdAsync(methodId);
+            if (methods == null || !methods.Any())
+            {
+                ret.Success = false;
+                ret.Message = "No incorporation methods found for the given application method ID.";
+                return NotFound(ret);
+            }
+            ret.Success = true;
+            ret.Data = methods;
+            return Ok(ret);
         }
-        return Ok(methods);
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching incorporation methods.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("manure-groups")]
     [SwaggerOperation(Summary = "Retrieve all manure groups", Description = "Fetches a list of all manure groups available.")]
-    [ProducesResponseType(typeof(IEnumerable<ManureGroupDto>), 200)]
-    public async Task<ActionResult<IEnumerable<ManureGroupDto>?>> ManureGroups()
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> ManureGroups()
     {
-        var groups = await _manureGroupService.FetchAllAsync();
-        return Ok(groups);
+        var ret = new StandardResponse();
+        try
+        {
+            var groups = await _manureGroupService.FetchAllAsync();
+            ret.Success = true;
+            ret.Data = groups;
+            return Ok(ret);
+        }
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching manure groups.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("manure-groups/{id}")]
     [SwaggerOperation(Summary = "Retrieve manure group by ID", Description = "Fetches a specific manure group by its unique ID.")]
-    [ProducesResponseType(typeof(ManureGroupDto), 200)]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<ManureGroupDto?>> ManureGroups(int id)
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> ManureGroups(int id)
     {
-        var group = await _manureGroupService.FetchByIdAsync(id);
-        if (group == null)
+        var ret = new StandardResponse();
+        try
         {
-            return NotFound();
+            var group = await _manureGroupService.FetchByIdAsync(id);
+            if (group == null)
+            {
+                ret.Success = false;
+                ret.Message = "Manure group not found.";
+                return NotFound(ret);
+            }
+            ret.Success = true;
+            ret.Data = group;
+            return Ok(ret);
         }
-        return Ok(group);
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching the manure group.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
+
 
     [HttpGet("manure-types")]
     [SwaggerOperation(
         Summary = "Retrieve all manure types or filter by criteria",
         Description = "Fetches all manure types if no filters are provided. You can filter by optional parameters such as manureGroupId, manureTypeCategoryId, countryId, highReadilyAvailableNitrogen, and isLiquid."
     )]
-    [ProducesResponseType(typeof(IEnumerable<ManureTypeDto>), 200)]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<IEnumerable<ManureTypeDto>?>> ManureTypes(
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> ManureTypes(
         [FromQuery, SwaggerParameter("ID of the manure group to filter by", Required = false)] int? manureGroupId = null,
         [FromQuery, SwaggerParameter("ID of the manure type category to filter by", Required = false)] int? manureTypeCategoryId = null,
         [FromQuery, SwaggerParameter("ID of the country to filter by", Required = false)] int? countryId = null,
         [FromQuery, SwaggerParameter("Whether to filter by highly readily available nitrogen (true/false)", Required = false)] bool? highReadilyAvailableNitrogen = null,
         [FromQuery, SwaggerParameter("Whether to filter by liquid manure types (true/false)", Required = false)] bool? isLiquid = null)
     {
-        IEnumerable<ManureTypeDto>? manureTypes;
-
-        if (!manureGroupId.HasValue && !manureTypeCategoryId.HasValue && !countryId.HasValue &&
-            !highReadilyAvailableNitrogen.HasValue && !isLiquid.HasValue)
+        var ret = new StandardResponse();
+        try
         {
-            // No filters provided, return all manure types
-            manureTypes = await _manureTypeService.FetchAllAsync();
-        }
-        else
-        {
-            // Filters provided, apply them
-            manureTypes = await _manureTypeService.FetchByCriteriaAsync(
-                manureGroupId,
-                manureTypeCategoryId,
-                countryId,
-                highReadilyAvailableNitrogen,
-                isLiquid
-            );
-        }
+            IEnumerable<ManureTypeDto>? manureTypes;
 
-        if (manureTypes == null || !manureTypes.Any())
-        {
-            return NotFound("No manure types found matching the specified criteria.");
-        }
+            if (!manureGroupId.HasValue && !manureTypeCategoryId.HasValue && !countryId.HasValue &&
+                !highReadilyAvailableNitrogen.HasValue && !isLiquid.HasValue)
+            {
+                // No filters provided, return all manure types
+                manureTypes = await _manureTypeService.FetchAllAsync();
+            }
+            else
+            {
+                // Filters provided, apply them
+                manureTypes = await _manureTypeService.FetchByCriteriaAsync(
+                    manureGroupId,
+                    manureTypeCategoryId,
+                    countryId,
+                    highReadilyAvailableNitrogen,
+                    isLiquid
+                );
+            }
 
-        return Ok(manureTypes);
+            if (manureTypes == null || !manureTypes.Any())
+            {
+                ret.Success = false;
+                ret.Message = "No manure types found matching the specified criteria.";
+                return NotFound(ret);
+            }
+
+            ret.Success = true;
+            ret.Data = manureTypes;
+            return Ok(ret);
+        }
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching manure types.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
 
 
     [HttpGet("manure-types/{id}")]
     [SwaggerOperation(Summary = "Retrieve manure type by ID", Description = "Fetches a specific manure type by its unique ID.")]
-    [ProducesResponseType(typeof(ManureTypeDto), 200)]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<ManureTypeDto?>> ManureTypes(int id)
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> ManureTypes(int id)
     {
-        var type = await _manureTypeService.FetchByIdAsync(id);
-        if (type == null)
+        var ret = new StandardResponse();
+        try
         {
-            return NotFound($"Manure type with ID {id} not found.");
+            var type = await _manureTypeService.FetchByIdAsync(id);
+            if (type == null)
+            {
+                ret.Success = false;
+                ret.Message = $"Manure type with ID {id} not found.";
+                return NotFound(ret);
+            }
+
+            ret.Success = true;
+            ret.Data = type;
+            return Ok(ret);
         }
-        return Ok(type);
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching the manure type.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
 
 
     [HttpGet("manure-type-categories")]
     [SwaggerOperation(Summary = "Retrieve all manure type categories", Description = "Fetches a list of all manure type categories available.")]
-    [ProducesResponseType(typeof(IEnumerable<ManureTypeCategoryDto>), 200)]
-    public async Task<ActionResult<IEnumerable<ManureTypeCategoryDto>?>> ManureTypeCategories()
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> ManureTypeCategories()
     {
-        var categories = await _manureTypeCategoryService.FetchAllAsync();
-        return Ok(categories);
+        var ret = new StandardResponse();
+        try
+        {
+            var categories = await _manureTypeCategoryService.FetchAllAsync();
+            ret.Success = true;
+            ret.Data = categories;
+            return Ok(ret);
+        }
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching manure type categories.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("manure-type-categories/{id}")]
     [SwaggerOperation(Summary = "Retrieve manure type category by ID", Description = "Fetches a specific manure type category by its unique ID.")]
-    [ProducesResponseType(typeof(ManureTypeCategoryDto), 200)]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<ManureTypeCategoryDto?>> ManureTypeCategories(int id)
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> ManureTypeCategories(int id)
     {
-        var category = await _manureTypeCategoryService.FetchByIdAsync(id);
-        if (category == null)
+        var ret = new StandardResponse();
+        try
         {
-            return NotFound();
+            var category = await _manureTypeCategoryService.FetchByIdAsync(id);
+            if (category == null)
+            {
+                ret.Success = false;
+                ret.Message = "Manure type category not found.";
+                return NotFound(ret);
+            }
+
+            ret.Success = true;
+            ret.Data = category;
+            return Ok(ret);
         }
-        return Ok(category);
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching the manure type category.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
+
 
     [HttpGet("moisture-types")]
     [SwaggerOperation(Summary = "Retrieve all moisture types", Description = "Fetches a list of all moisture types available.")]
-    [ProducesResponseType(typeof(IEnumerable<MoistureTypeDto>), 200)]
-    public async Task<ActionResult<IEnumerable<MoistureTypeDto>?>> MoistureTypes()
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> MoistureTypes()
     {
-        var types = await _moistureTypeService.FetchAllAsync();
-        return Ok(types);
+        var ret = new StandardResponse();
+        try
+        {
+            var types = await _moistureTypeService.FetchAllAsync();
+            ret.Success = true;
+            ret.Data = types;
+            return Ok(ret);
+        }
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching moisture types.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("moisture-types/{id}")]
     [SwaggerOperation(Summary = "Retrieve moisture type by ID", Description = "Fetches a specific moisture type by its unique ID.")]
-    [ProducesResponseType(typeof(MoistureTypeDto), 200)]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<MoistureTypeDto?>> MoistureTypes(int id)
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> MoistureTypes(int id)
     {
-        var type = await _moistureTypeService.FetchByIdAsync(id);
-        if (type == null)
+        var ret = new StandardResponse();
+        try
         {
-            return NotFound();
+            var type = await _moistureTypeService.FetchByIdAsync(id);
+            if (type == null)
+            {
+                ret.Success = false;
+                ret.Message = "Moisture type not found.";
+                return NotFound(ret);
+            }
+            ret.Success = true;
+            ret.Data = type;
+            return Ok(ret);
         }
-        return Ok(type);
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching the moisture type.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("rain-types")]
     [SwaggerOperation(Summary = "Retrieve all rain types", Description = "Fetches a list of all rain types available.")]
-    [ProducesResponseType(typeof(IEnumerable<RainTypeDto>), 200)]
-    public async Task<ActionResult<IEnumerable<RainTypeDto>?>> RainTypes()
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> RainTypes()
     {
-        var types = await _rainTypeService.FetchAllAsync();
-        return Ok(types);
+        var ret = new StandardResponse();
+        try
+        {
+            var types = await _rainTypeService.FetchAllAsync();
+            ret.Success = true;
+            ret.Data = types;
+            return Ok(ret);
+        }
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching rain types.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("rain-types/{id}")]
     [SwaggerOperation(Summary = "Retrieve rain type by ID", Description = "Fetches a specific rain type by its unique ID.")]
-    [ProducesResponseType(typeof(RainTypeDto), 200)]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<RainTypeDto?>> RainTypes(int id)
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> RainTypes(int id)
     {
-        var type = await _rainTypeService.FetchByIdAsync(id);
-        if (type == null)
+        var ret = new StandardResponse();
+        try
         {
-            return NotFound();
+            var type = await _rainTypeService.FetchByIdAsync(id);
+            if (type == null)
+            {
+                ret.Success = false;
+                ret.Message = "Rain type not found.";
+                return NotFound(ret);
+            }
+            ret.Success = true;
+            ret.Data = type;
+            return Ok(ret);
         }
-        return Ok(type);
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching the rain type.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("sub-soils")]
     [SwaggerOperation(Summary = "Retrieve all sub-soils", Description = "Fetches a list of all sub-soils available.")]
-    [ProducesResponseType(typeof(IEnumerable<SubSoilDto>), 200)]
-    public async Task<ActionResult<IEnumerable<SubSoilDto>?>> SubSoils()
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> SubSoils()
     {
-        var soils = await _subSoilService.FetchAllAsync();
-        return Ok(soils);
+        var ret = new StandardResponse();
+        try
+        {
+            var soils = await _subSoilService.FetchAllAsync();
+            ret.Success = true;
+            ret.Data = soils;
+            return Ok(ret);
+        }
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching sub-soils.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("sub-soils/{id}")]
     [SwaggerOperation(Summary = "Retrieve sub-soil by ID", Description = "Fetches a specific sub-soil by its unique ID.")]
-    [ProducesResponseType(typeof(SubSoilDto), 200)]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<SubSoilDto?>> SubSoils(int id)
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> SubSoils(int id)
     {
-        var soil = await _subSoilService.FetchByIdAsync(id);
-        if (soil == null)
+        var ret = new StandardResponse();
+        try
         {
-            return NotFound();
+            var soil = await _subSoilService.FetchByIdAsync(id);
+            if (soil == null)
+            {
+                ret.Success = false;
+                ret.Message = "Sub-soil not found.";
+                return NotFound(ret);
+            }
+            ret.Success = true;
+            ret.Data = soil;
+            return Ok(ret);
         }
-        return Ok(soil);
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching the sub-soil.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
+
 
     [HttpGet("top-soils")]
     [SwaggerOperation(Summary = "Retrieve all top-soils", Description = "Fetches a list of all top-soils available.")]
-    [ProducesResponseType(typeof(IEnumerable<TopSoilDto>), 200)]
-    public async Task<ActionResult<IEnumerable<TopSoilDto>?>> TopSoils()
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> TopSoils()
     {
-        var soils = await _topSoilService.FetchAllAsync();
-        return Ok(soils);
+        var ret = new StandardResponse();
+        try
+        {
+            var soils = await _topSoilService.FetchAllAsync();
+            ret.Success = true;
+            ret.Data = soils;
+            return Ok(ret);
+        }
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching top-soils.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("top-soils/{id}")]
     [SwaggerOperation(Summary = "Retrieve top-soil by ID", Description = "Fetches a specific top-soil by its unique ID.")]
-    [ProducesResponseType(typeof(TopSoilDto), 200)]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<TopSoilDto?>> TopSoils(int id)
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> TopSoils(int id)
     {
-        var soil = await _topSoilService.FetchByIdAsync(id);
-        if (soil == null)
+        var ret = new StandardResponse();
+        try
         {
-            return NotFound();
+            var soil = await _topSoilService.FetchByIdAsync(id);
+            if (soil == null)
+            {
+                ret.Success = false;
+                ret.Message = "Top-soil not found.";
+                return NotFound(ret);
+            }
+            ret.Success = true;
+            ret.Data = soil;
+            return Ok(ret);
         }
-        return Ok(soil);
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching the top-soil.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("windspeeds")]
     [SwaggerOperation(Summary = "Retrieve all windspeeds", Description = "Fetches a list of all windspeeds available.")]
-    [ProducesResponseType(typeof(IEnumerable<WindspeedDto>), 200)]
-    public async Task<ActionResult<IEnumerable<WindspeedDto>?>> Windspeeds()
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> Windspeeds()
     {
-        var windspeeds = await _windspeedService.FetchAllAsync();
-        return Ok(windspeeds);
+        var ret = new StandardResponse();
+        try
+        {
+            var windspeeds = await _windspeedService.FetchAllAsync();
+            ret.Success = true;
+            ret.Data = windspeeds;
+            return Ok(ret);
+        }
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching windspeeds.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
 
     [HttpGet("windspeeds/{id}")]
     [SwaggerOperation(Summary = "Retrieve windspeed by ID", Description = "Fetches a specific windspeed by its unique ID.")]
-    [ProducesResponseType(typeof(WindspeedDto), 200)]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
-    public async Task<ActionResult<WindspeedDto?>> Windspeeds(int id)
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> Windspeeds(int id)
     {
-        var windspeed = await _windspeedService.FetchByIdAsync(id);
-        if (windspeed == null)
+        var ret = new StandardResponse();
+        try
         {
-            return NotFound();
+            var windspeed = await _windspeedService.FetchByIdAsync(id);
+            if (windspeed == null)
+            {
+                ret.Success = false;
+                ret.Message = "Windspeed not found.";
+                return NotFound(ret);
+            }
+            ret.Success = true;
+            ret.Data = windspeed;
+            return Ok(ret);
         }
-        return Ok(windspeed);
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while fetching the windspeed.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
-
 
     [HttpPost("effective-rainfall")]
     [SwaggerOperation(Summary = "Calculates Rainfall Post Application of Manure", Description = "Calculates the effective rainfall based on application date and end of soil drainage date.")]
-    [ProducesResponseType(typeof(EffectiveRainfallResponse), 200)]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(400)]
-    public async Task<ActionResult<EffectiveRainfallResponse>> GetEffectiveRainfall(EffectiveRainfallRequest effectiveRainfallRequest)
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> GetEffectiveRainfall([FromBody] EffectiveRainfallRequest effectiveRainfallRequest)
     {
-        return Ok(await _climateService.FetchEffectiveRainFall(effectiveRainfallRequest));
+        var ret = new StandardResponse();
+        try
+        {
+            var rainfallResponse = await _climateService.FetchEffectiveRainFall(effectiveRainfallRequest);
+
+            ret.Success = true;
+            ret.Data = rainfallResponse;
+
+            return Ok(ret);
+        }
+        catch (Exception ex)
+        {
+            ret.Success = false;
+            ret.Message = "An error occurred while calculating effective rainfall.";
+            ret.Errors.Add(ex.Message);
+            return StatusCode(500, ret);
+        }
     }
+
 
 }
