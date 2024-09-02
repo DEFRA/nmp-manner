@@ -5,11 +5,8 @@ using Manner.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations; // Add this namespace for Swagger annotations
-using System;
-using System.Data.SqlTypes;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Manner.Api.Controllers;
 
@@ -72,31 +69,16 @@ public class MannerController : ControllerBase
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public async Task<ActionResult<StandardResponse?>> Climates(string postcode)
+    public async Task<ActionResult<StandardResponse>> Climates(string postcode)
     {
-        StandardResponse ret = new StandardResponse();
-        try
+        var (data, errors) = await _climateService.FetchByPostcodeAsync(postcode);
+        return Ok(new StandardResponse
         {
-            (ret.Data, ret.Errors) = await _climateService.FetchByPostcodeAsync(postcode);
-            if (ret.Data != null && !ret.Errors.Any())
-            {
-                ret.Success = true;
-            }
-            else
-            {
-                ret.Success = false;
-                ret.Message = "No climate data found for the provided postcode.";
-            }
-
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching climate data.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+            Success = data != null && !errors.Any(),
+            Data = data,
+            Message = data != null ? null : "No climate data found for the provided postcode.",
+            Errors = errors
+        });
     }
 
     [HttpGet("application-methods")]
@@ -105,31 +87,13 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> ApplicationMethods()
     {
-        var ret = new StandardResponse();
-        try
+        var data = await _applicationMethodService.FetchAllAsync();
+        return Ok(new StandardResponse
         {
-            var data = await _applicationMethodService.FetchAllAsync();
-            if (data != null && data.Any())
-            {
-                ret.Success = true;
-                ret.Data = data;
-            }
-            else
-            {
-                ret.Success = false;
-                ret.Message = "No application methods found.";
-            }
-
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching application methods.";
-            ret.Errors.Add(ex.Message);
-
-            return StatusCode(500, ret);
-        }
+            Success = data != null && data.Any(),
+            Data = data,
+            Message = data != null && data.Any() ? null : "No application methods found."
+        });
     }
 
     [HttpGet("application-methods/{id}")]
@@ -139,34 +103,11 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> ApplicationMethodById(int id)
     {
-        var ret = new StandardResponse();
-        try
-        {
-            var method = await _applicationMethodService.FetchByIdAsync(id);
-            if (method != null)
-            {
-                ret.Success = true;
-                ret.Data = method;
-            }
-            else
-            {
-                ret.Success = false;
-                ret.Message = "Application method not found.";
-                return NotFound(ret);
-            }
-
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching the application method.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+        var method = await _applicationMethodService.FetchByIdAsync(id);
+        return method != null
+            ? Ok(new StandardResponse { Success = true, Data = method })
+            : NotFound(new StandardResponse { Success = false, Message = "Application method not found." });
     }
-
-
 
     [HttpGet("crop-types")]
     [SwaggerOperation(Summary = "Retrieve all crop types", Description = "Fetches a list of all crop types available.")]
@@ -174,31 +115,13 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> CropTypes()
     {
-        var ret = new StandardResponse();
-        try
+        var data = await _cropTypeService.FetchAllAsync();
+        return Ok(new StandardResponse
         {
-            var data = await _cropTypeService.FetchAllAsync();
-            if (data != null && data.Any())
-            {
-                ret.Success = true;
-                ret.Data = data;
-            }
-            else
-            {
-                ret.Success = false;
-                ret.Message = "No crop types found.";
-            }
-
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching crop types.";
-            ret.Errors.Add(ex.Message);
-
-            return StatusCode(500, ret);
-        }
+            Success = data != null && data.Any(),
+            Data = data,
+            Message = data != null && data.Any() ? null : "No crop types found."
+        });
     }
 
     [HttpGet("crop-types/{id}")]
@@ -208,34 +131,11 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> CropTypes(int id)
     {
-        var ret = new StandardResponse();
-        try
-        {
-            var cropType = await _cropTypeService.FetchByIdAsync(id);
-            if (cropType != null)
-            {
-                ret.Success = true;
-                ret.Data = cropType;
-            }
-            else
-            {
-                ret.Success = false;
-                ret.Message = "Crop type not found.";
-                return NotFound(ret);
-            }
-
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching the crop type.";
-            ret.Errors.Add(ex.Message);
-
-            return StatusCode(500, ret);
-        }
+        var cropType = await _cropTypeService.FetchByIdAsync(id);
+        return cropType != null
+            ? Ok(new StandardResponse { Success = true, Data = cropType })
+            : NotFound(new StandardResponse { Success = false, Message = "Crop type not found." });
     }
-
 
     [HttpGet("countries")]
     [SwaggerOperation(Summary = "Retrieve all countries", Description = "Fetches a list of all countries available.")]
@@ -243,31 +143,13 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> Countries()
     {
-        var ret = new StandardResponse();
-        try
+        var data = await _countryService.FetchAllAsync();
+        return Ok(new StandardResponse
         {
-            var data = await _countryService.FetchAllAsync();
-            if (data != null && data.Any())
-            {
-                ret.Success = true;
-                ret.Data = data;
-            }
-            else
-            {
-                ret.Success = false;
-                ret.Message = "No countries found.";
-            }
-
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching countries.";
-            ret.Errors.Add(ex.Message);
-
-            return StatusCode(500, ret);
-        }
+            Success = data != null && data.Any(),
+            Data = data,
+            Message = data != null && data.Any() ? null : "No countries found."
+        });
     }
 
     [HttpGet("countries/{id}")]
@@ -277,33 +159,11 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> Countries(int id)
     {
-        var ret = new StandardResponse();
-        try
-        {
-            var country = await _countryService.FetchByIdAsync(id);
-            if (country != null)
-            {
-                ret.Success = true;
-                ret.Data = country;
-            }
-            else
-            {
-                ret.Success = false;
-                ret.Message = "Country not found.";
-                return NotFound(ret);
-            }
-
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching the country.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+        var country = await _countryService.FetchByIdAsync(id);
+        return country != null
+            ? Ok(new StandardResponse { Success = true, Data = country })
+            : NotFound(new StandardResponse { Success = false, Message = "Country not found." });
     }
-
 
     [HttpPost("autumn-crop-nitrogen-uptake")]
     [SwaggerOperation(Summary = "Get Autumn Crop Nitrogen Uptake", Description = "Calculates and retrieves the nitrogen uptake for autumn crops based on the provided request data.")]
@@ -312,23 +172,12 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> GetAutumnCropNitrogenUptake([FromBody] AutumnCropNitrogenUptakeRequest autumnCropNitrogenUptakeRequest)
     {
-        var ret = new StandardResponse();
-        try
+        var uptakeResponse = await _cropTypeService.FetchCropUptakeFactorDefault(autumnCropNitrogenUptakeRequest);
+        return Ok(new StandardResponse
         {
-            var uptakeResponse = await _cropTypeService.FetchCropUptakeFactorDefault(autumnCropNitrogenUptakeRequest);
-
-            ret.Success = true;
-            ret.Data = uptakeResponse;
-
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while calculating nitrogen uptake.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+            Success = true,
+            Data = uptakeResponse
+        });
     }
 
     [HttpGet("incorporation-delays")]
@@ -337,21 +186,12 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> IncorporationDelays()
     {
-        var ret = new StandardResponse();
-        try
+        var delays = await _incorporationDelayService.FetchAllAsync();
+        return Ok(new StandardResponse
         {
-            var delays = await _incorporationDelayService.FetchAllAsync();
-            ret.Success = true;
-            ret.Data = delays;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching incorporation delays.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+            Success = true,
+            Data = delays
+        });
     }
 
     [HttpGet("incorporation-delays/{id}")]
@@ -361,27 +201,10 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> IncorporationDelays(int id)
     {
-        var ret = new StandardResponse();
-        try
-        {
-            var delay = await _incorporationDelayService.FetchByIdAsync(id);
-            if (delay == null)
-            {
-                ret.Success = false;
-                ret.Message = "Incorporation delay not found.";
-                return NotFound(ret);
-            }
-            ret.Success = true;
-            ret.Data = delay;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching the incorporation delay.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+        var delay = await _incorporationDelayService.FetchByIdAsync(id);
+        return delay != null
+            ? Ok(new StandardResponse { Success = true, Data = delay })
+            : NotFound(new StandardResponse { Success = false, Message = "Incorporation delay not found." });
     }
 
     [HttpGet("incorporation-delays/by-incorp-method/{methodId}")]
@@ -391,29 +214,11 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> IncorporationDelaysByMethod(int methodId)
     {
-        var ret = new StandardResponse();
-        try
-        {
-            var delays = await _incorporationDelayService.FetchByIncorpMethodIdAsync(methodId);
-            if (delays == null || !delays.Any())
-            {
-                ret.Success = false;
-                ret.Message = "No incorporation delays found for the given method ID.";
-                return NotFound(ret);
-            }
-            ret.Success = true;
-            ret.Data = delays;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching incorporation delays.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+        var delays = await _incorporationDelayService.FetchByIncorpMethodIdAsync(methodId);
+        return delays != null && delays.Any()
+            ? Ok(new StandardResponse { Success = true, Data = delays })
+            : NotFound(new StandardResponse { Success = false, Message = "No incorporation delays found for the given method ID." });
     }
-
 
     [HttpGet("incorporation-methods")]
     [SwaggerOperation(Summary = "Retrieve all incorporation methods", Description = "Fetches a list of all incorporation methods available.")]
@@ -421,21 +226,12 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> IncorporationMethods()
     {
-        var ret = new StandardResponse();
-        try
+        var methods = await _incorporationMethodService.FetchAllAsync();
+        return Ok(new StandardResponse
         {
-            var methods = await _incorporationMethodService.FetchAllAsync();
-            ret.Success = true;
-            ret.Data = methods;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching incorporation methods.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+            Success = true,
+            Data = methods
+        });
     }
 
     [HttpGet("incorporation-methods/{id}")]
@@ -445,27 +241,10 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> IncorporationMethods(int id)
     {
-        var ret = new StandardResponse();
-        try
-        {
-            var method = await _incorporationMethodService.FetchByIdAsync(id);
-            if (method == null)
-            {
-                ret.Success = false;
-                ret.Message = "Incorporation method not found.";
-                return NotFound(ret);
-            }
-            ret.Success = true;
-            ret.Data = method;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching the incorporation method.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+        var method = await _incorporationMethodService.FetchByIdAsync(id);
+        return method != null
+            ? Ok(new StandardResponse { Success = true, Data = method })
+            : NotFound(new StandardResponse { Success = false, Message = "Incorporation method not found." });
     }
 
     [HttpGet("incorporation-methods/by-app-method/{methodId}")]
@@ -475,27 +254,10 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> IncorporationMethodsByMethodId(int methodId)
     {
-        var ret = new StandardResponse();
-        try
-        {
-            var methods = await _incorporationMethodService.FetchByAppMethodIdAsync(methodId);
-            if (methods == null || !methods.Any())
-            {
-                ret.Success = false;
-                ret.Message = "No incorporation methods found for the given application method ID.";
-                return NotFound(ret);
-            }
-            ret.Success = true;
-            ret.Data = methods;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching incorporation methods.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+        var methods = await _incorporationMethodService.FetchByAppMethodIdAsync(methodId);
+        return methods != null && methods.Any()
+            ? Ok(new StandardResponse { Success = true, Data = methods })
+            : NotFound(new StandardResponse { Success = false, Message = "No incorporation methods found for the given application method ID." });
     }
 
     [HttpGet("manure-groups")]
@@ -504,21 +266,12 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> ManureGroups()
     {
-        var ret = new StandardResponse();
-        try
+        var groups = await _manureGroupService.FetchAllAsync();
+        return Ok(new StandardResponse
         {
-            var groups = await _manureGroupService.FetchAllAsync();
-            ret.Success = true;
-            ret.Data = groups;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching manure groups.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+            Success = true,
+            Data = groups
+        });
     }
 
     [HttpGet("manure-groups/{id}")]
@@ -528,29 +281,11 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> ManureGroups(int id)
     {
-        var ret = new StandardResponse();
-        try
-        {
-            var group = await _manureGroupService.FetchByIdAsync(id);
-            if (group == null)
-            {
-                ret.Success = false;
-                ret.Message = "Manure group not found.";
-                return NotFound(ret);
-            }
-            ret.Success = true;
-            ret.Data = group;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching the manure group.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+        var group = await _manureGroupService.FetchByIdAsync(id);
+        return group != null
+            ? Ok(new StandardResponse { Success = true, Data = group })
+            : NotFound(new StandardResponse { Success = false, Message = "Manure group not found." });
     }
-
 
     [HttpGet("manure-types")]
     [SwaggerOperation(
@@ -567,49 +302,28 @@ public class MannerController : ControllerBase
         [FromQuery, SwaggerParameter("Whether to filter by highly readily available nitrogen (true/false)", Required = false)] bool? highReadilyAvailableNitrogen = null,
         [FromQuery, SwaggerParameter("Whether to filter by liquid manure types (true/false)", Required = false)] bool? isLiquid = null)
     {
-        var ret = new StandardResponse();
-        try
+        IEnumerable<ManureTypeDto>? manureTypes;
+
+        if (!manureGroupId.HasValue && !manureTypeCategoryId.HasValue && !countryId.HasValue &&
+            !highReadilyAvailableNitrogen.HasValue && !isLiquid.HasValue)
         {
-            IEnumerable<ManureTypeDto>? manureTypes;
-
-            if (!manureGroupId.HasValue && !manureTypeCategoryId.HasValue && !countryId.HasValue &&
-                !highReadilyAvailableNitrogen.HasValue && !isLiquid.HasValue)
-            {
-                // No filters provided, return all manure types
-                manureTypes = await _manureTypeService.FetchAllAsync();
-            }
-            else
-            {
-                // Filters provided, apply them
-                manureTypes = await _manureTypeService.FetchByCriteriaAsync(
-                    manureGroupId,
-                    manureTypeCategoryId,
-                    countryId,
-                    highReadilyAvailableNitrogen,
-                    isLiquid
-                );
-            }
-
-            if (manureTypes == null || !manureTypes.Any())
-            {
-                ret.Success = false;
-                ret.Message = "No manure types found matching the specified criteria.";
-                return NotFound(ret);
-            }
-
-            ret.Success = true;
-            ret.Data = manureTypes;
-            return Ok(ret);
+            manureTypes = await _manureTypeService.FetchAllAsync();
         }
-        catch (Exception ex)
+        else
         {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching manure types.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
+            manureTypes = await _manureTypeService.FetchByCriteriaAsync(
+                manureGroupId,
+                manureTypeCategoryId,
+                countryId,
+                highReadilyAvailableNitrogen,
+                isLiquid
+            );
         }
+
+        return manureTypes != null && manureTypes.Any()
+            ? Ok(new StandardResponse { Success = true, Data = manureTypes })
+            : NotFound(new StandardResponse { Success = false, Message = "No manure types found matching the specified criteria." });
     }
-
 
     [HttpGet("manure-types/{id}")]
     [SwaggerOperation(Summary = "Retrieve manure type by ID", Description = "Fetches a specific manure type by its unique ID.")]
@@ -618,30 +332,11 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> ManureTypes(int id)
     {
-        var ret = new StandardResponse();
-        try
-        {
-            var type = await _manureTypeService.FetchByIdAsync(id);
-            if (type == null)
-            {
-                ret.Success = false;
-                ret.Message = $"Manure type with ID {id} not found.";
-                return NotFound(ret);
-            }
-
-            ret.Success = true;
-            ret.Data = type;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching the manure type.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+        var type = await _manureTypeService.FetchByIdAsync(id);
+        return type != null
+            ? Ok(new StandardResponse { Success = true, Data = type })
+            : NotFound(new StandardResponse { Success = false, Message = $"Manure type with ID {id} not found." });
     }
-
 
     [HttpGet("manure-type-categories")]
     [SwaggerOperation(Summary = "Retrieve all manure type categories", Description = "Fetches a list of all manure type categories available.")]
@@ -649,21 +344,12 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> ManureTypeCategories()
     {
-        var ret = new StandardResponse();
-        try
+        var categories = await _manureTypeCategoryService.FetchAllAsync();
+        return Ok(new StandardResponse
         {
-            var categories = await _manureTypeCategoryService.FetchAllAsync();
-            ret.Success = true;
-            ret.Data = categories;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching manure type categories.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+            Success = true,
+            Data = categories
+        });
     }
 
     [HttpGet("manure-type-categories/{id}")]
@@ -673,30 +359,11 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> ManureTypeCategories(int id)
     {
-        var ret = new StandardResponse();
-        try
-        {
-            var category = await _manureTypeCategoryService.FetchByIdAsync(id);
-            if (category == null)
-            {
-                ret.Success = false;
-                ret.Message = "Manure type category not found.";
-                return NotFound(ret);
-            }
-
-            ret.Success = true;
-            ret.Data = category;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching the manure type category.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+        var category = await _manureTypeCategoryService.FetchByIdAsync(id);
+        return category != null
+            ? Ok(new StandardResponse { Success = true, Data = category })
+            : NotFound(new StandardResponse { Success = false, Message = "Manure type category not found." });
     }
-
 
     [HttpGet("moisture-types")]
     [SwaggerOperation(Summary = "Retrieve all moisture types", Description = "Fetches a list of all moisture types available.")]
@@ -704,21 +371,12 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> MoistureTypes()
     {
-        var ret = new StandardResponse();
-        try
+        var types = await _moistureTypeService.FetchAllAsync();
+        return Ok(new StandardResponse
         {
-            var types = await _moistureTypeService.FetchAllAsync();
-            ret.Success = true;
-            ret.Data = types;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching moisture types.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+            Success = true,
+            Data = types
+        });
     }
 
     [HttpGet("moisture-types/{id}")]
@@ -728,27 +386,10 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> MoistureTypes(int id)
     {
-        var ret = new StandardResponse();
-        try
-        {
-            var type = await _moistureTypeService.FetchByIdAsync(id);
-            if (type == null)
-            {
-                ret.Success = false;
-                ret.Message = "Moisture type not found.";
-                return NotFound(ret);
-            }
-            ret.Success = true;
-            ret.Data = type;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching the moisture type.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+        var type = await _moistureTypeService.FetchByIdAsync(id);
+        return type != null
+            ? Ok(new StandardResponse { Success = true, Data = type })
+            : NotFound(new StandardResponse { Success = false, Message = "Moisture type not found." });
     }
 
     [HttpGet("rain-types")]
@@ -757,21 +398,12 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> RainTypes()
     {
-        var ret = new StandardResponse();
-        try
+        var types = await _rainTypeService.FetchAllAsync();
+        return Ok(new StandardResponse
         {
-            var types = await _rainTypeService.FetchAllAsync();
-            ret.Success = true;
-            ret.Data = types;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching rain types.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+            Success = true,
+            Data = types
+        });
     }
 
     [HttpGet("rain-types/{id}")]
@@ -781,27 +413,10 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> RainTypes(int id)
     {
-        var ret = new StandardResponse();
-        try
-        {
-            var type = await _rainTypeService.FetchByIdAsync(id);
-            if (type == null)
-            {
-                ret.Success = false;
-                ret.Message = "Rain type not found.";
-                return NotFound(ret);
-            }
-            ret.Success = true;
-            ret.Data = type;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching the rain type.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+        var type = await _rainTypeService.FetchByIdAsync(id);
+        return type != null
+            ? Ok(new StandardResponse { Success = true, Data = type })
+            : NotFound(new StandardResponse { Success = false, Message = "Rain type not found." });
     }
 
     [HttpGet("sub-soils")]
@@ -810,21 +425,12 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> SubSoils()
     {
-        var ret = new StandardResponse();
-        try
+        var soils = await _subSoilService.FetchAllAsync();
+        return Ok(new StandardResponse
         {
-            var soils = await _subSoilService.FetchAllAsync();
-            ret.Success = true;
-            ret.Data = soils;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching sub-soils.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+            Success = true,
+            Data = soils
+        });
     }
 
     [HttpGet("sub-soils/{id}")]
@@ -834,29 +440,11 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> SubSoils(int id)
     {
-        var ret = new StandardResponse();
-        try
-        {
-            var soil = await _subSoilService.FetchByIdAsync(id);
-            if (soil == null)
-            {
-                ret.Success = false;
-                ret.Message = "Sub-soil not found.";
-                return NotFound(ret);
-            }
-            ret.Success = true;
-            ret.Data = soil;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching the sub-soil.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+        var soil = await _subSoilService.FetchByIdAsync(id);
+        return soil != null
+            ? Ok(new StandardResponse { Success = true, Data = soil })
+            : NotFound(new StandardResponse { Success = false, Message = "Sub-soil not found." });
     }
-
 
     [HttpGet("top-soils")]
     [SwaggerOperation(Summary = "Retrieve all top-soils", Description = "Fetches a list of all top-soils available.")]
@@ -864,21 +452,12 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> TopSoils()
     {
-        var ret = new StandardResponse();
-        try
+        var soils = await _topSoilService.FetchAllAsync();
+        return Ok(new StandardResponse
         {
-            var soils = await _topSoilService.FetchAllAsync();
-            ret.Success = true;
-            ret.Data = soils;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching top-soils.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+            Success = true,
+            Data = soils
+        });
     }
 
     [HttpGet("top-soils/{id}")]
@@ -888,27 +467,10 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> TopSoils(int id)
     {
-        var ret = new StandardResponse();
-        try
-        {
-            var soil = await _topSoilService.FetchByIdAsync(id);
-            if (soil == null)
-            {
-                ret.Success = false;
-                ret.Message = "Top-soil not found.";
-                return NotFound(ret);
-            }
-            ret.Success = true;
-            ret.Data = soil;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching the top-soil.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+        var soil = await _topSoilService.FetchByIdAsync(id);
+        return soil != null
+            ? Ok(new StandardResponse { Success = true, Data = soil })
+            : NotFound(new StandardResponse { Success = false, Message = "Top-soil not found." });
     }
 
     [HttpGet("windspeeds")]
@@ -917,21 +479,12 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> Windspeeds()
     {
-        var ret = new StandardResponse();
-        try
+        var windspeeds = await _windspeedService.FetchAllAsync();
+        return Ok(new StandardResponse
         {
-            var windspeeds = await _windspeedService.FetchAllAsync();
-            ret.Success = true;
-            ret.Data = windspeeds;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching windspeeds.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+            Success = true,
+            Data = windspeeds
+        });
     }
 
     [HttpGet("windspeeds/{id}")]
@@ -941,27 +494,10 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> Windspeeds(int id)
     {
-        var ret = new StandardResponse();
-        try
-        {
-            var windspeed = await _windspeedService.FetchByIdAsync(id);
-            if (windspeed == null)
-            {
-                ret.Success = false;
-                ret.Message = "Windspeed not found.";
-                return NotFound(ret);
-            }
-            ret.Success = true;
-            ret.Data = windspeed;
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while fetching the windspeed.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+        var windspeed = await _windspeedService.FetchByIdAsync(id);
+        return windspeed != null
+            ? Ok(new StandardResponse { Success = true, Data = windspeed })
+            : NotFound(new StandardResponse { Success = false, Message = "Windspeed not found." });
     }
 
     [HttpPost("effective-rainfall")]
@@ -971,24 +507,11 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> GetEffectiveRainfall([FromBody] EffectiveRainfallRequest effectiveRainfallRequest)
     {
-        var ret = new StandardResponse();
-        try
+        var rainfallResponse = await _climateService.FetchEffectiveRainFall(effectiveRainfallRequest);
+        return Ok(new StandardResponse
         {
-            var rainfallResponse = await _climateService.FetchEffectiveRainFall(effectiveRainfallRequest);
-
-            ret.Success = true;
-            ret.Data = rainfallResponse;
-
-            return Ok(ret);
-        }
-        catch (Exception ex)
-        {
-            ret.Success = false;
-            ret.Message = "An error occurred while calculating effective rainfall.";
-            ret.Errors.Add(ex.Message);
-            return StatusCode(500, ret);
-        }
+            Success = true,
+            Data = rainfallResponse
+        });
     }
-
-
 }
