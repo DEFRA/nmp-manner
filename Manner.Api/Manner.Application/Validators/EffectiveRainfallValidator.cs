@@ -19,8 +19,9 @@ namespace Manner.Application.Validators
 
             // Validate that Postcode is not null or empty
             RuleFor(x => x.ClimateDataPostcode)
-                .NotEmpty().WithMessage("ClimateDataPostcode is required.")
-                .MinimumLength(3).WithMessage("ClimateDataPostcode must be at least 3 characters long.");
+                .NotEmpty().WithMessage("Postcode is required.")
+                .MinimumLength(3).WithMessage("Postcode must be at least 3 characters long.")
+                .MaximumLength(4).WithMessage("Only the first half of the postcode is required. A maximum of 4 characters");
         }
 
         private bool BeWithinValidRange(DateOnly date)
