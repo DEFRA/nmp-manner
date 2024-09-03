@@ -240,72 +240,72 @@ public class MCDM
 
     public double get_Sand(SoilLayer soilLayer)
     {
-        double SandRet = default;
+        double sandRet = default;
         if (soilLayer == SoilLayer.Topsoil)
         {
-            SandRet = _topSand;
+            sandRet = _topSand;
         }
         else
         {
-            SandRet = _subSand;
+            sandRet = _subSand;
         }
 
-        return SandRet;
+        return sandRet;
     }
 
     public double get_Clay(SoilLayer soilLayer)
     {
-        double ClayRet = default;
+        double clayRet = default;
         if (soilLayer == SoilLayer.Topsoil)
         {
-            ClayRet = _topClay;
+            clayRet = _topClay;
         }
         else
         {
-            ClayRet = _subClay;
+            clayRet = _subClay;
         }
 
-        return ClayRet;
+        return clayRet;
     }
 
     public double get_Density(SoilLayer soilLayer)
     {
-        double DensityRet = default;
+        double densityRet = default;
         if (soilLayer == SoilLayer.Topsoil)
         {
-            DensityRet = _topDensity;
+            densityRet = _topDensity;
         }
         else
         {
-            DensityRet = _subDensity;
+            densityRet = _subDensity;
         }
 
-        return DensityRet;
+        return densityRet;
     }
 
     public double get_Carbon(SoilLayer soilLayer)
     {
-        double CarbonRet = default;
+        double carbonRet = default;
         if (soilLayer == SoilLayer.Topsoil)
         {
-            CarbonRet = _topCarbon;
+            carbonRet = _topCarbon;
         }
         else
         {
-            CarbonRet = _subCarbon;
+            carbonRet = _subCarbon;
         }
 
-        return CarbonRet;
+        return carbonRet;
     }
 
     public double get_WindSpeed(int monthIndex = -1)
     {
-        double WindSpeedRet = default;
+        double windSpeedRet = default;
         if (monthIndex == -1)
         {
-            WindSpeedRet = 0d;
+            windSpeedRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
-                WindSpeedRet = WindSpeedRet + _windSpeed[monthIndex] / 12d;
+                windSpeedRet = windSpeedRet + _windSpeed[monthIndex] / 12d;
         }
         else if (monthIndex < 0 | monthIndex > 11)
         {
@@ -313,10 +313,10 @@ public class MCDM
         }
         else
         {
-            WindSpeedRet = _windSpeed[monthIndex];
+            windSpeedRet = _windSpeed[monthIndex];
         }
 
-        return WindSpeedRet;
+        return windSpeedRet;
 
     }
 
@@ -340,13 +340,13 @@ public class MCDM
 
     public double get_MinTemp(int monthIndex = -1)
     {
-        double MinTempRet = default;
+        double minTempRet = default;
 
         if (monthIndex == -1)
         {
-            MinTempRet = 0d;
+            minTempRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
-                MinTempRet = MinTempRet + _minTemp[monthIndex] / 12d;
+                minTempRet = minTempRet + _minTemp[monthIndex] / 12d;
         }
         else if (monthIndex < 0 | monthIndex > 11)
         {
@@ -354,10 +354,10 @@ public class MCDM
         }
         else
         {
-            MinTempRet = _minTemp[monthIndex];
+            minTempRet = _minTemp[monthIndex];
         }
 
-        return MinTempRet;
+        return minTempRet;
 
     }
 
@@ -381,13 +381,13 @@ public class MCDM
 
     public double get_MaxTemp(int monthIndex = -1)
     {
-        double MaxTempRet = default;
+        double maxTempRet = default;
 
         if (monthIndex == -1)
         {
-            MaxTempRet = 0d;
+            maxTempRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
-                MaxTempRet = MaxTempRet + _maxTemp[monthIndex] / 12d;
+                maxTempRet = maxTempRet + _maxTemp[monthIndex] / 12d;
         }
         else if (monthIndex < 0 | monthIndex > 11)
         {
@@ -395,10 +395,10 @@ public class MCDM
         }
         else
         {
-            MaxTempRet = _maxTemp[monthIndex];
+            maxTempRet = _maxTemp[monthIndex];
         }
 
-        return MaxTempRet;
+        return maxTempRet;
 
     }
 
@@ -423,13 +423,13 @@ public class MCDM
 
     public double get_MeanTemp(int monthIndex = -1)
     {
-        double MeanTempRet = default;
+        double meanTempRet = default;
 
         if (monthIndex == -1)
         {
-            MeanTempRet = 0d;
+            meanTempRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
-                MeanTempRet = MeanTempRet + _meanTemp[monthIndex] / 12d;
+                meanTempRet = meanTempRet + _meanTemp[monthIndex] / 12d;
         }
         else if (monthIndex < 0 | monthIndex > 11)
         {
@@ -437,10 +437,10 @@ public class MCDM
         }
         else
         {
-            MeanTempRet = _meanTemp[monthIndex];
+            meanTempRet = _meanTemp[monthIndex];
         }
 
-        return MeanTempRet;
+        return meanTempRet;
 
     }
 
@@ -471,13 +471,13 @@ public class MCDM
 
     public double get_SunHours(int monthIndex = -1)
     {
-        double SunHoursRet = default;
+        double sunHoursRet = default;
 
         if (monthIndex == -1)
         {
-            SunHoursRet = 0d;
+            sunHoursRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
-                SunHoursRet = SunHoursRet + _sunHours[monthIndex] / 12d;
+                sunHoursRet = sunHoursRet + _sunHours[monthIndex] / 12d;
         }
         else if (monthIndex < 0 | monthIndex > 11)
         {
@@ -485,10 +485,10 @@ public class MCDM
         }
         else
         {
-            SunHoursRet = _sunHours[monthIndex];
+            sunHoursRet = _sunHours[monthIndex];
         }
 
-        return SunHoursRet;
+        return sunHoursRet;
 
     }
 
@@ -513,13 +513,13 @@ public class MCDM
 
     public double get_RainDays(int monthIndex = -1)
     {
-        double RainDaysRet = default;
+        double rainDaysRet = default;
 
         if (monthIndex == -1)
         {
-            RainDaysRet = 0d;
+            rainDaysRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
-                RainDaysRet = RainDaysRet + _rainDays[monthIndex] / 12d;
+                rainDaysRet = rainDaysRet + _rainDays[monthIndex] / 12d;
         }
         else if (monthIndex < 0 | monthIndex > 11)
         {
@@ -527,10 +527,10 @@ public class MCDM
         }
         else
         {
-            RainDaysRet = _rainDays[monthIndex];
+            rainDaysRet = _rainDays[monthIndex];
         }
 
-        return RainDaysRet;
+        return rainDaysRet;
 
     }
 
@@ -554,13 +554,13 @@ public class MCDM
 
     public double get_Rainfall(int monthIndex = -1)
     {
-        double RainfallRet = default;
+        double rainfallRet = default;
 
         if (monthIndex == -1)
         {
-            RainfallRet = 0d;
+            rainfallRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
-                RainfallRet = RainfallRet + _rainfall[monthIndex] / 12d;
+                rainfallRet = rainfallRet + _rainfall[monthIndex] / 12d;
         }
         else if (monthIndex < 0 | monthIndex > 11)
         {
@@ -568,10 +568,10 @@ public class MCDM
         }
         else
         {
-            RainfallRet = _rainfall[monthIndex];
+            rainfallRet = _rainfall[monthIndex];
         }
 
-        return RainfallRet;
+        return rainfallRet;
 
     }
 
@@ -597,9 +597,9 @@ public class MCDM
     {
         get
         {
-            LandCover LandCoverTypeRet = default;
-            LandCoverTypeRet = _landCover;
-            return LandCoverTypeRet;
+            LandCover landCoverTypeRet = default;
+            landCoverTypeRet = _landCover;
+            return landCoverTypeRet;
         }
     }
 
@@ -607,9 +607,9 @@ public class MCDM
     {
         get
         {
-            Texture PercentageAWCRet = default;
-            PercentageAWCRet = _texture;
-            return PercentageAWCRet;
+            Texture percentageAWCRet = default;
+            percentageAWCRet = _texture;
+            return percentageAWCRet;
         }
     }
 
@@ -617,9 +617,9 @@ public class MCDM
     {
         get
         {
-            double ObservationSoilTemperatureDepthRet = default;
-            ObservationSoilTemperatureDepthRet = _depth;
-            return ObservationSoilTemperatureDepthRet;
+            double observationSoilTemperatureDepthRet = default;
+            observationSoilTemperatureDepthRet = _depth;
+            return observationSoilTemperatureDepthRet;
         }
     }
 
@@ -627,9 +627,9 @@ public class MCDM
     {
         get
         {
-            double ObservationSoilTemperatureHourRet = default;
-            ObservationSoilTemperatureHourRet = _hour;
-            return ObservationSoilTemperatureHourRet;
+            double observationSoilTemperatureHourRet = default;
+            observationSoilTemperatureHourRet = _hour;
+            return observationSoilTemperatureHourRet;
         }
     }
 
@@ -637,9 +637,9 @@ public class MCDM
     {
         get
         {
-            double AltitudeRet = default;
-            AltitudeRet = _altitude;
-            return AltitudeRet;
+            double altitudeRet = default;
+            altitudeRet = _altitude;
+            return altitudeRet;
         }
     }
 
@@ -647,9 +647,9 @@ public class MCDM
     {
         get
         {
-            double LatitudeRet = default;
-            LatitudeRet = _latitude;
-            return LatitudeRet;
+            double latitudeRet = default;
+            latitudeRet = _latitude;
+            return latitudeRet;
         }
     }
 
@@ -657,13 +657,13 @@ public class MCDM
 
     public double get_CanopyEvaporation(int monthIndex = -1)
     {
-        double CanopyEvaporationRet = default;
+        double canopyEvaporationRet = default;
 
         if (monthIndex == -1)
         {
-            CanopyEvaporationRet = 0d;
+            canopyEvaporationRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
-                CanopyEvaporationRet = CanopyEvaporationRet + _canopyEvaporation[monthIndex] / 12d;
+                canopyEvaporationRet = canopyEvaporationRet + _canopyEvaporation[monthIndex] / 12d;
         }
         else if (monthIndex < 0 | monthIndex > 11)
         {
@@ -673,22 +673,22 @@ public class MCDM
         {
             if (_dirty)
                 Calculate();
-            CanopyEvaporationRet = _canopyEvaporation[monthIndex];
+            canopyEvaporationRet = _canopyEvaporation[monthIndex];
         }
 
-        return CanopyEvaporationRet;
+        return canopyEvaporationRet;
 
     }
 
     public double get_PotentialEvapotranspiration(int monthIndex = -1)
     {
-        double PotentialEvapotranspirationRet = default;
+        double potentialEvapotranspirationRet = default;
 
         if (monthIndex == -1)
         {
-            PotentialEvapotranspirationRet = 0d;
+            potentialEvapotranspirationRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
-                PotentialEvapotranspirationRet = PotentialEvapotranspirationRet + _potentialEvapotranspiration[monthIndex] / 12d;
+                potentialEvapotranspirationRet = potentialEvapotranspirationRet + _potentialEvapotranspiration[monthIndex] / 12d;
         }
         else if (monthIndex < 0 | monthIndex > 11)
         {
@@ -698,22 +698,22 @@ public class MCDM
         {
             if (_dirty)
                 Calculate();
-            PotentialEvapotranspirationRet = _potentialEvapotranspiration[monthIndex];
+            potentialEvapotranspirationRet = _potentialEvapotranspiration[monthIndex];
         }
 
-        return PotentialEvapotranspirationRet;
+        return potentialEvapotranspirationRet;
 
     }
 
     public double get_ActualEvapotranspiration(int monthIndex = -1)
     {
-        double ActualEvapotranspirationRet = default;
+        double actualEvapotranspirationRet = default;
 
         if (monthIndex == -1)
         {
-            ActualEvapotranspirationRet = 0d;
+            actualEvapotranspirationRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
-                ActualEvapotranspirationRet = ActualEvapotranspirationRet + _actualEvapotranspiration[monthIndex] / 12d;
+                actualEvapotranspirationRet = actualEvapotranspirationRet + _actualEvapotranspiration[monthIndex] / 12d;
         }
         else if (monthIndex < 0 | monthIndex > 11)
         {
@@ -723,22 +723,22 @@ public class MCDM
         {
             if (_dirty)
                 Calculate();
-            ActualEvapotranspirationRet = _actualEvapotranspiration[monthIndex];
+            actualEvapotranspirationRet = _actualEvapotranspiration[monthIndex];
         }
 
-        return ActualEvapotranspirationRet;
+        return actualEvapotranspirationRet;
 
     }
 
     public double get_SurfaceRunOff(int monthIndex = -1)
     {
-        double SurfaceRunOffRet = default;
+        double surfaceRunOffRet = default;
 
         if (monthIndex == -1)
         {
-            SurfaceRunOffRet = 0d;
+            surfaceRunOffRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
-                SurfaceRunOffRet = SurfaceRunOffRet + _surfaceRunOff[monthIndex] / 12d;
+                surfaceRunOffRet = surfaceRunOffRet + _surfaceRunOff[monthIndex] / 12d;
         }
         else if (monthIndex < 0 | monthIndex > 11)
         {
@@ -748,22 +748,22 @@ public class MCDM
         {
             if (_dirty)
                 Calculate();
-            SurfaceRunOffRet = _surfaceRunOff[monthIndex];
+            surfaceRunOffRet = _surfaceRunOff[monthIndex];
         }
 
-        return SurfaceRunOffRet;
+        return surfaceRunOffRet;
 
     }
 
     public double get_SoilDrainage(int monthIndex = -1)
     {
-        double SoilDrainageRet = default;
+        double soilDrainageRet = default;
 
         if (monthIndex == -1)
         {
-            SoilDrainageRet = 0d;
+            soilDrainageRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
-                SoilDrainageRet = SoilDrainageRet + _soilDrainage[monthIndex] / 12d;
+                soilDrainageRet = soilDrainageRet + _soilDrainage[monthIndex] / 12d;
         }
         else if (monthIndex < 0 | monthIndex > 11)
         {
@@ -773,22 +773,22 @@ public class MCDM
         {
             if (_dirty)
                 Calculate();
-            SoilDrainageRet = _soilDrainage[monthIndex];
+            soilDrainageRet = _soilDrainage[monthIndex];
         }
 
-        return SoilDrainageRet;
+        return soilDrainageRet;
 
     }
 
     public double get_SoilMoistureDeficit(int monthIndex = -1)
     {
-        double SoilMoistureDeficitRet = default;
+        double soilMoistureDeficitRet = default;
 
         if (monthIndex == -1)
         {
-            SoilMoistureDeficitRet = 0d;
+            soilMoistureDeficitRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
-                SoilMoistureDeficitRet = SoilMoistureDeficitRet + _soilMoistureDeficit[monthIndex] / 12d;
+                soilMoistureDeficitRet = soilMoistureDeficitRet + _soilMoistureDeficit[monthIndex] / 12d;
         }
         else if (monthIndex < 0 | monthIndex > 11)
         {
@@ -798,22 +798,22 @@ public class MCDM
         {
             if (_dirty)
                 Calculate();
-            SoilMoistureDeficitRet = _soilMoistureDeficit[monthIndex];
+            soilMoistureDeficitRet = _soilMoistureDeficit[monthIndex];
         }
 
-        return SoilMoistureDeficitRet;
+        return soilMoistureDeficitRet;
 
     }
 
     public double get_SoilTemperature(int monthIndex = -1)
     {
-        double SoilTemperatureRet = default;
+        double soilTemperatureRet = default;
 
         if (monthIndex == -1)
         {
-            SoilTemperatureRet = 0d;
+            soilTemperatureRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
-                SoilTemperatureRet = SoilTemperatureRet + _soilTemperature[monthIndex] / 12d;
+                soilTemperatureRet = soilTemperatureRet + _soilTemperature[monthIndex] / 12d;
         }
         else if (monthIndex < 0 | monthIndex > 11)
         {
@@ -823,25 +823,25 @@ public class MCDM
         {
             if (_dirty)
                 Calculate();
-            SoilTemperatureRet = _soilTemperature[monthIndex];
+            soilTemperatureRet = _soilTemperature[monthIndex];
         }
 
-        return SoilTemperatureRet;
+        return soilTemperatureRet;
 
     }
 
     // -- Public property subroutines --------------------------------------------------
 
-    public void SetLandCover(LandCover LandCover)
+    public void SetLandCover(LandCover landCover)
     {
 
-        if ((int)LandCover < 0 | (int)LandCover > 2)
+        if ((int)landCover < 0 | (int)landCover > 2)
         {
             throw new Exception("Invalid Land Cover");
         }
         else
         {
-            CalculateLandcover(LandCover);
+            CalculateLandcover(landCover);
             _dirty = true;
         }
 
@@ -901,32 +901,32 @@ public class MCDM
 
     }
 
-    public void SetAWC(double TopSoilAWC, double SubSoilAWC)
+    public void SetAWC(double topSoilAWC, double subSoilAWC)
     {
 
-        _topSoilAWC = TopSoilAWC;
-        _subSoilAWC = SubSoilAWC;
+        _topSoilAWC = topSoilAWC;
+        _subSoilAWC = subSoilAWC;
 
     }
 
-    public void SetPercentTopsoilAWC(Texture Soil, short TopSoilAWCHard, short TopSoilAWCEasy)
+    public void SetPercentTopsoilAWC(Texture soil, short topSoilAWCHard, short topSoilAWCEasy)
     {
 
-        _topSoilAWCHard = TopSoilAWCHard;
-        _topSoilAWCEasy = TopSoilAWCEasy;
+        _topSoilAWCHard = topSoilAWCHard;
+        _topSoilAWCEasy = topSoilAWCEasy;
 
     }
 
-    public void SetPercentSubsoilAWC(Texture Soil, short SubSoilAWCHard, short SubSoilAWCEasy)
+    public void SetPercentSubsoilAWC(Texture soil, short subSoilAWCHard, short subSoilAWCEasy)
     {
 
-        _subSoilAWCHard = SubSoilAWCHard;
-        _subSoilAWCEasy = SubSoilAWCEasy;
+        _subSoilAWCHard = subSoilAWCHard;
+        _subSoilAWCEasy = subSoilAWCEasy;
 
     }
 
 
-    public void SetSoil(SoilLayer soilLayer, double sand, double silt, double clay, double Density = -1, double Carbon = -1)
+    public void SetSoil(SoilLayer soilLayer, double sand, double silt, double clay, double density = -1, double carbon = -1)
     {
 
         if (sand + silt + clay != 100d)
@@ -937,11 +937,11 @@ public class MCDM
         {
             throw new Exception("Invalid Particle Size Distribution");
         }
-        else if (Carbon != -1 & (Carbon < 1d | Carbon > 100d))
+        else if (carbon != -1 & (carbon < 1d | carbon > 100d))
         {
             throw new Exception("Invalid Carbon Content");
         }
-        else if (Density != -1 & (Density < 1d | Density > 2d))
+        else if (density != -1 & (density < 1d | density > 2d))
         {
             throw new Exception("Invalid Bulk Density");
         }
@@ -961,15 +961,15 @@ public class MCDM
                 _subClay = clay;
             }
 
-            if (Carbon != -1)
+            if (carbon != -1)
             {
                 if (soilLayer == SoilLayer.Topsoil)
                 {
-                    _topCarbon = Carbon;
+                    _topCarbon = carbon;
                 }
                 else
                 {
-                    _subCarbon = Carbon;
+                    _subCarbon = carbon;
                 }
             }
             else if (soilLayer == SoilLayer.Topsoil)
@@ -981,15 +981,15 @@ public class MCDM
                 _subCarbon = 1d;
             }
 
-            if (Density != -1)
+            if (density != -1)
             {
                 if (soilLayer == SoilLayer.Topsoil)
                 {
-                    _topDensity = Density;
+                    _topDensity = density;
                 }
                 else
                 {
-                    _subDensity = Density;
+                    _subDensity = density;
                 }
             }
             else if (soilLayer == SoilLayer.Topsoil)
@@ -1008,29 +1008,29 @@ public class MCDM
     }
 
     // -- Public function declarations --------------------------------------------------------
-    public bool RetrieveClimate(DataSet ClimateDataset, string Postcode)
+    public bool RetrieveClimate(DataSet climateDataset, string postcode)
     {
-        bool RetrieveClimateRet = default;
+        bool retrieveClimateRet = default;
         // This function retrieves climate data from the given ClimateFile
         // for the location specified by  easting and northing
         // parameter values. If the climate file does not exist, or is corrupt, or the map location does not exist in the file, then the function returns false.
 
-        bool bNeedToRetriveData = true;
+        bool needToRetriveData = true;
 
-        RetrieveClimateRet = false;
+        retrieveClimateRet = false;
 
         try
         {
 
             if (_dataSetforMaxTemp & _dataSetforMinTemp & _dataSetforRainDays & _dataSetforRainFall & _dataSetforSunHours & _dataSetforWindSpeed)
             {
-                bNeedToRetriveData = false;
+                needToRetriveData = false;
             }
 
-            if (bNeedToRetriveData)
+            if (needToRetriveData)
             {
                 // Find map location index:
-                PopulateClimateObj(ClimateDataset, Postcode);
+                PopulateClimateObj(climateDataset, postcode);
             }
             return true;
         }
@@ -1040,21 +1040,21 @@ public class MCDM
 
         }
 
-        return RetrieveClimateRet;
+        return retrieveClimateRet;
 
     }
 
-    public bool RetrieveClimate(string ClimateXMLFileName, int Easting, int Northing)
+    public bool RetrieveClimate(string climateXMLFileName, int easting, int northing)
     {
-        bool RetrieveClimateRet = default;
+        bool retrieveClimateRet = default;
         // This function retrieves climate data from the given Climate Dataset
         // for the location specified by  easting and northing parameter values. If the climate file does not exist, or is corrupt, or the map location does not exist in the file, then the function returns false.
 
-        int ID;
-        var ClimateDataset = new DataSet();
-        bool bNeedToRetriveData = true;
+        int id;
+        var climateDataset = new DataSet();
+        bool needToRetriveData = true;
 
-        RetrieveClimateRet = false;
+        retrieveClimateRet = false;
 
         try
         {
@@ -1062,16 +1062,16 @@ public class MCDM
 
             if (_dataSetforMaxTemp & _dataSetforMinTemp & _dataSetforRainDays & _dataSetforRainFall & _dataSetforSunHours & _dataSetforWindSpeed)
             {
-                bNeedToRetriveData = false;
+                needToRetriveData = false;
             }
 
-            if (bNeedToRetriveData)
+            if (needToRetriveData)
             {
                 // Find map location index:
-                ID = (int)Math.Round(Conversion.Int(Easting / 10000d) * 1000d + Conversion.Int(Northing / 10000d));
-                ClimateDataset.ReadXml(ClimateXMLFileName);
+                id = (int)Math.Round(Convert.ToInt32(easting / 10000d) * 1000d + Convert.ToInt32(northing / 10000d));
+                climateDataset.ReadXml(climateXMLFileName);
 
-                PopulateClimateObj(ClimateDataset, ID.ToString());
+                PopulateClimateObj(climateDataset, id.ToString());
             }
             return true;
         }
@@ -1081,35 +1081,35 @@ public class MCDM
 
         }
 
-        return RetrieveClimateRet;
+        return retrieveClimateRet;
 
     }
 
-    public bool RetrieveClimate(DataSet ClimateDataset, int Easting, int Northing)
+    public bool RetrieveClimate(DataSet climateDataset, int easting, int northing)
     {
-        bool RetrieveClimateRet = default;
+        bool retrieveClimateRet = default;
         // This function retrieves climate data from the given ClimateFile
         // for the location specified by  easting and northing
         // parameter values. If the climate file does not exist, or is corrupt, or the map location does not exist in the file, then the function returns false.
 
-        int ID;
-        bool bNeedToRetriveData = true;
+        int id;
+        bool needToRetriveData = true;
 
-        RetrieveClimateRet = false;
+        retrieveClimateRet = false;
 
         try
         {
 
             if (_dataSetforMaxTemp & _dataSetforMinTemp & _dataSetforRainDays & _dataSetforRainFall & _dataSetforSunHours & _dataSetforWindSpeed)
             {
-                bNeedToRetriveData = false;
+                needToRetriveData = false;
             }
 
-            if (bNeedToRetriveData)
+            if (needToRetriveData)
             {
                 // Find map location index:
-                ID = (int)Math.Round(Conversion.Int(Easting / 10000d) * 1000d + Conversion.Int(Northing / 10000d));
-                PopulateClimateObj(ClimateDataset, ID.ToString());
+                id = (int)Math.Round(Conversion.Int(easting / 10000d) * 1000d + Conversion.Int(northing / 10000d));
+                PopulateClimateObj(climateDataset, id.ToString());
             }
             return true;
         }
@@ -1119,7 +1119,7 @@ public class MCDM
 
         }
 
-        return RetrieveClimateRet;
+        return retrieveClimateRet;
 
     }
 
@@ -1300,68 +1300,68 @@ public class MCDM
 
     // -- Private calculation functions ------------------------------------------------------
 
-    private void CalculateClimateFit(ref double[] Data, ref double Average, ref double Amplitude, ref double Phase)
+    private void CalculateClimateFit(ref double[] Data, ref double average, ref double amplitude, ref double phase)
     {
 
         // Fit the first fourier harmonic to monthly mean data
         // and return the coefficients.
 
-        double Sum;
-        double SumCos;
-        double SumSin;
-        int Index;
+        double sum;
+        double sumCos;
+        double sumSin;
+        int index;
 
-        Sum = 0d;
-        for (Index = 0; Index <= 11; Index++)
-            Sum = Sum + Data[Index];
+        sum = 0d;
+        for (index = 0; index <= 11; index++)
+            sum = sum + Data[index];
 
-        Average = Sum / 12d;
+        average = sum / 12d;
 
-        SumCos = 0d;
-        SumSin = 0d;
+        sumCos = 0d;
+        sumSin = 0d;
 
-        for (Index = 0; Index <= 11; Index++)
+        for (index = 0; index <= 11; index++)
         {
-            SumCos = SumCos + (Data[Index] - Average) * Math.Cos(2d * PI * (Index + 0.5d) / 12d);
-            SumSin = SumSin + (Data[Index] - Average) * Math.Sin(2d * PI * (Index + 0.5d) / 12d);
+            sumCos = sumCos + (Data[index] - average) * Math.Cos(2d * PI * (index + 0.5d) / 12d);
+            sumSin = sumSin + (Data[index] - average) * Math.Sin(2d * PI * (index + 0.5d) / 12d);
         }
 
-        SumCos = SumCos * 2d / 12d;
-        SumSin = SumSin * 2d / 12d;
+        sumCos = sumCos * 2d / 12d;
+        sumSin = sumSin * 2d / 12d;
 
-        Phase = CalculateATan2(-SumSin, SumCos);
+        phase = CalculateATan2(-sumSin, sumCos);
 
-        Amplitude = Math.Sqrt(Math.Pow(SumCos, 2d) + Math.Pow(SumSin, 2d));
+        amplitude = Math.Sqrt(Math.Pow(sumCos, 2d) + Math.Pow(sumSin, 2d));
 
     }
 
-    private double CalculateATan2(double Opp, double Adj)
+    private double CalculateATan2(double opp, double adj)
     {
-        double CalculateATan2Ret = default;
+        double calculateATan2Ret = default;
 
-        double Angle;
+        double angle;
 
-        if (Math.Abs(Adj) < 0.0001d)
+        if (Math.Abs(adj) < 0.0001d)
         {
-            Angle = PI / 2d;
+            angle = PI / 2d;
         }
         else
         {
-            Angle = Math.Abs(Math.Atan(Opp / Adj));
+            angle = Math.Abs(Math.Atan(opp / adj));
         }
 
-        if (Adj < 0d)
+        if (adj < 0d)
         {
-            Angle = PI - Angle;
+            angle = PI - angle;
         }
 
-        if (Opp < 0d)
+        if (opp < 0d)
         {
-            Angle = -1 * Angle;
+            angle = -1 * angle;
         }
 
-        CalculateATan2Ret = Angle;
-        return CalculateATan2Ret;
+        calculateATan2Ret = angle;
+        return calculateATan2Ret;
 
     }
 
@@ -1372,210 +1372,210 @@ public class MCDM
         // depth and observation hour, by application of the homogenous
         // conductor model with a correction for screen temperature.
 
-        int iMonth;
-        var SurfaceTemperature = new double[12];
-        var MeanSurface = default(double);
-        var MeanAmplitude = default(double);
-        var MeanPhase = default(double);
-        var SeasonalAmplitude = default(double);
-        var SeasonalPhase = default(double);
+        int indexMonth;
+        var surfaceTemperature = new double[12];
+        var meanSurface = default(double);
+        var meanAmplitude = default(double);
+        var meanPhase = default(double);
+        var seasonalAmplitude = default(double);
+        var seasonalPhase = default(double);
 
-        for (iMonth = 0; iMonth <= 11; iMonth++)
+        for (indexMonth = 0; indexMonth <= 11; indexMonth++)
         {
 
             // Monthly mean air temperature:
-            SurfaceTemperature[iMonth] = 0.5d * (_minTemp[iMonth] + _maxTemp[iMonth]);
+            surfaceTemperature[indexMonth] = 0.5d * (_minTemp[indexMonth] + _maxTemp[indexMonth]);
 
             // Correction for screen temperature:
-            SurfaceTemperature[iMonth] = SurfaceTemperature[iMonth] - (2.45d * ((_canopyEvaporation[iMonth] + _actualEvapotranspiration[iMonth]) / 30d) - _radiation[iMonth]) / _delta[iMonth];
+            surfaceTemperature[indexMonth] = surfaceTemperature[indexMonth] - (2.45d * ((_canopyEvaporation[indexMonth] + _actualEvapotranspiration[indexMonth]) / 30d) - _radiation[indexMonth]) / _delta[indexMonth];
 
         }
 
         // Fit first fourier harmonic to monthly mean soil surface temperatures:
-        CalculateClimateFit(ref SurfaceTemperature, ref MeanSurface, ref MeanAmplitude, ref MeanPhase);
+        CalculateClimateFit(ref surfaceTemperature, ref meanSurface, ref meanAmplitude, ref meanPhase);
 
         // Calculate seasonal depth corrections to phase and amplitude:
-        CalculateSeasonalCorrection(_depth, ref SeasonalAmplitude, ref SeasonalPhase);
+        CalculateSeasonalCorrection(_depth, ref seasonalAmplitude, ref seasonalPhase);
 
         // Calculate monthly mean soil temperatures at depth:
-        for (iMonth = 0; iMonth <= 11; iMonth++)
+        for (indexMonth = 0; indexMonth <= 11; indexMonth++)
         {
 
-            _soilTemperature[iMonth] = MeanSurface + MeanAmplitude * SeasonalAmplitude * Math.Cos((iMonth + 0.5d) * 2d * PI / 12d + MeanPhase + SeasonalPhase);
+            _soilTemperature[indexMonth] = meanSurface + meanAmplitude * seasonalAmplitude * Math.Cos((indexMonth + 0.5d) * 2d * PI / 12d + meanPhase + seasonalPhase);
 
             // Observation hour correction:
             if (_hour != -1)
             {
-                _soilTemperature[iMonth] = _soilTemperature[iMonth] + CalculateDayTemp(_depth, iMonth, (int)Math.Round(_hour));
+                _soilTemperature[indexMonth] = _soilTemperature[indexMonth] + CalculateDayTemp(_depth, indexMonth, (int)Math.Round(_hour));
             }
 
         }
 
     }
 
-    private double CalculateDayTemp(double Depth, int iMonth, int iHour)
+    private double CalculateDayTemp(double depth, int indexMonth, int indexHour)
     {
-        double CalculateDayTempRet = default;
+        double calculateDayTempRet = default;
 
         // Calculate adjustment to monthly mean soil temperature to
         // represent diurnal variation of soil temperature.
 
-        double DampingDepth12hr;
-        double DampingDepth24hr;
+        double dampingDepth12hr;
+        double dampingDepth24hr;
 
-        DampingDepth12hr = Math.Sqrt(12.0d * 3600.0d * CalculateDiffusivity() / PI);
-        DampingDepth24hr = Math.Sqrt(24.0d * 3600.0d * CalculateDiffusivity() / PI);
+        dampingDepth12hr = Math.Sqrt(12.0d * 3600.0d * CalculateDiffusivity() / PI);
+        dampingDepth24hr = Math.Sqrt(24.0d * 3600.0d * CalculateDiffusivity() / PI);
 
         if (_landCover == LandCover.ManagedGrass)
         {
-            Depth = Depth + 0.1d;
+            depth = depth + 0.1d;
         }
 
-        CalculateDayTempRet = _diurnalAve[iMonth] + Math.Exp(-1 * Depth / DampingDepth24hr) * Math.Cos(iHour * 2 * PI / 24d + _diurnalPhaseOne[iMonth] - Depth / DampingDepth24hr) * _diurnalAmpOne[iMonth] + Math.Exp(-1 * Depth / DampingDepth12hr) * Math.Cos(iHour * 2 * PI / 12d + _diurnalPhaseTwo[iMonth] - Depth / DampingDepth24hr) * _diurnalAmpTwo[iMonth];
+        calculateDayTempRet = _diurnalAve[indexMonth] + Math.Exp(-1 * depth / dampingDepth24hr) * Math.Cos(indexHour * 2 * PI / 24d + _diurnalPhaseOne[indexMonth] - depth / dampingDepth24hr) * _diurnalAmpOne[indexMonth] + Math.Exp(-1 * depth / dampingDepth12hr) * Math.Cos(indexHour * 2 * PI / 12d + _diurnalPhaseTwo[indexMonth] - depth / dampingDepth24hr) * _diurnalAmpTwo[indexMonth];
 
-        CalculateDayTempRet = (CalculateDayTempRet - _diurnalMin[iMonth]) / (_diurnalMax[iMonth] - _diurnalMin[iMonth]);
+        calculateDayTempRet = (calculateDayTempRet - _diurnalMin[indexMonth]) / (_diurnalMax[indexMonth] - _diurnalMin[indexMonth]);
 
-        if (CalculateDayTempRet < 0.5d)
+        if (calculateDayTempRet < 0.5d)
         {
-            CalculateDayTempRet = 0.5d - CalculateDayTempRet;
-            CalculateDayTempRet = -1 * CalculateDayTempRet * (_maxTemp[iMonth] - _minTemp[iMonth]);
+            calculateDayTempRet = 0.5d - calculateDayTempRet;
+            calculateDayTempRet = -1 * calculateDayTempRet * (_maxTemp[indexMonth] - _minTemp[indexMonth]);
         }
         else
         {
-            CalculateDayTempRet = (CalculateDayTempRet - 0.5d) * (_maxTemp[iMonth] - _minTemp[iMonth]);
+            calculateDayTempRet = (calculateDayTempRet - 0.5d) * (_maxTemp[indexMonth] - _minTemp[indexMonth]);
         }
 
-        return CalculateDayTempRet;
+        return calculateDayTempRet;
 
     }
 
-    private void CalculateSeasonalCorrection(double Depth, ref double Amplitude, ref double Phase)
+    private void CalculateSeasonalCorrection(double depth, ref double amplitude, ref double phase)
     {
 
         // Calculate seasonal damped amplitude and phase shift
         // of soil temperatures at observation depth.
 
-        double SeasonalDampingDepth;
-        double ProfileDiff;
+        double seasonalDampingDepth;
+        double profileDiff;
 
         // Depth correction for ManagedGrass cover:
         if (_landCover == LandCover.ManagedGrass)
         {
-            Depth = Depth + 0.1d;
+            depth = depth + 0.1d;
         }
 
-        ProfileDiff = CalculateDiffusivity();
+        profileDiff = CalculateDiffusivity();
 
-        SeasonalDampingDepth = Math.Pow(ProfileDiff * 24.0d * 3600.0d * 365.0d / PI, 0.5d);
+        seasonalDampingDepth = Math.Pow(profileDiff * 24.0d * 3600.0d * 365.0d / PI, 0.5d);
 
-        Amplitude = Math.Exp(-1 * Depth / SeasonalDampingDepth);
-        Phase = -Depth / SeasonalDampingDepth;
+        amplitude = Math.Exp(-1 * depth / seasonalDampingDepth);
+        phase = -depth / seasonalDampingDepth;
 
     }
 
     public double CalculateDiffusivity()
     {
-        double CalculateDiffusivityRet = default;
+        double calculateDiffusivityRet = default;
 
-        double Density;
+        double density;
 
         if (_depth > 0.3d)
         {
-            Density = (0.3d * _topDensity + (_depth - 0.3d) * _subDensity) / _depth;
+            density = (0.3d * _topDensity + (_depth - 0.3d) * _subDensity) / _depth;
         }
         else
         {
-            Density = _topDensity;
+            density = _topDensity;
         }
 
         if (_diffusivity == -1)
         {
-            CalculateDiffusivityRet = 0.000001d * CalculateThermalConductivity() / (Density * CalculateHeatCapacity());
+            calculateDiffusivityRet = 0.000001d * CalculateThermalConductivity() / (density * CalculateHeatCapacity());
         }
         else
         {
-            CalculateDiffusivityRet = _diffusivity;
+            calculateDiffusivityRet = _diffusivity;
         }
 
-        return CalculateDiffusivityRet;
+        return calculateDiffusivityRet;
 
     }
 
     private double CalculateThermalConductivity()
     {
-        double CalculateThermalConductivityRet = default;
+        double calculateThermalConductivityRet = default;
 
         // Calculate thermal conductivity of soil profile (J /  s m oC)
         // according to the method of Bristow (2002).
 
-        double Sand;
-        double Clay;
-        double Silt;
+        double sand;
+        double clay;
+        double silt;
 
-        var Soil = default(double);
-        var Air = default(double);
-        var Water = default(double);
+        var soil = default(double);
+        var air = default(double);
+        var water = default(double);
 
-        double A;
-        double B;
-        double C;
-        double D;
-        double E;
+        double a;
+        double b;
+        double c;
+        double d;
+        double e;
 
-        CalculateSoilAirWater(ref Soil, ref Air, ref Water);
+        CalculateSoilAirWater(ref soil, ref air, ref water);
 
         if (_depth > 0.3d)
         {
-            Sand = 0.01d * (0.3d * _topSand + (_depth - 0.3d) * _subSand) / _depth;
-            Silt = 0.01d * (0.3d * _topSilt + (_depth - 0.3d) * _subSilt) / _depth;
-            Clay = 0.01d * (0.3d * _topClay + (_depth - 0.3d) * _subClay) / _depth;
+            sand = 0.01d * (0.3d * _topSand + (_depth - 0.3d) * _subSand) / _depth;
+            silt = 0.01d * (0.3d * _topSilt + (_depth - 0.3d) * _subSilt) / _depth;
+            clay = 0.01d * (0.3d * _topClay + (_depth - 0.3d) * _subClay) / _depth;
         }
         else
         {
-            Sand = _topSand * 0.01d;
-            Silt = _topSilt * 0.01d;
-            Clay = _topClay * 0.01d;
+            sand = _topSand * 0.01d;
+            silt = _topSilt * 0.01d;
+            clay = _topClay * 0.01d;
         }
 
-        A = (0.57d + 1.73d * Sand + 0.93d * Silt) / (1d - 0.74d * Sand - 0.49d * Silt) - 2.8d * Soil * (1d - Soil);
-        B = 2.8d * Soil;
-        C = 1d + 2.6d / Math.Pow(Clay, 0.5d);
-        D = 0.03d + 0.7d * Math.Pow(Soil, 2d);
-        E = 4d;
+        a = (0.57d + 1.73d * sand + 0.93d * silt) / (1d - 0.74d * sand - 0.49d * silt) - 2.8d * soil * (1d - soil);
+        b = 2.8d * soil;
+        c = 1d + 2.6d / Math.Pow(clay, 0.5d);
+        d = 0.03d + 0.7d * Math.Pow(soil, 2d);
+        e = 4d;
 
-        CalculateThermalConductivityRet = A + B * Water - (A - D) * Math.Exp(-Math.Pow(C * Water, E));
-        return CalculateThermalConductivityRet;
+        calculateThermalConductivityRet = a + b * water - (a - d) * Math.Exp(-Math.Pow(c * water, e));
+        return calculateThermalConductivityRet;
 
     }
 
     private double CalculateHeatCapacity()
     {
-        double CalculateHeatCapacityRet = default;
+        double calculateHeatCapacityRet = default;
 
         // Calculate heat capacity of soil profile ( MJ / m3 oC), assuming
         // that the soil is at field capacity.
 
-        var Air = default(double);
-        var Soil = default(double);
-        var Water = default(double);
+        var air = default(double);
+        var soil = default(double);
+        var water = default(double);
 
-        CalculateSoilAirWater(ref Soil, ref Air, ref Water);
+        CalculateSoilAirWater(ref soil, ref air, ref water);
 
-        CalculateHeatCapacityRet = 1.92d * Soil + 1d * Air + Water * 4.18d;
-        return CalculateHeatCapacityRet;
+        calculateHeatCapacityRet = 1.92d * soil + 1d * air + water * 4.18d;
+        return calculateHeatCapacityRet;
 
     }
 
-    private void CalculateLandcover(LandCover LandCover)
+    private void CalculateLandcover(LandCover landCover)
     {
 
         // Calculate monthly mean values of plant height, canopy resistance
         // and height, according to the selected land cover type.
 
-        object Var;
-        int Index;
+        object obj;
+        int index;
 
-        _landCover = LandCover;
+        _landCover = landCover;
 
         switch (_landCover)
         {
@@ -1583,16 +1583,16 @@ public class MCDM
             case LandCover.BareSoil:
                 {
                     var zero = new object[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-                    for (Index = 0; Index <= 11; Index++)
-                        _leafAreaIndex[Index] = Convert.ToDouble(zero[Index]);
+                    for (index = 0; index <= 11; index++)
+                        _leafAreaIndex[index] = Convert.ToDouble(zero[index]);
 
                     var hundred = new object[] { 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100 };
-                    for (Index = 0; Index <= 11; Index++)
-                        _canopyResistance[Index] = Convert.ToDouble(hundred[Index]);
+                    for (index = 0; index <= 11; index++)
+                        _canopyResistance[index] = Convert.ToDouble(hundred[index]);
 
                     var zeroPointZeroFive = new object[] { 0.05d, 0.05d, 0.05d, 0.05d, 0.05d, 0.05d, 0.05d, 0.05d, 0.05d, 0.05d, 0.05d, 0.05d };
-                    for (Index = 0; Index <= 11; Index++)
-                        _height[Index] = Convert.ToDouble(zeroPointZeroFive[Index]);
+                    for (index = 0; index <= 11; index++)
+                        _height[index] = Convert.ToDouble(zeroPointZeroFive[index]);
                     break;
                 }
 
@@ -1600,16 +1600,16 @@ public class MCDM
                 {
 
                     var lfai = new object[] { 2, 2, 3, 4, 5, 5, 5, 5, 4, 3, 2.5d, 2 };
-                    for (Index = 0; Index <= 11; Index++)
-                        _leafAreaIndex[Index] = Convert.ToDouble(lfai[Index]);
+                    for (index = 0; index <= 11; index++)
+                        _leafAreaIndex[index] = Convert.ToDouble(lfai[index]);
 
                     var cr = new object[] { 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70 };
-                    for (Index = 0; Index <= 11; Index++)
-                        _canopyResistance[Index] = Convert.ToDouble(cr[Index]);
+                    for (index = 0; index <= 11; index++)
+                        _canopyResistance[index] = Convert.ToDouble(cr[index]);
 
                     var height = new object[] { 0.15d, 0.15d, 0.15d, 0.15d, 0.15d, 0.15d, 0.15d, 0.15d, 0.15d, 0.15d, 0.15d, 0.15d };
-                    for (Index = 0; Index <= 11; Index++)
-                        _height[Index] = Convert.ToDouble(height[Index]);
+                    for (index = 0; index <= 11; index++)
+                        _height[index] = Convert.ToDouble(height[index]);
                     break;
                 }
 
@@ -1617,16 +1617,16 @@ public class MCDM
                 {
 
                     var lfai = new object[] { 0.5d, 0.5d, 0.6d, 1.8d, 3.3d, 4.7d, 5, 3.2d, 0, 0.3d, 0.3d, 0.5d };
-                    for (Index = 0; Index <= 11; Index++)
-                        _leafAreaIndex[Index] = Convert.ToDouble(lfai[Index]);
+                    for (index = 0; index <= 11; index++)
+                        _leafAreaIndex[index] = Convert.ToDouble(lfai[index]);
 
                    var cr = new object[] { 40, 40, 40, 40, 40, 40, 125, 300, 100, 40, 40, 40 };
-                    for (Index = 0; Index <= 11; Index++)
-                        _canopyResistance[Index] = Convert.ToDouble(cr[Index]);
+                    for (index = 0; index <= 11; index++)
+                        _canopyResistance[index] = Convert.ToDouble(cr[index]);
 
                     var height = new object[] { 0.08d, 0.08d, 0.08d, 0.14d, 0.35d, 0.7d, 0.8d, 0.5d, 0.05d, 0.08d, 0.08d, 0.08d };
-                    for (Index = 0; Index <= 11; Index++)
-                        _height[Index] = Convert.ToDouble(height[Index]);
+                    for (index = 0; index <= 11; index++)
+                        _height[index] = Convert.ToDouble(height[index]);
                     break;
                 }
 
@@ -1634,140 +1634,140 @@ public class MCDM
 
     }
 
-    private void CalculatePotentialEvapotranspiration(int iMonth, ref double PET, ref double RATIO, ref double DELTA, ref double RADIATION)
+    private void CalculatePotentialEvapotranspiration(int indexMonth, ref double pet, ref double ratio, ref double delta, ref double radiation)
     {
 
         // Calculate monthly mean potential evapotranspiration (mm/day) based
         // on Penman-Monteith formula for the currently selected land cover,
         // and the efficiency ratio of evaporation from the plant canopy.
 
-        double RelativeDistance;
-        double SolarDeclination;
-        double SunSetHourAngle;
-        double JulianDay;
-        double Latitude;
-        double DayLength;
-        double Albedo;
+        double relativeDistance;
+        double solarDeclination;
+        double sunSetHourAngle;
+        double julianDay;
+        double latitude;
+        double dayLength;
+        double albedo;
 
-        double ActualVapourPressure;
-        double ExtraterrestrialRadiation;
-        double ShortwaveRadiation;
-        double LongwaveRadiation;
+        double actualVapourPressure;
+        double extraterrestrialRadiation;
+        double shortwaveRadiation;
+        double longwaveRadiation;
 
-        double VapourSlope;
-        double SaturationVapourPressure;
-        double Correction;
-        double AirDensity;
-        double AirPressure;
-        double AeroResistance;
-        double SurfaceResistance;
+        double vapourSlope;
+        double saturationVapourPressure;
+        double correction;
+        double airDensity;
+        double airPressure;
+        double aeroResistance;
+        double surfaceResistance;
 
-        double AngstromA;
-        double AngstromB;
-        double G;
+        double angstromA;
+        double angstromB;
+        double g;
 
         // Calculate soil heat loss:
-        if (iMonth == 0)
+        if (indexMonth == 0)
         {
-            G = 0.07d * (_minTemp[1] + _maxTemp[1] - _minTemp[11] - _maxTemp[11]) * 0.5d;
+            g = 0.07d * (_minTemp[1] + _maxTemp[1] - _minTemp[11] - _maxTemp[11]) * 0.5d;
         }
-        else if (iMonth == 11)
+        else if (indexMonth == 11)
         {
-            G = 0.07d * (_minTemp[0] + _maxTemp[0] - _minTemp[10] - _maxTemp[10]) * 0.5d;
+            g = 0.07d * (_minTemp[0] + _maxTemp[0] - _minTemp[10] - _maxTemp[10]) * 0.5d;
         }
         else
         {
-            G = 0.07d * (_minTemp[iMonth + 1] + _maxTemp[iMonth + 1] - _minTemp[iMonth - 1] - _maxTemp[iMonth - 1]) * 0.5d;
+            g = 0.07d * (_minTemp[indexMonth + 1] + _maxTemp[indexMonth + 1] - _minTemp[indexMonth - 1] - _maxTemp[indexMonth - 1]) * 0.5d;
         }
 
         // Calculate combined plant and soil albedo, taking account
         // of rainfall effect on soil albedo:
         if (_topSand > 50d)
         {
-            Albedo = 0.1d;
+            albedo = 0.1d;
         }
         else if (_topClay > 50d)
         {
-            Albedo = 0.3d;
+            albedo = 0.3d;
         }
         else
         {
-            Albedo = 0.2d;
+            albedo = 0.2d;
         }
 
-        Albedo = _rainDays[iMonth] * Albedo * 0.5d / 30d + (30d - _rainDays[iMonth]) * Albedo / 30d;
+        albedo = _rainDays[indexMonth] * albedo * 0.5d / 30d + (30d - _rainDays[indexMonth]) * albedo / 30d;
 
-        if (_leafAreaIndex[iMonth] > 4d)
+        if (_leafAreaIndex[indexMonth] > 4d)
         {
-            Albedo = 0.25d;
+            albedo = 0.25d;
         }
         else
         {
-            Albedo = Albedo + 0.25d * (0.25d - Albedo) * _leafAreaIndex[iMonth];
+            albedo = albedo + 0.25d * (0.25d - albedo) * _leafAreaIndex[indexMonth];
         }
 
         // Calculate incident radiation budget:
-        Latitude = _latitude * 2d * PI / 360d;
-        JulianDay = 30.42d * (iMonth + 1) - 15.23d;
+        latitude = _latitude * 2d * PI / 360d;
+        julianDay = 30.42d * (indexMonth + 1) - 15.23d;
 
-        SolarDeclination = 0.409d * Math.Sin(0.0172d * JulianDay - 1.39d);
-        RelativeDistance = 1d + 0.033d * Math.Cos(0.0172d * JulianDay);
+        solarDeclination = 0.409d * Math.Sin(0.0172d * julianDay - 1.39d);
+        relativeDistance = 1d + 0.033d * Math.Cos(0.0172d * julianDay);
 
-        SunSetHourAngle = -1 * Math.Tan(Latitude) * Math.Tan(SolarDeclination);
-        SunSetHourAngle = Math.Atan(-SunSetHourAngle / Math.Sqrt(-SunSetHourAngle * SunSetHourAngle + 1.0d)) + 2.0d * Math.Atan(1.0d);
-        DayLength = 7.64d * SunSetHourAngle;
+        sunSetHourAngle = -1 * Math.Tan(latitude) * Math.Tan(solarDeclination);
+        sunSetHourAngle = Math.Atan(-sunSetHourAngle / Math.Sqrt(-sunSetHourAngle * sunSetHourAngle + 1.0d)) + 2.0d * Math.Atan(1.0d);
+        dayLength = 7.64d * sunSetHourAngle;
 
-        ExtraterrestrialRadiation = 37.6d * RelativeDistance * (SunSetHourAngle * Math.Sin(Latitude) * Math.Sin(SolarDeclination) + Math.Cos(Latitude) * Math.Cos(SolarDeclination) * Math.Sin(SunSetHourAngle));
+        extraterrestrialRadiation = 37.6d * relativeDistance * (sunSetHourAngle * Math.Sin(latitude) * Math.Sin(solarDeclination) + Math.Cos(latitude) * Math.Cos(solarDeclination) * Math.Sin(sunSetHourAngle));
 
         // Seasonal variation of angstrom coefficients:
-        AngstromA = 0.235d;
-        AngstromB = 0.5058d + 0.0278d * Math.Cos((JulianDay - 140.9d) * 2d * PI / 365d) + 0.0074d * Math.Cos(2d * (JulianDay - 84.7d) * 2d * PI / 365d);
+        angstromA = 0.235d;
+        angstromB = 0.5058d + 0.0278d * Math.Cos((julianDay - 140.9d) * 2d * PI / 365d) + 0.0074d * Math.Cos(2d * (julianDay - 84.7d) * 2d * PI / 365d);
 
         // North south geographical variation of angstrom coefficients:
-        AngstromB = AngstromB - 0.05d + 0.1d * ((_latitude - 49.81d) / 0.00000913d) / 1000000d;
+        angstromB = angstromB - 0.05d + 0.1d * ((_latitude - 49.81d) / 0.00000913d) / 1000000d;
 
-        ShortwaveRadiation = (1d - Albedo) * ExtraterrestrialRadiation * (AngstromA + AngstromB * _sunHours[iMonth] / DayLength);
+        shortwaveRadiation = (1d - albedo) * extraterrestrialRadiation * (angstromA + angstromB * _sunHours[indexMonth] / dayLength);
 
-        ActualVapourPressure = 0.611d * Math.Exp(17.27d * _minTemp[iMonth] / (_minTemp[iMonth] + 237.3d));
+        actualVapourPressure = 0.611d * Math.Exp(17.27d * _minTemp[indexMonth] / (_minTemp[indexMonth] + 237.3d));
 
-        LongwaveRadiation = -0.0000000049d * (0.2d + 0.8d * _sunHours[iMonth] / DayLength) * (0.34d - 0.14d * Math.Sqrt(ActualVapourPressure)) * (Math.Pow(273d + _maxTemp[iMonth], 4d) + Math.Pow(273d + _minTemp[iMonth], 4d)) * 0.5d;
+        longwaveRadiation = -0.0000000049d * (0.2d + 0.8d * _sunHours[indexMonth] / dayLength) * (0.34d - 0.14d * Math.Sqrt(actualVapourPressure)) * (Math.Pow(273d + _maxTemp[indexMonth], 4d) + Math.Pow(273d + _minTemp[indexMonth], 4d)) * 0.5d;
 
-        SaturationVapourPressure = Math.Exp(17.27d * _minTemp[iMonth] / (_minTemp[iMonth] + 237.3d)) + Math.Exp(17.27d * _maxTemp[iMonth] / (_maxTemp[iMonth] + 237.3d));
-        SaturationVapourPressure = SaturationVapourPressure * 0.611d * 0.5d;
+        saturationVapourPressure = Math.Exp(17.27d * _minTemp[indexMonth] / (_minTemp[indexMonth] + 237.3d)) + Math.Exp(17.27d * _maxTemp[indexMonth] / (_maxTemp[indexMonth] + 237.3d));
+        saturationVapourPressure = saturationVapourPressure * 0.611d * 0.5d;
 
-        VapourSlope = 4098.0d * SaturationVapourPressure / Math.Pow(0.5d * (_minTemp[iMonth] + _maxTemp[iMonth]) + 237.3d, 2d);
+        vapourSlope = 4098.0d * saturationVapourPressure / Math.Pow(0.5d * (_minTemp[indexMonth] + _maxTemp[indexMonth]) + 237.3d, 2d);
 
-        Correction = 4.0d * 0.98d * 0.0000000049d * Math.Pow(273.1d + 0.5d * (_minTemp[iMonth] + _maxTemp[iMonth]), 3d);
+        correction = 4.0d * 0.98d * 0.0000000049d * Math.Pow(273.1d + 0.5d * (_minTemp[indexMonth] + _maxTemp[indexMonth]), 3d);
 
-        AirPressure = 101.3d * Math.Pow((293d - 0.0065d * 0d) / 293d, 5.26d);
-        AirDensity = 1000.0d * AirPressure / (287.0d * 1.01d * (0.5d * (_minTemp[iMonth] + _maxTemp[iMonth]) + 273.0d));
+        airPressure = 101.3d * Math.Pow((293d - 0.0065d * 0d) / 293d, 5.26d);
+        airDensity = 1000.0d * airPressure / (287.0d * 1.01d * (0.5d * (_minTemp[indexMonth] + _maxTemp[indexMonth]) + 273.0d));
 
-        AeroResistance = 6.25d / _windSpeed[iMonth] * Math.Log(10.0d / (0.1d * _height[iMonth])) * Math.Log(6.0d / (0.1d * _height[iMonth]));
+        aeroResistance = 6.25d / _windSpeed[indexMonth] * Math.Log(10.0d / (0.1d * _height[indexMonth])) * Math.Log(6.0d / (0.1d * _height[indexMonth]));
 
         // Calculate surface resistance as a function of crop canopy resistance,
         // leaf area and soil resistance on wet and dry days:
-        SurfaceResistance = Math.Pow(0.7d, _leafAreaIndex[iMonth]) / (_rainDays[iMonth] * 100d / 30d + (30d - _rainDays[iMonth]) * 600d / 30d);
-        SurfaceResistance = SurfaceResistance + (1d - Math.Pow(0.7d, _leafAreaIndex[iMonth])) / _canopyResistance[iMonth];
-        SurfaceResistance = 1d / SurfaceResistance;
+        surfaceResistance = Math.Pow(0.7d, _leafAreaIndex[indexMonth]) / (_rainDays[indexMonth] * 100d / 30d + (30d - _rainDays[indexMonth]) * 600d / 30d);
+        surfaceResistance = surfaceResistance + (1d - Math.Pow(0.7d, _leafAreaIndex[indexMonth])) / _canopyResistance[indexMonth];
+        surfaceResistance = 1d / surfaceResistance;
 
         // Screen temperature correction method for calculation of PET:
-        PET = VapourSlope * (ShortwaveRadiation + LongwaveRadiation - G) + 86.4d * AirDensity * 1.013d * (SaturationVapourPressure - ActualVapourPressure) * (1d + Correction * AeroResistance / (86.4d * AirDensity * 1.013d)) / AeroResistance;
-        PET = PET / (VapourSlope + 0.00163d * AirPressure / 2.45d * (1d + SurfaceResistance / AeroResistance) * (1d + Correction * AeroResistance / (86.4d * AirDensity * 1.013d)));
-        PET = PET / 2.45d;
+        pet = vapourSlope * (shortwaveRadiation + longwaveRadiation - g) + 86.4d * airDensity * 1.013d * (saturationVapourPressure - actualVapourPressure) * (1d + correction * aeroResistance / (86.4d * airDensity * 1.013d)) / aeroResistance;
+        pet = pet / (vapourSlope + 0.00163d * airPressure / 2.45d * (1d + surfaceResistance / aeroResistance) * (1d + correction * aeroResistance / (86.4d * airDensity * 1.013d)));
+        pet = pet / 2.45d;
 
         // Efficiency of evaporation from plant canopy:
-        RATIO = VapourSlope + 0.00163d * AirPressure / 2.45d * (1.0d + SurfaceResistance / AeroResistance);
-        RATIO = RATIO / (VapourSlope + 0.00163d * AirPressure / 2.45d);
+        ratio = vapourSlope + 0.00163d * airPressure / 2.45d * (1.0d + surfaceResistance / aeroResistance);
+        ratio = ratio / (vapourSlope + 0.00163d * airPressure / 2.45d);
 
         // Surface temperature correction data:
-        RADIATION = ShortwaveRadiation + LongwaveRadiation - G;
-        DELTA = 86.4d * AirDensity * 1.013d / AeroResistance + Correction;
+        radiation = shortwaveRadiation + longwaveRadiation - g;
+        delta = 86.4d * airDensity * 1.013d / aeroResistance + correction;
 
     }
 
-    private bool CalculateGammaQuantile(double dProbability, double dBeta, double dAlpha, ref double dQuantile)
+    private bool CalculateGammaQuantile(double probability, double beta, double alpha, ref double quantile)
     {
-        bool CalculateGammaQuantileRet = default;
+        bool calculateGammaQuantileRet = default;
 
         // Calculate the quantile corresponding to a probability
         // of non-exceedance for a two-parameter gamma function
@@ -1775,144 +1775,145 @@ public class MCDM
         // the modified transformation of Kirby (1972).
 
         // Default return:
-        CalculateGammaQuantileRet = false;
+        calculateGammaQuantileRet = false;
 
-        double tmp_dC;
-        var tmp_dU = default(double);
-        var tmp_dK = default(double);
-        double tmp_dQ;
-        double tmp_dA;
-        double tmp_dB;
-        double tmp_dG;
-        double tmp_dH;
+        double tmpDC;
+        var tmpDU = default(double);
+        var tmpDK = default(double);
+        double tmpDQ;
+        double tmpDA;
+        double tmpDB;
+        double tmpDG;
+        double tmpDH;
 
         try
         {
 
 
-            tmp_dC = dAlpha / Math.Abs(dAlpha) * 2d / Math.Pow(dBeta, 0.5d);
+            tmpDC = alpha / Math.Abs(alpha) * 2d / Math.Pow(beta, 0.5d);
 
-            if (CalculateNormalVariate(dProbability, ref tmp_dU) == false)
-                return CalculateGammaQuantileRet;
+            if (CalculateNormalVariate(probability, ref tmpDU) == false)
+                return calculateGammaQuantileRet;
 
-            if (tmp_dC < 1d)
+            if (tmpDC < 1d)
             {
 
-                tmp_dK = tmp_dC * (tmp_dU - tmp_dC / 6d) / 6d + 1d;
-                tmp_dK = Math.Pow(tmp_dK, 3d);
-                tmp_dK = tmp_dK - 1d;
-                tmp_dK = tmp_dK * 2d / tmp_dC;
+                tmpDK = tmpDC * (tmpDU - tmpDC / 6d) / 6d + 1d;
+                tmpDK = Math.Pow(tmpDK, 3d);
+                tmpDK = tmpDK - 1d;
+                tmpDK = tmpDK * 2d / tmpDC;
             }
 
-            else if (tmp_dC < 9.75d)
+            else if (tmpDC < 9.75d)
             {
 
-                tmp_dG = -0.00385205d + 1.00426d * tmp_dC + 0.00651207d * Math.Pow(tmp_dC, 2d) + -0.0149166d * Math.Pow(tmp_dC, 3d) + 0.00163945d * Math.Pow(tmp_dC, 4d) + -0.0000583804d * Math.Pow(tmp_dC, 5d);
+                tmpDG = -0.00385205d + 1.00426d * tmpDC + 0.00651207d * Math.Pow(tmpDC, 2d) + -0.0149166d * Math.Pow(tmpDC, 3d) + 0.00163945d * Math.Pow(tmpDC, 4d) + -0.0000583804d * Math.Pow(tmpDC, 5d);
 
-                tmp_dA = 0.00199447d + 0.48489d * tmp_dC + 0.0230935d * Math.Pow(tmp_dC, 2d) + -0.0152435d * Math.Pow(tmp_dC, 3d) + 0.00160597d * Math.Pow(tmp_dC, 4d) + -0.000055869d * Math.Pow(tmp_dC, 5d);
+                tmpDA = 0.00199447d + 0.48489d * tmpDC + 0.0230935d * Math.Pow(tmpDC, 2d) + -0.0152435d * Math.Pow(tmpDC, 3d) + 0.00160597d * Math.Pow(tmpDC, 4d) + -0.000055869d * Math.Pow(tmpDC, 5d);
 
-                tmp_dB = 0.990562d + 0.0319647d * tmp_dC + -0.0274231d * Math.Pow(tmp_dC, 2d) + 0.00777405d * Math.Pow(tmp_dC, 3d) + -0.000571184d * Math.Pow(tmp_dC, 4d) + 0.0000142077d * Math.Pow(tmp_dC, 5d);
+                tmpDB = 0.990562d + 0.0319647d * tmpDC + -0.0274231d * Math.Pow(tmpDC, 2d) + 0.00777405d * Math.Pow(tmpDC, 3d) + -0.000571184d * Math.Pow(tmpDC, 4d) + 0.0000142077d * Math.Pow(tmpDC, 5d);
 
-                tmp_dA = 1d / tmp_dA;
+                tmpDA = 1d / tmpDA;
 
-                tmp_dH = Math.Pow(tmp_dB - 2d / tmp_dC / tmp_dA, 1d / 3d);
+                tmpDH = Math.Pow(tmpDB - 2d / tmpDC / tmpDA, 1d / 3d);
 
-                tmp_dK = 1d - Math.Pow(tmp_dG / 6d, 2d) + tmp_dU * (tmp_dG / 6d);
+                tmpDK = 1d - Math.Pow(tmpDG / 6d, 2d) + tmpDU * (tmpDG / 6d);
 
-                if (tmp_dK < tmp_dH)
+                if (tmpDK < tmpDH)
                 {
-                    tmp_dK = tmp_dH;
+                    tmpDK = tmpDH;
                 }
 
-                tmp_dK = Math.Pow(tmp_dK, 3d);
-                tmp_dK = (tmp_dK - tmp_dB) * tmp_dA;
+                tmpDK = Math.Pow(tmpDK, 3d);
+                tmpDK = (tmpDK - tmpDB) * tmpDA;
             }
 
             else
             {
-                Information.Err().Raise(Constants.vbObjectError + 100, Description: "Algorithm Range Error");
+                throw new Exception("Algorithm Range Error");
+                //Information.Err().Raise(Constants.vbObjectError + 100, Description: "Algorithm Range Error");
             }
 
-            tmp_dQ = dAlpha * dBeta + tmp_dK * Math.Pow(Math.Pow(dAlpha, 2d) * dBeta, 0.5d);
+            tmpDQ = alpha * beta + tmpDK * Math.Pow(Math.Pow(alpha, 2d) * beta, 0.5d);
 
-            dQuantile = tmp_dQ;
+            quantile = tmpDQ;
 
             // Return value:
-            CalculateGammaQuantileRet = true;
+            calculateGammaQuantileRet = true;
         }
 
         catch (Exception ex)
         {
-            throw new Exception("Error: " + Information.Err().Description);
+            throw new Exception("Error: " + ex.Message);
         }
 
-        return CalculateGammaQuantileRet;
+        return calculateGammaQuantileRet;
 
     }
 
-    private bool CalculateNormalVariate(double dProbability, ref double dVariate)
+    private bool CalculateNormalVariate(double probability, ref double variate)
     {
-        bool CalculateNormalVariateRet = default;
+        bool calculateNormalVariateRet = default;
 
         // Calculate the standard normal variate corresponding to a
         // probability of non-exceedence, using the approximate
         // solution of Abramowitz and Stegun (1965).
 
         // Default return:
-        CalculateNormalVariateRet = false;
+        calculateNormalVariateRet = false;
 
-        double tmp_dW;
-        double tmp_dP;
-        double tmp_dU;
-        double tmp_dDen;
-        double tmp_dNum;
+        double tmpDW;
+        double tmpDP;
+        double tmpDU;
+        double tmpDen;
+        double tmpNum;
 
         try
         {
 
 
 
-            tmp_dP = 1d - dProbability;
-            if (tmp_dP > 0.5d)
+            tmpDP = 1d - probability;
+            if (tmpDP > 0.5d)
             {
-                tmp_dP = 1d - tmp_dP;
+                tmpDP = 1d - tmpDP;
             }
 
-            tmp_dW = Math.Pow(-2.0d * Math.Log(tmp_dP), 0.5d);
+            tmpDW = Math.Pow(-2.0d * Math.Log(tmpDP), 0.5d);
 
-            tmp_dDen = 1.0d + 1.432788d * tmp_dW + 0.189269d * Math.Pow(tmp_dW, 2d) + 0.001308d * Math.Pow(tmp_dW, 3d);
+            tmpDen = 1.0d + 1.432788d * tmpDW + 0.189269d * Math.Pow(tmpDW, 2d) + 0.001308d * Math.Pow(tmpDW, 3d);
 
-            tmp_dNum = 2.515517d + 0.802853d * tmp_dW + 0.010328d * Math.Pow(tmp_dW, 2d);
+            tmpNum = 2.515517d + 0.802853d * tmpDW + 0.010328d * Math.Pow(tmpDW, 2d);
 
-            tmp_dU = tmp_dW - tmp_dNum / tmp_dDen;
+            tmpDU = tmpDW - tmpNum / tmpDen;
 
-            if (1d - dProbability > 0.5d)
+            if (1d - probability > 0.5d)
             {
-                tmp_dU = -tmp_dU;
+                tmpDU = -tmpDU;
             }
 
-            dVariate = tmp_dU;
+            variate = tmpDU;
 
             // Return Value:
-            CalculateNormalVariateRet = true;
+            calculateNormalVariateRet = true;
         }
 
         catch (Exception ex)
         {
-            throw new Exception("Error: " + Information.Err().Description);
+            throw new Exception("Error: " + ex.Message);
         }
 
-        return CalculateNormalVariateRet;
+        return calculateNormalVariateRet;
 
     }
 
 
-    private double CalculateRunOff(int iMonth, double Rainfall)
+    private double CalculateRunOff(int indexMonth, double rainfall)
     {
-        double CalculateRunOffRet = default;
+        double calculateRunOffRet = default;
 
-        CalculateRunOffRet = 0d;
-        return CalculateRunOffRet;
+        calculateRunOffRet = 0d;
+        return calculateRunOffRet;
 
         // Awaiting appropriate runoff function. The code below illustrates
         // how the USDA SCS Curve Number method might be used.
@@ -1930,54 +1931,54 @@ public class MCDM
 
     }
 
-    private void CalculateSoilAirWater(ref double Soil, ref double Air, ref double Water)
+    private void CalculateSoilAirWater(ref double soil, ref double air, ref double water)
     {
 
         // Calculate the proportional soil, air and water contents
         // of the soil at field capacity, above the depth of soil
         // temperature observation.
 
-        double Phi05;
+        double phi05;
 
         if (_depth > 0.3d)
         {
-            Soil = (0.3d * _topDensity + (_depth - 0.3d) * _subDensity) / _depth;
+            soil = (0.3d * _topDensity + (_depth - 0.3d) * _subDensity) / _depth;
         }
         else
         {
-            Soil = _topDensity;
+            soil = _topDensity;
         }
 
-        Soil = Soil / 2.65d;
-        Air = 1d - Soil;
+        soil = soil / 2.65d;
+        air = 1d - soil;
 
         // Water content at field capacity:
-        Phi05 = 47d + 0.25d * _topClay + 0.1d * _topSilt + 1.12d * _topCarbon - 16.52d * _topDensity;
+        phi05 = 47d + 0.25d * _topClay + 0.1d * _topSilt + 1.12d * _topCarbon - 16.52d * _topDensity;
 
         if (_depth > 0.3d)
         {
 
-            Water = Phi05 * 0.3d;
-            Phi05 = 37.2d + 0.35d * _subClay + 0.12d * _subSilt - 11.73d * _subDensity;
-            Water = Water + (_depth - 0.3d) * Phi05;
-            Water = Water / _depth;
+            water = phi05 * 0.3d;
+            phi05 = 37.2d + 0.35d * _subClay + 0.12d * _subSilt - 11.73d * _subDensity;
+            water = water + (_depth - 0.3d) * phi05;
+            water = water / _depth;
         }
 
         else
         {
 
-            Water = Phi05;
+            water = phi05;
 
         }
 
-        Water = Water * 0.01d;
-        Water = Max(0d, Water);
-        Water = Min(Air, Water);
-        Air = Air - Water;
+        water = water * 0.01d;
+        water = Max(0d, water);
+        water = Min(air, water);
+        air = air - water;
 
     }
 
-    private void CalculateAvailableWater(ref double AM02, ref double AM15)
+    private void CalculateAvailableWater(ref double am02, ref double am15)
     {
 
         // Calculate the plant available water held in the soil profile
@@ -1986,53 +1987,53 @@ public class MCDM
         // size pedotransfer function and in proportion to the rooting depth
         // of the current landcover.
 
-        var Phi05 = default(double);
-        var Phi15 = default(double);
-        var Phi02 = default(double);
+        var phi05 = default(double);
+        var phi15 = default(double);
+        var phi02 = default(double);
 
         // Initialise available water contents:
-        AM02 = 0d;
-        AM15 = 0d;
+        am02 = 0d;
+        am15 = 0d;
 
         if (_euniceTexture == true)
         {
-            AM02 = AM02 + _topSoilAWCEasy * 0.01d * 300d;
-            AM15 = AM15 + (_topSoilAWCHard - _topSoilAWCEasy) * 0.01d * 300d;
+            am02 = am02 + _topSoilAWCEasy * 0.01d * 300d;
+            am15 = am15 + (_topSoilAWCHard - _topSoilAWCEasy) * 0.01d * 300d;
         }
         else
         {
             // Top soil water content:
-            Phi05 = 47d + 0.25d * _topClay + 0.1d * _topSilt + 1.12d * _topCarbon - 16.52d * _topDensity;
-            Phi02 = 8.7d + 0.45d * _topClay + 0.11d * _topSilt + 1.03d * _topCarbon;
-            Phi15 = 2.94d + 0.83d * _topClay - 0.0054d * Math.Pow(_topClay, 2d);
+            phi05 = 47d + 0.25d * _topClay + 0.1d * _topSilt + 1.12d * _topCarbon - 16.52d * _topDensity;
+            phi02 = 8.7d + 0.45d * _topClay + 0.11d * _topSilt + 1.03d * _topCarbon;
+            phi15 = 2.94d + 0.83d * _topClay - 0.0054d * Math.Pow(_topClay, 2d);
 
-            Phi05 = Max(0d, Phi05);
-            Phi05 = Min(100d, Phi05);
+            phi05 = Max(0d, phi05);
+            phi05 = Min(100d, phi05);
 
-            Phi02 = Max(0d, Phi02);
-            Phi02 = Min(Phi05, Phi02);
+            phi02 = Max(0d, phi02);
+            phi02 = Min(phi05, phi02);
 
-            Phi15 = Max(0d, Phi15);
-            Phi15 = Min(Phi02, Phi15);
+            phi15 = Max(0d, phi15);
+            phi15 = Min(phi02, phi15);
 
             // All land cover types can access all the water
             // held in the top soil (0-300mm):
-            AM02 = AM02 + (Phi05 - Phi02) * 0.01d * 300d;
-            AM15 = AM15 + (Phi02 - Phi15) * 0.01d * 300d;
+            am02 = am02 + (phi05 - phi02) * 0.01d * 300d;
+            am15 = am15 + (phi02 - phi15) * 0.01d * 300d;
 
             // Sub soil water content:
-            Phi05 = 37.2d + 0.35d * _subClay + 0.12d * _subSilt - 11.73d * _subDensity;
-            Phi02 = 7.57d + 0.48d * _subClay + 0.11d * _subSilt;
-            Phi15 = 1.48d + 0.84d * _subClay - 0.0054d * Math.Pow(_subClay, 2d);
+            phi05 = 37.2d + 0.35d * _subClay + 0.12d * _subSilt - 11.73d * _subDensity;
+            phi02 = 7.57d + 0.48d * _subClay + 0.11d * _subSilt;
+            phi15 = 1.48d + 0.84d * _subClay - 0.0054d * Math.Pow(_subClay, 2d);
 
-            Phi05 = Max(0d, Phi05);
-            Phi05 = Min(100d, Phi05);
+            phi05 = Max(0d, phi05);
+            phi05 = Min(100d, phi05);
 
-            Phi02 = Max(0d, Phi02);
-            Phi02 = Min(Phi05, Phi02);
+            phi02 = Max(0d, phi02);
+            phi02 = Min(phi05, phi02);
 
-            Phi15 = Max(0d, Phi15);
-            Phi15 = Min(Phi02, Phi15);
+            phi15 = Max(0d, phi15);
+            phi15 = Min(phi02, phi15);
 
         }
 
@@ -2046,22 +2047,22 @@ public class MCDM
 
                 case LandCover.BareSoil:
                     {
-                        AM02 = AM02 + _subSoilAWCEasy * 0.01d * 0d;
-                        AM15 = AM15 + (_subSoilAWCHard - _subSoilAWCEasy) * 0.01d * 0d;
+                        am02 = am02 + _subSoilAWCEasy * 0.01d * 0d;
+                        am15 = am15 + (_subSoilAWCHard - _subSoilAWCEasy) * 0.01d * 0d;
                         break;
                     }
 
                 case LandCover.ManagedGrass:
                     {
-                        AM02 = AM02 + _subSoilAWCEasy * 0.01d * 700d;
-                        AM15 = AM15 + (_subSoilAWCHard - _subSoilAWCEasy) * 0.01d * 400d;
+                        am02 = am02 + _subSoilAWCEasy * 0.01d * 700d;
+                        am15 = am15 + (_subSoilAWCHard - _subSoilAWCEasy) * 0.01d * 400d;
                         break;
                     }
 
                 case LandCover.WinterWheat:
                     {
-                        AM02 = AM02 + _subSoilAWCEasy * 0.01d * 900d;
-                        AM15 = AM15 + (_subSoilAWCHard - _subSoilAWCEasy) * 0.01d * 200d;
+                        am02 = am02 + _subSoilAWCEasy * 0.01d * 900d;
+                        am15 = am15 + (_subSoilAWCHard - _subSoilAWCEasy) * 0.01d * 200d;
                         break;
                     }
 
@@ -2075,22 +2076,22 @@ public class MCDM
 
                 case LandCover.BareSoil:
                     {
-                        AM02 = AM02 + (Phi05 - Phi02) * 0.01d * 0d;
-                        AM15 = AM15 + (Phi02 - Phi15) * 0.01d * 0d;
+                        am02 = am02 + (phi05 - phi02) * 0.01d * 0d;
+                        am15 = am15 + (phi02 - phi15) * 0.01d * 0d;
                         break;
                     }
 
                 case LandCover.ManagedGrass:
                     {
-                        AM02 = AM02 + (Phi05 - Phi02) * 0.01d * 700d;
-                        AM15 = AM15 + (Phi02 - Phi15) * 0.01d * 400d;
+                        am02 = am02 + (phi05 - phi02) * 0.01d * 700d;
+                        am15 = am15 + (phi02 - phi15) * 0.01d * 400d;
                         break;
                     }
 
                 case LandCover.WinterWheat:
                     {
-                        AM02 = AM02 + (Phi05 - Phi02) * 0.01d * 900d;
-                        AM15 = AM15 + (Phi02 - Phi15) * 0.01d * 200d;
+                        am02 = am02 + (phi05 - phi02) * 0.01d * 900d;
+                        am15 = am15 + (phi02 - phi15) * 0.01d * 200d;
                         break;
                     }
 
@@ -2098,31 +2099,31 @@ public class MCDM
         }
     }
 
-    private double Max(double LHS, double RHS)
+    private double Max(double lhs, double rhs)
     {
-        double MaxRet = default;
-        if (LHS > RHS)
+        double maxRet = default;
+        if (lhs > rhs)
         {
-            MaxRet = LHS;
+            maxRet = lhs;
         }
         else
         {
-            MaxRet = RHS;
+            maxRet = rhs;
         }
 
-        return MaxRet;
+        return maxRet;
     }
 
-    private double Min(double LHS, double RHS)
+    private double Min(double lhs, double rhs)
     {
         double MinRet = default;
-        if (LHS < RHS)
+        if (lhs < rhs)
         {
-            MinRet = LHS;
+            MinRet = lhs;
         }
         else
         {
-            MinRet = RHS;
+            MinRet = rhs;
         }
 
         return MinRet;

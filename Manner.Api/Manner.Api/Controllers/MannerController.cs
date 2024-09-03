@@ -33,6 +33,7 @@ public class MannerController : ControllerBase
     private readonly ICountryService _countryService;
     private readonly ICropTypeService _cropTypeService;
     private readonly IIncorporationMethodService _incorporationMethodService;
+    private readonly ICalculateResultService _calculateResultService;
 
     public MannerController(ILogger<MannerController> logger,
         IClimateService climateService,
@@ -48,7 +49,8 @@ public class MannerController : ControllerBase
         IRainTypeService rainTypeService,
         ISubSoilService subSoilService,
         ITopSoilService topSoilService,
-        IWindspeedService windspeedService)
+        IWindspeedService windspeedService,
+        ICalculateResultService calculateResultService)
     {
         _logger = logger;
         _incorporationDelayService = incorporationDelayService;
@@ -65,6 +67,7 @@ public class MannerController : ControllerBase
         _countryService = countryService;
         _cropTypeService = cropTypeService;
         _incorporationMethodService = incorporationMethodService;
+        _calculateResultService = calculateResultService;
     }
 
     [HttpGet("climates/{postcode}")]
@@ -465,6 +468,7 @@ public class MannerController : ControllerBase
         return Ok(windspeed);
     }
 
+    #region Manner API
 
     [HttpPost("effective-rainfall")]
     [SwaggerOperation(Summary = "Calculates Rainfall Post Application of Manure", Description = "Calculates the effective rainfall based on application date and end of soil drainage date.")]
@@ -475,4 +479,16 @@ public class MannerController : ControllerBase
         return Ok(await _climateService.FetchEffectiveRainFall(effectiveRainfallRequest));
     }
 
+
+    [HttpPost("calculate-nutrients")]
+    [SwaggerOperation(Summary = "Calculates Nutrients from manure applications", Description = "Calculates the nutrients based on manure all application.")]
+    [ProducesResponseType(typeof(NutrientsResponse), 200)]
+    [ProducesResponseType(400)]
+    public async Task<ActionResult<NutrientsResponse>> CalculateNutrients(CalculateNutrientsRequest calculateNutrientsRequest)
+    {
+        return Ok(await _calculateResultService.CalculateNutrientsAsync(calculateNutrientsRequest));
+    }
+
+
+    #endregion
 }

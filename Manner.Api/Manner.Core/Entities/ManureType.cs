@@ -8,7 +8,7 @@ namespace Manner.Core.Entities;
 public class ManureType
 {
     public int ID { get; set; }
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
     public int ManureGroupID { get; set; }
     public int ManureTypeCategoryID { get; set; }
     public int CountryID { get; set; }
