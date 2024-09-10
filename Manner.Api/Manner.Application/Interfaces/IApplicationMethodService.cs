@@ -8,5 +8,6 @@ using System.Threading.Tasks;
 
 namespace Manner.Application.Interfaces;
 public interface IApplicationMethodService : IService<ApplicationMethodDto>
-{   
+{
+    Task<IEnumerable<ApplicationMethodDto>?> FetchByCriteriaAsync(bool? isLiquid = null, int? fieldType = null);
 }

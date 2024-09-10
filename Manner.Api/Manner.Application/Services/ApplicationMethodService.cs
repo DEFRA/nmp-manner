@@ -27,4 +27,10 @@ public class ApplicationMethodService : IApplicationMethodService
     {
         return _mapper.Map<ApplicationMethodDto>(await _applicationMethodRepository.FetchByIdAsync(id));
     }
+
+    public async Task<IEnumerable<ApplicationMethodDto>?> FetchByCriteriaAsync(bool? isLiquid = null, int? fieldType = null)
+    {
+        var methods = await _applicationMethodRepository.FetchByCriteriaAsync(isLiquid, fieldType);
+        return _mapper.Map<IEnumerable<ApplicationMethodDto>>(methods);
+    }
 }
