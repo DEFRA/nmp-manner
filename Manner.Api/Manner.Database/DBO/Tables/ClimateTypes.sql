@@ -1,0 +1,17 @@
+﻿CREATE TABLE [dbo].[ClimateTypes]
+(
+	[MonthNumber] INT IDENTITY(1,1) NOT NULL,
+	[MonthName] NVARCHAR(10) NOT NULL,
+	[AE] INT NOT NULL,
+	[Rain] INT NOT NULL,
+	[MinTemp] DECIMAL(4,1) NOT NULL,
+	[MaxTemp] DECIMAL(4,1) NOT NULL,
+	[Sunshine] DECIMAL(4,1) NOT NULL,
+	[WindSpeed] DECIMAL(4,1) NOT NULL,
+	[MeanTemp] DECIMAL(4,1) NOT NULL,
+	[RainDays] DECIMAL(4,1) NOT NULL,
+	[HER]  DECIMAL(4,1) NOT NULL,
+	[SM]  DECIMAL(4,1) NOT NULL,
+	[PETG] DECIMAL(4,1) NOT NULL,
+	CONSTRAINT [PK_ClimateTypes] PRIMARY KEY ([MonthNumber] ASC)
+)

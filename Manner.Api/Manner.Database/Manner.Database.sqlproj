@@ -77,6 +77,7 @@
     <Build Include="DBO\Tables\MoistureTypes.sql" />
     <Build Include="DBO\Tables\IncorpMethodsIncorpDelays.sql" />
     <Build Include="DBO\Tables\Countries.sql" />
+    <Build Include="DBO\Tables\ClimateTypes.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
