@@ -31,17 +31,19 @@ namespace Manner.Api.Helpers
             {
                 var attribute = type.GetCustomAttribute<ServiceAttribute>();
                 var interfaces = type.GetInterfaces();
-
-                if (interfaces.Length > 0)
+                if (attribute != null)
                 {
-                    foreach (var item in interfaces)
+                    if (interfaces.Length > 0)
                     {
-                        services.Add(new ServiceDescriptor(item, type, attribute.Lifetime));
+                        foreach (var item in interfaces)
+                        {
+                            services.Add(new ServiceDescriptor(item, type, attribute.Lifetime));
+                        }
                     }
-                }
-                else
-                {
-                    services.Add(new ServiceDescriptor(type, type, attribute.Lifetime));
+                    else
+                    {
+                        services.Add(new ServiceDescriptor(type, type, attribute.Lifetime));
+                    }
                 }
             }
 
@@ -51,6 +53,8 @@ namespace Manner.Api.Helpers
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<AutumnCropNitrogenUptakeValidator>();
             services.AddValidatorsFromAssemblyContaining<EffectiveRainfallRequestValidator>();
+            services.AddValidatorsFromAssemblyContaining<MannerApplicationValidator>();
+            services.AddValidatorsFromAssemblyContaining<CalculateNutrientsRequestValidator>();
 
             return services;
         }

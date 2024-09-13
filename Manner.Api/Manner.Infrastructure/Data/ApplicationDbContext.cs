@@ -11,6 +11,7 @@ namespace Manner.Infrastructure.Data
 
         public DbSet<ApplicationMethod> ApplicationMethods { get; set; }
         public DbSet<Climate> Climates { get; set; }
+        public DbSet<ClimateType>ClimateTypes { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<CropType> CropTypes { get; set; }
         public DbSet<IncorporationDelay> IncorporationDelays { get; set; }

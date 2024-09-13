@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Manner.Core\Manner.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
+
 </Project>

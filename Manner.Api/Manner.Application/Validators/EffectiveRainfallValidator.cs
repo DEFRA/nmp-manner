@@ -18,7 +18,7 @@ namespace Manner.Application.Validators
                 .WithMessage("End of soil drainage date must be between 01/01 and 30/04, but was {PropertyValue:dd/MM/yyyy}");
 
             // Validate that Postcode is not null or empty
-            RuleFor(x => x.Postcode)
+            RuleFor(x => x.ClimateDataPostcode)
                 .NotEmpty().WithMessage("Postcode is required.")
                 .MinimumLength(3).WithMessage("Postcode must be at least 3 characters long.")
                 .MaximumLength(4).WithMessage("Only the first half of the postcode is required. A maximum of 4 characters");

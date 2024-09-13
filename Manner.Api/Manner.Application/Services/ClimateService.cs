@@ -66,7 +66,7 @@ public class ClimateService : IClimateService
 
     public async Task<EffectiveRainfallResponse> FetchEffectiveRainFall(EffectiveRainfallRequest effectiveRainfallRequest)
     {
-        var climate = await _climateRepository.FetchByPostcodeAsync(effectiveRainfallRequest.Postcode);
+        var climate = await _climateRepository.FetchByPostcodeAsync(effectiveRainfallRequest.ClimateDataPostcode);
 
         // Default to 0 mm rainfall if no climate data is found
         EffectiveRainfallResponse response = new()
