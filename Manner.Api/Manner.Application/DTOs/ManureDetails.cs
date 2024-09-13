@@ -9,10 +9,10 @@ public class ManureDetails()
     public decimal? TotalN { get; set; }
     public decimal? NH4N { get; set; }
     public decimal? Uric { get; set; }
-    public decimal NO3N { get; set; }
-    public decimal TotalP2O5 { get; set; }
-    public decimal TotalK2O { get; set; }
-    public decimal TotalSO3 { get; set; }
-    public decimal TotalMgO { get; set; }
+    public decimal? NO3N { get; set; }
+    public decimal? P2O5 { get; set; }
+    public decimal? K2O { get; set; }
+    public decimal? SO3 { get; set; }
+    public decimal? MgO { get; set; }
 
 }

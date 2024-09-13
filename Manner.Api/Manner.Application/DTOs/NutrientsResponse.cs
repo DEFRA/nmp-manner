@@ -11,7 +11,7 @@ public class NutrientsResponse
 
     public FieldRef Field { get; set; }
 
-    public List<Outputs> Outputs { get; set; }
+    public Outputs Outputs { get; set; }
     
 
 }

@@ -17,7 +17,7 @@ public class FieldDetail
     [JsonPropertyName("MannerCropTypeID")]
     public int CropTypeID { get; set; }
     public int TopsoilID { get; set; }
-    public int SubsoilId { get; set; }
+    public int SubsoilID { get; set; }
     public bool IsInNVZ { get; set; }
 }
 

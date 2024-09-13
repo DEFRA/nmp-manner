@@ -10,7 +10,7 @@ namespace Manner.Application.Interfaces
 {
     public interface INutrientsCalculator
     {
-        Task<CalculateNutrientsResponse> CalculateNutrients(CalculateNutrientsRequest calculateNutrientsRequest);
-        Outputs CalculateNutrientsOutputsValues(MannerApplication application, ManureType manureType);
+        Outputs CalculateNutrients();
+        
     }
 }

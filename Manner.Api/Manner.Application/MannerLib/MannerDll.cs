@@ -3977,15 +3977,15 @@ public class MannerDll
             // Return the value of the leached N for Nitrogen Crop Year 2
             // -------------------------------------------------------------------------------------------
 
-            TS.TraceEvent(TraceEventType.Information, 0, "Calculates the leached N of the mineralised N susceptible to leaching for the following crop.:  " + dMinN4 * dLProp);
+            //TS.TraceEvent(TraceEventType.Information, 0, "Calculates the leached N of the mineralised N susceptible to leaching for the following crop.:  " + dMinN4 * dLProp);
 
             return dMinN4 * dLProp;
         }
 
         catch (Exception ex)
         {
-            TS.TraceEvent(TraceEventType.Error, 0, ex.Message);
-            throw ex;
+            //TS.TraceEvent(TraceEventType.Error, 0, ex.Message);
+            //throw ex;
             return 0d;
         }
 
@@ -4178,7 +4178,7 @@ public class MannerDll
 
         MannerApplication.Outputs.PotentialEconomicValue = dNValue + dPValue + dKValue;
 
-        TS.TraceEvent(TraceEventType.Information, 0, "Potential Economic value:  " + MannerApplication.Outputs.PotentialEconomicValue);
+        //TS.TraceEvent(TraceEventType.Information, 0, "Potential Economic value:  " + MannerApplication.Outputs.PotentialEconomicValue);
 
     }
 
