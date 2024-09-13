@@ -85,19 +85,35 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("application-methods")]
-    [SwaggerOperation(Summary = "Retrieve all application methods", Description = "Fetches a list of all application methods available.")]
+    [SwaggerOperation(
+        Summary = "Retrieve all application methods or filter by criteria",
+        Description = "Fetches all application methods if no filters are provided. You can filter by optional parameters such as isLiquid and fieldType."
+    )]
     [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public async Task<ActionResult<StandardResponse>> ApplicationMethods()
+    public async Task<ActionResult<StandardResponse>> ApplicationMethods(
+        [FromQuery, SwaggerParameter("Whether to filter by liquid application methods (true/false)", Required = false)] bool? isLiquid = null,
+        [FromQuery, SwaggerParameter("The type of field to filter by (1 = arable, 2 = grass)", Required = false)] int? fieldType = null)
     {
-        var data = await _applicationMethodService.FetchAllAsync();
-        return Ok(new StandardResponse
+        IEnumerable<ApplicationMethodDto>? applicationMethods;
+
+        if (!isLiquid.HasValue && !fieldType.HasValue)
         {
-            Success = data != null && data.Any(),
-            Data = data,
-            Message = data != null && data.Any() ? null : "No application methods found."
-        });
+            // No filter provided, return all application methods
+            applicationMethods = await _applicationMethodService.FetchAllAsync();
+        }
+        else
+        {
+            // Filters applied
+            applicationMethods = await _applicationMethodService.FetchByCriteriaAsync(isLiquid, fieldType);
+        }
+
+        return applicationMethods != null && applicationMethods.Any()
+            ? Ok(new StandardResponse { Success = true, Data = applicationMethods })
+            : NotFound(new StandardResponse { Success = false, Message = "No application methods found matching the specified criteria." });
     }
+
 
     [HttpGet("application-methods/{id}")]
     [SwaggerOperation(Summary = "Retrieve application method by ID", Description = "Fetches a specific application method by its unique ID.")]
@@ -222,6 +238,22 @@ public class MannerController : ControllerBase
             ? Ok(new StandardResponse { Success = true, Data = delays })
             : NotFound(new StandardResponse { Success = false, Message = "No incorporation delays found for the given method ID." });
     }
+
+    [HttpGet("incorporation-delays/by-applicable-for")]
+    [SwaggerOperation(Summary = "Retrieve incorporation delays by ApplicableFor", Description = "Fetches incorporation delays based on whether they apply to Liquid, Solid, Poultry, or All.")]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> IncorporationDelaysByApplicableFor(
+    [FromQuery, SwaggerParameter("Filter by ApplicableFor (L for Liquid, S for Solid, P for Poultry, NULL for N/A or Not Incorporated)", Required = true)] string applicableFor)
+    {
+        var delays = await _incorporationDelayService.FetchByApplicableForAsync(applicableFor);
+
+        return delays != null && delays.Any()
+            ? Ok(new StandardResponse { Success = true, Data = delays })
+            : NotFound(new StandardResponse { Success = false, Message = "No incorporation delays found for the specified filter." });
+    }
+
 
     [HttpGet("incorporation-methods")]
     [SwaggerOperation(Summary = "Retrieve all incorporation methods", Description = "Fetches a list of all incorporation methods available.")]

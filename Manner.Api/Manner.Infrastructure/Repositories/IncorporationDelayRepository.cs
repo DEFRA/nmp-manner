@@ -33,4 +33,21 @@ public class IncorporationDelayRepository : IIncorporationDelayRepository
             .ToListAsync();
     }
 
+    public async Task<IEnumerable<IncorporationDelay>?> FetchByApplicableForAsync(string applicableFor)
+    {
+        // Fetch delays where ApplicableFor is 'A' (All) or matches the specified filter
+        if (applicableFor == "NULL")
+        {
+            // Handle special case for NULL values in the ApplicableFor column
+            return await _context.IncorporationDelays
+                .Where(d => d.ApplicableFor == null)
+                .ToListAsync();
+        }
+
+        return await _context.IncorporationDelays
+            .Where(d => d.ApplicableFor == "A" || d.ApplicableFor == applicableFor)
+            .ToListAsync();
+    }
+
+
 }

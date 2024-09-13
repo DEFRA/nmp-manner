@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Manner.Application\Manner.Application.csproj" />
     <ProjectReference Include="..\Manner.Infrastructure.Configuration\Manner.Infrastructure.Configuration.csproj" />
+    <ProjectReference Include="..\Manner.Infrastructure\Manner.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

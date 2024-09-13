@@ -34,4 +34,11 @@ public class IncorporationDelayService : IIncorporationDelayService
         var delays = await _incorporationDelayRepository.FetchByIncorpMethodIdAsync(methodId);
         return _mapper.Map<IEnumerable<IncorporationDelayDto>>(delays);
     }
+
+    public async Task<IEnumerable<IncorporationDelayDto>?> FetchByApplicableForAsync(string applicableFor)
+    {
+        var delays = await _incorporationDelayRepository.FetchByApplicableForAsync(applicableFor);
+        return _mapper.Map<IEnumerable<IncorporationDelayDto>>(delays);
+    }
+
 }
