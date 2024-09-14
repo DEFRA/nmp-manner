@@ -50,12 +50,18 @@ namespace Manner.Application.Helpers
             CreateMap<SubSoilDto, SubSoil>();
             CreateMap<SubSoil, SubSoilDto>();
 
-
             CreateMap<TopSoilDto, TopSoil>();
             CreateMap<TopSoil, TopSoilDto>();
 
             CreateMap<WindspeedDto, Windspeed>();
             CreateMap<Windspeed, WindspeedDto>();
+
+            CreateMap<ClimateTypeDto, ClimateType>();
+            CreateMap<ClimateType, ClimateTypeDto>();
+
+            //CreateMap<ClimateTypeDto, ClimateType>();
+            //CreateMap<ClimateType, ClimateTypeDto>();
+            
 
             // Add more mappings here
         }

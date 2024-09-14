@@ -212,7 +212,7 @@ public class MeanClimateDrainageModel
 
     private bool _euniceTexture;
 
-    private readonly string _climateDataFile; // Input climate data file (s)
+    //private readonly string _climateDataFile; // Input climate data file (s)
 
     // Added by RE on the 25/11/09
     private bool _dataSetforRainFall = false;
@@ -1078,9 +1078,9 @@ public class MeanClimateDrainageModel
             return true;
         }
 
-        catch (Exception ex)
+        catch (Exception)
         {
-
+            
         }
 
         return retrieveClimateRet;
@@ -1232,7 +1232,7 @@ public class MeanClimateDrainageModel
     public void Clear()
     {
 
-        object obj;
+        //object obj;
         int iMonth;
 
         // Set default observation depth / hour:
@@ -1265,7 +1265,7 @@ public class MeanClimateDrainageModel
 
         var windSpeed = new object[] { 5.1d, 5, 5.3d, 4.8d, 4.6d, 4.2d, 4.1d, 4.2d, 4.3d, 4.4d, 4.8d, 4.9d };
         for (iMonth = 0; iMonth <= 11; iMonth++)
-            SetWindSpeed(iMonth, Convert.ToDouble((int)windSpeed[iMonth]));
+            SetWindSpeed(iMonth, Convert.ToDouble(windSpeed[iMonth]));
 
         // Default min temp (oC)
         var minTemp = new object[] { 0.6d, 0.5d, 1.6d, 3.8d, 6.5d, 9.7d, 11.8d, 11.5d, 9.5d, 6.1d, 3.5d, 1.7d };
@@ -1574,7 +1574,7 @@ public class MeanClimateDrainageModel
         // Calculate monthly mean values of plant height, canopy resistance
         // and height, according to the selected land cover type.
 
-        object obj;
+        //object obj;
         int index;
 
         _landCover = landCover;
@@ -2227,7 +2227,7 @@ public class MeanClimateDrainageModel
         var SoilDrainage = new double[12];
         var Drainage = default(double);
         int Iteration;
-        bool Flag;
+        bool flag;
 
         for (iMonth = 0; iMonth <= 11; iMonth++)
         {
@@ -2246,7 +2246,7 @@ public class MeanClimateDrainageModel
         for (Iteration = 0; Iteration <= 999; Iteration++)
         {
 
-            Flag = true;
+            flag = true;
 
             for (iMonth = 0; iMonth <= 11; iMonth++)
             {
@@ -2323,14 +2323,14 @@ public class MeanClimateDrainageModel
 
                 if (Math.Abs(SoilDrainage[iMonth] - Drainage) > 1d)
                 {
-                    Flag = false;
+                    flag = false;
                 }
 
             }
 
             // MMG Removed flag 29-01-07
             // Originally put in to speed up PSYCHIC
-            // If Flag = True Then Exit For
+            // If flag = true Then Exit For
 
         }
 
@@ -2376,7 +2376,7 @@ public class MeanClimateDrainageModel
         // harmonics were derived empirically by the author from an analysis of
         // hourly temperature measurements at Cambridge.
 
-        object Var;
+       // object Var;
         int iMonth;
         double iHour;
         double Value;

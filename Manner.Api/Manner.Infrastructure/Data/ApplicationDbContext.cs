@@ -41,6 +41,7 @@ namespace Manner.Infrastructure.Data
 
             modelBuilder.Entity<ApplicationMethodsIncorpMethods>()
                 .HasNoKey();
+            modelBuilder.Entity<ClimateType>().HasKey("MonthNumber");
             base.OnModelCreating(modelBuilder);
         }
     }

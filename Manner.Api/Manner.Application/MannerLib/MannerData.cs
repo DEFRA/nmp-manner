@@ -112,7 +112,7 @@ namespace Manner.Application.MannerLib
                 al = AddItemToArray(dv.ToTable(dv.Table.TableName, false, "ManureID", "ManureName").DefaultView);
             }
 
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }
@@ -139,7 +139,7 @@ namespace Manner.Application.MannerLib
                 Dv = ds.Tables[0].DefaultView;
                 Dv.RowFilter = "ManureID = " + manureId;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }
@@ -166,7 +166,7 @@ namespace Manner.Application.MannerLib
                 Dv = ds.Tables[0].DefaultView;
                 Dv.RowFilter = "ManureID = " + manureId;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }
@@ -269,7 +269,7 @@ namespace Manner.Application.MannerLib
                 al = AddItemToArray(dv.ToTable(dv.Table.TableName, false, "IncorporationID", "IncorportaionName").DefaultView);
             }
 
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }

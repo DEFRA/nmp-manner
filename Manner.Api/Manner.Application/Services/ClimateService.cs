@@ -64,14 +64,14 @@ public class ClimateService : IClimateService
         return _mapper.Map<ClimateDto>( await _climateRepository.FetchByIdAsync(id));
     }
 
-    public async Task<EffectiveRainfallResponse> FetchEffectiveRainFall(EffectiveRainfallRequest effectiveRainfallRequest)
+    public async Task<RainfallPostApplicationResponse> FetchRainfallPostApplication(RainfallPostApplicationRequest rainfallPostApplicationRequest)
     {
-        var climate = await _climateRepository.FetchByPostcodeAsync(effectiveRainfallRequest.ClimateDataPostcode);
+        var climate = await _climateRepository.FetchByPostcodeAsync(rainfallPostApplicationRequest.ClimateDataPostcode);
 
         // Default to 0 mm rainfall if no climate data is found
-        EffectiveRainfallResponse response = new()
+        RainfallPostApplicationResponse response = new()
         {
-            EffectiveRainfall = new EffectiveRainfall
+            RainfallPostApplication = new RainfallPostApplication
             {
                 Value = 0,
                 Unit = "mm"
@@ -85,12 +85,12 @@ public class ClimateService : IClimateService
             // Calculate rainfall only if climate data is found
             decimal rainfall = _rainfallCalculator.CalculateRainfallPostApplication(
                 climateDto,
-                effectiveRainfallRequest.ApplicationDate,
-                effectiveRainfallRequest.EndOfSoilDrainageDate
+                rainfallPostApplicationRequest.ApplicationDate,
+                rainfallPostApplicationRequest.EndOfSoilDrainageDate
             );
 
             // Set the calculated rainfall value in the response
-            response.EffectiveRainfall.Value = (int)Math.Round(rainfall);
+            response.RainfallPostApplication.Value = (int)Math.Round(rainfall);
         }
 
         return response;

@@ -61,7 +61,7 @@ public class ClimateCalculator
             mcdm.SetObservation(ref argdepth, 9);
 
             // Set default diffusivity:
-            mcdm.Diffusivity = (double)-1;
+            mcdm.Diffusivity = (double)-1d;
 
             // Estimate latitude from northing
             latitude = Math.Round(49.81d + 0.00000913d * northing, 1);

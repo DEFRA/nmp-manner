@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace Manner.Application.Validators
 {
-    public class MannerApplicationValidator : AbstractValidator<MannerApplication>
+    public class ManureApplicationValidator : AbstractValidator<ManureApplication>
     {
-        public MannerApplicationValidator()
+        public ManureApplicationValidator()
         {
+            //TODO: Need to reviste to apply validation
             //if ((int)MannerApplication.Application.ApplicationMethodEnum == default(int))
             //{
             //    canproc = false;
@@ -82,7 +83,18 @@ namespace Manner.Application.Validators
             //isValid = isValid & MannerNPK.Misc.IsTextboxValid(this.txtNutrientPrice_2_P2O5, "numeric");
             //isValid = isValid & MannerNPK.Misc.IsTextboxValid(this.txtNutrientPrice_2_K2O, "numeric");
 
+            //If RainfallpostApplication > 9999 Then
+            //       Throw New Exception("Total Rain has a maximum permitted value of 9999 mm")
 
-        }       
+            //    ElseIf RainfallpostApplication< 0 Then
+            //        Throw New Exception("Total Rain must be greater than (or equal to) zero")
+
+            //If CropNUpTake> 100 Then
+            //      Throw New Exception("Crop N Uptake has a maximum permitted value of 100 kg/ha")
+
+            //    ElseIf CropNUpTake< 0 Then
+            //        Throw New Exception("Crop N Uptake must be greater than (or equal to) zero")
+
+        }
     }
 }

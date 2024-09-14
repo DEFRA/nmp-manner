@@ -1,8 +1,8 @@
 ﻿namespace Manner.Application.DTOs;
 
-public class EffectiveRainfall
+public class RainfallPostApplication
 {
-    public EffectiveRainfall()
+    public RainfallPostApplication()
     {
         Value = 0;
         Unit = "mm";

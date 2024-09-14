@@ -3,8 +3,8 @@
 public class ManureDetails()
 {        
     public int ManureID { get; set; }
-    public string Name { get; set; } = string.Empty;     
-    
+    public string Name { get; set; } = string.Empty;
+    public bool IsLiquid { get; set; }
     public decimal? DryMatter { get; set; }
     public decimal? TotalN { get; set; }
     public decimal? NH4N { get; set; }

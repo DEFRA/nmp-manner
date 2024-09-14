@@ -54,11 +54,12 @@ public class CalculateResultService : ICalculateResultService
         CropTypeDto cropType = _mapper.Map<CropTypeDto>(await _cropTypeRepository.FetchByIdAsync(calculateNutrientsRequest.Field.CropTypeID));
        
         TopSoilDto topSoil = _mapper.Map<TopSoilDto>(await _topSoilRepository.FetchByIdAsync(calculateNutrientsRequest.Field.TopsoilID));
-        SubSoilDto subSoil = _mapper.Map<SubSoilDto>(await _topSoilRepository.FetchByIdAsync(calculateNutrientsRequest.Field.SubsoilID));
+        SubSoilDto subSoil = _mapper.Map<SubSoilDto>(await _subSoilRepository.FetchByIdAsync(calculateNutrientsRequest.Field.SubsoilID));
         List<ClimateTypeDto> climateTypes = _mapper.Map<List<ClimateTypeDto>>(await _climateTypeRepository.FetchAllAsync());
 
-        foreach (var application in calculateNutrientsRequest.Applications)
-        {
+        foreach (var application in calculateNutrientsRequest.ManureApplications)
+        {            
+            IncorporationDelayDto? incorporationDelay = _mapper.Map<IncorporationDelayDto>(await _incorporationDelayRepository.FetchByIdAsync(application.IncorporationDelayID));
             ManureTypeDto manureType = _mapper.Map<ManureTypeDto>(await _manureTypeRepository.FetchByIdAsync(application.ManureDetails.ManureID));
             manureType.TotalN = application.ManureDetails.TotalN ?? manureType.TotalN;
             manureType.NH4N = application.ManureDetails.NH4N ?? manureType.NH4N;
@@ -69,27 +70,28 @@ public class CalculateResultService : ICalculateResultService
             manureType.K2O = application.ManureDetails.K2O ?? manureType.K2O;
             manureType.SO3 = application.ManureDetails.SO3 ?? manureType.SO3;
             manureType.MgO = application.ManureDetails.MgO ?? manureType.MgO;
-            IncorporationDelayDto incorporationDelay = _mapper.Map<IncorporationDelayDto>(_incorporationDelayRepository.FetchByIdAsync(application.IncorporationDelayID));
-            INutrientsCalculator nutrientsCalculator = new NutrientsCalculator(calculateNutrientsRequest.Field, climate, cropType, application, manureType, incorporationDelay, topSoil, subSoil, climateTypes);
-            Outputs outputs = nutrientsCalculator.CalculateNutrients();
-            ret.Outputs.TotalNitrogenApplied += outputs.TotalNitrogenApplied;
-            ret.Outputs.PotentialCropAvailableN += outputs.PotentialCropAvailableN;
-            ret.Outputs.NH3NLoss += outputs.NH3NLoss;
-            ret.Outputs.N2ONLoss += outputs.N2ONLoss;
-            ret.Outputs.N2NLoss += outputs.N2NLoss;
-            ret.Outputs.NO3NLoss += outputs.NO3NLoss;
-            ret.Outputs.MineralisedN += outputs.MineralisedN;
-            ret.Outputs.PotentialEconomicValue += outputs.PotentialEconomicValue;
-            ret.Outputs.P2O5CropAvailable += outputs.P2O5CropAvailable;
-            ret.Outputs.P2O5Total += outputs.P2O5Total;
-            ret.Outputs.K2OCropAvailable += outputs.K2OCropAvailable;
-            ret.Outputs.K2OTotal += outputs.K2OTotal;
-            ret.Outputs.SO3Total += outputs.SO3Total;
-            ret.Outputs.MgOTotal += outputs.MgOTotal;                   
-            ret.Outputs.ResultantNAvailable += outputs.ResultantNAvailable;
-            ret.Outputs.ResultantNAvailableSecondCut += outputs.ResultantNAvailableSecondCut;
-            ret.Outputs.ResultantNAvailableYear2 += outputs.ResultantNAvailableYear2;                        
-            ret.Outputs.CropUptake += outputs.CropUptake;
+            
+            MannerCalculator calculator = new MannerCalculator(calculateNutrientsRequest.Field, climate, cropType, application, manureType, incorporationDelay, topSoil, subSoil, climateTypes);
+            calculator.Calculate();
+
+            ret.Outputs.TotalNitrogenApplied += calculator.MannerEngine.TotalNitrogenApplied;
+            ret.Outputs.PotentialCropAvailableN += calculator.MannerEngine.PotentialCropAvailableN;
+            ret.Outputs.NH3NLoss += calculator.MannerEngine.NH3NLoss;
+            ret.Outputs.N2ONLoss += calculator.MannerEngine.N2ONLoss;
+            ret.Outputs.N2NLoss += calculator.MannerEngine.N2NLoss;
+            ret.Outputs.NO3NLoss += calculator.MannerEngine.NO3NLoss;
+            ret.Outputs.MineralisedN += calculator.MannerEngine.MineralisedN;
+            ret.Outputs.PotentialEconomicValue += calculator.MannerEngine.PotentialEconomicValue;
+            ret.Outputs.P2O5CropAvailable += calculator.MannerEngine.P2O5CropAvailable;
+            ret.Outputs.P2O5Total += calculator.MannerEngine.P2O5Total;
+            ret.Outputs.K2OCropAvailable += calculator.MannerEngine.K2OCropAvailable;
+            ret.Outputs.K2OTotal += calculator.MannerEngine.K2OTotal;
+            ret.Outputs.SO3Total += calculator.MannerEngine.SO3Total;
+            ret.Outputs.MgOTotal += calculator.MannerEngine.MgOTotal;                   
+            ret.Outputs.ResultantNAvailable += calculator.MannerEngine.ResultantNAvailable;
+            ret.Outputs.ResultantNAvailableSecondCut += calculator.MannerEngine.ResultantNAvailableSecondCut;
+            ret.Outputs.ResultantNAvailableYear2 += calculator.MannerEngine.ResultantNAvailableYear2;                        
+            ret.Outputs.CropUptake += calculator.MannerEngine.CropUptake;
         }
 
         return ret;

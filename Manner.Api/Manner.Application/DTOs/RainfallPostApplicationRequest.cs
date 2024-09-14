@@ -1,9 +1,7 @@
 ﻿namespace Manner.Application.DTOs;
 
-public class EffectiveRainfallRequest
-{        
-    public int CropTypeId { get; set; }
-
+public class RainfallPostApplicationRequest
+{ 
     public DateOnly ApplicationDate { get; set; }
 
     public DateOnly EndOfSoilDrainageDate { get; set; }

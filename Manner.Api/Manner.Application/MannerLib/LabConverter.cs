@@ -126,8 +126,8 @@ namespace Manner.Application.MannerLib
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
-                return 0d;
+                throw; // new Exception(ex.ToString());
+                //return 0d;
             }
         }
 
@@ -155,8 +155,8 @@ namespace Manner.Application.MannerLib
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
-                return 0d;
+                throw; // new Exception(ex.ToString());
+                //return 0d;
             }
         }
 
@@ -219,8 +219,8 @@ namespace Manner.Application.MannerLib
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
-                return 0d;
+                throw; // new Exception(ex.ToString());
+                //return 0d;
             }
 
         }

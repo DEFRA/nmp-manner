@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 
 namespace Manner.Application.Interfaces
 {
-    public interface INutrientsCalculator
+    public interface IMannerCalculator
     {
-        Outputs CalculateNutrients();
+        DTOs.Outputs MannerEngine { get; }
+
+        void Calculate();
         
     }
 }

@@ -22,7 +22,7 @@ public class IncorporationDelayRepository : IIncorporationDelayRepository
 
     public async Task<IncorporationDelay?> FetchByIdAsync(int id)
     {
-        return await _context.IncorporationDelays.FirstOrDefaultAsync(a => a.ID == id);
+        return await _context.IncorporationDelays.FirstOrDefaultAsync(i => i.ID == id);
     }
 
     public async Task<IEnumerable<IncorporationDelay>?> FetchByIncorpMethodIdAsync(int methodId)

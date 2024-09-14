@@ -11,6 +11,6 @@ public interface IClimateService : IService<ClimateDto>
 {
     Task<(ClimateDto?, List<string>)> FetchByPostcodeAsync(string postcode);
 
-    Task<ClimateDto?> FetchByIdAsync(int id);
-    Task<EffectiveRainfallResponse> FetchEffectiveRainFall(EffectiveRainfallRequest effectiveRainfallRequest);
+    //Task<ClimateDto?> FetchByIdAsync(int id);
+    Task<RainfallPostApplicationResponse> FetchRainfallPostApplication(RainfallPostApplicationRequest rainfallPostApplicationRequest);
 }
