@@ -7,7 +7,7 @@ public class CalculateNutrientsRequest
     public CalculateNutrientsRequest()
     {
         Field= new FieldDetail();
-        Applications = new List<MannerApplication>();
+        ManureApplications = new List<ManureApplication>();
         Postcode= string.Empty;
         CountryID = default(int);
     }
@@ -17,7 +17,7 @@ public class CalculateNutrientsRequest
     public int CountryID {  get; set; }
     public FieldDetail Field { get; set; }
 
-    public List<MannerApplication> Applications { get; set; }
+    public List<ManureApplication> ManureApplications { get; set; }
 
     
 

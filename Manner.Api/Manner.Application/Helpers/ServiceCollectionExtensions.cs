@@ -52,8 +52,8 @@ namespace Manner.Api.Helpers
             // Register FluentValidation
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<AutumnCropNitrogenUptakeValidator>();
-            services.AddValidatorsFromAssemblyContaining<EffectiveRainfallRequestValidator>();
-            services.AddValidatorsFromAssemblyContaining<MannerApplicationValidator>();
+            services.AddValidatorsFromAssemblyContaining<RainfallPostApplicationRequestValidator>();
+            services.AddValidatorsFromAssemblyContaining<ManureApplicationValidator>();
             services.AddValidatorsFromAssemblyContaining<CalculateNutrientsRequestValidator>();
 
             return services;

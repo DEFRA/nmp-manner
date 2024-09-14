@@ -5,6 +5,7 @@ using Manner.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
 
@@ -184,20 +185,7 @@ public class MannerController : ControllerBase
             : NotFound(new StandardResponse { Success = false, Message = "Country not found." });
     }
 
-    [HttpPost("autumn-crop-nitrogen-uptake")]
-    [SwaggerOperation(Summary = "Get Autumn Crop Nitrogen Uptake", Description = "Calculates and retrieves the nitrogen uptake for autumn crops based on the provided request data.")]
-    [ProducesResponseType(typeof(StandardResponse), 200)]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(500)]
-    public async Task<ActionResult<StandardResponse>> GetAutumnCropNitrogenUptake([FromBody] AutumnCropNitrogenUptakeRequest autumnCropNitrogenUptakeRequest)
-    {
-        var uptakeResponse = await _cropTypeService.FetchCropUptakeFactorDefault(autumnCropNitrogenUptakeRequest);
-        return Ok(new StandardResponse
-        {
-            Success = true,
-            Data = uptakeResponse
-        });
-    }
+    
 
     [HttpGet("incorporation-delays")]
     [SwaggerOperation(Summary = "Retrieve all incorporation delays", Description = "Fetches a list of all incorporation delays available.")]
@@ -536,15 +524,29 @@ public class MannerController : ControllerBase
     }
 
     #region Manner API
+    [HttpPost("autumn-crop-nitrogen-uptake")]
+    [SwaggerOperation(Summary = "Get Autumn Crop Nitrogen Uptake", Description = "Calculates and retrieves the nitrogen uptake for autumn crops based on the provided request data.")]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> GetAutumnCropNitrogenUptake([FromBody] AutumnCropNitrogenUptakeRequest autumnCropNitrogenUptakeRequest)
+    {
+        var uptakeResponse = await _cropTypeService.FetchCropUptakeFactorDefault(autumnCropNitrogenUptakeRequest);
+        return Ok(new StandardResponse
+        {
+            Success = true,
+            Data = uptakeResponse
+        });
+    }
 
-    [HttpPost("effective-rainfall")]
+    [HttpPost("rainfall-post-application")]
     [SwaggerOperation(Summary = "Calculates Rainfall Post Application of Manure", Description = "Calculates the effective rainfall based on application date and end of soil drainage date.")]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(500)]
-    public async Task<ActionResult<StandardResponse>> GetEffectiveRainfall([FromBody] EffectiveRainfallRequest effectiveRainfallRequest)
+    public async Task<ActionResult<StandardResponse>> RainfallPostApplication([FromBody] RainfallPostApplicationRequest rainfallPostApplicationRequest)
     {
-        var rainfallResponse = await _climateService.FetchEffectiveRainFall(effectiveRainfallRequest);
+        var rainfallResponse = await _climateService.FetchRainfallPostApplication(rainfallPostApplicationRequest);
         return Ok(new StandardResponse
         {
             Success = true,
@@ -552,14 +554,19 @@ public class MannerController : ControllerBase
         });
     }
 
-
     [HttpPost("calculate-nutrients")]
     [SwaggerOperation(Summary = "Calculates Nutrients from manure applications", Description = "Calculates the nutrients based on manure all application.")]
-    [ProducesResponseType(typeof(NutrientsResponse), 200)]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(400)]
-    public async Task<ActionResult<NutrientsResponse>> CalculateNutrients(CalculateNutrientsRequest calculateNutrientsRequest)
+    public async Task<ActionResult<StandardResponse>> CalculateNutrients(CalculateNutrientsRequest calculateNutrientsRequest)
     {
-        return Ok(await _calculateResultService.CalculateNutrientsAsync(calculateNutrientsRequest));
+        var nutrientsResponse = await _calculateResultService.CalculateNutrientsAsync(calculateNutrientsRequest);
+
+        return Ok(new StandardResponse
+        {
+            Success = true,
+            Data = nutrientsResponse
+        });
     }
 
 

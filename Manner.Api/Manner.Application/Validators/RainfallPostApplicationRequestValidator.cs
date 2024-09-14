@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Manner.Application.Validators
 {
-    public class EffectiveRainfallRequestValidator : AbstractValidator<EffectiveRainfallRequest>
+    public class RainfallPostApplicationRequestValidator : AbstractValidator<RainfallPostApplicationRequest>
     {
-        public EffectiveRainfallRequestValidator()
+        public RainfallPostApplicationRequestValidator()
         {
             // Validate EndOfSoilDrainageDate to be between 01/01 and 30/04
             RuleFor(x => x.EndOfSoilDrainageDate)

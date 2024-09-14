@@ -34,12 +34,12 @@ namespace Manner.Application.Validators
                 .NotNull().WithMessage("TopsoilID is required.");
             RuleFor(x => x.Field.IsInNVZ)
               .NotNull().WithMessage("IsInNVZ is required.");
-            RuleForEach(a => a.Applications).SetValidator(new MannerApplicationValidator());
+            RuleForEach(a => a.ManureApplications).SetValidator(new ManureApplicationValidator());
             
             
         }
 
-        private bool ValidateApplication (MannerApplication application)
+        private bool ValidateApplication (ManureApplication application)
         {
             return application.ApplicationDate > application.EndOfDrainageDate;            
         }
