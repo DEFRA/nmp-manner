@@ -26,7 +26,7 @@ public class HomeController : Controller
         StandardResponse ret = new StandardResponse();
         try
         {
-            var type = await _rainTypeService.FetchByIdAsync(1); ;
+            var type = await _rainTypeService.FetchByIdAsync(1);
             if (type != null)
             {
                 ret.Success = true;
