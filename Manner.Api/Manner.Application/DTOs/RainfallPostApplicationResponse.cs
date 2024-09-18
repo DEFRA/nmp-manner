@@ -2,10 +2,10 @@
 
 public class RainfallPostApplicationResponse
 {
-    public RainfallPostApplication RainfallPostApplication { get; set; }
+    public Rainfall RainfallPostApplication { get; set; }
 
     public RainfallPostApplicationResponse()
     {
-        RainfallPostApplication = new RainfallPostApplication();
+        RainfallPostApplication = new Rainfall();
     }
 }

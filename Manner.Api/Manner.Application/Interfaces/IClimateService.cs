@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 namespace Manner.Application.Interfaces;
 public interface IClimateService : IService<ClimateDto>
 {
-    Task<(ClimateDto?, List<string>)> FetchByPostcodeAsync(string postcode);
+    Task<ClimateDto?> FetchByPostcodeAsync(string postcode);
 
-    //Task<ClimateDto?> FetchByIdAsync(int id);
+    Task<Rainfall?> FetchAverageAnualRainfall(string postcode);
     Task<RainfallPostApplicationResponse> FetchRainfallPostApplication(RainfallPostApplicationRequest rainfallPostApplicationRequest);
 }

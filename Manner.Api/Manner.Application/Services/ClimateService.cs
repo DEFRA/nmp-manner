@@ -31,31 +31,10 @@ public class ClimateService : IClimateService
          throw new NotImplementedException();
     }
 
-    public async Task<(ClimateDto?, List<string>)> FetchByPostcodeAsync(string postcode)
-    {
-       List<string> errors = new List<string>();
-
-
-        if(postcode == null)
-        {
-            errors.Add("Postcode should not be empty");
-
-        }
-        if (postcode != null)
-        {
-            if (postcode.Length < 3)
-            {
-                errors.Add("Invalid post code. Post code should be 3 or 4 length");
-            }
-        }
-
-        if(errors.Any())
-        {
-            return (null, errors);
-        }
-
+    public async Task<ClimateDto?> FetchByPostcodeAsync(string postcode)
+    {       
         var climate = await _climateRepository.FetchByPostcodeAsync(postcode);
-        return (_mapper.Map<ClimateDto?>(climate), errors);
+        return _mapper.Map<ClimateDto?>(climate);
     }
 
 
@@ -71,7 +50,7 @@ public class ClimateService : IClimateService
         // Default to 0 mm rainfall if no climate data is found
         RainfallPostApplicationResponse response = new()
         {
-            RainfallPostApplication = new RainfallPostApplication
+            RainfallPostApplication = new Rainfall
             {
                 Value = 0,
                 Unit = "mm"
@@ -96,8 +75,29 @@ public class ClimateService : IClimateService
         return response;
     }
 
+    public async Task<Rainfall?> FetchAverageAnualRainfall(string postcode)
+    {
+        Rainfall? rainfall = null;
+        var climate = await _climateRepository.FetchByPostcodeAsync(postcode);
+        if(climate != null)
+        {
+            var meanTotalRainfall = climate.MeanTotalRainFallJan
+                + climate.MeanTotalRainFallFeb
+                + climate.MeanTotalRainFallMar
+                + climate.MeanTotalRainFallApr
+                + climate.MeanTotalRainFallMay
+                + climate.MeanTotalRainFallJun
+                + climate.MeanTotalRainFallJul
+                + climate.MeanTotalRainFallAug
+                + climate.MeanTotalRainFallSep
+                + climate.MeanTotalRainFallOct
+                + climate.MeanTotalRainFallNov
+                + climate.MeanTotalRainFallDec;
+            rainfall = new Rainfall();
+            rainfall.Value = Convert.ToInt32(meanTotalRainfall);
 
+        }
 
-
-
+        return rainfall;
+    }
 }
