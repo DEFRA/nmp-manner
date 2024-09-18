@@ -7,13 +7,14 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Manner.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/")]
-[Authorize]
+//[Authorize]
 public class MannerController : ControllerBase
 {
     private readonly ILogger<MannerController> _logger;
@@ -75,14 +76,89 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> Climates(string postcode)
     {
-        var (data, errors) = await _climateService.FetchByPostcodeAsync(postcode);
+        string code = (postcode.Length > 4) ? postcode.Substring(0, 4).Trim() : postcode.Trim();
+        List<string> errors = new List<string>();
+
+
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            errors.Add("Postcode should not be empty");
+
+        }
+        if (code != null)
+        {
+            if (code.Length < 3 && code.Length > 4)
+            {
+                errors.Add("Invalid post code. Post code should be 3 or 4 length");
+            }
+        }
+
+        if (errors.Any())
+        {
+            return Ok(new StandardResponse
+            {
+                Success = !errors.Any(),
+                Data = null,
+                Message = "Invalid Postcode.",
+                Errors = errors
+            });
+        }
+
+        var data = await _climateService.FetchByPostcodeAsync(postcode);
         return Ok(new StandardResponse
         {
             Success = data != null && !errors.Any(),
             Data = data,
-            Message = data != null ? null : "No climate data found for the provided postcode.",
+            Message = data == null ? "No climate data found for the provided postcode." : string.Empty,
             Errors = errors
         });
+    }
+
+    [HttpGet("climates/avarage-annual-rainfall/{postcode}")]
+    [SwaggerOperation(Summary = "Retrieve average annual rainfall by postcode", Description = "Fetches average annual rainfall for a given postcode.")]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> FetchAverageAnualRainfall(string postcode)
+    {
+        string code = string.Empty;
+        code = (postcode.Length > 4) ? postcode.Substring(0, 4).Trim() : postcode.Trim();
+
+        List<string> errors = new List<string>();
+
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            errors.Add("Postcode should not be empty.");
+
+        }
+        if (code != null)
+        {
+            if (code.Length < 3 && code.Length > 4)
+            {
+                errors.Add("Invalid post code. Post code should be 3 or 4 length.");
+            }
+        }
+
+        if (errors.Any())
+        {
+            return Ok(new StandardResponse
+            {
+                Success = !errors.Any(),
+                Data = null,
+                Message = "Invalid Postcode.",
+                Errors = errors
+            });
+        }
+
+        var data = await _climateService.FetchAverageAnualRainfall(code);
+        return Ok(new StandardResponse
+        {
+            Success = data != null && !errors.Any(),
+            Data = new { AvarageAnnualRainfall = data },
+            Message = data != null ? string.Empty : "No climate data found for the provided postcode.",
+            Errors = errors
+        });
+
     }
 
     [HttpGet("application-methods")]
@@ -185,7 +261,7 @@ public class MannerController : ControllerBase
             : NotFound(new StandardResponse { Success = false, Message = "Country not found." });
     }
 
-    
+
 
     [HttpGet("incorporation-delays")]
     [SwaggerOperation(Summary = "Retrieve all incorporation delays", Description = "Fetches a list of all incorporation delays available.")]

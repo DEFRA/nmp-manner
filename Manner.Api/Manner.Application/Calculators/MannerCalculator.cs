@@ -112,7 +112,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             // -------------------------------------------------------------
             // Calculate soil volumetric water content
             double vmWaterTopSoil = _topSoil.VolumetricMeasure; // Convert.ToDouble(objManData.GetDataField(MannerApplication.RunType, MannerLib.MannerData.XmlLookups.Soil, "SoilID", "TopSoilVM", (int)MannerApplication.FieldData.Topsoil));
-            double vmWaterTotal = vmWaterTopSoil + vmWaterTopSoil; //Convert.ToDouble(objManData.GetDataField(MannerApplication.RunType, MannerLib.MannerData.XmlLookups.Soil, "SoilID", "SubSoilVM", (int)MannerApplication.FieldData.Subsoil));
+            double vmWaterTotal = vmWaterTopSoil + _subSoil.VolumetricMeasure; //Convert.ToDouble(objManData.GetDataField(MannerApplication.RunType, MannerLib.MannerData.XmlLookups.Soil, "SoilID", "SubSoilVM", (int)MannerApplication.FieldData.Subsoil));
 
             double calculatedLeachedN = CalculateLeachedN(mineralN4, vmWaterTotal, vmWaterTopSoil);
             double nMineralised4 = mineralN4 - calculatedLeachedN;
@@ -588,8 +588,11 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
         _outputs.K2OTotal = Convert.ToDouble(_manureType.K2O * _manureApplication.ApplicationRate.Value);
         _outputs.MgOTotal = Convert.ToDouble(_manureType.MgO * _manureApplication.ApplicationRate.Value);
         _outputs.SO3Total = Convert.ToDouble(_manureType.SO3 * _manureApplication.ApplicationRate.Value);
-        _outputs.P2O5CropAvailable = Convert.ToDouble(_manureType.P2O5 * _manureApplication.ApplicationRate.Value * (_manureType.P2O5Available / 100));
-        _outputs.K2OCropAvailable = Convert.ToDouble(_manureType.K2O * _manureApplication.ApplicationRate.Value * (_manureType.K2OAvailable / 100));
+        var percentageP2O5Available = _manureType.P2O5Available /100m;
+        _outputs.P2O5CropAvailable = Convert.ToDouble(_manureType.P2O5 * _manureApplication.ApplicationRate.Value * percentageP2O5Available);
+        //_outputs.P2O5CropAvailable = Convert.ToDouble(_manureType.P2O5 * (Convert.ToDouble(_manureApplication.ApplicationRate.Value) * (_manureType.P2O5Available/100)));
+        var percentageK2OCropAvailable = _manureType.K2OAvailable/100m;
+        _outputs.K2OCropAvailable = Convert.ToDouble(_manureType.K2O * _manureApplication.ApplicationRate.Value * percentageK2OCropAvailable);
 
     }
 
