@@ -10,6 +10,13 @@ namespace Manner.Application.MannerLib
     public class Enumerations
     {
 
+        public enum RunAs : int
+        {
+            MannerEngland = 1,
+            MannerScotland = 2,
+            PlanetEngland = 3,
+            PlanetScotland = 4
+        }
         public enum ClimateDataType : int
         {
             Rainfall = 1,

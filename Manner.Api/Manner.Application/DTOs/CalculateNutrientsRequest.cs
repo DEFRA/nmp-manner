@@ -11,6 +11,13 @@ public class CalculateNutrientsRequest
         Postcode= string.Empty;
         CountryID = default(int);
     }
+    /// <summary>
+    /// MannerEngland = 1,
+    /// MannerScotland = 2,
+    /// PlanetEngland = 3,
+    /// PlanetScotland = 4
+    /// </summary>
+    public int RunType {  get; set; }
 
     public string Postcode { get; set; }
 
