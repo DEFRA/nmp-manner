@@ -2,11 +2,13 @@
 using Manner.Application.Interfaces;
 using Manner.Application.MannerLib;
 using Manner.Core.Attributes;
+using Manner.Core.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
+using System.Diagnostics;
 namespace Manner.Application.Calculators;
 //[Service(ServiceLifetime.Transient)]
-public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto cropType, ManureApplication manureApplication, ManureTypeDto manureType, IncorporationDelayDto incorporationDelay, TopSoilDto topSoil, SubSoilDto subSoil, List<ClimateTypeDto> climateTypes) : IMannerCalculator
+public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto cropType, ManureApplication manureApplication, ManureTypeDto manureType, IncorporationDelayDto incorporationDelay, TopSoilDto topSoil, SubSoilDto subSoil, List<ClimateTypeDto> climateTypes, int runType) : IMannerCalculator
 {
     private readonly FieldDetail _field = field;
     private readonly ManureApplication _manureApplication = manureApplication;
@@ -21,6 +23,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     private ClimateCalculator _climateCalculator = new();
     private double _rainfallTotal;
     private double _evapotranspirationTotal;
+    private readonly int _runType = runType;
 
     //public const double NVZ_ESW_Total_N_Limit = 250;
     //public const double NVZ_ESW_GREEN_COMPOST_LOWER_LIMIT = 500;
@@ -76,18 +79,8 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             mineralN2 = calculatedPotentialN - calculatedVolatilisedN - calculatedN2 - calculatedN2O;
             if (mineralN2 < 0d)
                 mineralN2 = 0d;
-            double calculatedcropUptakeFactor = 0d;
-            if (_cropType != null)
-            {
-                if (mineralN2 < _cropType.CropUptakeFactor)
-                {
-                    calculatedcropUptakeFactor = mineralN2;
-                }
-                else
-                {
-                    calculatedcropUptakeFactor = _cropType.CropUptakeFactor;
-                }
-            }
+            
+            double calculatedcropUptakeFactor = this.CalculateCropUptakeFactor(mineralN2, _manureApplication.ApplicationDate.Month);
 
             if (mineralN2 < calculatedcropUptakeFactor)
             {
@@ -1165,6 +1158,77 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             throw;
         }
 
+
+    }
+
+    /// <summary>
+    /// Calculates the uptake of manure N by a crop planted after a late summer/autumn manure application.  
+    /// Refer to the Plant Uptake Module Technical Guide (September 2003).
+    /// </summary>
+    /// <param name="mineralN2">RAN after losses through NH3 volat. + NO3-N</param>
+    /// <param name="month"></param>
+    /// <param name="cropType"></param>
+    /// <returns type="Double">Manure N following plant uptake</returns>
+    /// <remarks></remarks>
+    private double CalculateCropUptakeFactor(double mineralN2, int month)
+    {
+        try
+        {
+
+            // if date of manure application was in late summer/autumn (1st July - 31st October) then subtract the Autumn
+            // Crop N Uptake (kg/ha) for the selected crop  'Now changed to 1st August - 31st October (November 2007)
+
+            double CropUpdateFactor;
+
+            if (mineralN2 < GetCropUptakeFactor(month))
+            {
+                CropUpdateFactor = mineralN2;
+            }
+            else
+            {
+                CropUpdateFactor = GetCropUptakeFactor(month);
+            }
+
+           // TS.TraceEvent(TraceEventType.Information, 0, "Calculated the uptake of manure N by a crop planted after a late summer/autumn manure application.:  " + CropUpdateFactor);
+
+            return CropUpdateFactor;
+        }
+
+        catch (Exception ex)
+        {
+            //TS.TraceEvent(TraceEventType.Error, 0, ex.Message);
+            throw ex;
+            //return 0d;
+        }
+
+    }
+
+    private int GetCropUptakeFactor(int month)
+    {
+
+        int CropuptakeFactor;
+        
+
+        if (month >= 8 & month <= 10)
+        {
+
+            if (_runType == (int)Enumerations.RunAs.PlanetEngland || _runType == (int)Enumerations.RunAs.PlanetScotland)
+            {
+                CropuptakeFactor = _cropType.CropUptakeFactor;
+            }
+            else
+            {
+                CropuptakeFactor = _manureApplication.AutumnCropNitrogenUptake.Value;
+            }
+        }
+
+        else
+        {
+            CropuptakeFactor = 0;
+        }
+
+        //TS.TraceEvent(TraceEventType.Information, 0, "Crop update factor :" + CropuptakeFactor);
+        return CropuptakeFactor;
 
     }
 

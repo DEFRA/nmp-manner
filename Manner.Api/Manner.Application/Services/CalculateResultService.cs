@@ -6,6 +6,7 @@ using Manner.Core.Attributes;
 using Manner.Core.Entities;
 using Manner.Core.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using System.Runtime.Intrinsics.Arm;
 
 namespace Manner.Application.Services;
 [Service(ServiceLifetime.Transient)]
@@ -46,8 +47,10 @@ public class CalculateResultService : ICalculateResultService
     public async Task<NutrientsResponse> CalculateNutrientsAsync(CalculateNutrientsRequest calculateNutrientsRequest)
     {        
         NutrientsResponse ret = new NutrientsResponse();
-        ret.Field.FieldID = calculateNutrientsRequest.Field.FieldID;
-        ret.Field.FieldName = calculateNutrientsRequest.Field.FieldName;
+        ret.FieldID = calculateNutrientsRequest.Field.FieldID;
+        ret.FieldName = calculateNutrientsRequest.Field.FieldName;
+
+        Outputs outputs = new Outputs();
 
         ClimateDto climate = _mapper.Map<ClimateDto>(await _climateRepository.FetchByPostcodeAsync(calculateNutrientsRequest.Postcode));
 
@@ -56,6 +59,8 @@ public class CalculateResultService : ICalculateResultService
         TopSoilDto topSoil = _mapper.Map<TopSoilDto>(await _topSoilRepository.FetchByIdAsync(calculateNutrientsRequest.Field.TopsoilID));
         SubSoilDto subSoil = _mapper.Map<SubSoilDto>(await _subSoilRepository.FetchByIdAsync(calculateNutrientsRequest.Field.SubsoilID));
         List<ClimateTypeDto> climateTypes = _mapper.Map<List<ClimateTypeDto>>(await _climateTypeRepository.FetchAllAsync());
+
+        int runType = calculateNutrientsRequest.RunType;
 
         foreach (var application in calculateNutrientsRequest.ManureApplications)
         {            
@@ -71,28 +76,43 @@ public class CalculateResultService : ICalculateResultService
             manureType.SO3 = application.ManureDetails.SO3 ?? manureType.SO3;
             manureType.MgO = application.ManureDetails.MgO ?? manureType.MgO;
             
-            MannerCalculator calculator = new MannerCalculator(calculateNutrientsRequest.Field, climate, cropType, application, manureType, incorporationDelay, topSoil, subSoil, climateTypes);
+            MannerCalculator calculator = new MannerCalculator(calculateNutrientsRequest.Field, climate, cropType, application, manureType, incorporationDelay, topSoil, subSoil, climateTypes, runType);
             calculator.Calculate();
 
-            ret.Outputs.TotalNitrogenApplied += calculator.MannerEngine.TotalNitrogenApplied;
-            ret.Outputs.PotentialCropAvailableN += calculator.MannerEngine.PotentialCropAvailableN;
-            ret.Outputs.NH3NLoss += calculator.MannerEngine.NH3NLoss;
-            ret.Outputs.N2ONLoss += calculator.MannerEngine.N2ONLoss;
-            ret.Outputs.N2NLoss += calculator.MannerEngine.N2NLoss;
-            ret.Outputs.NO3NLoss += calculator.MannerEngine.NO3NLoss;
-            ret.Outputs.MineralisedN += calculator.MannerEngine.MineralisedN;
-            ret.Outputs.PotentialEconomicValue += calculator.MannerEngine.PotentialEconomicValue;
-            ret.Outputs.P2O5CropAvailable += calculator.MannerEngine.P2O5CropAvailable;
-            ret.Outputs.P2O5Total += calculator.MannerEngine.P2O5Total;
-            ret.Outputs.K2OCropAvailable += calculator.MannerEngine.K2OCropAvailable;
-            ret.Outputs.K2OTotal += calculator.MannerEngine.K2OTotal;
-            ret.Outputs.SO3Total += calculator.MannerEngine.SO3Total;
-            ret.Outputs.MgOTotal += calculator.MannerEngine.MgOTotal;                   
-            ret.Outputs.ResultantNAvailable += calculator.MannerEngine.ResultantNAvailable;
-            ret.Outputs.ResultantNAvailableSecondCut += calculator.MannerEngine.ResultantNAvailableSecondCut;
-            ret.Outputs.ResultantNAvailableYear2 += calculator.MannerEngine.ResultantNAvailableYear2;                        
-            ret.Outputs.CropUptake += calculator.MannerEngine.CropUptake;
+            outputs.TotalNitrogenApplied += calculator.MannerEngine.TotalNitrogenApplied;
+            outputs.PotentialCropAvailableN += calculator.MannerEngine.PotentialCropAvailableN;
+            outputs.NH3NLoss += calculator.MannerEngine.NH3NLoss;
+            outputs.N2ONLoss += calculator.MannerEngine.N2ONLoss;
+            outputs.N2NLoss += calculator.MannerEngine.N2NLoss;
+            outputs.NO3NLoss += calculator.MannerEngine.NO3NLoss;
+            outputs.MineralisedN += calculator.MannerEngine.MineralisedN;
+            outputs.PotentialEconomicValue += calculator.MannerEngine.PotentialEconomicValue;
+            outputs.P2O5CropAvailable += calculator.MannerEngine.P2O5CropAvailable;
+            outputs.P2O5Total += calculator.MannerEngine.P2O5Total;
+            outputs.K2OCropAvailable += calculator.MannerEngine.K2OCropAvailable;
+            outputs.K2OTotal += calculator.MannerEngine.K2OTotal;
+            outputs.SO3Total += calculator.MannerEngine.SO3Total;
+            outputs.MgOTotal += calculator.MannerEngine.MgOTotal;
+            outputs.ResultantNAvailable += calculator.MannerEngine.ResultantNAvailable;
+            outputs.ResultantNAvailableSecondCut += calculator.MannerEngine.ResultantNAvailableSecondCut;
+            outputs.ResultantNAvailableYear2 += calculator.MannerEngine.ResultantNAvailableYear2;
+            outputs.CropUptake += calculator.MannerEngine.CropUptake;
         }
+        ret.TotalN = Convert.ToInt32(Math.Round(outputs.TotalNitrogenApplied,0));
+        ret.MineralisedN = Convert.ToInt32(Math.Round(outputs.MineralisedN, 0));
+        ret.NitrateNLoss = Convert.ToInt32(Math.Round(outputs.NO3NLoss, 0));
+        ret.AmmoniaNLoss = Convert.ToInt32(Math.Round(outputs.NH3NLoss, 0));
+        ret.DenitrifiedNLoss = Convert.ToInt32(outputs.N2ONLoss + outputs.N2NLoss);
+        ret.CurrentCropAvailableN = Convert.ToInt32(Math.Round(outputs.ResultantNAvailable, 0));
+        ret.NextGrassNCropCurrentYear = Convert.ToInt32(Math.Round(outputs.ResultantNAvailableSecondCut, 0));
+        ret.FollowingCropYear2AvailableN = Convert.ToInt32(Math.Round(outputs.ResultantNAvailableYear2,0));
+        ret.NitrogenEfficiencePercentage = Convert.ToInt32(Math.Round((outputs.ResultantNAvailable + outputs.ResultantNAvailableSecondCut) * 100 / outputs.TotalNitrogenApplied, 0));
+        ret.TotalP2O5 = Convert.ToInt32(Math.Round(outputs.P2O5Total, 0));
+        ret.CropAvailableP2O5 = Convert.ToInt32(Math.Round(outputs.P2O5CropAvailable, 0));
+        ret.TotalK2O= Convert.ToInt32(Math.Round(outputs.K2OTotal, 0));
+        ret.CropAvailableK2O = Convert.ToInt32(Math.Round(outputs.K2OCropAvailable, 0));
+        ret.TotalSO3= Convert.ToInt32(Math.Round(outputs.SO3Total, 0));
+        ret.TotalMgO= Convert.ToInt32(Math.Round(outputs.MgOTotal, 0));
 
         return ret;
     }

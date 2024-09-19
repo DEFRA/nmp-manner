@@ -96,5 +96,10 @@ namespace Manner.Application.Validators
             //        Throw New Exception("Crop N Uptake must be greater than (or equal to) zero")
 
         }
+
+        private bool ValidateApplication(ManureApplication application)
+        {
+            return application.ApplicationDate > application.EndOfDrainageDate;
+        }
     }
 }
