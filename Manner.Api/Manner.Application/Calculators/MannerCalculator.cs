@@ -1,6 +1,6 @@
 ﻿using Manner.Application.DTOs;
 using Manner.Application.Interfaces;
-using Manner.Application.MannerLib;
+using Manner.Application.Enums;
 using Manner.Core.Attributes;
 using Manner.Core.Entities;
 using Microsoft.Extensions.DependencyInjection;
@@ -104,7 +104,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             // Leached N
             // -------------------------------------------------------------
             // Calculate soil volumetric water content
-            double vmWaterTopSoil = _topSoil.VolumetricMeasure; // Convert.ToDouble(objManData.GetDataField(MannerApplication.RunType, MannerLib.MannerData.XmlLookups.Soil, "SoilID", "TopSoilVM", (int)MannerApplication.FieldData.Topsoil));
+            double vmWaterTopSoil = _topSoil.VolumetricMeasure; // Convert.ToDouble(objManData.GetDataField(MannerApplication.RunType, Enums.MannerData.XmlLookups.Soil, "SoilID", "TopSoilVM", (int)MannerApplication.FieldData.Topsoil));
             double vmWaterTotal = vmWaterTopSoil + _subSoil.VolumetricMeasure; //Convert.ToDouble(objManData.GetDataField(MannerApplication.RunType, MannerLib.MannerData.XmlLookups.Soil, "SoilID", "SubSoilVM", (int)MannerApplication.FieldData.Subsoil));
 
             double calculatedLeachedN = CalculateLeachedN(mineralN4, vmWaterTotal, vmWaterTopSoil);
@@ -345,7 +345,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
 
     private void CheckAndChangeNegativeNResults()
     {
-        if (_manureType.ID != (int)MannerLib.Enumerations.ManureTypes.PaperCrumbleChemicallyPhysicallyTreated)
+        if (_manureType.ID != (int)Enums.Enumerations.ManureTypes.PaperCrumbleChemicallyPhysicallyTreated)
         {
             if (_outputs.ResultantNAvailable < 0d)
                 _outputs.ResultantNAvailable = 0d;
@@ -627,7 +627,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
 
     private void CalculateNAvailableResultsPaperCrumble()
     {
-        if (_manureType.ID == (int)MannerLib.Enumerations.ManureTypes.PaperCrumbleChemicallyPhysicallyTreated)
+        if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.PaperCrumbleChemicallyPhysicallyTreated)
         {
             _outputs.ResultantNAvailable = -0.8d * (double)_manureApplication.ApplicationRate.Value;
         }
@@ -680,12 +680,12 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             // ------------------------------------------------------------------------
             // If the selected manure is cattle slurry or liquid digested sludge and the soil moisture status is dry then
 
-            if ((_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.CattleSlurry && _manureApplication.TopsoilMoistureID == (int)MannerLib.Enumerations.TopsoilMoistureEnum.Dry) || (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.LiquidSludge && _manureApplication.TopsoilMoistureID == (int)MannerLib.Enumerations.TopsoilMoistureEnum.Dry))
+            if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Dry) || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Dry))
             {
                 dPVN1 = dPVN0 * 1.3d;
             }
             // Else if the soil moisture status is moist then
-            else if ((_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.CattleSlurry && _manureApplication.TopsoilMoistureID == (int)MannerLib.Enumerations.TopsoilMoistureEnum.Moist) || (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.LiquidSludge && _manureApplication.TopsoilMoistureID == (int)MannerLib.Enumerations.TopsoilMoistureEnum.Moist))
+            else if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Moist) || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Moist))
             {
                 dPVN1 = dPVN0 * 0.7d;
             }
@@ -702,12 +702,12 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             // ------------------------------------------------------------------------
             // If the selected manure is cattle slurry or liquid digested sludge and the land use is arable
 
-            if ((_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.CattleSlurry && cropuse == "Arable") || (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.LiquidSludge && cropuse == "Arable"))
+            if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && cropuse == "Arable") || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && cropuse == "Arable"))
             {
                 dPVN2 = dPVN1 * 0.85d;
             }
             // else if the manure is cattle slurry or liquid digest sludge and the land use is grass
-            else if ((_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.CattleSlurry && cropuse == "Grass") || (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.LiquidSludge && cropuse == "Grass"))
+            else if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && cropuse == "Grass") || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && cropuse == "Grass"))
             {
                 dPVN2 = dPVN1 * 1.15d;
             }
@@ -717,12 +717,12 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                 dPVN2 = dPVN1;
             }
 
-            if ((_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.CattleSlurry && cropuse == "Arable") || (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.LiquidSludge && cropuse == "Arable"))
+            if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && cropuse == "Arable") || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && cropuse == "Arable"))
             {
                 dPVN2 = dPVN1 * 0.85d;
             }
             // else if the manure is cattle slurry or liquid digest sludge and the land use is grass
-            else if ((_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.CattleSlurry & cropuse == "Grass") || (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.LiquidSludge && cropuse == "Grass"))
+            else if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry & cropuse == "Grass") || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && cropuse == "Grass"))
             {
                 dPVN2 = dPVN1 * 1.15d;
             }
@@ -735,13 +735,13 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             // Dry matter adjustment (slurry or liquid digested sludge only)
             // -------------------------------------------------------------------------
             // if cattle slurry then
-            if ((_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.CattleSlurry && _manureApplication.TopsoilMoistureID == (int)MannerLib.Enumerations.TopsoilMoistureEnum.Moist) || (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.LiquidSludge && _manureApplication.TopsoilMoistureID == (int)MannerLib.Enumerations.TopsoilMoistureEnum.Moist))
+            if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Moist) || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Moist))
             {
                 // Not ((month(CurAppDate)) >= 5 And (month(CurAppDate)) <= 7) Then
                 dPVN3 = (8.3d * (double)_manureType.DryMatter + 50.2d) / 100d * dPVN2;
             }
             // else if pig slurry then
-            else if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.PigSlurry && _manureApplication.TopsoilMoistureID == (int)MannerLib.Enumerations.TopsoilMoistureEnum.Moist)
+            else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Moist)
             {
                 dPVN3 = (12.3d * (double)_manureType.DryMatter + 50.8d) / 100d * dPVN2;
             }
@@ -760,11 +760,11 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                 switch (_manureApplication.ApplicationMethodID)
                 {
                     // Adjust PVN4 depending on the application type
-                    case (int)MannerLib.Enumerations.ApplicationMethodEnum.DeepInjection: // "Deep Injection"
+                    case (int)Enums.Enumerations.ApplicationMethodEnum.DeepInjection: // "Deep Injection"
                         {
                             double proportionOfNMax = 0.1d;
                             // A.C new algorithim for Digistate Whole Food based
-                            if (_manureType.ID == (int)MannerLib.Enumerations.ManureTypes.DigestateWholeFoodBased)
+                            if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
                             {
                                 proportionOfNMax = 1d;
                             }
@@ -772,11 +772,11 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                             break;
                         }
 
-                    case (int)MannerLib.Enumerations.ApplicationMethodEnum.ShallowInjection: // "Shallow Injection"
+                    case (int)Enums.Enumerations.ApplicationMethodEnum.ShallowInjection: // "Shallow Injection"
                         {
                             double proportionOfNMax = 0.3d;
                             // A.C new algorithim for Digistate Whole Food based
-                            if (_manureType.ID == (int)MannerLib.Enumerations.ManureTypes.DigestateWholeFoodBased)
+                            if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
                             {
                                 proportionOfNMax = 0.55d;
                             }
@@ -784,11 +784,11 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                             break;
                         }
 
-                    case (int)MannerLib.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingHose: // "Band Spreader - Trailing Hose"
+                    case (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingHose: // "Band Spreader - Trailing Hose"
                         {
                             double proportionOfNMax = 0.7d;
                             // A.C new algorithim for Digistate Whole Food based
-                            if (_manureType.ID == (int)MannerLib.Enumerations.ManureTypes.DigestateWholeFoodBased)
+                            if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
                             {
                                 proportionOfNMax = 0.55d;
                             }
@@ -796,11 +796,11 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                             break;
                         }
 
-                    case (int)MannerLib.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingShoeShortGrass: // "Band Spreader - Trailing Shoe (Short Grass)"
+                    case (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingShoeShortGrass: // "Band Spreader - Trailing Shoe (Short Grass)"
                         {
                             double proportionOfNMax = 0.7d;
                             // A.C new algorithim for Digistate Whole Food based
-                            if (_manureType.ID == (int)MannerLib.Enumerations.ManureTypes.DigestateWholeFoodBased)
+                            if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
                             {
                                 proportionOfNMax = 0.55d;
                             }
@@ -808,11 +808,11 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                             break;
                         }
 
-                    case (int)MannerLib.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingShoeLongGrass: // "Band Spreader - Trailing Shoe (Long Grass)"
+                    case (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingShoeLongGrass: // "Band Spreader - Trailing Shoe (Long Grass)"
                         {
                             double proportionOfNMax = 0.4d;
                             // A.C new algorithim for Digistate Whole Food based
-                            if (_manureType.ID == (int)MannerLib.Enumerations.ManureTypes.DigestateWholeFoodBased)
+                            if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
                             {
                                 proportionOfNMax = 0.31d;
                             }
@@ -838,20 +838,20 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             // Windspeed (slurry only)
             // -------------------------------------------------------------------------
             // if the manure type is a slurry (of any kind) or a liquid digested sludge
-            if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.LiquidSludge)
+            if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
             {
 
                 // Adjust the NMax for wind speed
                 switch (_manureApplication.WindspeedID)
                 {
 
-                    case (int)MannerLib.Enumerations.WindSpeed.Moderate4to5BeaufortScale:  // "Moderate (4-5 Beaufort Scale)"
+                    case (int)Enums.Enumerations.WindSpeed.Moderate4to5BeaufortScale:  // "Moderate (4-5 Beaufort Scale)"
                         {
                             dPVN5 = dPVN4 * 1.2d;
                             break;
                         }
 
-                    case (int)MannerLib.Enumerations.WindSpeed.StrongBreeze6to7BeaufortScale: // "Strong Breeze (6-7 Beaufort Scale)"
+                    case (int)Enums.Enumerations.WindSpeed.StrongBreeze6to7BeaufortScale: // "Strong Breeze (6-7 Beaufort Scale)"
                         {
                             dPVN5 = dPVN4 * 1.6d;
                             break;
@@ -873,7 +873,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
 
             // Rainfall adjustment (slurry only)
             // -------------------------------------------------------------------------
-            if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.LiquidSludge || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.PigSlurry)
+            if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry)
             {
 
                 switch (_manureApplication.RainTypeID)
@@ -894,7 +894,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                     // DigestateWholeFoodBased = 4.5
 
                     // Light rainfall adjustment
-                    case (int)MannerLib.Enumerations.Rainfall.LightRainLessthan5mmWithin6Hours: // "Light rain (<5 mm) within 6 hours"
+                    case (int)Enums.Enumerations.Rainfall.LightRainLessthan5mmWithin6Hours: // "Light rain (<5 mm) within 6 hours"
                         {
                             if (incorporationCumulativeHours <= 6)
                             {
@@ -905,17 +905,17 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                                 dPVN6 = dPVN5 * 0.5d;
 
                                 // If the manure is cattle slurry or liquid digested sludge
-                                if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.CattleSlurry | _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.LiquidSludge)
+                                if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry | _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
                                 {
                                     dTemp1 = dPVN6 * (6d / (6d + 7.5d));
                                     dPVN7 = dPVN6 - dTemp1;
                                 }
                                 // Else if the manure is pig slurry
-                                else if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.PigSlurry)
+                                else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry)
                                 {
                                     double KM = 11.6d;
                                     // A.C new algorithim for Digistate Whole Food based
-                                    if (_manureType.ID == (int)MannerLib.Enumerations.ManureTypes.DigestateWholeFoodBased)
+                                    if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
                                     {
                                         KM = 4.5d;
                                     }
@@ -928,7 +928,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                         }
 
                     // Heavy rainfall adjustment
-                    case (int)MannerLib.Enumerations.Rainfall.HeavyRainGreaterThan5mmWithin6hours: // "Heavy rain (>5 mm) within 6 hours"
+                    case (int)Enums.Enumerations.Rainfall.HeavyRainGreaterThan5mmWithin6hours: // "Heavy rain (>5 mm) within 6 hours"
                         {
                             if (incorporationCumulativeHours <= 6)
                             {
@@ -940,17 +940,17 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
 
                                 // (Incorporation(IncorporationSel).CumulativeHours
                                 // If the manure is cattle slurry or liquid digested sludge
-                                if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.CattleSlurry | _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.LiquidSludge)
+                                if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry | _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
                                 {
                                     dTemp1 = dPVN6 * (6d / (6d + 7.5d));
                                     dPVN7 = dPVN6 - dTemp1;
                                 }
                                 // Elseif the manure is pig slurry
-                                else if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.PigSlurry)
+                                else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry)
                                 {
                                     double KM = 11.6d;
                                     // A.C new algorithim for Digistate Whole Food based
-                                    if (_manureType.ID == (int)MannerLib.Enumerations.ManureTypes.DigestateWholeFoodBased)
+                                    if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
                                     {
                                         KM = 4.5d;
                                     }
@@ -981,7 +981,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             // Incorporation Timing (all manures)
             // -------------------------------------------------------------------------
             // If the manure is not incorporated then there is no adjustment for incorporation timing
-            if (_manureApplication.IncorporationMethodID == (int)MannerLib.Enumerations.MethodOfIncorporationEnum.NotIncorporated) // "Not Incorporated" Then
+            if (_manureApplication.IncorporationMethodID == (int)Enums.Enumerations.MethodOfIncorporationEnum.NotIncorporated) // "Not Incorporated" Then
             {
                 dPVN8 = dPVN7; // PVN8 = PVN7
             }
@@ -1000,29 +1000,29 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                     // Poultry manure:            40.4
                     // Digestate Whole Food Based 4.5
 
-                    case (int)MannerLib.Enumerations.ManureCategory.FYM:  // Manure: FYM
+                    case (int)Enums.Enumerations.ManureCategory.FYM:  // Manure: FYM
                         {
                             dTemp2 = dPVN7 * (incorporationCumulativeHours / (incorporationCumulativeHours + 14.9d));
                             dPVN8 = dPVN7 - dTemp2;
                             break;
                         }
-                    case (int)MannerLib.Enumerations.ManureCategory.Poultry:  // Manure: Poultry
+                    case (int)Enums.Enumerations.ManureCategory.Poultry:  // Manure: Poultry
                         {
                             dTemp2 = dPVN7 * (incorporationCumulativeHours / (incorporationCumulativeHours + 40.4d));
                             dPVN8 = dPVN7 - dTemp2;
                             break;
                         }
-                    case (int)MannerLib.Enumerations.ManureCategory.CattleSlurry:  // Manure: Cattle Slurry
+                    case (int)Enums.Enumerations.ManureCategory.CattleSlurry:  // Manure: Cattle Slurry
                         {
                             dTemp2 = dPVN7 * (incorporationCumulativeHours / (incorporationCumulativeHours + 7.5d));
                             dPVN8 = dPVN7 - dTemp2;
                             break;
                         }
-                    case (int)MannerLib.Enumerations.ManureCategory.PigSlurry:  // Manure: Pig Slurry
+                    case (int)Enums.Enumerations.ManureCategory.PigSlurry:  // Manure: Pig Slurry
                         {
                             double KM = 11.6d;
                             // A.C new algorithim for Digistate Whole Food based
-                            if (_manureType.ID == (int)MannerLib.Enumerations.ManureTypes.DigestateWholeFoodBased)
+                            if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
                             {
                                 KM = 4.5d;
                             }
@@ -1030,13 +1030,13 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                             dPVN8 = dPVN7 - dTemp2;
                             break;
                         }
-                    case (int)MannerLib.Enumerations.ManureCategory.SolidSludge: // Solid sludge (treated the same as poultry manure c.f. e-mail 12/07/07)
+                    case (int)Enums.Enumerations.ManureCategory.SolidSludge: // Solid sludge (treated the same as poultry manure c.f. e-mail 12/07/07)
                         {
                             dTemp2 = dPVN7 * (incorporationCumulativeHours / (incorporationCumulativeHours + 40.4d));
                             dPVN8 = dPVN7 - dTemp2;
                             break;
                         }
-                    case (int)MannerLib.Enumerations.ManureCategory.LiquidSludge: // Liquid sludge (treated the same as cattle slurry c.f. e-mail 12/07/07)
+                    case (int)Enums.Enumerations.ManureCategory.LiquidSludge: // Liquid sludge (treated the same as cattle slurry c.f. e-mail 12/07/07)
                         {
                             dTemp2 = dPVN7 * (incorporationCumulativeHours / (incorporationCumulativeHours + 7.5d));
                             dPVN8 = dPVN7 - dTemp2;
@@ -1053,15 +1053,15 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             switch (_manureApplication.IncorporationMethodID) // IncorporationMethods(IncMethodSel).Name
             {
 
-                case (int)MannerLib.Enumerations.MethodOfIncorporationEnum.TineCultivator: // "Tine Cultivator"
+                case (int)Enums.Enumerations.MethodOfIncorporationEnum.TineCultivator: // "Tine Cultivator"
                     {
                         // Slurry or liquid digested sludge
-                        if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.LiquidSludge)
+                        if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
                         {
                             dPVN9 = dPVN8 * 0.3d;
                         }
                         // Poultry or solid sewage sludges
-                        else if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.SolidSludge)
+                        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.SolidSludge)
                         {
                             dPVN9 = dPVN8 * 0.3d;
                         }
@@ -1074,15 +1074,15 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                         break;
                     }
 
-                case (int)MannerLib.Enumerations.MethodOfIncorporationEnum.Discs: // "Discs"
+                case (int)Enums.Enumerations.MethodOfIncorporationEnum.Discs: // "Discs"
                     {
                         // Slurry or liquid digested sludge
-                        if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.LiquidSludge)
+                        if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
                         {
                             dPVN9 = dPVN8 * 0.2d;
                         }
                         // Poultry or solid sewage sludges
-                        else if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.SolidSludge)
+                        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.SolidSludge)
                         {
                             dPVN9 = dPVN8 * 0.2d;
                         }
@@ -1095,15 +1095,15 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                         break;
                     }
 
-                case (int)MannerLib.Enumerations.MethodOfIncorporationEnum.RotaryCultivator: // "Rotary Cultivator"
+                case (int)Enums.Enumerations.MethodOfIncorporationEnum.RotaryCultivator: // "Rotary Cultivator"
                     {
                         // Slurry or liquid digested sludge
-                        if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.LiquidSludge)
+                        if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
                         {
                             dPVN9 = dPVN8 * 0.15d;
                         }
                         // Poultry or solid sewage sludges
-                        else if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.SolidSludge)
+                        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.SolidSludge)
                         {
                             dPVN9 = dPVN8 * 0.1d;
                         }
@@ -1116,15 +1116,15 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                         break;
                     }
 
-                case (int)MannerLib.Enumerations.MethodOfIncorporationEnum.MouldboardPlough: // "Mouldboard Plough"
+                case (int)Enums.Enumerations.MethodOfIncorporationEnum.MouldboardPlough: // "Mouldboard Plough"
                     {
                         // Slurry or liquid digested sludge
-                        if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.LiquidSludge)
+                        if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
                         {
                             dPVN9 = dPVN8 * 0.1d;
                         }
                         // Poultry or solid sewage sludges
-                        else if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.SolidSludge)
+                        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.SolidSludge)
                         {
                             dPVN9 = dPVN8 * 0.05d;
                         }
@@ -1256,17 +1256,17 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
         double dN2OEmission;
         double N2OEmissionFactor;
         // AC Three separate EFs: Slurry (0.85), FYM (0.73) & poultry manure (1.44)
-        if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.PigSlurry)
+        if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry)
         {
             // Slurry
             N2OEmissionFactor = 0.85d;
         }
-        else if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.Poultry)
+        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry)
         {
             // Poultry
             N2OEmissionFactor = 1.44d;
         }
-        else if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.FYM)
+        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.FYM)
         {
             // FYM
             N2OEmissionFactor = 0.73d;
@@ -1285,9 +1285,9 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
 
     private bool IsPaperCrumble(int manureTypeId)
     {
-        bool isPaperCrumble = manureTypeId == (int)MannerLib.Enumerations.ManureTypes.PaperCrumble;
-        isPaperCrumble = isPaperCrumble || manureTypeId == (int)MannerLib.Enumerations.ManureTypes.PaperCrumbleBiologicallyTreated;
-        isPaperCrumble = isPaperCrumble || manureTypeId == (int)MannerLib.Enumerations.ManureTypes.PaperCrumbleChemicallyPhysicallyTreated;
+        bool isPaperCrumble = manureTypeId == (int)Enums.Enumerations.ManureTypes.PaperCrumble;
+        isPaperCrumble = isPaperCrumble || manureTypeId == (int)Enums.Enumerations.ManureTypes.PaperCrumbleBiologicallyTreated;
+        isPaperCrumble = isPaperCrumble || manureTypeId == (int)Enums.Enumerations.ManureTypes.PaperCrumbleChemicallyPhysicallyTreated;
         return isPaperCrumble;
     }
 
@@ -1361,8 +1361,8 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             var dCDD2A = default(double);
 
 
-            //var objMannerData = new MannerLib.MannerData();
-            string cropUse = _cropType.Use; // objMannerData.GetDataField(MannerApplication.RunType, MannerLib.MannerData.XmlLookups.Crops, "CROPID", "CropUse", (int)MannerApplication.FieldData.CropTypeEnum);
+            //var objMannerData = new Enums.MannerData();
+            string cropUse = _cropType.Use; // objMannerData.GetDataField(MannerApplication.RunType, Enums.MannerData.XmlLookups.Crops, "CROPID", "CropUse", (int)MannerApplication.FieldData.CropTypeEnum);
 
             // This array is a temporary one to allow the mineralisation and leaching to be tested before applying to specific parts of the country
             int[] tempArray = CreateTempArray();
@@ -1627,15 +1627,15 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     {
         double mineralisedN;
 
-        if ((_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.FYM || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.CattleSlurry) && !this.IsBiosolidLiquidDigested(_manureType.ID))
+        if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.FYM || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry) && !this.IsBiosolidLiquidDigested(_manureType.ID))
         {
             mineralisedN = percentagedMineralisedNFymCattleSlurry * cumulativeDayDegrees / 100d * organicN;
         }
-        else if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.None || this.IsPaperCrumble(_manureType.ID))
+        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.None || this.IsPaperCrumble(_manureType.ID))
         {
             mineralisedN = 0d;
         }
-        else if (_manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.SolidSludge || _manureType.ManureTypeCategoryID == (int)MannerLib.Enumerations.ManureCategory.LiquidSludge)
+        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.SolidSludge || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
         {
             mineralisedN = percentagedMineralisedPultrySlurrySludgeAndDefault * cumulativeDayDegrees / 100d * organicN;
         }
@@ -1650,7 +1650,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     // added C Lam Sep 2012
     private bool IsBiosolidLiquidDigested(int mannerTypeID)
     {
-        return mannerTypeID == (int)MannerLib.Enumerations.ManureTypes.BiosolidsLiquidDigested;
+        return mannerTypeID == (int)Enums.Enumerations.ManureTypes.BiosolidsLiquidDigested;
     }
 
     private double AdjustMineralisedN2ForArableCrop(ref double mineralisedN2, double adjustmentFactor)
@@ -1659,14 +1659,14 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
         // For cereals or oilseed rape multiply NMin2 by 0.6
         switch (_cropType.ID)
         {
-            case (int)MannerLib.Enumerations.CropTypeEnum.EarlySownWinterCereal:
-            case (int)MannerLib.Enumerations.CropTypeEnum.LateSownWinterCereal:
-            case (int)MannerLib.Enumerations.CropTypeEnum.EarlyEstablishedWinterOilseedRape:
-            case (int)MannerLib.Enumerations.CropTypeEnum.LateEstablishedWinterOilseedRape:
-            case (int)MannerLib.Enumerations.CropTypeEnum.SpringCerealOilseedRape:
-            case (int)MannerLib.Enumerations.CropTypeEnum.Potatoes:
-            case (int)MannerLib.Enumerations.CropTypeEnum.Sugarbeet:
-            case (int)MannerLib.Enumerations.CropTypeEnum.Other:
+            case (int)Enums.Enumerations.CropTypeEnum.EarlySownWinterCereal:
+            case (int)Enums.Enumerations.CropTypeEnum.LateSownWinterCereal:
+            case (int)Enums.Enumerations.CropTypeEnum.EarlyEstablishedWinterOilseedRape:
+            case (int)Enums.Enumerations.CropTypeEnum.LateEstablishedWinterOilseedRape:
+            case (int)Enums.Enumerations.CropTypeEnum.SpringCerealOilseedRape:
+            case (int)Enums.Enumerations.CropTypeEnum.Potatoes:
+            case (int)Enums.Enumerations.CropTypeEnum.Sugarbeet:
+            case (int)Enums.Enumerations.CropTypeEnum.Other:
                 {
 
                     return mineralisedN2 * adjustmentFactor;
@@ -1720,7 +1720,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
         double dLIndex;
         double dLProp;
 
-        //var objManData = new MannerLib.MannerData();
+        //var objManData = new Enums.MannerData();
         int incorporationDelayHours;
 
         try
@@ -1803,7 +1803,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                 // ----------------------------------------------------------------------------------
                 // if the result of the string search for the word clay is greater than 0 then we have a clay soil
 
-                if (_subSoil.ID == (int)MannerLib.Enumerations.SoilType.Clay || _subSoil.ID == (int)MannerLib.Enumerations.SoilType.ClayLoam || _subSoil.ID == (int)MannerLib.Enumerations.SoilType.SandyClay || _subSoil.ID == (int)MannerLib.Enumerations.SoilType.SandyClayLoam || _subSoil.ID == (int)MannerLib.Enumerations.SoilType.SiltyClay || _subSoil.ID == (int)MannerLib.Enumerations.SoilType.SiltyClayLoam)
+                if (_subSoil.ID == (int)Enums.Enumerations.SoilType.Clay || _subSoil.ID == (int)Enums.Enumerations.SoilType.ClayLoam || _subSoil.ID == (int)Enums.Enumerations.SoilType.SandyClay || _subSoil.ID == (int)Enums.Enumerations.SoilType.SandyClayLoam || _subSoil.ID == (int)Enums.Enumerations.SoilType.SiltyClay || _subSoil.ID == (int)Enums.Enumerations.SoilType.SiltyClayLoam)
                 {
 
                     double dLProp1;
@@ -1818,22 +1818,22 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                     switch (_manureApplication.IncorporationMethodID)
                     {
                         // If the manure has been ploughed down
-                        case (int)MannerLib.Enumerations.MethodOfIncorporationEnum.MouldboardPlough: // "Mouldboard Plough"
+                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.MouldboardPlough: // "Mouldboard Plough"
                             {
                                 dInc = 0.9d;
                                 break;
                             }
-                        case (int)MannerLib.Enumerations.MethodOfIncorporationEnum.TineCultivator: // "Tine Cultivator"
+                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.TineCultivator: // "Tine Cultivator"
                             {
                                 dInc = 0.4d;
                                 break;
                             }
-                        case (int)MannerLib.Enumerations.MethodOfIncorporationEnum.RotaryCultivator: // "Rotary Cultivator"
+                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.RotaryCultivator: // "Rotary Cultivator"
                             {
                                 dInc = 0.4d;
                                 break;
                             }
-                        case (int)MannerLib.Enumerations.MethodOfIncorporationEnum.NotIncorporated: // "Not Incorporated"
+                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.NotIncorporated: // "Not Incorporated"
                             {
                                 dInc = 0d; // catch all, but shouldn't get here
                                 break;
@@ -1930,23 +1930,23 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                     switch (_manureApplication.IncorporationMethodID)
                     {
                         // If the manure has been cultivated or ploughed down within a month ie at all
-                        case (int)MannerLib.Enumerations.MethodOfIncorporationEnum.MouldboardPlough: // "Mouldboard Plough"
+                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.MouldboardPlough: // "Mouldboard Plough"
                             {
                                 dVMEffective = vmTotal - 0.5d * vmTop;
                                 break;
                             }
-                        case (int)MannerLib.Enumerations.MethodOfIncorporationEnum.TineCultivator: // "Tine Cultivator"
+                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.TineCultivator: // "Tine Cultivator"
                             {
                                 dVMEffective = vmTotal - 0.25d * vmTop;
                                 break;
                             }
-                        case (int)MannerLib.Enumerations.MethodOfIncorporationEnum.RotaryCultivator: // "Rotary Cultivator"
+                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.RotaryCultivator: // "Rotary Cultivator"
                             {
                                 dVMEffective = vmTotal - 0.25d * vmTop;
                                 break;
                             }
                         // If it hasn't been incorporated then nothing changes
-                        case (int)MannerLib.Enumerations.MethodOfIncorporationEnum.NotIncorporated: // "Not Incorporated"
+                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.NotIncorporated: // "Not Incorporated"
                             {
                                 dVMEffective = vmTotal; // catch all, but shouldn't get here
                                 break;
@@ -2237,7 +2237,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     {
         // EG Modification required to multiply mineralisation by 2 for poultry only.
         // some biosolids as set as manure category as poultry but these don't need the factor applied.
-        if (_manureType.ID == (int)MannerLib.Enumerations.ManureTypes.BroilerTurkeyLitter || _manureType.ID == (int)MannerLib.Enumerations.ManureTypes.PoultryManure)
+        if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.BroilerTurkeyLitter || _manureType.ID == (int)Enums.Enumerations.ManureTypes.PoultryManure)
         {
             return 2d;
         }

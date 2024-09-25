@@ -1,4 +1,4 @@
-﻿using Manner.Application.MannerLib;
+﻿using Manner.Application.Enums;
 
 namespace Manner.Application.DTOs;
 
