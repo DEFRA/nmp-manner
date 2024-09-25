@@ -104,7 +104,7 @@ public class MannerController : ControllerBase
             });
         }
 
-        var data = await _climateService.FetchByPostcodeAsync(postcode);
+        var data = await _climateService.FetchByPostcodeAsync(code);
         return Ok(new StandardResponse
         {
             Success = data != null && !errors.Any(),
