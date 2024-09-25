@@ -108,7 +108,7 @@ public class MannerController : ControllerBase
         return Ok(new StandardResponse
         {
             Success = data != null && !errors.Any(),
-            Data = data,
+            Data = new { climate = data },
             Message = data == null ? "No climate data found for the provided postcode." : string.Empty,
             Errors = errors
         });
@@ -155,7 +155,7 @@ public class MannerController : ControllerBase
         {
             Success = data != null && !errors.Any(),
             Data = new { AvarageAnnualRainfall = data },
-            Message = data != null ? string.Empty : "No climate data found for the provided postcode.",
+            Message = data != null ? string.Empty : "No avarage annual rainfall data found for the provided postcode.",
             Errors = errors
         });
 
