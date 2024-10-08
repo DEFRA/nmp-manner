@@ -51,7 +51,7 @@ namespace Manner.Infrastructure.Repositories
 
             if (countryId.HasValue)
             {
-                query = query.Where(mt => mt.CountryID == countryId.Value);
+                query = query.Where(mt => mt.CountryID == countryId.Value || mt.CountryID==3);
             }
 
             if (highReadilyAvailableNitrogen.HasValue)
