@@ -323,7 +323,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public async Task<ActionResult<StandardResponse>> IncorporationDelaysByMethod(int methodId, [FromQuery, SwaggerParameter("Filter by ApplicableFor (L for Liquid, S for Solid, P for Poultry, NULL for N/A or Not Incorporated)", Required = true)] string applicableFor)
+    public async Task<ActionResult<StandardResponse>> IncorporationDelaysByMethod(int methodId, string applicableFor)
     {
         var delays = await _incorporationDelayService.FetchByIncorpMethodIdAndApplicableForAsync(methodId, applicableFor);
         return delays != null && delays.Any()
