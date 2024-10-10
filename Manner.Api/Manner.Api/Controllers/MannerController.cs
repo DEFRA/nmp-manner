@@ -694,6 +694,38 @@ public class MannerController : ControllerBase
     [ProducesResponseType(400)]
     public async Task<ActionResult<StandardResponse>> CalculateNutrients(CalculateNutrientsRequest calculateNutrientsRequest)
     {
+        string code = string.Empty;
+        code = (calculateNutrientsRequest.Postcode.Length > 4) ? calculateNutrientsRequest.Postcode.Substring(0, 4).Trim() : calculateNutrientsRequest.Postcode.Trim();
+
+        List<string> errors = new List<string>();
+
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            errors.Add("Postcode should not be empty.");
+
+        }
+        if (code != null)
+        {
+            if (code.Length < 3 && code.Length > 4)
+            {
+                errors.Add("Invalid post code. Post code should be 3 or 4 length.");
+            }
+        }
+
+        if (errors.Any())
+        {
+            return Ok(new StandardResponse
+            {
+                Success = !errors.Any(),
+                Data = null,
+                Message = "Invalid Postcode.",
+                Errors = errors
+            });
+        }
+
+        calculateNutrientsRequest.Postcode = code;
+
+
         var nutrientsResponse = await _calculateResultService.CalculateNutrientsAsync(calculateNutrientsRequest);
 
         return Ok(new StandardResponse
