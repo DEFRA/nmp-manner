@@ -49,5 +49,11 @@ public class IncorporationDelayRepository : IIncorporationDelayRepository
             .ToListAsync();
     }
 
-
+    public async Task<IEnumerable<IncorporationDelay>?> FetchByIncorpMethodIdAndApplicableForAsync(int methodId, string applicableFor)
+    {
+        return await _context.IncorporationDelays
+            .Where(d => _context.Set<IncorpMethodsIncorpDelays>().Any(link => link.IncorporationMethodID == methodId && link.IncorporationDelayID == d.ID)
+            && d.ApplicableFor == "A" || d.ApplicableFor == applicableFor)
+            .ToListAsync();
+    }
 }
