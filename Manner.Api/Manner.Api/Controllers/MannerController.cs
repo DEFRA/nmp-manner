@@ -319,11 +319,11 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("incorporation-delays/by-incorp-method-and-applicable-for/{methodId}")]
-    [SwaggerOperation(Summary = "Retrieve incorporation delays by incorporation method ID", Description = "Fetches incorporation delays associated with a specific incorporation method.")]
+    [SwaggerOperation(Summary = "Retrieve incorporation delays by incorporation method ID and applicable for ", Description = "Fetches incorporation delays associated with a specific incorporation method.")]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public async Task<ActionResult<StandardResponse>> IncorporationDelaysByMethod(int methodId, [FromQuery, SwaggerParameter("Filter by ApplicableFor (L for Liquid, S for Solid, P for Poultry, NULL for N/A or Not Incorporated)", Required = true)] string applicableFor)
+    public async Task<ActionResult<StandardResponse>> IncorporationDelaysByMethodAndApplicableFor(int methodId, [FromQuery, SwaggerParameter("Filter by ApplicableFor (L for Liquid, S for Solid, P for Poultry, NULL for N/A or Not Incorporated)", Required = true)] string applicableFor)
     {
         var delays = await _incorporationDelayService.FetchByIncorpMethodIdAndApplicableForAsync(methodId, applicableFor);
         return delays != null && delays.Any()
@@ -649,6 +649,37 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> RainfallPostApplication([FromBody] RainfallPostApplicationRequest rainfallPostApplicationRequest)
     {
+        string code = string.Empty;
+        code = (rainfallPostApplicationRequest.ClimateDataPostcode.Length > 4) ? rainfallPostApplicationRequest.ClimateDataPostcode.Substring(0, 4).Trim() : rainfallPostApplicationRequest.ClimateDataPostcode.Trim();
+
+        List<string> errors = new List<string>();
+
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            errors.Add("Postcode should not be empty.");
+
+        }
+        if (code != null)
+        {
+            if (code.Length < 3 && code.Length > 4)
+            {
+                errors.Add("Invalid post code. Post code should be 3 or 4 length.");
+            }
+        }
+
+        if (errors.Any())
+        {
+            return Ok(new StandardResponse
+            {
+                Success = !errors.Any(),
+                Data = null,
+                Message = "Invalid Postcode.",
+                Errors = errors
+            });
+        }
+
+        rainfallPostApplicationRequest.ClimateDataPostcode = code;
+
         var rainfallResponse = await _climateService.FetchRainfallPostApplication(rainfallPostApplicationRequest);
         return Ok(new StandardResponse
         {
