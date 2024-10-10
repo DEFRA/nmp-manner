@@ -14,7 +14,7 @@ namespace Manner.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/")]
-[Authorize]
+//[Authorize]
 public class MannerController : ControllerBase
 {
     private readonly ILogger<MannerController> _logger;
@@ -316,6 +316,19 @@ public class MannerController : ControllerBase
         return delays != null && delays.Any()
             ? Ok(new StandardResponse { Success = true, Data = delays })
             : NotFound(new StandardResponse { Success = false, Message = "No incorporation delays found for the specified filter." });
+    }
+
+    [HttpGet("incorporation-delays/by-incorp-method-and-applicable-for/{methodId}/{applicableFor}")]
+    [SwaggerOperation(Summary = "Retrieve incorporation delays by incorporation method ID", Description = "Fetches incorporation delays associated with a specific incorporation method.")]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> IncorporationDelaysByMethod(int methodId, [FromQuery, SwaggerParameter("Filter by ApplicableFor (L for Liquid, S for Solid, P for Poultry, NULL for N/A or Not Incorporated)", Required = true)] string applicableFor)
+    {
+        var delays = await _incorporationDelayService.FetchByIncorpMethodIdAndApplicableForAsync(methodId, applicableFor);
+        return delays != null && delays.Any()
+            ? Ok(new StandardResponse { Success = true, Data = delays })
+            : NotFound(new StandardResponse { Success = false, Message = "No incorporation delays found for the given method ID." });
     }
 
 
