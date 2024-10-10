@@ -68,8 +68,10 @@ public class IncorporationDelayRepository : IIncorporationDelayRepository
         {
 
             return await _context.IncorporationDelays
+                //.Where(d=>d.ApplicableFor == "A" || d.ApplicableFor == applicableFor)
+                
                 .Where(d => _context.Set<IncorpMethodsIncorpDelays>().Any(link => link.IncorporationMethodID == methodId && link.IncorporationDelayID == d.ID)
-                && d.ApplicableFor == "A" || d.ApplicableFor == applicableFor)
+                && (d.ApplicableFor == "A" || d.ApplicableFor == applicableFor))
                 .ToListAsync();
         }
     }

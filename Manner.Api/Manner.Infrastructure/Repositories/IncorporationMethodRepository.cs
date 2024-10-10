@@ -33,7 +33,7 @@ namespace Manner.Infrastructure.Repositories
         public async Task<IEnumerable<IncorporationMethod>?> FetchByAppMethodIdAsync(int methodId)
         {
             return await _context.IncorporationMethods
-                .Where(im => _context.ApplicationMethodsIncorpMethods
+                .Where(im => _context.Set<ApplicationMethodsIncorpMethods>()
                     .Any(link => link.ApplicationMethodID == methodId && link.IncorporationMethodID == im.ID))
                 .ToListAsync();
         }
@@ -43,35 +43,35 @@ namespace Manner.Infrastructure.Repositories
             if (string.IsNullOrWhiteSpace(applicableFor))
             {
                 return await _context.IncorporationMethods
-               .Where(im => _context.ApplicationMethodsIncorpMethods
+               .Where(im => _context.Set<ApplicationMethodsIncorpMethods>()
                    .Any(link => link.ApplicationMethodID == methodId && link.IncorporationMethodID == im.ID))
                .ToListAsync();
             }
             else if (applicableFor.ToLower() == "null")
             {
                 return await _context.IncorporationMethods
-               .Where(im => _context.ApplicationMethodsIncorpMethods.Any(link => link.ApplicationMethodID == methodId && link.IncorporationMethodID == im.ID) 
+               .Where(im => _context.Set<ApplicationMethodsIncorpMethods>().Any(link => link.ApplicationMethodID == methodId && link.IncorporationMethodID == im.ID) 
                             && (im.ApplicableForGrass == null || im.ApplicableForArableAndHorticulture == null))
                .ToListAsync();
             }
             else if(applicableFor == "G")
             {
                 return await _context.IncorporationMethods
-               .Where(im => _context.ApplicationMethodsIncorpMethods
+               .Where(im => _context.Set<ApplicationMethodsIncorpMethods>()
                    .Any(link => link.ApplicationMethodID == methodId && link.IncorporationMethodID == im.ID) && (im.ApplicableForGrass == applicableFor || im.ApplicableForGrass == "B"))
                .ToListAsync();
             }
             else if (applicableFor =="A")
             {
                 return await _context.IncorporationMethods
-               .Where(im => _context.ApplicationMethodsIncorpMethods
+               .Where(im => _context.Set<ApplicationMethodsIncorpMethods>()
                    .Any(link => link.ApplicationMethodID == methodId && link.IncorporationMethodID == im.ID) && (im.ApplicableForArableAndHorticulture == applicableFor || im.ApplicableForArableAndHorticulture == "B"))
                .ToListAsync();
             }
             else if (applicableFor == "B")
             {
                 return await _context.IncorporationMethods
-               .Where(im => _context.ApplicationMethodsIncorpMethods
+               .Where(im => _context.Set<ApplicationMethodsIncorpMethods>()
                    .Any(link => link.ApplicationMethodID == methodId && link.IncorporationMethodID == im.ID) && (im.ApplicableForGrass == applicableFor || im.ApplicableForArableAndHorticulture == applicableFor))
                .ToListAsync();
             }
