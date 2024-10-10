@@ -318,12 +318,12 @@ public class MannerController : ControllerBase
             : NotFound(new StandardResponse { Success = false, Message = "No incorporation delays found for the specified filter." });
     }
 
-    [HttpGet("incorporation-delays/by-incorp-method-and-applicable-for/{methodId}/{applicableFor}")]
+    [HttpGet("incorporation-delays/by-incorp-method-and-applicable-for/{methodId}")]
     [SwaggerOperation(Summary = "Retrieve incorporation delays by incorporation method ID", Description = "Fetches incorporation delays associated with a specific incorporation method.")]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public async Task<ActionResult<StandardResponse>> IncorporationDelaysByMethod(int methodId, string applicableFor)
+    public async Task<ActionResult<StandardResponse>> IncorporationDelaysByMethod(int methodId, [FromQuery, SwaggerParameter("Filter by ApplicableFor (L for Liquid, S for Solid, P for Poultry, NULL for N/A or Not Incorporated)", Required = true)] string applicableFor)
     {
         var delays = await _incorporationDelayService.FetchByIncorpMethodIdAndApplicableForAsync(methodId, applicableFor);
         return delays != null && delays.Any()
