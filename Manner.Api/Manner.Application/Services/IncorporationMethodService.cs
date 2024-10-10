@@ -39,5 +39,11 @@ namespace Manner.Application.Services
             var methods = await _incorporationMethodRepository.FetchByAppMethodIdAsync(methodId);
             return _mapper.Map<IEnumerable<IncorporationMethodDto>>(methods);
         }
+
+        public async Task<IEnumerable<IncorporationMethodDto>?> FetchByAppMethodIdAndApploicableForAsync(int methodId, string applicableFor)
+        {
+            var methods = await _incorporationMethodRepository.FetchByAppMethodIdAndApploicableForAsync(methodId, applicableFor);
+            return _mapper.Map<IEnumerable<IncorporationMethodDto>>(methods);
+        }
     }
 }

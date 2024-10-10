@@ -328,7 +328,7 @@ public class MannerController : ControllerBase
         var delays = await _incorporationDelayService.FetchByIncorpMethodIdAndApplicableForAsync(methodId, applicableFor);
         return delays != null && delays.Any()
             ? Ok(new StandardResponse { Success = true, Data = delays })
-            : NotFound(new StandardResponse { Success = false, Message = "No incorporation delays found for the given method ID." });
+            : NotFound(new StandardResponse { Success = false, Message = "No incorporation delays found for the given method ID and applicable for." });
     }
 
 
@@ -371,6 +371,20 @@ public class MannerController : ControllerBase
             ? Ok(new StandardResponse { Success = true, Data = methods })
             : NotFound(new StandardResponse { Success = false, Message = "No incorporation methods found for the given application method ID." });
     }
+
+    [HttpGet("incorporation-methods/by-app-method-and-applicable-for/{methodId}")]
+    [SwaggerOperation(Summary = "Retrieve incorporation methods by application method ID", Description = "Fetches incorporation methods associated with a specific application method ID.")]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> IncorporationMethodsByMethodIdAndApplicableFor(int methodId, [FromQuery, SwaggerParameter("Filter by ApplicableFor ('G' for Grass, 'A' for Arable and Horticulture, 'B' for Both, 'NULL' for N/A)", Required = true)] string applicableFor)
+    {
+        var methods = await _incorporationMethodService.FetchByAppMethodIdAndApploicableForAsync(methodId, applicableFor);
+        return methods != null && methods.Any()
+            ? Ok(new StandardResponse { Success = true, Data = methods })
+            : NotFound(new StandardResponse { Success = false, Message = "No incorporation methods found for the given application method ID and Applicable for" });
+    }
+
 
     [HttpGet("manure-groups")]
     [SwaggerOperation(Summary = "Retrieve all manure groups", Description = "Fetches a list of all manure groups available.")]
