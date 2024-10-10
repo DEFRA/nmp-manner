@@ -50,8 +50,8 @@ namespace Manner.Infrastructure.Repositories
             else if (applicableFor.ToLower() == "null")
             {
                 return await _context.IncorporationMethods
-               .Where(im => _context.ApplicationMethodsIncorpMethods
-                   .Any(link => link.ApplicationMethodID == methodId && link.IncorporationMethodID == im.ID) && (im.ApplicableForGrass == null || im.ApplicableForArableAndHorticulture == null))
+               .Where(im => _context.ApplicationMethodsIncorpMethods.Any(link => link.ApplicationMethodID == methodId && link.IncorporationMethodID == im.ID) 
+                            && (im.ApplicableForGrass == null || im.ApplicableForArableAndHorticulture == null))
                .ToListAsync();
             }
             else if(applicableFor == "G")
