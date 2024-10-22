@@ -1,3 +1,4 @@
+using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Manner.Api.Exceptions;
 using Manner.Api.Helpers;
 using Manner.Api.Security;
@@ -13,24 +14,38 @@ using System.Resources;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.Authority = $"{builder.Configuration["CustomerIdentityInstance"]}{builder.Configuration["CustomerIdentityDomain"]}/{builder.Configuration["CustomerIdentityPolicyId"]}/v2.0/";
-                    options.Audience = builder.Configuration["CustomerIdentityClientId"];
+    .AddJwtBearer(options =>
+    {
+        options.Authority = $"{builder.Configuration["CustomerIdentityInstance"]}{builder.Configuration["CustomerIdentityDomain"]}/{builder.Configuration["CustomerIdentityPolicyId"]}/v2.0/";
+        options.Audience = builder.Configuration["CustomerIdentityClientId"];
 
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        NameClaimType = "name",
-                        ValidateIssuer = false
-                    };
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            NameClaimType = "name",
+            ValidateIssuer = false
+        };
 
-                    options.Events = new CustomJwtBearerEvents();
-                });
+        options.Events = new CustomJwtBearerEvents();
+    });
 
 // Add services to the container.
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<CustomExceptionFilter>();
+});
+
+var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();
+
+if(!string.IsNullOrWhiteSpace(applicationInsightsConnectionString))
+{
+    builder.Services.AddOpenTelemetry().UseAzureMonitor();
+}
+
+
+builder.Services.AddLogging(builder =>
+{
+    builder.ClearProviders();
+    builder.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

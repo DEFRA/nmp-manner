@@ -6,46 +6,37 @@ using Manner.Core.Attributes;
 using Manner.Core.Entities;
 using Manner.Core.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.Runtime.Intrinsics.Arm;
 
 namespace Manner.Application.Services;
 [Service(ServiceLifetime.Transient)]
-public class CalculateResultService : ICalculateResultService
+public class CalculateResultService(
+    ILogger<CalculateResultService> logger,
+    IClimateRepository climateRepository,
+    ICropTypeRepository cropTypeRepository,
+    IManureTypeRepository manureTypeRepository,
+    IMapper mapper,
+    IIncorporationMethodRepository incorporationMethodRepository,
+    IIncorporationDelayRepository incorporationDelayRepository,
+    ITopSoilRepository topSoilRepository,
+    ISubSoilRepository subSoilRepository,
+    IClimateTypeRepository climateTypeRepository) : ICalculateResultService
 {    
-    private readonly IClimateRepository _climateRepository;
-    private readonly ICropTypeRepository _cropTypeRepository;
-    private readonly IManureTypeRepository _manureTypeRepository;
-    private readonly IMapper _mapper;
-    private readonly IIncorporationMethodRepository _incorporationMethodRepository;
-    private readonly IIncorporationDelayRepository _incorporationDelayRepository;
-    private readonly ITopSoilRepository _topSoilRepository;
-    private readonly ISubSoilRepository _subSoilRepository;
-    private readonly IClimateTypeRepository _climateTypeRepository;
-
-    public CalculateResultService(        
-        IClimateRepository climateRepository,
-        ICropTypeRepository cropTypeRepository,
-        IManureTypeRepository manureTypeRepository,
-        IMapper mapper,
-        IIncorporationMethodRepository incorporationMethodRepository,
-        IIncorporationDelayRepository incorporationDelayRepository,
-        ITopSoilRepository topSoilRepository,
-        ISubSoilRepository subSoilRepository,
-        IClimateTypeRepository climateTypeRepository)
-    {        
-        _climateRepository = climateRepository;
-        _cropTypeRepository = cropTypeRepository;
-        _manureTypeRepository = manureTypeRepository;
-        _mapper = mapper;
-        _incorporationMethodRepository = incorporationMethodRepository;
-        _incorporationDelayRepository = incorporationDelayRepository;
-        _topSoilRepository = topSoilRepository;
-        _subSoilRepository = subSoilRepository;
-        _climateTypeRepository = climateTypeRepository;
-    }
+    private readonly IClimateRepository _climateRepository = climateRepository;
+    private readonly ICropTypeRepository _cropTypeRepository = cropTypeRepository;
+    private readonly IManureTypeRepository _manureTypeRepository = manureTypeRepository;
+    private readonly IMapper _mapper = mapper;
+    private readonly IIncorporationMethodRepository _incorporationMethodRepository = incorporationMethodRepository;
+    private readonly IIncorporationDelayRepository _incorporationDelayRepository = incorporationDelayRepository;
+    private readonly ITopSoilRepository _topSoilRepository = topSoilRepository;
+    private readonly ISubSoilRepository _subSoilRepository = subSoilRepository;
+    private readonly IClimateTypeRepository _climateTypeRepository = climateTypeRepository;
+    private readonly ILogger<CalculateResultService> _logger = logger;
 
     public async Task<NutrientsResponse> CalculateNutrientsAsync(CalculateNutrientsRequest calculateNutrientsRequest)
-    {        
+    {
+        _logger.LogTrace($"CalculateResultService : CalculateNutrientsAsync() callled");
         NutrientsResponse ret = new NutrientsResponse();
         ret.FieldID = calculateNutrientsRequest.Field.FieldID;
         ret.FieldName = calculateNutrientsRequest.Field.FieldName;
