@@ -6,6 +6,7 @@ using Manner.Core.Attributes;
 using Manner.Core.Entities;
 using Manner.Core.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Net;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -13,26 +14,23 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace Manner.Application.Services;
 
 [Service(ServiceLifetime.Transient)]
-public class ClimateService : IClimateService
+public class ClimateService(ILogger<ClimateService> logger, IClimateRepository climateRepository, IMapper mapper, IRainfallCalculator rainfallCalculator) : IClimateService
 {
-    private readonly IClimateRepository _climateRepository;
-    private readonly IMapper _mapper;
-    private readonly IRainfallCalculator _rainfallCalculator;
-    public ClimateService(IClimateRepository climateRepository, IMapper mapper, IRainfallCalculator rainfallCalculator)
-    {
-        _climateRepository = climateRepository;
-        _mapper = mapper;
-        _rainfallCalculator = rainfallCalculator;
-    }
+    private readonly IClimateRepository _climateRepository = climateRepository;
+    private readonly IMapper _mapper = mapper;
+    private readonly IRainfallCalculator _rainfallCalculator = rainfallCalculator;
+    private readonly ILogger<ClimateService> _logger = logger;
 
     public Task<IEnumerable<ClimateDto>?> FetchAllAsync()
     {
+        _logger.LogTrace($"ClimateService : FetchAllAsync() callled");
         //return _mapper.Map<IEnumerable<ClimateDto>>( await _climateRepository.FetchAllAsync());
-         throw new NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public async Task<ClimateDto?> FetchByPostcodeAsync(string postcode)
-    {       
+    {
+        _logger.LogTrace($"ClimateService : FetchByPostcodeAsync({postcode}) callled");
         var climate = await _climateRepository.FetchByPostcodeAsync(postcode);
         return _mapper.Map<ClimateDto?>(climate);
     }
@@ -40,11 +38,13 @@ public class ClimateService : IClimateService
 
     public async Task<ClimateDto?> FetchByIdAsync(int id)
     {
+        _logger.LogTrace($"ClimateService : FetchByIdAsync({id}) callled");
         return _mapper.Map<ClimateDto>( await _climateRepository.FetchByIdAsync(id));
     }
 
     public async Task<RainfallPostApplicationResponse> FetchRainfallPostApplication(RainfallPostApplicationRequest rainfallPostApplicationRequest)
     {
+        _logger.LogTrace($"ClimateService : FetchRainfallPostApplication() callled");
         var climate = await _climateRepository.FetchByPostcodeAsync(rainfallPostApplicationRequest.ClimateDataPostcode);
 
         // Default to 0 mm rainfall if no climate data is found
@@ -77,6 +77,7 @@ public class ClimateService : IClimateService
 
     public async Task<Rainfall?> FetchAverageAnualRainfall(string postcode)
     {
+        _logger.LogTrace($"ClimateService : FetchAverageAnualRainfall({postcode}) callled");
         Rainfall? rainfall = null;
         var climate = await _climateRepository.FetchByPostcodeAsync(postcode);
         if(climate != null)

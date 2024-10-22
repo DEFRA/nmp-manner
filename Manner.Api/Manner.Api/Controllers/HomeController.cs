@@ -23,6 +23,7 @@ public class HomeController : Controller
     [ProducesResponseType(404)]
     public async Task<ActionResult<StandardResponse?>> Index()
     {
+        _logger.LogTrace("HomeController : Index action called");
         StandardResponse ret = new StandardResponse();
         try
         {
