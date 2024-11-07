@@ -1,5 +1,5 @@
 # NMP Manner
-This directory contains the frontend code for the NMP project.
+This directory contains the api code for the NMP-Manner project.
 
 ## Main Branches:
 
