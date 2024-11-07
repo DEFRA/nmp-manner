@@ -3,6 +3,7 @@ using Manner.Core.Entities;
 using Manner.Infrastructure.Data;
 using Manner.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,7 +28,9 @@ public class ApplicationMethodRepositoryTests
         // Seed data
         SeedData(_context);
 
-        _repository = new ApplicationMethodRepository(_context);
+        var nullLogger = NullLogger<ApplicationMethodRepository>.Instance;
+
+        _repository = new ApplicationMethodRepository(nullLogger, _context);
     }
 
     private void SeedData(ApplicationDbContext context)
