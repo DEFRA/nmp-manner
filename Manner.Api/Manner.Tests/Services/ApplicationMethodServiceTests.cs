@@ -5,6 +5,7 @@ using Manner.Application.Interfaces;
 using Manner.Application.Services;
 using Manner.Core.Entities;
 using Manner.Core.Interfaces;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,10 @@ namespace Manner.Tests.Services
             // Mock the repository and the mapper
             _mockRepository = new Mock<IApplicationMethodRepository>();
             _mockMapper = new Mock<IMapper>();
+            var mockLogger = new Mock<ILogger<ApplicationMethodService>>();
 
             // Create the service with mocked dependencies
-            _service = new ApplicationMethodService(_mockRepository.Object, _mockMapper.Object);
+            _service = new ApplicationMethodService(mockLogger.Object, _mockRepository.Object, _mockMapper.Object);
         }
 
         // Test FetchAllAsync()
