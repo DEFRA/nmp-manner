@@ -12,7 +12,7 @@ namespace Manner.Application.Validators
     {
         public CalculateNutrientsRequestValidator()
         {
-            RuleFor(x => x.Postcode.Substring(0, 4).Trim())
+            RuleFor(x => (x.Postcode.Length > 4) ? x.Postcode.Substring(0, 4).Trim() : x.Postcode.Trim())
                 .NotNull().NotEmpty().WithMessage("Postcode is required.")                
                 .MinimumLength(3).WithMessage("Postcode must be at least 3 characters long.")
                 .MaximumLength(4).WithMessage("Only the first half of the postcode is required. A maximum of 4 characters");
