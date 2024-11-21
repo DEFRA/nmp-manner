@@ -83,6 +83,7 @@ public class CalculateResultService(
             outputs.K2OCropAvailable += calculator.MannerEngine.K2OCropAvailable;
             outputs.K2OTotal += calculator.MannerEngine.K2OTotal;
             outputs.SO3Total += calculator.MannerEngine.SO3Total;
+            outputs.SO3CropAvailable += calculator.MannerEngine.SO3CropAvailable;
             outputs.MgOTotal += calculator.MannerEngine.MgOTotal;
             outputs.ResultantNAvailable += calculator.MannerEngine.ResultantNAvailable;
             outputs.ResultantNAvailableSecondCut += calculator.MannerEngine.ResultantNAvailableSecondCut;
@@ -102,8 +103,9 @@ public class CalculateResultService(
         ret.CropAvailableP2O5 = Convert.ToInt32(Math.Round(outputs.P2O5CropAvailable, 0));
         ret.TotalK2O= Convert.ToInt32(Math.Round(outputs.K2OTotal, 0));
         ret.CropAvailableK2O = Convert.ToInt32(Math.Round(outputs.K2OCropAvailable, 0));
-        ret.TotalSO3= Convert.ToInt32(Math.Round(outputs.SO3Total, 0));
-        ret.TotalMgO= Convert.ToInt32(Math.Round(outputs.MgOTotal, 0));
+        ret.TotalSO3= Convert.ToInt32(outputs.SO3Total);
+        ret.CropAvailableSO3 = Convert.ToInt32(outputs.SO3CropAvailable);
+        ret.TotalMgO= Convert.ToInt32(outputs.MgOTotal);
 
         return ret;
     }

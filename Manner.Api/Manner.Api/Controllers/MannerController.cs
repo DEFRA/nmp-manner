@@ -86,13 +86,17 @@ public class MannerController : ControllerBase
             errors.Add("Postcode should not be empty");
 
         }
-        if (code != null)
+        else
         {
-            if (code.Length < 3 && code.Length > 4)
+            if (code != null)
             {
-                errors.Add("Invalid post code. Post code should be 3 or 4 length");
+                if (code.Length < 3 && code.Length > 4)
+                {
+                    errors.Add("Invalid post code. Post code should be 3 or 4 length");
+                }
             }
         }
+
 
         if (errors.Any())
         {
@@ -104,8 +108,11 @@ public class MannerController : ControllerBase
                 Errors = errors
             });
         }
-
-        var data = await _climateService.FetchByPostcodeAsync(code);
+        ClimateDto? data = null;
+        if (code != null)
+        {
+            data = await _climateService.FetchByPostcodeAsync(code);
+        }  
         return Ok(new StandardResponse
         {
             Success = data != null && !errors.Any(),
@@ -151,8 +158,12 @@ public class MannerController : ControllerBase
                 Errors = errors
             });
         }
-
-        var data = await _climateService.FetchAverageAnualRainfall(code);
+        Rainfall? data = null;
+        if(code != null)
+        {
+            data = await _climateService.FetchAverageAnualRainfall(code);
+        }
+        
         return Ok(new StandardResponse
         {
             Success = data != null && !errors.Any(),
@@ -221,7 +232,7 @@ public class MannerController : ControllerBase
         {
             Success = data != null && data.Any(),
             Data = data,
-            Message = data != null && data.Any() ? null : "No crop types found."
+            Message = data != null && data.Any() ? string.Empty : "No crop types found."
         });
     }
 
@@ -246,12 +257,14 @@ public class MannerController : ControllerBase
     public async Task<ActionResult<StandardResponse>> Countries()
     {
         _logger.LogTrace($"MannerController: countries called.");
+        
         var data = await _countryService.FetchAllAsync();
+        
         return Ok(new StandardResponse
         {
             Success = data != null && data.Any(),
             Data = data,
-            Message = data != null && data.Any() ? null : "No countries found."
+            Message = data != null && data.Any() ? string.Empty : "No countries found."
         });
     }
 
@@ -713,8 +726,10 @@ public class MannerController : ControllerBase
             });
         }
 
-        rainfallPostApplicationRequest.ClimateDataPostcode = code;
-
+        if (code != null)
+        {
+            rainfallPostApplicationRequest.ClimateDataPostcode = code;
+        }
         var rainfallResponse = await _climateService.FetchRainfallPostApplication(rainfallPostApplicationRequest);
         return Ok(new StandardResponse
         {
@@ -770,8 +785,11 @@ public class MannerController : ControllerBase
                 Errors = errors
             });
         }
-
-        calculateNutrientsRequest.Postcode = code;
+        if(code != null)
+        {
+            calculateNutrientsRequest.Postcode = code;
+        }
+        
 
 
         var nutrientsResponse = await _calculateResultService.CalculateNutrientsAsync(calculateNutrientsRequest);

@@ -8,8 +8,8 @@ namespace Manner.Core.Entities;
 public class Climate
 {
     public int ID { get; set; }
-    public string Territory { get; set; }
-    public string PostCode { get; set; }
+    public required string Territory { get; set; }
+    public required string PostCode { get; set; }
     public int East { get; set; }
     public int North { get; set; }
     public decimal Altitude { get; set; }

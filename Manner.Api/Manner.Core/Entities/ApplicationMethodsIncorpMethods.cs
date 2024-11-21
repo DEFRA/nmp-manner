@@ -11,7 +11,7 @@ namespace Manner.Core.Entities
         public int ApplicationMethodID { get; set; }
         public int IncorporationMethodID { get; set; }
 
-        public ApplicationMethod ApplicationMethod { get; set; }
-        public IncorporationMethod IncorporationMethod { get; set; }
+        public required ApplicationMethod ApplicationMethod { get; set; }
+        public required IncorporationMethod IncorporationMethod { get; set; }
     }
 }
