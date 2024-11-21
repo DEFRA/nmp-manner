@@ -20,6 +20,7 @@ namespace Manner.Tests.Calculators
             // Arrange
             var climate = new ClimateDto
             {
+                Territory= "EnglandWalesScotland",
                 PostCode = "AL1",
                 MeanTotalRainFallJan = 69.550721170m,
                 MeanTotalRainFallFeb = 48.041668180m,
@@ -42,6 +43,7 @@ namespace Manner.Tests.Calculators
             // Arrange
             var climate = new ClimateDto
             {
+                Territory = "EnglandWalesScotland",
                 PostCode = "AL10",
                 MeanTotalRainFallJan = 64.515481210m,
                 MeanTotalRainFallFeb = 46.731500640m,
@@ -64,6 +66,7 @@ namespace Manner.Tests.Calculators
             // Arrange
             var climate = new ClimateDto
             {
+                Territory = "EnglandWalesScotland",
                 PostCode = "AL2",
                 MeanTotalRainFallJan = 68.985180580m,
                 MeanTotalRainFallFeb = 49.709538810m,
@@ -86,6 +89,7 @@ namespace Manner.Tests.Calculators
             // Arrange
             var climate = new ClimateDto
             {
+                Territory = "EnglandWalesScotland",
                 PostCode = "AL3",
                 MeanTotalRainFallJan = 70.709515820m,
                 MeanTotalRainFallFeb = 50.605571410m,
@@ -108,6 +112,7 @@ namespace Manner.Tests.Calculators
             // Arrange
             var climate = new ClimateDto
             {
+                Territory = "EnglandWalesScotland",
                 PostCode = "AL4",
                 MeanTotalRainFallJan = 67.570715100m,
                 MeanTotalRainFallFeb = 48.491295090m,
@@ -130,6 +135,7 @@ namespace Manner.Tests.Calculators
             // Arrange
             var climate = new ClimateDto
             {
+                Territory = "EnglandWalesScotland",
                 PostCode = "BB10",
                 MeanTotalRainFallOct = 147.038808600m,
                 MeanTotalRainFallNov = 138.823611600m,
@@ -155,6 +161,7 @@ namespace Manner.Tests.Calculators
             // Arrange
             var climate = new ClimateDto
             {
+                Territory = "EnglandWalesScotland",
                 PostCode = "BB11",
                 MeanTotalRainFallNov = 132.528806400m,
                 MeanTotalRainFallDec = 155.132262700m,
@@ -178,6 +185,7 @@ namespace Manner.Tests.Calculators
             // Arrange
             var climate = new ClimateDto
             {
+                Territory = "EnglandWalesScotland",
                 PostCode = "BB12",
                 MeanTotalRainFallDec = 139.704101100m,
                 MeanTotalRainFallJan = 121.728579200m,
@@ -199,6 +207,8 @@ namespace Manner.Tests.Calculators
             // Arrange
             var climate = new ClimateDto
             {
+                Territory = "EnglandWalesScotland",
+                PostCode = "BB12",
                 MeanTotalRainFallOct = 146.216752100m,
                 MeanTotalRainFallNov = 132.528806400m,
                 MeanTotalRainFallDec = 155.132262700m,
