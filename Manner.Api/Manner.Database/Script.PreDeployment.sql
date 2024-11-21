@@ -9,4 +9,4 @@
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
-TRUNCATE TABLE [dbo].[ManureTypes]
+--TRUNCATE TABLE [dbo].[ManureTypes]
