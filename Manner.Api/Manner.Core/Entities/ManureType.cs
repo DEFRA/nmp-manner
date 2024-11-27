@@ -27,5 +27,8 @@ public class ManureType
     public int K2OAvailable { get; set; }
     public decimal NMaxConstant { get; set; }
     public int ApplicationRateArable { get; set; }
-    public int ApplicationRateGrass { get; set; }
+    public int ApplicationRateGrass { get; set; }        
+    public decimal SO3AvaiableAutumnOther { get; set; }
+    public decimal SO3AvaiableAutumnOsrGrass { get; set; }
+    public decimal SO3AvailableSpring { get; set; }
 }

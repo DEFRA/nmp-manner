@@ -16,8 +16,9 @@ public class Outputs
         P2O5Total = 0d;
         K2OCropAvailable = 0d;
         K2OTotal = 0d;
-        SO3Total = 0d;
-        MgOTotal = 0;
+        SO3Total = null;
+        SO3CropAvailable = null;
+        MgOTotal = null;
         ResultantNAvailable = 0d;
         ResultantNAvailableSecondCut = 0d;
         ResultantNAvailableYear2 = 0d;
@@ -36,8 +37,9 @@ public class Outputs
     public double P2O5Total { get; set; }
     public double K2OCropAvailable { get; set; }
     public double K2OTotal { get; set; }
-    public double SO3Total { get; set; }
-    public double MgOTotal { get; set; }
+    public double? SO3Total { get; set; }
+    public double? SO3CropAvailable { get; set; }
+    public double? MgOTotal { get; set; }
 
     public double ResultantNAvailable { get; set; }
 

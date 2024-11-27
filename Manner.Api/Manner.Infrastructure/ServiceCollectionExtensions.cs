@@ -28,12 +28,16 @@ namespace Manner.Infrastructure
                 {
                     foreach (var item in interfaces)
                     {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                         services.Add(new ServiceDescriptor(item, type, attribute.Lifetime));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                     }
                 }
                 else
                 {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                     services.Add(new ServiceDescriptor(type, type, attribute.Lifetime));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                 }
             }
 

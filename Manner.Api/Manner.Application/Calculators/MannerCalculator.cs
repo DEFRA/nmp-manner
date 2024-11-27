@@ -578,16 +578,46 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     private void CalculateNutrientsOutputsValues()
     {
         _outputs.P2O5Total = Convert.ToDouble(_manureType.P2O5 * _manureApplication.ApplicationRate.Value);
+        var percentageP2O5Available = _manureType.P2O5Available / 100m;
+        _outputs.P2O5CropAvailable = Convert.ToDouble(_manureType.P2O5 * _manureApplication.ApplicationRate.Value * percentageP2O5Available);
         _outputs.K2OTotal = Convert.ToDouble(_manureType.K2O * _manureApplication.ApplicationRate.Value);
+        var percentageK2OCropAvailable = _manureType.K2OAvailable / 100m;
+        _outputs.K2OCropAvailable = Convert.ToDouble(_manureType.K2O * _manureApplication.ApplicationRate.Value * percentageK2OCropAvailable);
         _outputs.MgOTotal = Convert.ToDouble(_manureType.MgO * _manureApplication.ApplicationRate.Value);
         _outputs.SO3Total = Convert.ToDouble(_manureType.SO3 * _manureApplication.ApplicationRate.Value);
-        var percentageP2O5Available = _manureType.P2O5Available /100m;
-        _outputs.P2O5CropAvailable = Convert.ToDouble(_manureType.P2O5 * _manureApplication.ApplicationRate.Value * percentageP2O5Available);
+        _outputs.SO3CropAvailable = CalculateSO3CropAvailable();
         //_outputs.P2O5CropAvailable = Convert.ToDouble(_manureType.P2O5 * (Convert.ToDouble(_manureApplication.ApplicationRate.Value) * (_manureType.P2O5Available/100)));
-        var percentageK2OCropAvailable = _manureType.K2OAvailable/100m;
-        _outputs.K2OCropAvailable = Convert.ToDouble(_manureType.K2O * _manureApplication.ApplicationRate.Value * percentageK2OCropAvailable);
+
 
     }
+
+    private double CalculateSO3CropAvailable()
+    {
+        if ((int)_manureApplication.ApplicationDate.Month >= 8 & (int)_manureApplication.ApplicationDate.Month <= 12)
+        {
+            if (_cropType.ID == (int)Enumerations.CropTypeEnum.Grass || _cropType.ID == (int)Enumerations.CropTypeEnum.SpringCerealOilseedRape || _cropType.ID == (int)Enumerations.CropTypeEnum.EarlyEstablishedWinterOilseedRape || _cropType.ID == (int)Enumerations.CropTypeEnum.LateEstablishedWinterOilseedRape)
+            {
+                if (_manureType.SO3AvaiableAutumnOsrGrass > 0)
+                {
+                    var percentageSO3AvaiableAutumnOsrGrass = _manureType.SO3AvaiableAutumnOsrGrass / 100m;
+                    return Convert.ToDouble(_manureType.SO3 * _manureApplication.ApplicationRate.Value * percentageSO3AvaiableAutumnOsrGrass);
+                }
+            }
+            else if (_manureType.SO3AvaiableAutumnOther > 0)
+            {
+                var percentageSO3AvaiableAutumnOther = _manureType.SO3AvaiableAutumnOther / 100m;
+                return Convert.ToDouble(_manureType.SO3 * _manureApplication.ApplicationRate.Value * percentageSO3AvaiableAutumnOther);
+            }
+        }
+        else if (_manureType.SO3AvailableSpring > 0)
+        {
+            var percentageSO3AvailableSpring = _manureType.SO3AvailableSpring / 100m;
+            return Convert.ToDouble(_manureType.SO3 * _manureApplication.ApplicationRate.Value * percentageSO3AvailableSpring);
+        }
+        return 0d;
+
+    }
+
 
     private void CalculateNAvailableResultsGrass(double mineralN3, double nMineralised2A, double calculatedcropUptakeFactor, double calculatedMineralisedN, double calculatedLeachedN)
     {
@@ -1194,10 +1224,10 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             return CropUpdateFactor;
         }
 
-        catch (Exception ex)
+        catch (Exception)
         {
             //TS.TraceEvent(TraceEventType.Error, 0, ex.Message);
-            throw ex;
+            throw;
             //return 0d;
         }
 

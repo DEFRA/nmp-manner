@@ -37,25 +37,29 @@ public class ValidationMiddleware
                 var validationFailures = JsonConvert.DeserializeObject<ValidationError>(body);
                 context.Response.Clear();
                 context.Response.ContentType = "application/json";
-                context.Response.StatusCode = validationFailures.Status;
+                if (validationFailures != null)
+                {
+                    context.Response.StatusCode = validationFailures.Status;
+                }
                 var standardResponse = new StandardResponse
                 {
                     Success = false,
                     Message = "Validation failed"
                 };
-
-                foreach (var error in validationFailures.Errors)
+                if (validationFailures != null)
                 {
-                    foreach (var value in error.Value)
+                    foreach (var error in validationFailures.Errors)
                     {
-                        standardResponse.Errors.Add($"{error.Key} - {value}");
+                        foreach (var value in error.Value)
+                        {
+                            standardResponse.Errors.Add($"{error.Key} - {value}");
+                        }
                     }
                 }
-
                 context.Response.Body.Seek(0, SeekOrigin.Begin);
                 await context.Response.WriteAsync(JsonConvert.SerializeObject(standardResponse));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                
             }

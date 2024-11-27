@@ -11,7 +11,7 @@ namespace Manner.Core.Entities
         public int IncorporationMethodID { get; set; }
         public int IncorporationDelayID { get; set; }
 
-        public IncorporationMethod IncorporationMethod { get; set; }
-        public IncorporationDelay IncorporationDelay { get; set; }
+        public required IncorporationMethod IncorporationMethod { get; set; }
+        public required IncorporationDelay IncorporationDelay { get; set; }
     }
 }

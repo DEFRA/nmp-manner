@@ -23,7 +23,8 @@ public class NutrientsResponse
     public int TotalP2O5 { get; set; }
     public int CropAvailableP2O5 { get; set; }
     public int TotalK2O { get; set; }
-    public int CropAvailableK2O { get; set; }    
-    public int TotalSO3 { get; set; }
-    public int TotalMgO { get; set; }
+    public int CropAvailableK2O { get; set; }
+    public int? TotalSO3 { get; set; }
+    public int? CropAvailableSO3 { get; set; }
+    public int? TotalMgO { get; set; }
 }

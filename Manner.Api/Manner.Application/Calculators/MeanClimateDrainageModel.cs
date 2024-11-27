@@ -2227,7 +2227,6 @@ public class MeanClimateDrainageModel
         var SoilDrainage = new double[12];
         var Drainage = default(double);
         int Iteration;
-        bool flag;
 
         for (iMonth = 0; iMonth <= 11; iMonth++)
         {
@@ -2245,9 +2244,6 @@ public class MeanClimateDrainageModel
         double tmp_Ratio;
         for (Iteration = 0; Iteration <= 999; Iteration++)
         {
-
-            flag = true;
-
             for (iMonth = 0; iMonth <= 11; iMonth++)
             {
 
@@ -2323,7 +2319,6 @@ public class MeanClimateDrainageModel
 
                 if (Math.Abs(SoilDrainage[iMonth] - Drainage) > 1d)
                 {
-                    flag = false;
                 }
 
             }
@@ -2435,9 +2430,10 @@ public class MeanClimateDrainageModel
         Clear();
 
     }
-    public MeanClimateDrainageModel() : base()
+    public MeanClimateDrainageModel(Texture texture = default) : base()
     {
         ClassInitializeRenamed();
+        _texture = texture;
     }
 
     private void ClassTerminateRenamed()
