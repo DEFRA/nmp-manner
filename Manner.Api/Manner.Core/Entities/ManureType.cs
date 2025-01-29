@@ -31,5 +31,5 @@ public class ManureType
     public decimal SO3AvaiableAutumnOther { get; set; }
     public decimal SO3AvaiableAutumnOsrGrass { get; set; }
     public decimal SO3AvailableSpring { get; set; }
-    public int PercentOfTotalNForUseInNmaxCalculation { get; set; }
+    public int? PercentOfTotalNForUseInNmaxCalculation { get; set; }
 }
