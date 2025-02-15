@@ -24,6 +24,7 @@
 	[SO3AvaiableAutumnOther] DECIMAL(18, 2) NOT NULL,
 	[SO3AvaiableAutumnOsrGrass] DECIMAL(18, 2) NOT NULL,
 	[SO3AvailableSpring] DECIMAL(18, 2) NOT NULL,
+	[PercentOfTotalNForUseInNmaxCalculation] INT NULL,
     CONSTRAINT [PK_ManureTypes] PRIMARY KEY CLUSTERED ([ID] ASC),	
 	CONSTRAINT [FK_ManureTypes_ManureGroups] FOREIGN KEY (ManureGroupID) REFERENCES ManureGroups(ID),
     CONSTRAINT [FK_ManureTypes_Countries] FOREIGN KEY (CountryID) REFERENCES Countries(ID),
