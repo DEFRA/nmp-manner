@@ -16,4 +16,5 @@ public class ApplicationMethod
     public string Name { get; set; }
     public string? ApplicableForGrass { get; set; }
     public string? ApplicableForArableAndHorticulture { get; set; }
+    public int? SortOrder { get; set; }
 }
