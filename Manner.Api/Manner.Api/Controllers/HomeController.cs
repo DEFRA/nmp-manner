@@ -18,7 +18,7 @@ public class HomeController : Controller
     }
 
     [HttpGet("/")]
-    [SwaggerOperation(Summary = "Health Check", Description = "Health Check of API.")]
+    [SwaggerOperation(Summary = "Health Check", Description = "Health Check of API.", Tags = ["Health Checks"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     public async Task<ActionResult<StandardResponse?>> Index()

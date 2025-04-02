@@ -13,4 +13,6 @@ public interface IClimateService : IService<ClimateDto>
 
     Task<Rainfall?> FetchAverageAnualRainfall(string postcode);
     Task<RainfallPostApplicationResponse> FetchRainfallPostApplication(RainfallPostApplicationRequest rainfallPostApplicationRequest);
+
+    Task<Rainfall?> FetchAverageAprilToSeptemberRainfall(string postcode);
 }
