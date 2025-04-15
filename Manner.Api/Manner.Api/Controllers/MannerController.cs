@@ -70,7 +70,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("climates/{postcode}")]
-    [SwaggerOperation(Summary = "Retrieve climate data by postcode", Description = "Fetches climate information for a given postcode.")]
+    [SwaggerOperation(Summary = "Retrieve climate data by postcode", Description = "Fetches climate information for a given postcode.", Tags = ["Climates"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -123,7 +123,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("climates/avarage-annual-rainfall/{postcode}")]
-    [SwaggerOperation(Summary = "Retrieve average annual rainfall by postcode", Description = "Fetches average annual rainfall for a given postcode.")]
+    [SwaggerOperation(Summary = "Retrieve average annual rainfall by postcode", Description = "Fetches average annual rainfall for a given postcode.", Tags = ["Climates"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -177,7 +177,8 @@ public class MannerController : ControllerBase
     [HttpGet("application-methods")]
     [SwaggerOperation(
         Summary = "Retrieve all application methods or filter by criteria",
-        Description = "Fetches all application methods if no filters are provided. You can filter by optional parameters such as isLiquid and fieldType."
+        Description = "Fetches all application methods if no filters are provided. You can filter by optional parameters such as isLiquid and fieldType.",
+        Tags = ["Application Methods"]
     )]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
@@ -205,9 +206,8 @@ public class MannerController : ControllerBase
             : NotFound(new StandardResponse { Success = false, Message = "No application methods found matching the specified criteria." });
     }
 
-
     [HttpGet("application-methods/{id}")]
-    [SwaggerOperation(Summary = "Retrieve application method by ID", Description = "Fetches a specific application method by its unique ID.")]
+    [SwaggerOperation(Summary = "Retrieve application method by ID", Description = "Fetches a specific application method by its unique ID.", Tags = ["Application Methods"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -221,7 +221,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("crop-types")]
-    [SwaggerOperation(Summary = "Retrieve all crop types", Description = "Fetches a list of all crop types available.")]
+    [SwaggerOperation(Summary = "Retrieve all crop types", Description = "Fetches a list of all crop types available.",Tags = ["Crop Types"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> CropTypes()
@@ -237,7 +237,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("crop-types/{id}")]
-    [SwaggerOperation(Summary = "Retrieve crop type by ID", Description = "Fetches a specific crop type by its unique ID.")]
+    [SwaggerOperation(Summary = "Retrieve crop type by ID", Description = "Fetches a specific crop type by its unique ID.", Tags = ["Crop Types"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -251,7 +251,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("countries")]
-    [SwaggerOperation(Summary = "Retrieve all countries", Description = "Fetches a list of all countries available.")]
+    [SwaggerOperation(Summary = "Retrieve all countries", Description = "Fetches a list of all countries available.", Tags = ["Countries"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> Countries()
@@ -269,7 +269,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("countries/{id}")]
-    [SwaggerOperation(Summary = "Retrieve country by ID", Description = "Fetches a specific country by its unique ID.")]
+    [SwaggerOperation(Summary = "Retrieve country by ID", Description = "Fetches a specific country by its unique ID.", Tags = ["Countries"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -282,10 +282,8 @@ public class MannerController : ControllerBase
             : NotFound(new StandardResponse { Success = false, Message = "Country not found." });
     }
 
-
-
     [HttpGet("incorporation-delays")]
-    [SwaggerOperation(Summary = "Retrieve all incorporation delays", Description = "Fetches a list of all incorporation delays available.")]
+    [SwaggerOperation(Summary = "Retrieve all incorporation delays", Description = "Fetches a list of all incorporation delays available.", Tags = ["Incorporation Delays"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> IncorporationDelays()
@@ -300,7 +298,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("incorporation-delays/{id}")]
-    [SwaggerOperation(Summary = "Retrieve incorporation delay by ID", Description = "Fetches a specific incorporation delay by its unique ID.")]
+    [SwaggerOperation(Summary = "Retrieve incorporation delay by ID", Description = "Fetches a specific incorporation delay by its unique ID.", Tags = ["Incorporation Delays"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -314,7 +312,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("incorporation-delays/by-incorp-method/{methodId}")]
-    [SwaggerOperation(Summary = "Retrieve incorporation delays by incorporation method ID", Description = "Fetches incorporation delays associated with a specific incorporation method.")]
+    [SwaggerOperation(Summary = "Retrieve incorporation delays by incorporation method ID", Description = "Fetches incorporation delays associated with a specific incorporation method.", Tags = ["Incorporation Delays"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -328,7 +326,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("incorporation-delays/by-applicable-for")]
-    [SwaggerOperation(Summary = "Retrieve incorporation delays by ApplicableFor", Description = "Fetches incorporation delays based on whether they apply to Liquid, Solid, Poultry, or All.")]
+    [SwaggerOperation(Summary = "Retrieve incorporation delays by ApplicableFor", Description = "Fetches incorporation delays based on whether they apply to Liquid, Solid, Poultry, or All.", Tags = ["Incorporation Delays"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -344,7 +342,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("incorporation-delays/by-incorp-method-and-applicable-for/{methodId}")]
-    [SwaggerOperation(Summary = "Retrieve incorporation delays by incorporation method ID and applicable for ", Description = "Fetches incorporation delays associated with a specific incorporation method.")]
+    [SwaggerOperation(Summary = "Retrieve incorporation delays by incorporation method ID and applicable for ", Description = "Fetches incorporation delays associated with a specific incorporation method.", Tags = ["Incorporation Delays"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -359,7 +357,7 @@ public class MannerController : ControllerBase
 
 
     [HttpGet("incorporation-methods")]
-    [SwaggerOperation(Summary = "Retrieve all incorporation methods", Description = "Fetches a list of all incorporation methods available.")]
+    [SwaggerOperation(Summary = "Retrieve all incorporation methods", Description = "Fetches a list of all incorporation methods available.", Tags = ["Incorporation Methods"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> IncorporationMethods()
@@ -374,7 +372,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("incorporation-methods/{id}")]
-    [SwaggerOperation(Summary = "Retrieve incorporation method by ID", Description = "Fetches a specific incorporation method by its unique ID.")]
+    [SwaggerOperation(Summary = "Retrieve incorporation method by ID", Description = "Fetches a specific incorporation method by its unique ID.", Tags = ["Incorporation Methods"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -388,7 +386,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("incorporation-methods/by-app-method/{methodId}")]
-    [SwaggerOperation(Summary = "Retrieve incorporation methods by application method ID", Description = "Fetches incorporation methods associated with a specific application method ID.")]
+    [SwaggerOperation(Summary = "Retrieve incorporation methods by application method ID", Description = "Fetches incorporation methods associated with a specific application method ID.", Tags = ["Incorporation Methods"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -402,7 +400,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("incorporation-methods/by-app-method-and-applicable-for/{methodId}")]
-    [SwaggerOperation(Summary = "Retrieve incorporation methods by application method ID", Description = "Fetches incorporation methods associated with a specific application method ID.")]
+    [SwaggerOperation(Summary = "Retrieve incorporation methods by application method ID", Description = "Fetches incorporation methods associated with a specific application method ID.", Tags = ["Incorporation Methods"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -415,9 +413,8 @@ public class MannerController : ControllerBase
             : NotFound(new StandardResponse { Success = false, Message = "No incorporation methods found for the given application method ID and Applicable for" });
     }
 
-
     [HttpGet("manure-groups")]
-    [SwaggerOperation(Summary = "Retrieve all manure groups", Description = "Fetches a list of all manure groups available.")]
+    [SwaggerOperation(Summary = "Retrieve all manure groups", Description = "Fetches a list of all manure groups available.", Tags = ["Manure Groups"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> ManureGroups()
@@ -432,7 +429,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("manure-groups/{id}")]
-    [SwaggerOperation(Summary = "Retrieve manure group by ID", Description = "Fetches a specific manure group by its unique ID.")]
+    [SwaggerOperation(Summary = "Retrieve manure group by ID", Description = "Fetches a specific manure group by its unique ID.", Tags = ["Manure Groups"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -448,8 +445,9 @@ public class MannerController : ControllerBase
     [HttpGet("manure-types")]
     [SwaggerOperation(
         Summary = "Retrieve all manure types or filter by criteria",
-        Description = "Fetches all manure types if no filters are provided. You can filter by optional parameters such as manureGroupId, manureTypeCategoryId, countryId, highReadilyAvailableNitrogen, and isLiquid."
-    )]
+        Description = "Fetches all manure types if no filters are provided. You can filter by optional parameters such as manureGroupId, manureTypeCategoryId, countryId, highReadilyAvailableNitrogen, and isLiquid.",
+        Tags = ["Manure Types"]
+        )]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -485,7 +483,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("manure-types/{id}")]
-    [SwaggerOperation(Summary = "Retrieve manure type by ID", Description = "Fetches a specific manure type by its unique ID.")]
+    [SwaggerOperation(Summary = "Retrieve manure type by ID", Description = "Fetches a specific manure type by its unique ID.", Tags = ["Manure Types"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -499,7 +497,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("manure-type-categories")]
-    [SwaggerOperation(Summary = "Retrieve all manure type categories", Description = "Fetches a list of all manure type categories available.")]
+    [SwaggerOperation(Summary = "Retrieve all manure type categories", Description = "Fetches a list of all manure type categories available.", Tags = ["Manure Type Categories"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> ManureTypeCategories()
@@ -514,7 +512,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("manure-type-categories/{id}")]
-    [SwaggerOperation(Summary = "Retrieve manure type category by ID", Description = "Fetches a specific manure type category by its unique ID.")]
+    [SwaggerOperation(Summary = "Retrieve manure type category by ID", Description = "Fetches a specific manure type category by its unique ID.",Tags = ["Manure Type Categories"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -528,7 +526,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("moisture-types")]
-    [SwaggerOperation(Summary = "Retrieve all moisture types", Description = "Fetches a list of all moisture types available.")]
+    [SwaggerOperation(Summary = "Retrieve all moisture types", Description = "Fetches a list of all moisture types available.", Tags = ["Moisture Types"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> MoistureTypes()
@@ -543,7 +541,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("moisture-types/{id}")]
-    [SwaggerOperation(Summary = "Retrieve moisture type by ID", Description = "Fetches a specific moisture type by its unique ID.")]
+    [SwaggerOperation(Summary = "Retrieve moisture type by ID", Description = "Fetches a specific moisture type by its unique ID.", Tags = ["Moisture Types"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -557,7 +555,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("rain-types")]
-    [SwaggerOperation(Summary = "Retrieve all rain types", Description = "Fetches a list of all rain types available.")]
+    [SwaggerOperation(Summary = "Retrieve all rain types", Description = "Fetches a list of all rain types available.", Tags = ["Rain Types"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> RainTypes()
@@ -572,7 +570,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("rain-types/{id}")]
-    [SwaggerOperation(Summary = "Retrieve rain type by ID", Description = "Fetches a specific rain type by its unique ID.")]
+    [SwaggerOperation(Summary = "Retrieve rain type by ID", Description = "Fetches a specific rain type by its unique ID.", Tags = ["Rain Types"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -586,7 +584,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("sub-soils")]
-    [SwaggerOperation(Summary = "Retrieve all sub-soils", Description = "Fetches a list of all sub-soils available.")]
+    [SwaggerOperation(Summary = "Retrieve all sub-soils", Description = "Fetches a list of all sub-soils available.", Tags = ["Soils"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> SubSoils()
@@ -601,7 +599,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("sub-soils/{id}")]
-    [SwaggerOperation(Summary = "Retrieve sub-soil by ID", Description = "Fetches a specific sub-soil by its unique ID.")]
+    [SwaggerOperation(Summary = "Retrieve sub-soil by ID", Description = "Fetches a specific sub-soil by its unique ID.", Tags = ["Soils"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -615,7 +613,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("top-soils")]
-    [SwaggerOperation(Summary = "Retrieve all top-soils", Description = "Fetches a list of all top-soils available.")]
+    [SwaggerOperation(Summary = "Retrieve all top-soils", Description = "Fetches a list of all top-soils available.", Tags = ["Soils"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> TopSoils()
@@ -630,7 +628,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("top-soils/{id}")]
-    [SwaggerOperation(Summary = "Retrieve top-soil by ID", Description = "Fetches a specific top-soil by its unique ID.")]
+    [SwaggerOperation(Summary = "Retrieve top-soil by ID", Description = "Fetches a specific top-soil by its unique ID.", Tags = ["Soils"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -644,7 +642,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("windspeeds")]
-    [SwaggerOperation(Summary = "Retrieve all windspeeds", Description = "Fetches a list of all windspeeds available.")]
+    [SwaggerOperation(Summary = "Retrieve all windspeeds", Description = "Fetches a list of all windspeeds available.", Tags = ["Windspeeds"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> Windspeeds()
@@ -659,7 +657,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("windspeeds/{id}")]
-    [SwaggerOperation(Summary = "Retrieve windspeed by ID", Description = "Fetches a specific windspeed by its unique ID.")]
+    [SwaggerOperation(Summary = "Retrieve windspeed by ID", Description = "Fetches a specific windspeed by its unique ID.", Tags = ["Windspeeds"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -674,7 +672,7 @@ public class MannerController : ControllerBase
 
     #region Manner API
     [HttpPost("autumn-crop-nitrogen-uptake")]
-    [SwaggerOperation(Summary = "Get Autumn Crop Nitrogen Uptake", Description = "Calculates and retrieves the nitrogen uptake for autumn crops based on the provided request data.")]
+    [SwaggerOperation(Summary = "Get Autumn Crop Nitrogen Uptake", Description = "Calculates and retrieves the nitrogen uptake for autumn crops based on the provided request data.", Tags = ["Autumn Crop Nitrogen Uptake"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(500)]
@@ -690,7 +688,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpPost("rainfall-post-application")]
-    [SwaggerOperation(Summary = "Calculates Rainfall Post Application of Manure", Description = "Calculates the effective rainfall based on application date and end of soil drainage date.")]
+    [SwaggerOperation(Summary = "Calculates Rainfall Post Application of Manure", Description = "Calculates the effective rainfall based on application date and end of soil drainage date.", Tags = ["Climates"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(500)]
@@ -737,9 +735,57 @@ public class MannerController : ControllerBase
             Data = rainfallResponse
         });
     }
+        
+    [HttpGet("rainfall-april-to-september/{postcode}")]
+    [SwaggerOperation(Summary = "Retrieve average April to September rainfall by postcode", Description = "Fetches average April to September rainfall for a given postcode.", Tags = ["Climates"])]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> RainfallAprilToSeptember(string postcode)
+    {
+        _logger.LogTrace($"MannerController: climates/{postcode} called.");
+        string code = (postcode.Length > 4) ? postcode.Substring(0, 4).Trim() : postcode.Trim();
+        List<string> errors = new List<string>();
+
+
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            errors.Add("Postcode should not be empty");
+
+        }
+        else
+        {
+            if (code != null)
+            {
+                if (code.Length < 3 && code.Length > 4)
+                {
+                    errors.Add("Invalid post code. Post code should be 3 or 4 length");
+                }
+            }
+        }
+
+
+        if (errors.Any())
+        {
+            return Ok(new StandardResponse
+            {
+                Success = !errors.Any(),
+                Data = null,
+                Message = "Invalid Postcode.",
+                Errors = errors
+            });
+        }
+                
+        var rainfallResponse = await _climateService.FetchAverageAprilToSeptemberRainfall(code);
+        return Ok(new StandardResponse
+        {
+            Success = true,
+            Data = rainfallResponse
+        });
+    }
 
     [HttpPost("calculate-nutrients")]
-    [SwaggerOperation(Summary = "Calculates Nutrients from manure applications", Description = "Calculates the nutrients based on manure all application.")]
+    [SwaggerOperation(Summary = "Calculates Nutrients from manure applications", Description = "Calculates the nutrients based on manure all application.",Tags = ["Calculate Nutrients"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(400)]
     public async Task<ActionResult<StandardResponse>> CalculateNutrients(CalculateNutrientsRequest calculateNutrientsRequest)
@@ -800,7 +846,6 @@ public class MannerController : ControllerBase
             Data = nutrientsResponse
         });
     }
-
 
     #endregion
 }
