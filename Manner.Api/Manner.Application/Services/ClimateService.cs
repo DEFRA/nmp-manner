@@ -101,4 +101,24 @@ public class ClimateService(ILogger<ClimateService> logger, IClimateRepository c
 
         return rainfall;
     }
+
+    public async Task<Rainfall?> FetchAverageAprilToSeptemberRainfall(string postcode)
+    {
+        _logger.LogTrace($"ClimateService : FetchAverageAprilToSeptemberRainfall({postcode}) callled");
+        Rainfall? rainfall = null;
+        var climate = await _climateRepository.FetchByPostcodeAsync(postcode);
+        if (climate != null)
+        {
+            var meanTotalRainfall = climate.MeanTotalRainFallApr
+                + climate.MeanTotalRainFallMay
+                + climate.MeanTotalRainFallJun
+                + climate.MeanTotalRainFallJul
+                + climate.MeanTotalRainFallAug
+                + climate.MeanTotalRainFallSep;                
+            rainfall = new Rainfall();
+            rainfall.Value = Convert.ToInt32(meanTotalRainfall);
+        }
+
+        return rainfall;
+    }
 }

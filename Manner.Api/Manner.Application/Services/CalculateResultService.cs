@@ -110,7 +110,7 @@ public class CalculateResultService(
         ret.CurrentCropAvailableN = Convert.ToInt32(Math.Round(outputs.ResultantNAvailable, 0));
         ret.NextGrassNCropCurrentYear = Convert.ToInt32(Math.Round(outputs.ResultantNAvailableSecondCut, 0));
         ret.FollowingCropYear2AvailableN = Convert.ToInt32(Math.Round(outputs.ResultantNAvailableYear2,0));
-        ret.NitrogenEfficiencePercentage = Convert.ToInt32(Math.Round((outputs.ResultantNAvailable + outputs.ResultantNAvailableSecondCut) * 100 / outputs.TotalNitrogenApplied, 0));
+        ret.NitrogenEfficiencePercentage = outputs.TotalNitrogenApplied == 0? 0: Convert.ToInt32(Math.Round((outputs.ResultantNAvailable + outputs.ResultantNAvailableSecondCut) * 100 / outputs.TotalNitrogenApplied, 0));
         ret.TotalP2O5 = Convert.ToInt32(Math.Round(outputs.P2O5Total, 0));
         ret.CropAvailableP2O5 = Convert.ToInt32(Math.Round(outputs.P2O5CropAvailable, 0));
         ret.TotalK2O= Convert.ToInt32(Math.Round(outputs.K2OTotal, 0));
