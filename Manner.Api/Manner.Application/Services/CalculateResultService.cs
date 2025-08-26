@@ -70,40 +70,40 @@ public class CalculateResultService(
             MannerCalculator calculator = new MannerCalculator(calculateNutrientsRequest.Field, climate, cropType, application, manureType, incorporationDelay, topSoil, subSoil, climateTypes, runType);
             calculator.Calculate();
 
-            outputs.TotalNitrogenApplied += calculator.MannerEngine.TotalNitrogenApplied;
-            outputs.PotentialCropAvailableN += calculator.MannerEngine.PotentialCropAvailableN;
-            outputs.NH3NLoss += calculator.MannerEngine.NH3NLoss;
-            outputs.N2ONLoss += calculator.MannerEngine.N2ONLoss;
-            outputs.N2NLoss += calculator.MannerEngine.N2NLoss;
-            outputs.NO3NLoss += calculator.MannerEngine.NO3NLoss;
-            outputs.MineralisedN += calculator.MannerEngine.MineralisedN;
-            outputs.PotentialEconomicValue += calculator.MannerEngine.PotentialEconomicValue;
-            outputs.P2O5CropAvailable += calculator.MannerEngine.P2O5CropAvailable;
-            outputs.P2O5Total += calculator.MannerEngine.P2O5Total;
-            outputs.K2OCropAvailable += calculator.MannerEngine.K2OCropAvailable;
-            outputs.K2OTotal += calculator.MannerEngine.K2OTotal;
+            outputs.TotalNitrogenApplied += Math.Round(calculator.MannerEngine.TotalNitrogenApplied,0);
+            outputs.PotentialCropAvailableN += Math.Round(calculator.MannerEngine.PotentialCropAvailableN,0);
+            outputs.NH3NLoss += Math.Round(calculator.MannerEngine.NH3NLoss,0);
+            outputs.N2ONLoss += Math.Round(calculator.MannerEngine.N2ONLoss,0);
+            outputs.N2NLoss += Math.Round(calculator.MannerEngine.N2NLoss,0);
+            outputs.NO3NLoss += Math.Round(calculator.MannerEngine.NO3NLoss,0);
+            outputs.MineralisedN += Math.Round(calculator.MannerEngine.MineralisedN,0);
+            outputs.PotentialEconomicValue += Math.Round(calculator.MannerEngine.PotentialEconomicValue,0);
+            outputs.P2O5CropAvailable += Math.Round(calculator.MannerEngine.P2O5CropAvailable,0);
+            outputs.P2O5Total += Math.Round(calculator.MannerEngine.P2O5Total,0);
+            outputs.K2OCropAvailable += Math.Round(calculator.MannerEngine.K2OCropAvailable,0);
+            outputs.K2OTotal += Math.Round(calculator.MannerEngine.K2OTotal,0);
             if (outputs.SO3Total == null && calculator.MannerEngine.SO3Total != null)
             {
                 outputs.SO3Total = 0;
             }
-            outputs.SO3Total += calculator.MannerEngine.SO3Total;
+            outputs.SO3Total += Math.Round(calculator.MannerEngine.SO3Total.Value,0);
             if (outputs.SO3CropAvailable == null && calculator.MannerEngine.SO3CropAvailable != null)
             {
                 outputs.SO3CropAvailable = 0;
             }
-            outputs.SO3CropAvailable += calculator.MannerEngine.SO3CropAvailable;
+            outputs.SO3CropAvailable += Math.Round(calculator.MannerEngine.SO3CropAvailable.Value,0);
             if (outputs.MgOTotal == null && calculator.MannerEngine.MgOTotal != null)
             {
                 outputs.MgOTotal = 0;
             }
-            outputs.MgOTotal += calculator.MannerEngine.MgOTotal;
-            outputs.ResultantNAvailable += calculator.MannerEngine.ResultantNAvailable;
-            outputs.ResultantNAvailableSecondCut += calculator.MannerEngine.ResultantNAvailableSecondCut;
-            outputs.ResultantNAvailableYear2 += calculator.MannerEngine.ResultantNAvailableYear2;
-            outputs.CropUptake += calculator.MannerEngine.CropUptake;
+            outputs.MgOTotal += Math.Round(calculator.MannerEngine.MgOTotal.Value,0);
+            outputs.ResultantNAvailable += Math.Round(calculator.MannerEngine.ResultantNAvailable, 0);
+            outputs.ResultantNAvailableSecondCut += Math.Round(calculator.MannerEngine.ResultantNAvailableSecondCut, 0);
+            outputs.ResultantNAvailableYear2 += Math.Round(calculator.MannerEngine.ResultantNAvailableYear2, 0);
+            outputs.CropUptake += Math.Round(calculator.MannerEngine.CropUptake, 0);
         }
         ret.TotalN = Convert.ToInt32(Math.Round(outputs.TotalNitrogenApplied,0));
-        ret.MineralisedN = Convert.ToInt32(Math.Round(outputs.MineralisedN, 0));
+        ret.MineralisedN = Convert.ToInt32(Math.Round(outputs.MineralisedN,0));
         ret.NitrateNLoss = Convert.ToInt32(Math.Round(outputs.NO3NLoss, 0));
         ret.AmmoniaNLoss = Convert.ToInt32(Math.Round(outputs.NH3NLoss, 0));
         ret.DenitrifiedNLoss = Convert.ToInt32(outputs.N2ONLoss + outputs.N2NLoss);
