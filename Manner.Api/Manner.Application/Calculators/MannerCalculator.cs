@@ -591,8 +591,9 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
 
     }
 
-    private double CalculateSO3CropAvailable()
+    private double? CalculateSO3CropAvailable()
     {
+        double? so3 = null;
         if ((int)_manureApplication.ApplicationDate.Month >= 8 & (int)_manureApplication.ApplicationDate.Month <= 12)
         {
             if (_cropType.ID == (int)Enumerations.CropTypeEnum.Grass || _cropType.ID == (int)Enumerations.CropTypeEnum.SpringCerealOilseedRape || _cropType.ID == (int)Enumerations.CropTypeEnum.EarlyEstablishedWinterOilseedRape || _cropType.ID == (int)Enumerations.CropTypeEnum.LateEstablishedWinterOilseedRape)
@@ -614,7 +615,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             var percentageSO3AvailableSpring = _manureType.SO3AvailableSpring / 100m;
             return Convert.ToDouble(_manureType.SO3 * _manureApplication.ApplicationRate.Value * percentageSO3AvailableSpring);
         }
-        return 0d;
+        return so3;
 
     }
 
