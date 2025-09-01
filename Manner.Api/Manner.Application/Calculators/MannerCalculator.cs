@@ -615,7 +615,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             var percentageSO3AvailableSpring = _manureType.SO3AvailableSpring / 100m;
             return Convert.ToDouble(_manureType.SO3 * _manureApplication.ApplicationRate.Value * percentageSO3AvailableSpring);
         }
-        return so3;
+        return 0d;
 
     }
 
