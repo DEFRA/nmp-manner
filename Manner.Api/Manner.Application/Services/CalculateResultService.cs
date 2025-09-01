@@ -82,21 +82,24 @@ public class CalculateResultService(
             outputs.P2O5Total += Math.Round(calculator.MannerEngine.P2O5Total,0);
             outputs.K2OCropAvailable += Math.Round(calculator.MannerEngine.K2OCropAvailable,0);
             outputs.K2OTotal += Math.Round(calculator.MannerEngine.K2OTotal,0);
-            if (outputs.SO3Total == null && calculator.MannerEngine.SO3Total != null)
+            if (calculator.MannerEngine.SO3Total.HasValue)
             {
-                outputs.SO3Total = 0;
+                var rounded = Math.Round(calculator.MannerEngine.SO3Total.Value, 0);
+                outputs.SO3Total = (outputs.SO3Total ?? 0) + rounded;
             }
-            outputs.SO3Total += Math.Round(calculator.MannerEngine.SO3Total.Value,0);
-            if (outputs.SO3CropAvailable == null && calculator.MannerEngine.SO3CropAvailable != null)
+            
+            if ( calculator.MannerEngine.SO3CropAvailable.HasValue)
             {
-                outputs.SO3CropAvailable = 0;
+                var rounded = Math.Round(calculator.MannerEngine.SO3CropAvailable.Value, 0);
+                outputs.SO3CropAvailable = (outputs.SO3CropAvailable ?? 0) + rounded;                
             }
-            outputs.SO3CropAvailable += Math.Round(calculator.MannerEngine.SO3CropAvailable.Value,0);
-            if (outputs.MgOTotal == null && calculator.MannerEngine.MgOTotal != null)
+             
+            if (calculator.MannerEngine.MgOTotal.HasValue)
             {
-                outputs.MgOTotal = 0;
+                var rounded = Math.Round(calculator.MannerEngine.MgOTotal.Value, 0);
+                outputs.MgOTotal = (outputs.MgOTotal ?? 0) + rounded;                
             }
-            outputs.MgOTotal += Math.Round(calculator.MannerEngine.MgOTotal.Value,0);
+            
             outputs.ResultantNAvailable += Math.Round(calculator.MannerEngine.ResultantNAvailable, 0);
             outputs.ResultantNAvailableSecondCut += Math.Round(calculator.MannerEngine.ResultantNAvailableSecondCut, 0);
             outputs.ResultantNAvailableYear2 += Math.Round(calculator.MannerEngine.ResultantNAvailableYear2, 0);
@@ -116,7 +119,7 @@ public class CalculateResultService(
         ret.TotalK2O= Convert.ToInt32(Math.Round(outputs.K2OTotal, 0));
         ret.CropAvailableK2O = Convert.ToInt32(Math.Round(outputs.K2OCropAvailable, 0));
         ret.TotalSO3= Convert.ToInt32(outputs?.SO3Total);
-        ret.CropAvailableSO3 = Convert.ToInt32(outputs?.SO3CropAvailable);
+        ret.CropAvailableSO3 = outputs?.SO3CropAvailable == null? null : Convert.ToInt32(outputs?.SO3CropAvailable);
         ret.TotalMgO= Convert.ToInt32(outputs?.MgOTotal);
 
         return ret;
