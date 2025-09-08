@@ -10,7 +10,6 @@
 --------------------------------------------------------------------------------------
 */
 
-
 IF NOT EXISTS (SELECT 1 FROM [dbo].[Climates])
 BEGIN
     SET IDENTITY_INSERT [dbo].[Climates] ON 
@@ -2770,11 +2769,18 @@ GO
 IF NOT EXISTS (SELECT 1 FROM [dbo].[ManureGroups])
 BEGIN
     SET IDENTITY_INSERT [dbo].[ManureGroups] ON
-    INSERT [dbo].[ManureGroups] ([ID], [Name]) VALUES (1, N'Livestock manure')
-    INSERT [dbo].[ManureGroups] ([ID], [Name]) VALUES (2, N'Biosolids')
-    INSERT [dbo].[ManureGroups] ([ID], [Name]) VALUES (3, N'Another type of organic material')
-    INSERT [dbo].[ManureGroups] ([ID], [Name]) VALUES (4, N'Digestate')
+    INSERT [dbo].[ManureGroups] ([ID], [Name],[SortOrder]) VALUES (1, N'Livestock manure',1)
+    INSERT [dbo].[ManureGroups] ([ID], [Name],[SortOrder]) VALUES (2, N'Biosolids',2)
+    INSERT [dbo].[ManureGroups] ([ID], [Name],[SortOrder]) VALUES (3, N'Another type of organic material',4)
+    INSERT [dbo].[ManureGroups] ([ID], [Name],[SortOrder]) VALUES (4, N'Digestate',3)
     SET IDENTITY_INSERT [dbo].[ManureGroups] OFF
+END
+ELSE
+BEGIN
+    UPDATE [dbo].[ManureGroups] SET  [SortOrder] = 1 WHERE [ID] = 1;
+    UPDATE [dbo].[ManureGroups] SET  [SortOrder] = 2 WHERE [ID] = 2;
+    UPDATE [dbo].[ManureGroups] SET  [SortOrder] = 4 WHERE [ID] = 3;
+    UPDATE [dbo].[ManureGroups] SET  [SortOrder] = 3 WHERE [ID] = 4;
 END
 GO
 
@@ -3411,4 +3417,6 @@ BEGIN
         (12, N'December', 15, 60, 1.2, 6.6, 40.6, 4.5, 3.9, 17.4, 10.3, 4.3, 13.7)
     SET IDENTITY_INSERT [dbo].[ClimateTypes] OFF
 END
+
+
 GO
