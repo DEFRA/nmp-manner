@@ -77,7 +77,8 @@ public class MannerController : ControllerBase
     public async Task<ActionResult<StandardResponse>> Climates(string postcode)
     {
         _logger.LogTrace($"MannerController: climates/{postcode} called.");
-        string code = (postcode.Length > 4) ? postcode.Substring(0, 4).Trim() : postcode.Trim();
+        string[] postcodeArray = postcode.Split(" ");
+        string code = (postcodeArray[0].Length > 4) ? postcodeArray[0].Substring(0, 4).Trim() : postcodeArray[0].Trim();
         List<string> errors = new List<string>();
 
 
@@ -90,9 +91,9 @@ public class MannerController : ControllerBase
         {
             if (code != null)
             {
-                if (code.Length < 3 && code.Length > 4)
+                if (code.Length < 2 && code.Length > 4)
                 {
-                    errors.Add("Invalid post code. Post code should be 3 or 4 length");
+                    errors.Add("Invalid post code. Post code should be 2 to 4 length.");
                 }
             }
         }
@@ -130,8 +131,8 @@ public class MannerController : ControllerBase
     public async Task<ActionResult<StandardResponse>> FetchAverageAnualRainfall(string postcode)
     {
         _logger.LogTrace($"MannerController: climates/avarage-annual-rainfall/{postcode} called.");
-        string code = string.Empty;
-        code = (postcode.Length > 4) ? postcode.Substring(0, 4).Trim() : postcode.Trim();
+        string[] postcodeArray = postcode.Split(" ");
+        string code = (postcodeArray[0].Length > 4) ? postcodeArray[0].Substring(0, 4).Trim() : postcodeArray[0].Trim();
 
         List<string> errors = new List<string>();
 
@@ -142,9 +143,9 @@ public class MannerController : ControllerBase
         }
         if (code != null)
         {
-            if (code.Length < 3 && code.Length > 4)
+            if (code.Length < 2 && code.Length > 4)
             {
-                errors.Add("Invalid post code. Post code should be 3 or 4 length.");
+                errors.Add("Invalid post code. Post code should be 2 to 4 length.");
             }
         }
 
@@ -744,7 +745,9 @@ public class MannerController : ControllerBase
     public async Task<ActionResult<StandardResponse>> RainfallAprilToSeptember(string postcode)
     {
         _logger.LogTrace($"MannerController: climates/{postcode} called.");
-        string code = (postcode.Length > 4) ? postcode.Substring(0, 4).Trim() : postcode.Trim();
+
+        string[] postcodeArray = postcode.Split(" ");
+        string code = (postcodeArray[0].Length > 4) ? postcodeArray[0].Substring(0, 4).Trim() : postcodeArray[0].Trim();
         List<string> errors = new List<string>();
 
 
@@ -757,9 +760,9 @@ public class MannerController : ControllerBase
         {
             if (code != null)
             {
-                if (code.Length < 3 && code.Length > 4)
+                if (code.Length < 2 && code.Length > 4)
                 {
-                    errors.Add("Invalid post code. Post code should be 3 or 4 length");
+                    errors.Add("Invalid post code. Post code should be 2 to 4 length");
                 }
             }
         }
