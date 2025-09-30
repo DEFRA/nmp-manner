@@ -15,7 +15,7 @@ namespace Manner.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/")]
-[Authorize]
+//[Authorize]
 public class MannerController : ControllerBase
 {
     private readonly ILogger<MannerController> _logger;
@@ -860,30 +860,34 @@ public class MannerController : ControllerBase
     private string GetOutwardCode(string postcode, out List<string> errors)
     {
         errors = new List<string>();
+        postcode = postcode.Trim();
 
-        postcode = postcode.Trim().Replace(" ", "").ToUpper();
         if (string.IsNullOrWhiteSpace(postcode))
         {
-            errors.Add("Outward postcode should not be empty");
+            errors.Add("Postcode should not be empty");
+        }
+
+        if (postcode.Length <= 4)
+        {
+            if (postcode.Length < 2)
+            {
+                errors.Add("Invalid postcode. Outward postcode length should be greater than 2");
+            }
+            // If postcode length is 4 or less, use it as is (after trimming)
+            //postcode = (postcode.Length > 4) ? postcode.Substring(0, 4).Trim() : postcode.Trim();
+            return postcode.ToUpper();
+        }
+        else if (postcode.Length > 4)
+        {            
+            postcode = postcode.Replace(" ", "").ToUpper();
+            // Outward = everything except last 3 characters
+            return postcode.Substring(0, postcode.Length - 3);
         }
         else
         {
-            if (postcode != null)
-            {
-                if (postcode.Length < 2)
-                {
-                    errors.Add("Invalid postcode. Outward postcode should be greater 2 charater");
-                }
-            }
-        }
-
-        if (errors.Any())
-        {
+            errors.Add("Invalid postcode format.");
             return string.Empty;
         }
-                
-        // Outward = everything except last 3 characters
-        return postcode.Substring(0, postcode.Length - 3);
     }
     #endregion
 }
