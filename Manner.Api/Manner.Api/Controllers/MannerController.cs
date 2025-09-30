@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Globalization;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Manner.Api.Controllers;
 
@@ -77,28 +78,28 @@ public class MannerController : ControllerBase
     public async Task<ActionResult<StandardResponse>> Climates(string postcode)
     {
         _logger.LogTrace($"MannerController: climates/{postcode} called.");
-        string[] postcodeArray = postcode.Split(" ");
-        string code = (postcodeArray[0].Length > 4) ? postcodeArray[0].Substring(0, 4).Trim() : postcodeArray[0].Trim();
-        List<string> errors = new List<string>();
+        //string[] postcodeArray = postcode.Split(" ");
+        //string code = (postcodeArray[0].Length > 4) ? postcodeArray[0].Substring(0, 4).Trim() : postcodeArray[0].Trim();
+        List<string> errors;// = new List<string>();
 
 
-        if (string.IsNullOrWhiteSpace(code))
-        {
-            errors.Add("Postcode should not be empty");
+        //if (string.IsNullOrWhiteSpace(code))
+        //{
+        //    errors.Add("Postcode should not be empty");
 
-        }
-        else
-        {
-            if (code != null)
-            {
-                if (code.Length < 2 && code.Length > 4)
-                {
-                    errors.Add("Invalid post code. Post code should be 2 to 4 length.");
-                }
-            }
-        }
+        //}
+        //else
+        //{
+        //    if (code != null)
+        //    {
+        //        if (code.Length < 2 && code.Length > 4)
+        //        {
+        //            errors.Add("Invalid post code. Post code should be 2 to 4 length.");
+        //        }
+        //    }
+        //}
 
-
+        string code = GetOutwardCode(postcode, out errors);
         if (errors.Any())
         {
             return Ok(new StandardResponse
@@ -113,7 +114,7 @@ public class MannerController : ControllerBase
         if (code != null)
         {
             data = await _climateService.FetchByPostcodeAsync(code);
-        }  
+        }
         return Ok(new StandardResponse
         {
             Success = data != null && !errors.Any(),
@@ -131,23 +132,24 @@ public class MannerController : ControllerBase
     public async Task<ActionResult<StandardResponse>> FetchAverageAnualRainfall(string postcode)
     {
         _logger.LogTrace($"MannerController: climates/avarage-annual-rainfall/{postcode} called.");
-        string[] postcodeArray = postcode.Split(" ");
-        string code = (postcodeArray[0].Length > 4) ? postcodeArray[0].Substring(0, 4).Trim() : postcodeArray[0].Trim();
+        //string[] postcodeArray = postcode.Split(" ");
+        //string code = (postcodeArray[0].Length > 4) ? postcodeArray[0].Substring(0, 4).Trim() : postcodeArray[0].Trim();
 
-        List<string> errors = new List<string>();
+        List<string> errors;// = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(code))
-        {
-            errors.Add("Postcode should not be empty.");
+        //if (string.IsNullOrWhiteSpace(code))
+        //{
+        //    errors.Add("Postcode should not be empty.");
 
-        }
-        if (code != null)
-        {
-            if (code.Length < 2 && code.Length > 4)
-            {
-                errors.Add("Invalid post code. Post code should be 2 to 4 length.");
-            }
-        }
+        //}
+        //if (code != null)
+        //{
+        //    if (code.Length < 2 && code.Length > 4)
+        //    {
+        //        errors.Add("Invalid post code. Post code should be 2 to 4 length.");
+        //    }
+        //}
+        string code = GetOutwardCode(postcode, out errors);
 
         if (errors.Any())
         {
@@ -160,11 +162,11 @@ public class MannerController : ControllerBase
             });
         }
         Rainfall? data = null;
-        if(code != null)
+        if (code != null)
         {
             data = await _climateService.FetchAverageAnualRainfall(code);
         }
-        
+
         return Ok(new StandardResponse
         {
             Success = data != null && !errors.Any(),
@@ -222,7 +224,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("crop-types")]
-    [SwaggerOperation(Summary = "Retrieve all crop types", Description = "Fetches a list of all crop types available.",Tags = ["Crop Types"])]
+    [SwaggerOperation(Summary = "Retrieve all crop types", Description = "Fetches a list of all crop types available.", Tags = ["Crop Types"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> CropTypes()
@@ -258,9 +260,9 @@ public class MannerController : ControllerBase
     public async Task<ActionResult<StandardResponse>> Countries()
     {
         _logger.LogTrace($"MannerController: countries called.");
-        
+
         var data = await _countryService.FetchAllAsync();
-        
+
         return Ok(new StandardResponse
         {
             Success = data != null && data.Any(),
@@ -513,7 +515,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpGet("manure-type-categories/{id}")]
-    [SwaggerOperation(Summary = "Retrieve manure type category by ID", Description = "Fetches a specific manure type category by its unique ID.",Tags = ["Manure Type Categories"])]
+    [SwaggerOperation(Summary = "Retrieve manure type category by ID", Description = "Fetches a specific manure type category by its unique ID.", Tags = ["Manure Type Categories"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -696,23 +698,25 @@ public class MannerController : ControllerBase
     public async Task<ActionResult<StandardResponse>> RainfallPostApplication([FromBody] RainfallPostApplicationRequest rainfallPostApplicationRequest)
     {
         _logger.LogTrace($"MannerController: rainfall-post-application posted for climate postcode : {rainfallPostApplicationRequest.ClimateDataPostcode}.");
-        string code = string.Empty;
-        code = (rainfallPostApplicationRequest.ClimateDataPostcode.Length > 4) ? rainfallPostApplicationRequest.ClimateDataPostcode.Substring(0, 4).Trim() : rainfallPostApplicationRequest.ClimateDataPostcode.Trim();
+        //string[] postcodeArray = rainfallPostApplicationRequest.ClimateDataPostcode.Split(" ");
+        //string code = (postcodeArray[0].Length > 4) ? postcodeArray[0].Substring(0, 4).Trim() : postcodeArray[0].Trim();
 
-        List<string> errors = new List<string>();
+        List<string> errors; // = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(code))
-        {
-            errors.Add("Postcode should not be empty.");
+        //if (string.IsNullOrWhiteSpace(code))
+        //{
+        //    errors.Add("Postcode should not be empty.");
 
-        }
-        if (code != null)
-        {
-            if (code.Length < 3 && code.Length > 4)
-            {
-                errors.Add("Invalid post code. Post code should be 3 or 4 length.");
-            }
-        }
+        //}
+        //if (code != null)
+        //{
+        //    if (code.Length < 2 && code.Length > 4)
+        //    {
+        //        errors.Add("Invalid post code. Post code should be 2 to 4 length.");
+        //    }
+        //}
+
+        string code = GetOutwardCode(rainfallPostApplicationRequest.ClimateDataPostcode, out errors);
 
         if (errors.Any())
         {
@@ -736,7 +740,7 @@ public class MannerController : ControllerBase
             Data = rainfallResponse
         });
     }
-        
+
     [HttpGet("rainfall-april-to-september/{postcode}")]
     [SwaggerOperation(Summary = "Retrieve average April to September rainfall by postcode", Description = "Fetches average April to September rainfall for a given postcode.", Tags = ["Climates"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
@@ -746,27 +750,28 @@ public class MannerController : ControllerBase
     {
         _logger.LogTrace($"MannerController: climates/{postcode} called.");
 
-        string[] postcodeArray = postcode.Split(" ");
-        string code = (postcodeArray[0].Length > 4) ? postcodeArray[0].Substring(0, 4).Trim() : postcodeArray[0].Trim();
-        List<string> errors = new List<string>();
+        //string[] postcodeArray = postcode.Split(" ");
+        //string code = (postcodeArray[0].Length > 4) ? postcodeArray[0].Substring(0, 4).Trim() : postcodeArray[0].Trim();
+        List<string> errors; // = new List<string>();
 
 
-        if (string.IsNullOrWhiteSpace(code))
-        {
-            errors.Add("Postcode should not be empty");
+        //if (string.IsNullOrWhiteSpace(code))
+        //{
+        //    errors.Add("Postcode should not be empty");
 
-        }
-        else
-        {
-            if (code != null)
-            {
-                if (code.Length < 2 && code.Length > 4)
-                {
-                    errors.Add("Invalid post code. Post code should be 2 to 4 length");
-                }
-            }
-        }
+        //}
+        //else
+        //{
+        //    if (code != null)
+        //    {
+        //        if (code.Length < 2 && code.Length > 4)
+        //        {
+        //            errors.Add("Invalid post code. Post code should be 2 to 4 length");
+        //        }
+        //    }
+        //}
 
+        string code = GetOutwardCode(postcode, out errors);
 
         if (errors.Any())
         {
@@ -778,7 +783,7 @@ public class MannerController : ControllerBase
                 Errors = errors
             });
         }
-                
+
         var rainfallResponse = await _climateService.FetchAverageAprilToSeptemberRainfall(code);
         return Ok(new StandardResponse
         {
@@ -788,7 +793,7 @@ public class MannerController : ControllerBase
     }
 
     [HttpPost("calculate-nutrients")]
-    [SwaggerOperation(Summary = "Calculates Nutrients from manure applications", Description = "Calculates the nutrients based on manure all application.",Tags = ["Calculate Nutrients"])]
+    [SwaggerOperation(Summary = "Calculates Nutrients from manure applications", Description = "Calculates the nutrients based on manure all application.", Tags = ["Calculate Nutrients"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(400)]
     public async Task<ActionResult<StandardResponse>> CalculateNutrients(CalculateNutrientsRequest calculateNutrientsRequest)
@@ -834,11 +839,11 @@ public class MannerController : ControllerBase
                 Errors = errors
             });
         }
-        if(code != null)
+        if (code != null)
         {
             calculateNutrientsRequest.Postcode = code;
         }
-        
+
 
 
         var nutrientsResponse = await _calculateResultService.CalculateNutrientsAsync(calculateNutrientsRequest);
@@ -850,5 +855,35 @@ public class MannerController : ControllerBase
         });
     }
 
+
+
+    private string GetOutwardCode(string postcode, out List<string> errors)
+    {
+        errors = new List<string>();
+
+        postcode = postcode.Trim().Replace(" ", "").ToUpper();
+        if (string.IsNullOrWhiteSpace(postcode))
+        {
+            errors.Add("Outward postcode should not be empty");
+        }
+        else
+        {
+            if (postcode != null)
+            {
+                if (postcode.Length < 2)
+                {
+                    errors.Add("Invalid postcode. Outward postcode should be greater 2 charater");
+                }
+            }
+        }
+
+        if (errors.Any())
+        {
+            return string.Empty;
+        }
+                
+        // Outward = everything except last 3 characters
+        return postcode.Substring(0, postcode.Length - 3);
+    }
     #endregion
 }
