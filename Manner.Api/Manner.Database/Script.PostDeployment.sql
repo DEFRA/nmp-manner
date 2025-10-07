@@ -3298,14 +3298,14 @@ GO
 IF NOT EXISTS (SELECT 1 FROM [dbo].[RainTypes])
 BEGIN
     SET IDENTITY_INSERT [dbo].[RainTypes] ON 
-    INSERT [dbo].[RainTypes] ([ID], [Name], [RainInMM]) VALUES (1, N'No rainfall with 6 hours of application', 0)
+    INSERT [dbo].[RainTypes] ([ID], [Name], [RainInMM]) VALUES (1, N'No rainfall within 6 hours of application', 0)
     INSERT [dbo].[RainTypes] ([ID], [Name], [RainInMM]) VALUES (2, N'Light rain (less than 5mm) within 6 hours of applicatio', 4)
     INSERT [dbo].[RainTypes] ([ID], [Name], [RainInMM]) VALUES (3, N'Heavy rain (greater than or equal to 5mm) within 6 hours of application', 6)
     SET IDENTITY_INSERT [dbo].[RainTypes] OFF
 END
 ELSE
 BEGIN
-    UPDATE [dbo].[RainTypes] SET [Name] = N'No rainfall with 6 hours of application' WHERE ID=1
+    UPDATE [dbo].[RainTypes] SET [Name] = N'No rainfall within 6 hours of application' WHERE ID=1
     UPDATE [dbo].[RainTypes] SET [Name] = N'Light rain (less than 5mm) within 6 hours of application' WHERE ID=2
     UPDATE [dbo].[RainTypes] SET [Name] = N'Heavy rain (greater than or equal to 5mm) within 6 hours of application' WHERE ID=3
 END
