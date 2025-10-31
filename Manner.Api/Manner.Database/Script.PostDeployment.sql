@@ -3121,73 +3121,57 @@ BEGIN
     INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (6, N'12 to 24 hours', 18, 24, N'A')
     INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (7, N'1 to 2 days', 36, 48, N'A')
     INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (8, N'3 to 5 days', 96, 120, N'S')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (9, N'3 to 7 days', 120, 168, N'L')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (10, N'6 to 12 days', 216, 288, N'S')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (11, N'More than 7 days', 1000, 10000, N'L')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (12, N'More than 12 days', 1000, 10000, N'S')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (13, N'12 to 32 days', 528, 768, N'P')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (14, N'More than 32 days', 1000, 10000, N'P')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (15, N'Not incorporated', 1000, 9999, NULL)
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (16, N'3 to 5 days', 96, 120, N'P')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (17, N'6 to 12 days', 216, 288, N'P')
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (9, N'3 to 5 days', 96, 120, N'P')
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (10, N'3 to 7 days', 120, 168, N'L')
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (11, N'6 to 12 days', 216, 288, N'S')
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (12, N'6 to 12 days', 216, 288, N'P')
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (13, N'More than 7 days', 1000, 10000, N'L')
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (14, N'More than 12 days', 1000, 10000, N'S')
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (15, N'12 to 32 days', 528, 768, N'P')
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (16, N'More than 32 days', 1000, 10000, N'P')
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (17, N'Not incorporated', 1000, 9999, NULL)
     SET IDENTITY_INSERT [dbo].[IncorporationDelays] OFF
 END
+ELSE
+BEGIN
+    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 9)
+    BEGIN
+        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'3 to 5 days',[Hours]=96, [CumulativeHours]=120, [ApplicableFor]=N'P' WHERE [ID] = 9;
+    END
+    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 10)
+    BEGIN
+        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'3 to 7 days',[Hours]=120, [CumulativeHours]=168, [ApplicableFor]=N'L' WHERE [ID] = 10;
+    END
+    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 11)
+    BEGIN
+        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'6 to 12 days',[Hours]=216, [CumulativeHours]=288, [ApplicableFor]=N'S' WHERE [ID] = 11;
+    END
+    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 12)
+    BEGIN
+        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'More than 7 days',[Hours]=1000, [CumulativeHours]=10000, [ApplicableFor]=N'L' WHERE [ID] = 12;
+    END
+    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 13)
+    BEGIN
+        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'6 to 12 days',[Hours]=216, [CumulativeHours]=288, [ApplicableFor]=N'P' WHERE [ID] = 13;
+    END
+    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 14)
+    BEGIN
+        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'More than 12 days',[Hours]=1000, [CumulativeHours]=10000, [ApplicableFor]=N'S' WHERE [ID] = 14;
+    END
+    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 15)
+    BEGIN
+        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'12 to 32 days',[Hours]=528, [CumulativeHours]=768, [ApplicableFor]=N'P' WHERE [ID] = 15;
+    END
+    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 16)
+    BEGIN
+        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'More than 32 days',[Hours]=1000, [CumulativeHours]=10000, [ApplicableFor]=N'P' WHERE [ID] = 16;
+    END
+    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 17)
+    BEGIN
+        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'Not incorporated',[Hours]=1000, [CumulativeHours]=9999, [ApplicableFor]=NULL WHERE [ID] = 17;
+    END
+END
 
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 3 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 3;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 4 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 4;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 5 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 5;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 6 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 6;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 7 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 7;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 8 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 8;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 9 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 9;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 10 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 10;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 13 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 13;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 16 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 16;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 17 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 17;
---END
 
 GO
 
