@@ -2854,8 +2854,8 @@ BEGIN
     INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[SortOrder]) VALUES (40, N'Straw mulch', 3, 7, 3, 0, 0, CAST(90.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.20 AS Decimal(18, 2)), CAST(9.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.30 AS Decimal(18, 2)), 50, 90, CAST(0.00 AS Decimal(18, 2)), 50, 0,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,45)
     INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[SortOrder]) VALUES (41, N'Goat farmyard manure', 1, 1, 3, 0, 0, CAST(40.00 AS Decimal(18, 2)), CAST(9.50 AS Decimal(18, 2)), CAST(0.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(4.50 AS Decimal(18, 2)), CAST(12.00 AS Decimal(18, 2)), CAST(2.80 AS Decimal(18, 2)), CAST(1.90 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 20, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,11)
     INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[SortOrder]) VALUES (42, N'Biosolids - composted', 2, 2, 3, 0, 0, CAST(40.00 AS Decimal(18, 2)), CAST(11.00 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(10.00 AS Decimal(18, 2)), CAST(3.00 AS Decimal(18, 2)), CAST(6.10 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), 50, 90, CAST(52.30 AS Decimal(18, 2)), 20, 20,CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),CAST(35 AS Decimal(18, 2)),NULL,24)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[SortOrder]) VALUES (43, N'Other - solid materials', 3, 1, 3, 0, 0, CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 25,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,46)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[SortOrder]) VALUES (44, N'Other - liquid materials', 3, 3, 3, 0, 1, CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(32.40 AS Decimal(18, 2)), 30, 25,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,47)
+    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[SortOrder]) VALUES (43, N'Solid material', 3, 1, 3, 0, 0, CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 25,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,46)
+    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[SortOrder]) VALUES (44, N'Liquid material', 3, 3, 3, 0, 1, CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(32.40 AS Decimal(18, 2)), 30, 25,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,47)
     INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[SortOrder]) VALUES (45, N'Cattle slurry', 1, 3, 3, 1, 1, CAST(6.00 AS Decimal(18, 2)), CAST(2.60 AS Decimal(18, 2)), CAST(1.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.20 AS Decimal(18, 2)), CAST(2.50 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), 50, 90, CAST(32.40 AS Decimal(18, 2)), 30, 25,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(45 AS Decimal(18, 2)),40, 12)
     INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[SortOrder]) VALUES (46, N'Digestate - whole food based', 4, 4, 3, 1, 1, CAST(4.10 AS Decimal(18, 2)), CAST(4.80 AS Decimal(18, 2)), CAST(4.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.10 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), CAST(0.70 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), 50, 80, CAST(45.50 AS Decimal(18, 2)), 25, 20,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,29)
     INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[SortOrder]) VALUES (49, N'Digestate - separated liquor food based', 4, 4, 3, 1, 1, CAST(3.80 AS Decimal(18, 2)), CAST(4.50 AS Decimal(18, 2)), CAST(3.80 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), CAST(2.80 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), 50, 80, CAST(45.50 AS Decimal(18, 2)), 25, 20,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,30)
@@ -2867,10 +2867,14 @@ BEGIN
 END
 GO
 
---IF EXISTS (SELECT 1 FROM [dbo].[ManureTypes] WHERE [ID] = 0)
---BEGIN
---    UPDATE [dbo].[ManureTypes] SET [Name] = 'Cattle farmyard manure - Fresh',[PercentOfTotalNForUseInNmaxCalculation] = 10, [SortOrder] = 1 WHERE [ID] = 0;
---END
+IF EXISTS (SELECT 1 FROM [dbo].[ManureTypes] WHERE [ID] = 43)
+BEGIN
+    UPDATE [dbo].[ManureTypes] SET [Name] = 'Solid material' WHERE [ID] = 43;
+END
+IF EXISTS (SELECT 1 FROM [dbo].[ManureTypes] WHERE [ID] = 44)
+BEGIN
+    UPDATE [dbo].[ManureTypes] SET [Name] = 'Liquid material' WHERE [ID] = 44;
+END
 --IF EXISTS (SELECT 1 FROM [dbo].[ManureTypes] WHERE [ID] = 1)
 --BEGIN
 --    UPDATE [dbo].[ManureTypes] SET [Name] = 'Cattle farmyard manure - Old',[PercentOfTotalNForUseInNmaxCalculation] = 10, [SortOrder] = 2 WHERE [ID] = 1;
@@ -3121,141 +3125,125 @@ BEGIN
     INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (6, N'12 to 24 hours', 18, 24, N'A')
     INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (7, N'1 to 2 days', 36, 48, N'A')
     INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (8, N'3 to 5 days', 96, 120, N'S')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (9, N'3 to 7 days', 120, 168, N'L')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (10, N'6 to 12 days', 216, 288, N'S')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (11, N'More than 7 days', 1000, 10000, N'L')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (12, N'More than 12 days', 1000, 10000, N'S')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (13, N'12 to 32 days', 528, 768, N'P')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (14, N'More than 32 days', 1000, 10000, N'P')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (15, N'Not incorporated', 1000, 9999, NULL)
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (16, N'3 to 5 days', 96, 120, N'P')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (17, N'6 to 12 days', 216, 288, N'P')
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (9, N'3 to 5 days', 96, 120, N'P')
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (10, N'3 to 7 days', 120, 168, N'L')
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (11, N'6 to 12 days', 216, 288, N'S')
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (12, N'6 to 12 days', 216, 288, N'P')
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (13, N'More than 7 days', 1000, 10000, N'L')
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (14, N'More than 12 days', 1000, 10000, N'S')
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (15, N'12 to 32 days', 528, 768, N'P')
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (16, N'More than 32 days', 1000, 10000, N'P')
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (17, N'Not incorporated', 1000, 9999, NULL)
     SET IDENTITY_INSERT [dbo].[IncorporationDelays] OFF
 END
+ELSE
+BEGIN
+    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 9)
+    BEGIN
+        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'3 to 5 days',[Hours]=96, [CumulativeHours]=120, [ApplicableFor]=N'P' WHERE [ID] = 9;
+    END
+    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 10)
+    BEGIN
+        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'3 to 7 days',[Hours]=120, [CumulativeHours]=168, [ApplicableFor]=N'L' WHERE [ID] = 10;
+    END
+    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 11)
+    BEGIN
+        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'6 to 12 days',[Hours]=216, [CumulativeHours]=288, [ApplicableFor]=N'S' WHERE [ID] = 11;
+    END
+    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 12)
+    BEGIN
+        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'More than 7 days',[Hours]=1000, [CumulativeHours]=10000, [ApplicableFor]=N'L' WHERE [ID] = 12;
+    END
+    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 13)
+    BEGIN
+        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'6 to 12 days',[Hours]=216, [CumulativeHours]=288, [ApplicableFor]=N'P' WHERE [ID] = 13;
+    END
+    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 14)
+    BEGIN
+        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'More than 12 days',[Hours]=1000, [CumulativeHours]=10000, [ApplicableFor]=N'S' WHERE [ID] = 14;
+    END
+    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 15)
+    BEGIN
+        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'12 to 32 days',[Hours]=528, [CumulativeHours]=768, [ApplicableFor]=N'P' WHERE [ID] = 15;
+    END
+    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 16)
+    BEGIN
+        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'More than 32 days',[Hours]=1000, [CumulativeHours]=10000, [ApplicableFor]=N'P' WHERE [ID] = 16;
+    END
+    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 17)
+    BEGIN
+        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'Not incorporated',[Hours]=1000, [CumulativeHours]=9999, [ApplicableFor]=NULL WHERE [ID] = 17;
+    END
+END
 
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 3 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 3;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 4 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 4;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 5 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 5;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 6 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 6;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 7 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 7;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 8 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 8;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 9 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 9;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 10 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 10;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 13 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 13;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 16 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 16;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 17 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[IncorporationDelays] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 17;
---END
 
 GO
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[IncorpMethodsIncorpDelays])
 BEGIN
     INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (1, 1)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (2, 1)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 2)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 3)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 4)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 5)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 6)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 7)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 8)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 9)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 10)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 11)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 12)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 13)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 14)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 16)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 17)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 2)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 3)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 4)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 5)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 6)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 7)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 8)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 9)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 10)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 11)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 12)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 13)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 14)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 16)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 17)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 2)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 3)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 4)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 5)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 6)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 7)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 8)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 9)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 10)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 11)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 12)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 13)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 14)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 16)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 17)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 2)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 3)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 4)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 5)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 6)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 7)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 8)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 9)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 10)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 11)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 12)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 13)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 14)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 16)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 17)
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (7, 15)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (2, 1)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 2)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 3)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 4)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 5)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 6)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 7)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 8)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 9)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 10)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 11)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 12)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 13)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 14)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 15)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 16)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 2)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 3)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 4)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 5)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 6)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 7)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 8)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 9)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 10)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 11)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 12)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 13)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 14)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 15)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 16)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 2)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 3)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 4)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 5)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 6)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 7)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 8)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 9)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 10)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 11)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 12)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 13)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 14)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 15)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 16)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 2)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 3)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 4)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 5)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 6)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 7)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 8)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 9)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 10)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 11)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 12)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 13)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 14)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 15)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 16)
+INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (7, 17)
 END
 
 

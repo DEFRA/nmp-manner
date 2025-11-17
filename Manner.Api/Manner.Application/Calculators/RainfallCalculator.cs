@@ -59,7 +59,7 @@ public class RainfallCalculator : IRainfallCalculator
     private decimal CalculateRainfallForNumberofDays(DateOnly date, bool isStartDate, ClimateDto climate)
     {
         int daysInMonth = DateTime.DaysInMonth(date.Year, date.Month);
-        int daysBetween = isStartDate ? daysInMonth - (date.Day - 1) : date.Day;
+        int daysBetween = isStartDate ? daysInMonth - (date.Day) : date.Day;
         return (daysInMonth == daysBetween) ? GetMonthlyRainfall(date.Month, climate) : (GetMonthlyRainfall(date.Month, climate) / daysInMonth) * daysBetween;
     }
 
