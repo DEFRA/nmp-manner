@@ -811,23 +811,25 @@ public class MannerController : ControllerBase
             _logger.LogTrace($"MannerController: calculate-nutrients posted with manure : {calculateNutrientsRequest.ManureApplications[0].ManureDetails.Name}.");
         }
 
-        string code = string.Empty;
-        code = (calculateNutrientsRequest.Postcode.Length > 4) ? calculateNutrientsRequest.Postcode.Substring(0, 4).Trim() : calculateNutrientsRequest.Postcode.Trim();
+        //string code = string.Empty;
+        //code = (calculateNutrientsRequest.Postcode.Length > 4) ? calculateNutrientsRequest.Postcode.Substring(0, 4).Trim() : calculateNutrientsRequest.Postcode.Trim();
 
         List<string> errors = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(code))
-        {
-            errors.Add("Postcode should not be empty.");
+        //if (string.IsNullOrWhiteSpace(code))
+        //{
+        //    errors.Add("Postcode should not be empty.");
 
-        }
-        if (code != null)
-        {
-            if (code.Length < 3 && code.Length > 4)
-            {
-                errors.Add("Invalid post code. Post code should be 3 or 4 character length.");
-            }
-        }
+        //}
+        //if (code != null)
+        //{
+        //    if (code.Length < 3 && code.Length > 4)
+        //    {
+        //        errors.Add("Invalid post code. Post code should be 3 or 4 character length.");
+        //    }
+        //}
+
+        string code = GetOutwardCode(calculateNutrientsRequest.Postcode, out errors);
 
         if (errors.Any())
         {
