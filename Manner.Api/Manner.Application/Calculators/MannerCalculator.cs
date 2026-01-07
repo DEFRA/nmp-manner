@@ -66,7 +66,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             // N2O Emission
             // --------------------------------------------------------------
             // N2O Emission is 1.74% of applied readily available N remaining following volatilisation
-            double n2oEmission = calculatedPotentialN - calculatedVolatilisedN;
+            double n2oEmission = calculatedTotalN - calculatedVolatilisedN;
             double calculatedN2O = this.CalculateN2OEmission(n2oEmission);
 
             // N2 Emission
@@ -793,12 +793,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                     // Adjust PVN4 depending on the application type
                     case (int)Enums.Enumerations.ApplicationMethodEnum.DeepInjection: // "Deep Injection"
                         {
-                            double proportionOfNMax = 0.1d;
-                            // A.C new algorithim for Digistate Whole Food based
-                            if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
-                            {
-                                proportionOfNMax = 1d;
-                            }
+                            double proportionOfNMax = 0.1d;                            
                             dPVN4 = dPVN3 * proportionOfNMax;
                             break;
                         }
