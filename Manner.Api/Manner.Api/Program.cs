@@ -9,8 +9,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Trace;
 using System.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,20 +36,9 @@ builder.Services.AddControllers(options =>
 
 var applicationInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]?.ToString();
 
-if(!string.IsNullOrWhiteSpace(applicationInsightsConnectionString))
+if (!string.IsNullOrWhiteSpace(applicationInsightsConnectionString))
 {
-    builder.Services.AddOpenTelemetry()
-        .WithTracing(t => t.AddAspNetCoreInstrumentation())
-        .WithMetrics(m => m.AddAspNetCoreInstrumentation())
-        .UseAzureMonitor(options =>
-        {
-            options.ConnectionString = applicationInsightsConnectionString;
-        });
-
-    builder.Services.AddApplicationInsightsTelemetry(options =>
-    {
-        options.ConnectionString = applicationInsightsConnectionString;
-    });
+    builder.Services.AddOpenTelemetry().UseAzureMonitor();
 }
 
 
@@ -59,8 +46,6 @@ builder.Services.AddLogging(builder =>
 {
     builder.ClearProviders();
     builder.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-    builder.AddApplicationInsights();
-    builder.AddOpenTelemetry();
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
