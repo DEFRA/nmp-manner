@@ -16,13 +16,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = $"{builder.Configuration["CustomerIdentityInstance"]}{builder.Configuration["CustomerIdentityDomain"]}/{builder.Configuration["CustomerIdentityPolicyId"]}/v2.0/";
+        options.MetadataAddress = builder.Configuration["CustomerIdentityMetaDataUrl"]?? string.Empty;        
         options.Audience = builder.Configuration["CustomerIdentityClientId"];
 
         options.TokenValidationParameters = new TokenValidationParameters
         {
             NameClaimType = "name",
-            ValidateIssuer = false
+            ValidateIssuer = true
         };
 
         options.Events = new CustomJwtBearerEvents();
@@ -93,11 +93,6 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Manner API V1");
 });
 
-
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//}
 app.UseMiddleware<ValidationMiddleware>();
 
 // Register the exception handling middleware
