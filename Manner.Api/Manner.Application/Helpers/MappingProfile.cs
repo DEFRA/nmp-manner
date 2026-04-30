@@ -13,55 +13,49 @@ namespace Manner.Application.Helpers
     {
         public MappingProfile()
         {
-            //CreateMap<Source, Destination>();
-            CreateMap<ClimateDto, Climate>();
-            CreateMap<Climate, ClimateDto>();
-
-            CreateMap<ApplicationMethodDto, ApplicationMethod>();
-            CreateMap<ApplicationMethod, ApplicationMethodDto>();
-
-            CreateMap<CountryDto, Country>();
-            CreateMap<Country, CountryDto>();
-
-            CreateMap<CropTypeDto, CropType>();
-            CreateMap<CropType, CropTypeDto>();
-
-            CreateMap<IncorporationDelayDto, IncorporationDelay>();
-            CreateMap<IncorporationDelay, IncorporationDelayDto>();
-
-            CreateMap<IncorporationMethodDto, IncorporationMethod>();
-            CreateMap<IncorporationMethod, IncorporationMethodDto>();
-
-            CreateMap<ManureGroupDto, ManureGroup>();
-            CreateMap<ManureGroup, ManureGroupDto>();
-
-            CreateMap<ManureTypeCategoryDto, ManureTypeCategory>();
-            CreateMap<ManureTypeCategory, ManureTypeCategoryDto>();
-
-            CreateMap<ManureTypeDto, ManureType>();
-            CreateMap<ManureType, ManureTypeDto>();
-
-            CreateMap<MoistureTypeDto, MoistureType>();
-            CreateMap<MoistureType, MoistureTypeDto>();
-
-            CreateMap<RainTypeDto, RainType>();
-            CreateMap<RainType, RainTypeDto>();
-
-            CreateMap<SubSoilDto, SubSoil>();
-            CreateMap<SubSoil, SubSoilDto>();
-
-            CreateMap<TopSoilDto, TopSoil>();
-            CreateMap<TopSoil, TopSoilDto>();
-
-            CreateMap<WindspeedDto, Windspeed>();
-            CreateMap<Windspeed, WindspeedDto>();
-
-            CreateMap<ClimateTypeDto, ClimateType>();
-            CreateMap<ClimateType, ClimateTypeDto>();
-
-            //CreateMap<ClimateTypeDto, ClimateType>();
-            //CreateMap<ClimateType, ClimateTypeDto>();
             
+            CreateMap<ClimateDto, Climate>().MaxDepth(5).PreserveReferences();
+            CreateMap<Climate, ClimateDto>().MaxDepth(5).PreserveReferences();
+
+            CreateMap<ApplicationMethodDto, ApplicationMethod>().MaxDepth(5).PreserveReferences();
+            CreateMap<ApplicationMethod, ApplicationMethodDto>().MaxDepth(5).PreserveReferences();
+
+            CreateMap<CountryDto, Country>().MaxDepth(5).PreserveReferences();
+            CreateMap<Country, CountryDto>().MaxDepth(5).PreserveReferences();
+
+            CreateMap<CropTypeDto, CropType>().MaxDepth(5).PreserveReferences();
+            CreateMap<CropType, CropTypeDto>().MaxDepth(5).PreserveReferences();
+
+            CreateMap<IncorporationDelayDto, IncorporationDelay>().MaxDepth(5).PreserveReferences();
+            CreateMap<IncorporationDelay, IncorporationDelayDto>().MaxDepth(5).PreserveReferences();
+
+            CreateMap<IncorporationMethodDto, IncorporationMethod>().MaxDepth(5).PreserveReferences();
+            CreateMap<IncorporationMethod, IncorporationMethodDto>().MaxDepth(5).PreserveReferences();
+
+            CreateMap<ManureGroupDto, ManureGroup>().MaxDepth(5).PreserveReferences();
+            CreateMap<ManureGroup, ManureGroupDto>().MaxDepth(5).PreserveReferences();
+            CreateMap<ManureTypeCategoryDto, ManureTypeCategory>().MaxDepth(5).PreserveReferences();
+            CreateMap<ManureTypeCategory, ManureTypeCategoryDto>().MaxDepth(5).PreserveReferences();
+
+            CreateMap<ManureTypeDto, ManureType>().MaxDepth(5).PreserveReferences();
+            CreateMap<ManureType, ManureTypeDto>().MaxDepth(5).PreserveReferences();
+            CreateMap<MoistureTypeDto, MoistureType>().MaxDepth(5).PreserveReferences();
+            CreateMap<MoistureType, MoistureTypeDto>().MaxDepth(5).PreserveReferences();
+
+            CreateMap<RainTypeDto, RainType>().MaxDepth(5).PreserveReferences();
+            CreateMap<RainType, RainTypeDto>().MaxDepth(5).PreserveReferences();
+
+            CreateMap<SubSoilDto, SubSoil>().MaxDepth(5).PreserveReferences();
+            CreateMap<SubSoil, SubSoilDto>().MaxDepth(5).PreserveReferences();
+
+            CreateMap<TopSoilDto, TopSoil>().MaxDepth(5).PreserveReferences();
+            CreateMap<TopSoil, TopSoilDto>().MaxDepth(5).PreserveReferences();
+
+            CreateMap<WindspeedDto, Windspeed>().MaxDepth(5).PreserveReferences();
+            CreateMap<Windspeed, WindspeedDto>().MaxDepth(5).PreserveReferences();
+
+            CreateMap<ClimateTypeDto, ClimateType>().MaxDepth(5).PreserveReferences();
+            CreateMap<ClimateType, ClimateTypeDto>().MaxDepth(5).PreserveReferences();
 
             // Add more mappings here
         }
