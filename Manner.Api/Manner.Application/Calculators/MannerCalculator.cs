@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Diagnostics;
 namespace Manner.Application.Calculators;
-//[Service(ServiceLifetime.Transient)]
+[Service(ServiceLifetime.Transient)]
 public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto cropType, ManureApplication manureApplication, ManureTypeDto manureType, IncorporationDelayDto incorporationDelay, TopSoilDto topSoil, SubSoilDto subSoil, List<ClimateTypeDto> climateTypes, int runType) : IMannerCalculator
 {
     private readonly FieldDetail _field = field;

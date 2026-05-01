@@ -77,28 +77,8 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> Climates(string postcode)
     {
-        _logger.LogTrace($"MannerController: climates/{postcode} called.");
-        //string[] postcodeArray = postcode.Split(" ");
-        //string code = (postcodeArray[0].Length > 4) ? postcodeArray[0].Substring(0, 4).Trim() : postcodeArray[0].Trim();
-        List<string> errors;// = new List<string>();
-
-
-        //if (string.IsNullOrWhiteSpace(code))
-        //{
-        //    errors.Add("Postcode should not be empty");
-
-        //}
-        //else
-        //{
-        //    if (code != null)
-        //    {
-        //        if (code.Length < 2 && code.Length > 4)
-        //        {
-        //            errors.Add("Invalid post code. Post code should be 2 to 4 length.");
-        //        }
-        //    }
-        //}
-
+        _logger.LogTrace("MannerController: climates/{Postcode} called.", postcode);        
+        List<string> errors;
         string code = GetOutwardCode(postcode, out errors);
         if (errors.Any())
         {
@@ -131,24 +111,8 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> FetchAverageAnualRainfall(string postcode)
     {
-        _logger.LogTrace($"MannerController: climates/avarage-annual-rainfall/{postcode} called.");
-        //string[] postcodeArray = postcode.Split(" ");
-        //string code = (postcodeArray[0].Length > 4) ? postcodeArray[0].Substring(0, 4).Trim() : postcodeArray[0].Trim();
-
-        List<string> errors;// = new List<string>();
-
-        //if (string.IsNullOrWhiteSpace(code))
-        //{
-        //    errors.Add("Postcode should not be empty.");
-
-        //}
-        //if (code != null)
-        //{
-        //    if (code.Length < 2 && code.Length > 4)
-        //    {
-        //        errors.Add("Invalid post code. Post code should be 2 to 4 length.");
-        //    }
-        //}
+        _logger.LogTrace("MannerController: climates/avarage-annual-rainfall/{Postcode} called.", postcode);        
+        List<string> errors;
         string code = GetOutwardCode(postcode, out errors);
 
         if (errors.Any())
@@ -190,7 +154,7 @@ public class MannerController : ControllerBase
         [FromQuery, SwaggerParameter("Whether to filter by liquid application methods (true/false)", Required = false)] bool? isLiquid = null,
         [FromQuery, SwaggerParameter("The type of field to filter by (1 = arable, 2 = grass)", Required = false)] int? fieldType = null)
     {
-        _logger.LogTrace($"MannerController: application-methods called.");
+        _logger.LogTrace("MannerController: application-methods called.");
         IEnumerable<ApplicationMethodDto>? applicationMethods;
 
         if (!isLiquid.HasValue && !fieldType.HasValue)
@@ -216,7 +180,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> ApplicationMethodById(int id)
     {
-        _logger.LogTrace($"MannerController: application-methods/{id} called.");
+        _logger.LogTrace("MannerController: application-methods/{Id} called.", id);
         var method = await _applicationMethodService.FetchByIdAsync(id);
         return method != null
             ? Ok(new StandardResponse { Success = true, Data = method })
@@ -229,7 +193,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> CropTypes()
     {
-        _logger.LogTrace($"MannerController: crop-types called.");
+        _logger.LogTrace("MannerController: crop-types called.");
         var data = await _cropTypeService.FetchAllAsync();
         return Ok(new StandardResponse
         {
@@ -246,7 +210,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> CropTypes(int id)
     {
-        _logger.LogTrace($"MannerController: crop-types/{id} called.");
+        _logger.LogTrace("MannerController: crop-types/{Id} called.", id);
         var cropType = await _cropTypeService.FetchByIdAsync(id);
         return cropType != null
             ? Ok(new StandardResponse { Success = true, Data = cropType })
@@ -259,7 +223,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> Countries()
     {
-        _logger.LogTrace($"MannerController: countries called.");
+        _logger.LogTrace("MannerController: countries called.");
 
         var data = await _countryService.FetchAllAsync();
 
@@ -278,7 +242,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> Countries(int id)
     {
-        _logger.LogTrace($"MannerController: countries/{id} called.");
+        _logger.LogTrace("MannerController: countries/{Id} called.", id);
         var country = await _countryService.FetchByIdAsync(id);
         return country != null
             ? Ok(new StandardResponse { Success = true, Data = country })
@@ -291,7 +255,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> IncorporationDelays()
     {
-        _logger.LogTrace($"MannerController: incorporation-delays called.");
+        _logger.LogTrace("MannerController: incorporation-delays called.");
         var delays = await _incorporationDelayService.FetchAllAsync();
         return Ok(new StandardResponse
         {
@@ -307,7 +271,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> IncorporationDelays(int id)
     {
-        _logger.LogTrace($"MannerController: incorporation-delays/{id} called.");
+        _logger.LogTrace("MannerController: incorporation-delays/{Id} called.", id);
         var delay = await _incorporationDelayService.FetchByIdAsync(id);
         return delay != null
             ? Ok(new StandardResponse { Success = true, Data = delay })
@@ -321,7 +285,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> IncorporationDelaysByMethod(int methodId)
     {
-        _logger.LogTrace($"MannerController: incorporation-delays/by-incorp-method/{methodId} called.");
+        _logger.LogTrace("MannerController: incorporation-delays/by-incorp-method/{MethodId} called.", methodId);
         var delays = await _incorporationDelayService.FetchByIncorpMethodIdAsync(methodId);
         return delays != null && delays.Any()
             ? Ok(new StandardResponse { Success = true, Data = delays })
@@ -351,7 +315,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> IncorporationDelaysByMethodAndApplicableFor(int methodId, [FromQuery, SwaggerParameter("Filter by ApplicableFor (L for Liquid, S for Solid, P for Poultry, NULL for N/A or Not Incorporated)", Required = true)] string applicableFor)
     {
-        _logger.LogTrace($"MannerController: incorporation-delays/by-incorp-method-and-applicable-for/{methodId}/{applicableFor} called.");
+        _logger.LogTrace("MannerController: incorporation-delays/by-incorp-method-and-applicable-for/{MethodId}/{ApplicableFor} called.", methodId, applicableFor);
         var delays = await _incorporationDelayService.FetchByIncorpMethodIdAndApplicableForAsync(methodId, applicableFor);
         return delays != null && delays.Any()
             ? Ok(new StandardResponse { Success = true, Data = delays })
@@ -365,7 +329,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> IncorporationMethods()
     {
-        _logger.LogTrace($"MannerController: incorporation-methods called.");
+        _logger.LogTrace("MannerController: incorporation-methods called.");
         var methods = await _incorporationMethodService.FetchAllAsync();
         return Ok(new StandardResponse
         {
@@ -381,7 +345,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> IncorporationMethods(int id)
     {
-        _logger.LogTrace($"MannerController: incorporation-methods/{id} called.");
+        _logger.LogTrace("MannerController: incorporation-methods/{Id} called.", id);
         var method = await _incorporationMethodService.FetchByIdAsync(id);
         return method != null
             ? Ok(new StandardResponse { Success = true, Data = method })
@@ -395,7 +359,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> IncorporationMethodsByMethodId(int methodId)
     {
-        _logger.LogTrace($"MannerController: incorporation-methods/by-app-method/{methodId} called.");
+        _logger.LogTrace("MannerController: incorporation-methods/by-app-method/{MethodId} called.", methodId);
         var methods = await _incorporationMethodService.FetchByAppMethodIdAsync(methodId);
         return methods != null && methods.Any()
             ? Ok(new StandardResponse { Success = true, Data = methods })
@@ -409,7 +373,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> IncorporationMethodsByMethodIdAndApplicableFor(int methodId, [FromQuery, SwaggerParameter("Filter by ApplicableFor ('G' for Grass, 'A' for Arable and Horticulture, 'B' for Both, 'NULL' for N/A)", Required = true)] string applicableFor)
     {
-        _logger.LogTrace($"MannerController: incorporation-methods/by-app-method-and-applicable-for/{methodId} called.");
+        _logger.LogTrace("MannerController: incorporation-methods/by-app-method-and-applicable-for/{MethodId}/{ApplicableFor} called.", methodId, applicableFor);
         var methods = await _incorporationMethodService.FetchByAppMethodIdAndApploicableForAsync(methodId, applicableFor);
         return methods != null && methods.Any()
             ? Ok(new StandardResponse { Success = true, Data = methods })
@@ -422,7 +386,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> ManureGroups()
     {
-        _logger.LogTrace($"MannerController: manure-groups called.");
+        _logger.LogTrace("MannerController: manure-groups called.");
         var groups = await _manureGroupService.FetchAllAsync();
         return Ok(new StandardResponse
         {
@@ -438,7 +402,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> ManureGroups(int id)
     {
-        _logger.LogTrace($"MannerController: manure-groups/{id} called.");
+        _logger.LogTrace("MannerController: manure-groups/{Id} called.", id);
         var group = await _manureGroupService.FetchByIdAsync(id);
         return group != null
             ? Ok(new StandardResponse { Success = true, Data = group })
@@ -492,7 +456,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> ManureTypes(int id)
     {
-        _logger.LogTrace($"MannerController: manure-types/{id} called.");
+        _logger.LogTrace("MannerController: manure-types/{Id} called.", id);
         var type = await _manureTypeService.FetchByIdAsync(id);
         return type != null
             ? Ok(new StandardResponse { Success = true, Data = type })
@@ -505,7 +469,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> ManureTypeCategories()
     {
-        _logger.LogTrace($"MannerController: manure-type-categories called.");
+        _logger.LogTrace("MannerController: manure-type-categories called.");
         var categories = await _manureTypeCategoryService.FetchAllAsync();
         return Ok(new StandardResponse
         {
@@ -521,7 +485,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> ManureTypeCategories(int id)
     {
-        _logger.LogTrace($"MannerController: manure-type-categories/{id} called.");
+        _logger.LogTrace("MannerController: manure-type-categories/{Id} called.", id);
         var category = await _manureTypeCategoryService.FetchByIdAsync(id);
         return category != null
             ? Ok(new StandardResponse { Success = true, Data = category })
@@ -534,7 +498,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> MoistureTypes()
     {
-        _logger.LogTrace($"MannerController: moisture-types called.");
+        _logger.LogTrace("MannerController: moisture-types called.");
         var types = await _moistureTypeService.FetchAllAsync();
         return Ok(new StandardResponse
         {
@@ -550,7 +514,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> MoistureTypes(int id)
     {
-        _logger.LogTrace($"MannerController: moisture-types/{id} called.");
+        _logger.LogTrace("MannerController: moisture-types/{Id} called.", id);
         var type = await _moistureTypeService.FetchByIdAsync(id);
         return type != null
             ? Ok(new StandardResponse { Success = true, Data = type })
@@ -563,7 +527,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> RainTypes()
     {
-        _logger.LogTrace($"MannerController: rain-types called.");
+        _logger.LogTrace("MannerController: rain-types called.");
         var types = await _rainTypeService.FetchAllAsync();
         return Ok(new StandardResponse
         {
@@ -579,7 +543,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> RainTypes(int id)
     {
-        _logger.LogTrace($"MannerController: rain-types/{id} called.");
+        _logger.LogTrace("MannerController: rain-types/{Id} called.", id);
         var type = await _rainTypeService.FetchByIdAsync(id);
         return type != null
             ? Ok(new StandardResponse { Success = true, Data = type })
@@ -592,7 +556,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> SubSoils()
     {
-        _logger.LogTrace($"MannerController: sub-soils called.");
+        _logger.LogTrace("MannerController: sub-soils called.");
         var soils = await _subSoilService.FetchAllAsync();
         return Ok(new StandardResponse
         {
@@ -608,7 +572,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> SubSoils(int id)
     {
-        _logger.LogTrace($"MannerController: sub-soils/{id} called.");
+        _logger.LogTrace("MannerController: sub-soils/{Id} called.", id);
         var soil = await _subSoilService.FetchByIdAsync(id);
         return soil != null
             ? Ok(new StandardResponse { Success = true, Data = soil })
@@ -621,7 +585,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> TopSoils()
     {
-        _logger.LogTrace($"MannerController: top-soils called.");
+        _logger.LogTrace("MannerController: top-soils called.");
         var soils = await _topSoilService.FetchAllAsync();
         return Ok(new StandardResponse
         {
@@ -637,7 +601,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> TopSoils(int id)
     {
-        _logger.LogTrace($"MannerController: top-soils/{id} called.");
+        _logger.LogTrace("MannerController: top-soils/{Id} called.", id);
         var soil = await _topSoilService.FetchByIdAsync(id);
         return soil != null
             ? Ok(new StandardResponse { Success = true, Data = soil })
@@ -650,7 +614,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> Windspeeds()
     {
-        _logger.LogTrace($"MannerController: windspeeds called.");
+        _logger.LogTrace("MannerController: windspeeds called.");
         var windspeeds = await _windspeedService.FetchAllAsync();
         return Ok(new StandardResponse
         {
@@ -666,7 +630,7 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> Windspeeds(int id)
     {
-        _logger.LogTrace($"MannerController: windspeeds/{id} called.");
+        _logger.LogTrace("MannerController: windspeeds/{Id} called.", id);
         var windspeed = await _windspeedService.FetchByIdAsync(id);
         return windspeed != null
             ? Ok(new StandardResponse { Success = true, Data = windspeed })
@@ -697,25 +661,9 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> RainfallPostApplication([FromBody] RainfallPostApplicationRequest rainfallPostApplicationRequest)
     {
-        _logger.LogTrace($"MannerController: rainfall-post-application posted for climate postcode : {rainfallPostApplicationRequest.ClimateDataPostcode}.");
-        //string[] postcodeArray = rainfallPostApplicationRequest.ClimateDataPostcode.Split(" ");
-        //string code = (postcodeArray[0].Length > 4) ? postcodeArray[0].Substring(0, 4).Trim() : postcodeArray[0].Trim();
-
-        List<string> errors; // = new List<string>();
-
-        //if (string.IsNullOrWhiteSpace(code))
-        //{
-        //    errors.Add("Postcode should not be empty.");
-
-        //}
-        //if (code != null)
-        //{
-        //    if (code.Length < 2 && code.Length > 4)
-        //    {
-        //        errors.Add("Invalid post code. Post code should be 2 to 4 length.");
-        //    }
-        //}
-
+        _logger.LogTrace("MannerController: rainfall-post-application posted for climate postcode : {ClimateDataPostcode}.", rainfallPostApplicationRequest.ClimateDataPostcode);
+        
+        List<string> errors;
         string code = GetOutwardCode(rainfallPostApplicationRequest.ClimateDataPostcode, out errors);
 
         if (errors.Any())
@@ -748,29 +696,9 @@ public class MannerController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<ActionResult<StandardResponse>> RainfallAprilToSeptember(string postcode)
     {
-        _logger.LogTrace($"MannerController: climates/{postcode} called.");
+        _logger.LogTrace("MannerController: climates/{Postcode} called.", postcode);
 
-        //string[] postcodeArray = postcode.Split(" ");
-        //string code = (postcodeArray[0].Length > 4) ? postcodeArray[0].Substring(0, 4).Trim() : postcodeArray[0].Trim();
-        List<string> errors; // = new List<string>();
-
-
-        //if (string.IsNullOrWhiteSpace(code))
-        //{
-        //    errors.Add("Postcode should not be empty");
-
-        //}
-        //else
-        //{
-        //    if (code != null)
-        //    {
-        //        if (code.Length < 2 && code.Length > 4)
-        //        {
-        //            errors.Add("Invalid post code. Post code should be 2 to 4 length");
-        //        }
-        //    }
-        //}
-
+        List<string> errors;
         string code = GetOutwardCode(postcode, out errors);
 
         if (errors.Any())
@@ -800,34 +728,17 @@ public class MannerController : ControllerBase
     {
         if (!string.IsNullOrWhiteSpace(calculateNutrientsRequest.Field?.FieldName))
         {
-            _logger.LogTrace($"MannerController: calculate-nutrients posted for field name : {calculateNutrientsRequest.Field?.FieldName}.");
+            _logger.LogTrace("MannerController: calculate-nutrients posted for field name : {FieldName}.", calculateNutrientsRequest.Field?.FieldName);
         }
         else if (calculateNutrientsRequest.Field?.FieldID > 0)
         {
-            _logger.LogTrace($"MannerController: calculate-nutrients posted for field id : {calculateNutrientsRequest.Field?.FieldID}.");
+            _logger.LogTrace("MannerController: calculate-nutrients posted for field id : {FieldID}.", calculateNutrientsRequest.Field?.FieldID);
         }
         else if (calculateNutrientsRequest.ManureApplications[0] != null)
         {
-            _logger.LogTrace($"MannerController: calculate-nutrients posted with manure : {calculateNutrientsRequest.ManureApplications[0].ManureDetails.Name}.");
+            _logger.LogTrace("MannerController: calculate-nutrients posted with manure : {ManureName}.", calculateNutrientsRequest.ManureApplications[0].ManureDetails.Name);
         }
-
-        //string code = string.Empty;
-        //code = (calculateNutrientsRequest.Postcode.Length > 4) ? calculateNutrientsRequest.Postcode.Substring(0, 4).Trim() : calculateNutrientsRequest.Postcode.Trim();
-
-        List<string> errors = new List<string>();
-
-        //if (string.IsNullOrWhiteSpace(code))
-        //{
-        //    errors.Add("Postcode should not be empty.");
-
-        //}
-        //if (code != null)
-        //{
-        //    if (code.Length < 3 && code.Length > 4)
-        //    {
-        //        errors.Add("Invalid post code. Post code should be 3 or 4 character length.");
-        //    }
-        //}
+        List<string> errors;
 
         string code = GetOutwardCode(calculateNutrientsRequest.Postcode, out errors);
 
@@ -857,9 +768,7 @@ public class MannerController : ControllerBase
         });
     }
 
-
-
-    private string GetOutwardCode(string postcode, out List<string> errors)
+    private static string GetOutwardCode(string postcode, out List<string> errors)
     {
         errors = new List<string>();
         postcode = postcode.Trim();
@@ -875,8 +784,7 @@ public class MannerController : ControllerBase
             {
                 errors.Add("Invalid postcode. Outward postcode length should be greater than 2");
             }
-            // If postcode length is 4 or less, use it as is (after trimming)
-            //postcode = (postcode.Length > 4) ? postcode.Substring(0, 4).Trim() : postcode.Trim();
+            // If postcode length is 4 or less, use it as is (after trimming)            
             return postcode.ToUpper();
         }
         else if (postcode.Length > 4)
