@@ -1,13 +1,4 @@
-﻿//using Microsoft.VisualBasic;
-using Manner.Application.DTOs;
-using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using Manner.Application.DTOs;
 namespace Manner.Application.Calculators;
 
 public class MeanClimateDrainageModel
@@ -212,8 +203,6 @@ public class MeanClimateDrainageModel
 
     private bool _euniceTexture;
 
-    //private readonly string _climateDataFile; // Input climate data file (s)
-
     // Added by RE on the 25/11/09
     private bool _dataSetforRainFall = false;
     private bool _dataSetforRainDays = false;
@@ -222,22 +211,29 @@ public class MeanClimateDrainageModel
     private bool _dataSetforMaxTemp = false;
     private bool _dataSetforMinTemp = false;
 
+    private const string _invalidMonthIndex = "Invalid Month Index";
+
     // -- Public property accessors --------------------------------------------------
 
     public double Diffusivity
     {
+        get => _diffusivity;
         set
         {
+            const double epsilon = 1e-6;
 
-            if (value != -1 & value <= 0d)
+            bool isMinusOne = Math.Abs(value + 1) < epsilon;
+
+            if (!isMinusOne && value <= 0d)
             {
-                throw new Exception("Invalid Diffusivity Value");
-            }
-            else
-            {
-                _diffusivity = value;
+                throw new ArgumentOutOfRangeException(
+                    nameof(value),
+                    value,
+                    "Diffusivity must be -1 (special case) or a positive number."
+                );
             }
 
+            _diffusivity = value;
         }
     }
 
@@ -308,11 +304,13 @@ public class MeanClimateDrainageModel
         {
             windSpeedRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
+            {
                 windSpeedRet = windSpeedRet + _windSpeed[monthIndex] / 12d;
+            }
         }
-        else if (monthIndex < 0 | monthIndex > 11)
+        else if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
         else
         {
@@ -325,13 +323,13 @@ public class MeanClimateDrainageModel
 
     public void SetWindSpeed(int monthIndex = -1, double value = default)
     {
-        if (monthIndex < 0 | monthIndex > 11)
+        if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
         else if (value < 0d)
         {
-            throw new Exception("Invalid Wind Speed Value");
+            throw new ArgumentOutOfRangeException(nameof(value), value, "Invalid Wind Speed Value");
         }
         else
         {
@@ -349,11 +347,13 @@ public class MeanClimateDrainageModel
         {
             minTempRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
+            {
                 minTempRet = minTempRet + _minTemp[monthIndex] / 12d;
+            }
         }
-        else if (monthIndex < 0 | monthIndex > 11)
+        else if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
         else
         {
@@ -366,13 +366,13 @@ public class MeanClimateDrainageModel
 
     public void SetMinTemp(int monthIndex = -1, double value = default)
     {
-        if (monthIndex < 0 | monthIndex > 11)
+        if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
-        else if (value < -100 | value > 100d)
+        else if (value < -100 || value > 100d)
         {
-            throw new Exception("Invalid Minimum Temperature Value");
+            throw new ArgumentOutOfRangeException(nameof(value), value, "Invalid Minimum Temperature Value");
         }
         else
         {
@@ -390,11 +390,13 @@ public class MeanClimateDrainageModel
         {
             maxTempRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
-                maxTempRet = maxTempRet + _maxTemp[monthIndex] / 12d;
+            { 
+                maxTempRet = maxTempRet + _maxTemp[monthIndex] / 12d; 
+            }
         }
-        else if (monthIndex < 0 | monthIndex > 11)
+        else if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
         else
         {
@@ -407,13 +409,13 @@ public class MeanClimateDrainageModel
 
     public void SetMaxTemp(int monthIndex = -1, double value = default)
     {
-        if (monthIndex < 0 | monthIndex > 11)
+        if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
-        else if (value < -100 | value > 100d)
+        else if (value < -100 || value > 100d)
         {
-            throw new Exception("Invalid Maximum Temperature Value");
+            throw new ArgumentOutOfRangeException(nameof(value), value, "Invalid Maximum Temperature Value");
         }
         else
         {
@@ -432,11 +434,13 @@ public class MeanClimateDrainageModel
         {
             meanTempRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
+            {
                 meanTempRet = meanTempRet + _meanTemp[monthIndex] / 12d;
+            }
         }
-        else if (monthIndex < 0 | monthIndex > 11)
+        else if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
         else
         {
@@ -449,13 +453,13 @@ public class MeanClimateDrainageModel
 
     public void SetMeanTemp(int monthIndex = -1, double value = default)
     {
-        if (monthIndex < 0 | monthIndex > 11)
+        if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
-        else if (value < -100 | value > 100d)
+        else if (value < -100 || value > 100d)
         {
-            throw new Exception("Invalid Mean Temperature Value");
+            throw new ArgumentOutOfRangeException(nameof(value), value, "Invalid Mean Temperature Value");
         }
         else
         {
@@ -464,12 +468,9 @@ public class MeanClimateDrainageModel
         }
     }
 
-    public bool EuniceTexture
+    public void SetEuniceTexture(bool value)
     {
-        set
-        {
-            _euniceTexture = value;
-        }
+        _euniceTexture = value;
     }
 
     public double GetSunHours(int monthIndex = -1)
@@ -480,11 +481,13 @@ public class MeanClimateDrainageModel
         {
             sunHoursRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
+            {
                 sunHoursRet = sunHoursRet + _sunHours[monthIndex] / 12d;
+            }
         }
-        else if (monthIndex < 0 | monthIndex > 11)
+        else if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, "Invalid Month Index");
         }
         else
         {
@@ -492,18 +495,17 @@ public class MeanClimateDrainageModel
         }
 
         return sunHoursRet;
-
     }
 
     public void SetSunHours(int monthIndex = -1, double value = default)
     {
-        if (monthIndex < 0 | monthIndex > 11)
+        if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
-        else if (value < 0d | value > 24d)
+        else if (value < 0d || value > 24d)
         {
-            throw new Exception("Invalid Sun Hours Value");
+            throw new ArgumentOutOfRangeException(nameof(value), value, "Invalid Sun Hours Value");
         }
         else
         {
@@ -522,11 +524,13 @@ public class MeanClimateDrainageModel
         {
             rainDaysRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
+            {
                 rainDaysRet = rainDaysRet + _rainDays[monthIndex] / 12d;
+            }
         }
-        else if (monthIndex < 0 | monthIndex > 11)
+        else if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
         else
         {
@@ -534,18 +538,17 @@ public class MeanClimateDrainageModel
         }
 
         return rainDaysRet;
-
     }
 
     public void SetRainDays(int monthIndex = -1, double value = default)
     {
-        if (monthIndex < 0 | monthIndex > 11)
+        if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
-        else if (value < 0d | value > 30d)
+        else if (value < 0d || value > 30d)
         {
-            throw new Exception("Invalid Rain Days Value");
+            throw new ArgumentOutOfRangeException(nameof(value), value, "Invalid Rain Days Value");
         }
         else
         {
@@ -565,9 +568,9 @@ public class MeanClimateDrainageModel
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
                 rainfallRet = rainfallRet + _rainfall[monthIndex] / 12d;
         }
-        else if (monthIndex < 0 | monthIndex > 11)
+        else if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
         else
         {
@@ -580,13 +583,13 @@ public class MeanClimateDrainageModel
 
     public void SetRainfall(int monthIndex = -1, double value = default)
     {
-        if (monthIndex < 0 | monthIndex > 11)
+        if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month value");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
-        else if (value < 0d | value > 1000d)
+        else if (value < 0d || value > 1000d)
         {
-            throw new Exception("Invalid Rainfall Value");
+            throw new ArgumentOutOfRangeException(nameof(value), value, "Invalid Rainfall Value");
         }
         else
         {
@@ -666,21 +669,24 @@ public class MeanClimateDrainageModel
         {
             canopyEvaporationRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
+            {
                 canopyEvaporationRet = canopyEvaporationRet + _canopyEvaporation[monthIndex] / 12d;
+            }
         }
-        else if (monthIndex < 0 | monthIndex > 11)
+        else if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
         else
         {
             if (_dirty)
+            {
                 Calculate();
+            }
             canopyEvaporationRet = _canopyEvaporation[monthIndex];
         }
 
         return canopyEvaporationRet;
-
     }
 
     public double GetPotentialEvapotranspiration(int monthIndex = -1)
@@ -691,21 +697,24 @@ public class MeanClimateDrainageModel
         {
             potentialEvapotranspirationRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
+            {
                 potentialEvapotranspirationRet = potentialEvapotranspirationRet + _potentialEvapotranspiration[monthIndex] / 12d;
+            }
         }
-        else if (monthIndex < 0 | monthIndex > 11)
+        else if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
         else
         {
             if (_dirty)
+            {
                 Calculate();
+            }
+
             potentialEvapotranspirationRet = _potentialEvapotranspiration[monthIndex];
         }
-
         return potentialEvapotranspirationRet;
-
     }
 
     public double GetActualEvapotranspiration(int monthIndex = -1)
@@ -716,21 +725,24 @@ public class MeanClimateDrainageModel
         {
             actualEvapotranspirationRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
+            {
                 actualEvapotranspirationRet = actualEvapotranspirationRet + _actualEvapotranspiration[monthIndex] / 12d;
+            }
         }
-        else if (monthIndex < 0 | monthIndex > 11)
+        else if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
         else
         {
             if (_dirty)
+            {
                 Calculate();
+            }
             actualEvapotranspirationRet = _actualEvapotranspiration[monthIndex];
         }
 
         return actualEvapotranspirationRet;
-
     }
 
     public double GetSurfaceRunOff(int monthIndex = -1)
@@ -741,16 +753,20 @@ public class MeanClimateDrainageModel
         {
             surfaceRunOffRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
+            {
                 surfaceRunOffRet = surfaceRunOffRet + _surfaceRunOff[monthIndex] / 12d;
+            }
         }
-        else if (monthIndex < 0 | monthIndex > 11)
+        else if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
         else
         {
             if (_dirty)
+            {
                 Calculate();
+            }
             surfaceRunOffRet = _surfaceRunOff[monthIndex];
         }
 
@@ -766,21 +782,24 @@ public class MeanClimateDrainageModel
         {
             soilDrainageRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
+            {
                 soilDrainageRet = soilDrainageRet + _soilDrainage[monthIndex] / 12d;
+            }
         }
-        else if (monthIndex < 0 | monthIndex > 11)
+        else if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
         else
         {
             if (_dirty)
+            {
                 Calculate();
+            }
             soilDrainageRet = _soilDrainage[monthIndex];
         }
 
         return soilDrainageRet;
-
     }
 
     public double GetSoilMoistureDeficit(int monthIndex = -1)
@@ -791,21 +810,24 @@ public class MeanClimateDrainageModel
         {
             soilMoistureDeficitRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
+            {
                 soilMoistureDeficitRet = soilMoistureDeficitRet + _soilMoistureDeficit[monthIndex] / 12d;
+            }
         }
-        else if (monthIndex < 0 | monthIndex > 11)
+        else if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
         else
         {
             if (_dirty)
+            {
                 Calculate();
+            }
             soilMoistureDeficitRet = _soilMoistureDeficit[monthIndex];
         }
 
         return soilMoistureDeficitRet;
-
     }
 
     public double GetSoilTemperature(int monthIndex = -1)
@@ -816,54 +838,52 @@ public class MeanClimateDrainageModel
         {
             soilTemperatureRet = 0d;
             for (monthIndex = 0; monthIndex <= 11; monthIndex++)
+            {
                 soilTemperatureRet = soilTemperatureRet + _soilTemperature[monthIndex] / 12d;
+            }
         }
-        else if (monthIndex < 0 | monthIndex > 11)
+        else if (monthIndex < 0 || monthIndex > 11)
         {
-            throw new Exception("Invalid Month Index");
+            throw new ArgumentOutOfRangeException(nameof(monthIndex), monthIndex, _invalidMonthIndex);
         }
         else
         {
             if (_dirty)
+            {
                 Calculate();
+            }
             soilTemperatureRet = _soilTemperature[monthIndex];
         }
 
         return soilTemperatureRet;
-
     }
-
-    // -- Public property subroutines --------------------------------------------------
 
     public void SetLandCover(LandCover landCover)
     {
 
-        if ((int)landCover < 0 | (int)landCover > 2)
+        if ((int)landCover < 0 || (int)landCover > 2)
         {
-            throw new Exception("Invalid Land Cover");
+            throw new ArgumentOutOfRangeException(nameof(landCover), landCover, "Invalid Land Cover");
         }
         else
         {
             CalculateLandcover(landCover);
             _dirty = true;
         }
-
     }
 
     public void SetLocation(double latitude, double altitude = -1)
     {
-
-        if (latitude < 0d | latitude > 90d)
+        if (latitude < 0d || latitude > 90d)
         {
-            throw new Exception("Invalid Latitude Value");
+            throw new ArgumentOutOfRangeException(nameof(latitude), latitude, "Invalid Latitude Value");
         }
-        else if (altitude != -1 & altitude < 0d)
+        else if (altitude != -1 && altitude < 0d)
         {
-            throw new Exception("Invalid Altitude Value");
+            throw new ArgumentOutOfRangeException(nameof(altitude), altitude, "Invalid Altitude Value");
         }
         else
         {
-
             _latitude = latitude;
 
             if (altitude == -1)
@@ -876,151 +896,162 @@ public class MeanClimateDrainageModel
             }
 
             _dirty = true;
-
         }
-
     }
 
     public void SetObservation(ref double depth, int hour = -1)
     {
-
         if (depth < 0d)
         {
-            throw new Exception("Invalid Observation Depth");
+            throw new ArgumentOutOfRangeException(nameof(depth), depth, "Invalid Observation Depth");
         }
-        else if (hour != -1 & (hour < 0 | hour > 24))
+        else if (hour != -1 && (hour < 0 || hour > 24))
         {
-            throw new Exception("Invalid Observation Hour");
+            throw new ArgumentOutOfRangeException(nameof(hour), hour, "Invalid Observation Hour");
         }
         else
         {
-
             _depth = depth;
             _hour = hour;
-
             _dirty = true;
-
         }
-
     }
 
     public void SetAWC(double topSoilAWC, double subSoilAWC)
     {
-
         _topSoilAWC = topSoilAWC;
         _subSoilAWC = subSoilAWC;
-
     }
 
     public void SetPercentTopsoilAWC(Texture soil, short topSoilAWCHard, short topSoilAWCEasy)
     {
-
         _topSoilAWCHard = topSoilAWCHard;
         _topSoilAWCEasy = topSoilAWCEasy;
-
     }
 
     public void SetPercentSubsoilAWC(Texture soil, short subSoilAWCHard, short subSoilAWCEasy)
     {
-
         _subSoilAWCHard = subSoilAWCHard;
         _subSoilAWCEasy = subSoilAWCEasy;
-
     }
-
 
     public void SetSoil(SoilLayer soilLayer, double sand, double silt, double clay, double density = -1, double carbon = -1)
     {
+        ValidateSoilInputs(sand, silt, clay, density, carbon);
 
-        if (sand + silt + clay != 100d)
+        bool isTop = soilLayer == SoilLayer.Topsoil;
+
+        SetTexture(isTop, sand, silt, clay);
+        SetCarbon(isTop, carbon);
+        SetDensity(isTop, density);
+
+        _dirty = true;
+    }
+
+    private static void ValidateSoilInputs(double sand, double silt, double clay, double density, double carbon)
+    {
+        if (sand + silt + clay != 100d ||
+            sand < 1d || sand > 100d ||
+            silt < 1d || silt > 100d ||
+            clay < 1d || clay > 100d)
         {
-            throw new Exception("Invalid Particle Size Distribution");
+            throw new ArgumentOutOfRangeException(nameof(sand), sand, "Invalid Particle Size Distribution");
         }
-        else if (sand < 1d | sand > 100d | silt < 1d | silt > 100d | clay < 1d | clay > 100d)
+
+        if (carbon != -1 && (carbon < 1d || carbon > 100d))
         {
-            throw new Exception("Invalid Particle Size Distribution");
+            throw new ArgumentOutOfRangeException(nameof(carbon), carbon, "Invalid Carbon Content");
         }
-        else if (carbon != -1 & (carbon < 1d | carbon > 100d))
+
+        if (density != -1 && (density < 1d || density > 2d))
         {
-            throw new Exception("Invalid Carbon Content");
+            throw new ArgumentOutOfRangeException(nameof(density), density, "Invalid Bulk Density");
         }
-        else if (density != -1 & (density < 1d | density > 2d))
+    }
+
+    private void SetTexture(bool isTop, double sand, double silt, double clay)
+    {
+        if (isTop)
         {
-            throw new Exception("Invalid Bulk Density");
+            _topSand = sand;
+            _topSilt = silt;
+            _topClay = clay;
         }
         else
         {
-
-            if (soilLayer == SoilLayer.Topsoil)
-            {
-                _topSand = sand;
-                _topSilt = silt;
-                _topClay = clay;
-            }
-            else
-            {
-                _subSand = sand;
-                _subSilt = silt;
-                _subClay = clay;
-            }
-
-            if (carbon != -1)
-            {
-                if (soilLayer == SoilLayer.Topsoil)
-                {
-                    _topCarbon = carbon;
-                }
-                else
-                {
-                    _subCarbon = carbon;
-                }
-            }
-            else if (soilLayer == SoilLayer.Topsoil)
-            {
-                _topCarbon = 1d;
-            }
-            else
-            {
-                _subCarbon = 1d;
-            }
-
-            if (density != -1)
-            {
-                if (soilLayer == SoilLayer.Topsoil)
-                {
-                    _topDensity = density;
-                }
-                else
-                {
-                    _subDensity = density;
-                }
-            }
-            else if (soilLayer == SoilLayer.Topsoil)
-            {
-                _topDensity = 1.2d;
-            }
-            else
-            {
-                _subDensity = 1.2d;
-            }
-
-            _dirty = true;
-
+            _subSand = sand;
+            _subSilt = silt;
+            _subClay = clay;
         }
-
     }
 
-    // -- Public function declarations --------------------------------------------------------
+    private void SetCarbon(bool isTop, double carbon)
+    {
+        double value = carbon != -1 ? carbon : 1d;
+
+        if (isTop)
+        {
+            _topCarbon = value;
+        }
+        else
+        {
+            _subCarbon = value;
+        }
+    }
+
+    private void SetDensity(bool isTop, double density)
+    {
+        double value = density != -1 ? density : 1.2d;
+
+        if (isTop)
+        {
+            _topDensity = value;
+        }
+        else
+        {
+            _subDensity = value;
+        }
+    }
+
     public bool RetrieveClimate(ClimateDto climate)
     {
-        bool retrieveClimateRet = default;
+        bool retrieveClimateRet = false;
         // This function retrieves climate data from the given ClimateFile
         // for the location specified by  easting and northing
         // parameter values. If the climate file does not exist, or is corrupt, or the map location does not exist in the file, then the function returns false.
 
         bool needToRetriveData = true;
+        try
+        {
+            if (_dataSetforMaxTemp && _dataSetforMinTemp && _dataSetforRainDays && _dataSetforRainFall && _dataSetforSunHours && _dataSetforWindSpeed)
+            {
+                needToRetriveData = false;
+            }
 
-        retrieveClimateRet = false;
+            if (needToRetriveData)
+            {
+                // Find map location index:
+                PopulateClimateObj(climate);
+            }
+            retrieveClimateRet = true;
+        }
+        catch (Exception)
+        {
+            retrieveClimateRet = false;
+        }
+
+        return retrieveClimateRet;
+
+    }
+
+    public bool RetrieveClimate(ClimateDto climate, int easting, int northing)
+    {
+        bool retrieveClimateRet = false;
+        // This function retrieves climate data from the given Climate Dataset
+        // for the location specified by  easting and northing parameter values. If the climate file does not exist, or is corrupt, or the map location does not exist in the file, then the function returns false.
+
+
+        bool needToRetriveData = true;        
 
         try
         {
@@ -1033,108 +1064,24 @@ public class MeanClimateDrainageModel
             if (needToRetriveData)
             {
                 // Find map location index:
+                //id = (int)Math.Round(Convert.ToInt32(easting / 10000d) * 1000d + Convert.ToInt32(northing / 10000d));
+
                 PopulateClimateObj(climate);
             }
-            return true;
+            retrieveClimateRet = true;
         }
-
         catch (Exception)
         {
-
+            retrieveClimateRet = false;
         }
 
         return retrieveClimateRet;
-
     }
-
-    public bool RetrieveClimate(ClimateDto climate, int easting, int northing)
-    {
-        bool retrieveClimateRet = default;
-        // This function retrieves climate data from the given Climate Dataset
-        // for the location specified by  easting and northing parameter values. If the climate file does not exist, or is corrupt, or the map location does not exist in the file, then the function returns false.
-
-        int id;
-        
-        bool needToRetriveData = true;
-
-        retrieveClimateRet = false;
-
-        try
-        {
-
-
-            if (_dataSetforMaxTemp & _dataSetforMinTemp & _dataSetforRainDays & _dataSetforRainFall & _dataSetforSunHours & _dataSetforWindSpeed)
-            {
-                needToRetriveData = false;
-            }
-
-            if (needToRetriveData)
-            {
-                // Find map location index:
-                id = (int)Math.Round(Convert.ToInt32(easting / 10000d) * 1000d + Convert.ToInt32(northing / 10000d));
-                
-                PopulateClimateObj(climate);
-            }
-            return true;
-        }
-
-        catch (Exception)
-        {
-            
-        }
-
-        return retrieveClimateRet;
-
-    }
-
-    //public bool RetrieveClimate(ClimateDto climate, int easting, int northing)
-    //{
-    //    bool retrieveClimateRet = default;
-    //    // This function retrieves climate data from the given ClimateFile
-    //    // for the location specified by  easting and northing
-    //    // parameter values. If the climate file does not exist, or is corrupt, or the map location does not exist in the file, then the function returns false.
-
-    //    int id;
-    //    bool needToRetriveData = true;
-
-    //    retrieveClimateRet = false;
-
-    //    try
-    //    {
-
-    //        if (_dataSetforMaxTemp && _dataSetforMinTemp && _dataSetforRainDays && _dataSetforRainFall && _dataSetforSunHours && _dataSetforWindSpeed)
-    //        {
-    //            needToRetriveData = false;
-    //        }
-
-    //        if (needToRetriveData)
-    //        {
-    //            // Find map location index:
-    //            id = (int)Math.Round(Convert.ToInt32(easting / 10000d) * 1000d + Conversion.Int(northing / 10000d));
-    //            PopulateClimateObj(climate, id.ToString());
-    //        }
-    //        return true;
-    //    }
-
-    //    catch (Exception ex)
-    //    {
-
-    //    }
-
-    //    return retrieveClimateRet;
-
-    //}
 
     private void PopulateClimateObj(ClimateDto climate)
     {
-
         try
         {
-
-            //var DV = DS.Tables[0].DefaultView;
-            //DV.RowFilter = "POSTCODE = '" + Postcode + "'";
-            // Retrieve climate data:
-
             // Site altitude (m)
             _altitude = Convert.ToDouble(climate.Altitude);
 
@@ -1222,17 +1169,14 @@ public class MeanClimateDrainageModel
             _maxTemp[10] = Convert.ToDouble(climate.MeanMaxNov);
             _maxTemp[11] = Convert.ToDouble(climate.MeanMaxDec);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            // MsgBox(ex.Message)
-            throw;
+            throw new ArgumentOutOfRangeException(nameof(climate), climate, ex.Message);            
         }
     }
 
     public void Clear()
     {
-
-        //object obj;
         int iMonth;
 
         // Set default observation depth / hour:
@@ -1302,9 +1246,8 @@ public class MeanClimateDrainageModel
 
     // -- Private calculation functions ------------------------------------------------------
 
-    private void CalculateClimateFit(ref double[] Data, ref double average, ref double amplitude, ref double phase)
+    private static void CalculateClimateFit(ref double[] Data, ref double average, ref double amplitude, ref double phase)
     {
-
         // Fit the first fourier harmonic to monthly mean data
         // and return the coefficients.
 
@@ -1315,10 +1258,11 @@ public class MeanClimateDrainageModel
 
         sum = 0d;
         for (index = 0; index <= 11; index++)
+        {
             sum = sum + Data[index];
+        }
 
         average = sum / 12d;
-
         sumCos = 0d;
         sumSin = 0d;
 
@@ -1330,17 +1274,13 @@ public class MeanClimateDrainageModel
 
         sumCos = sumCos * 2d / 12d;
         sumSin = sumSin * 2d / 12d;
-
         phase = CalculateATan2(-sumSin, sumCos);
-
         amplitude = Math.Sqrt(Math.Pow(sumCos, 2d) + Math.Pow(sumSin, 2d));
-
     }
 
-    private double CalculateATan2(double opp, double adj)
+    private static double CalculateATan2(double opp, double adj)
     {
         double calculateATan2Ret = default;
-
         double angle;
 
         if (Math.Abs(adj) < 0.0001d)
@@ -1364,17 +1304,14 @@ public class MeanClimateDrainageModel
 
         calculateATan2Ret = angle;
         return calculateATan2Ret;
-
     }
 
     private void CalculateSoilTemperature()
     {
-
         // Calculate the monthly mean soil temperatures at the reference
         // depth and observation hour, by application of the homogenous
         // conductor model with a correction for screen temperature.
-
-        int indexMonth;
+                
         var surfaceTemperature = new double[12];
         var meanSurface = default(double);
         var meanAmplitude = default(double);
@@ -1382,15 +1319,9 @@ public class MeanClimateDrainageModel
         var seasonalAmplitude = default(double);
         var seasonalPhase = default(double);
 
-        for (indexMonth = 0; indexMonth <= 11; indexMonth++)
+        for (int month = 0; month < 12; month++)
         {
-
-            // Monthly mean air temperature:
-            surfaceTemperature[indexMonth] = 0.5d * (_minTemp[indexMonth] + _maxTemp[indexMonth]);
-
-            // Correction for screen temperature:
-            surfaceTemperature[indexMonth] = surfaceTemperature[indexMonth] - (2.45d * ((_canopyEvaporation[indexMonth] + _actualEvapotranspiration[indexMonth]) / 30d) - _radiation[indexMonth]) / _delta[indexMonth];
-
+            surfaceTemperature[month] = CalculateSurfaceTemperature(month);
         }
 
         // Fit first fourier harmonic to monthly mean soil surface temperatures:
@@ -1399,20 +1330,41 @@ public class MeanClimateDrainageModel
         // Calculate seasonal depth corrections to phase and amplitude:
         CalculateSeasonalCorrection(_depth, ref seasonalAmplitude, ref seasonalPhase);
 
-        // Calculate monthly mean soil temperatures at depth:
-        for (indexMonth = 0; indexMonth <= 11; indexMonth++)
+        // Calculate monthly mean soil temperatures at depth: 
+        for (int month = 0; month < 12; month++)
         {
-
-            _soilTemperature[indexMonth] = meanSurface + meanAmplitude * seasonalAmplitude * Math.Cos((indexMonth + 0.5d) * 2d * PI / 12d + meanPhase + seasonalPhase);
-
-            // Observation hour correction:
-            if (_hour != -1)
-            {
-                _soilTemperature[indexMonth] = _soilTemperature[indexMonth] + CalculateDayTemp(_depth, indexMonth, (int)Math.Round(_hour));
-            }
-
+            _soilTemperature[month] = CalculateSoilTemperature(month, meanSurface, meanAmplitude, seasonalAmplitude, meanPhase, seasonalPhase);
         }
+    }
 
+    private double CalculateSoilTemperature(int month, double meanSurface, double meanAmplitude, double seasonalAmplitude, double meanPhase, double seasonalPhase)
+    {
+        double baseTemp = CalculateBaseSoilTemperature(month, meanSurface, meanAmplitude, seasonalAmplitude, meanPhase, seasonalPhase);
+
+        return HasObservationHour()
+            ? baseTemp + GetObservationCorrection(month)
+            : baseTemp;
+    }
+
+    private static double CalculateBaseSoilTemperature(int month, double meanSurface, double meanAmplitude, double seasonalAmplitude, double meanPhase, double seasonalPhase)
+    {
+        return meanSurface
+            + meanAmplitude * seasonalAmplitude
+            * Math.Cos((month + 0.5d) * 2d * PI / 12d + meanPhase + seasonalPhase);
+    }
+
+    private bool HasObservationHour() => _hour != -1;
+
+    private double GetObservationCorrection(int month)
+    {
+        return CalculateDayTemp(_depth, month, (int)Math.Round(_hour));
+    }
+
+    private double CalculateSurfaceTemperature(int month)
+    {
+        double meanTemp = 0.5d * (_minTemp[month] + _maxTemp[month]);
+        double correction = (2.45d * ((_canopyEvaporation[month] + _actualEvapotranspiration[month]) / 30d) - _radiation[month]) / _delta[month];
+        return meanTemp - correction;
     }
 
     private double CalculateDayTemp(double depth, int indexMonth, int indexHour)
@@ -1570,75 +1522,52 @@ public class MeanClimateDrainageModel
 
     private void CalculateLandcover(LandCover landCover)
     {
-
         // Calculate monthly mean values of plant height, canopy resistance
         // and height, according to the selected land cover type.
-
-        //object obj;
-        int index;
-
         _landCover = landCover;
 
-        switch (_landCover)
+        switch (landCover)
         {
-
             case LandCover.BareSoil:
-                {
-                    var zero = new object[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-                    for (index = 0; index <= 11; index++)
-                        _leafAreaIndex[index] = Convert.ToDouble(zero[index]);
-
-                    var hundred = new object[] { 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100 };
-                    for (index = 0; index <= 11; index++)
-                        _canopyResistance[index] = Convert.ToDouble(hundred[index]);
-
-                    var zeroPointZeroFive = new object[] { 0.05d, 0.05d, 0.05d, 0.05d, 0.05d, 0.05d, 0.05d, 0.05d, 0.05d, 0.05d, 0.05d, 0.05d };
-                    for (index = 0; index <= 11; index++)
-                        _height[index] = Convert.ToDouble(zeroPointZeroFive[index]);
-                    break;
-                }
+                ApplyLandCover(
+                    leafArea: CreateArray(0d),
+                    canopy: CreateArray(100d),
+                    height: CreateArray(0.05d));
+                break;
 
             case LandCover.ManagedGrass:
-                {
-
-                    var lfai = new object[] { 2, 2, 3, 4, 5, 5, 5, 5, 4, 3, 2.5d, 2 };
-                    for (index = 0; index <= 11; index++)
-                        _leafAreaIndex[index] = Convert.ToDouble(lfai[index]);
-
-                    var cr = new object[] { 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70 };
-                    for (index = 0; index <= 11; index++)
-                        _canopyResistance[index] = Convert.ToDouble(cr[index]);
-
-                    var height = new object[] { 0.15d, 0.15d, 0.15d, 0.15d, 0.15d, 0.15d, 0.15d, 0.15d, 0.15d, 0.15d, 0.15d, 0.15d };
-                    for (index = 0; index <= 11; index++)
-                        _height[index] = Convert.ToDouble(height[index]);
-                    break;
-                }
+                ApplyLandCover(
+                    leafArea: new[] { 2d, 2d, 3d, 4d, 5d, 5d, 5d, 5d, 4d, 3d, 2.5d, 2d },
+                    canopy: CreateArray(70d),
+                    height: CreateArray(0.15d));
+                break;
 
             case LandCover.WinterWheat:
-                {
-
-                    var lfai = new object[] { 0.5d, 0.5d, 0.6d, 1.8d, 3.3d, 4.7d, 5, 3.2d, 0, 0.3d, 0.3d, 0.5d };
-                    for (index = 0; index <= 11; index++)
-                        _leafAreaIndex[index] = Convert.ToDouble(lfai[index]);
-
-                    var cr = new object[] { 40, 40, 40, 40, 40, 40, 125, 300, 100, 40, 40, 40 };
-                    for (index = 0; index <= 11; index++)
-                        _canopyResistance[index] = Convert.ToDouble(cr[index]);
-
-                    var height = new object[] { 0.08d, 0.08d, 0.08d, 0.14d, 0.35d, 0.7d, 0.8d, 0.5d, 0.05d, 0.08d, 0.08d, 0.08d };
-                    for (index = 0; index <= 11; index++)
-                        _height[index] = Convert.ToDouble(height[index]);
-                    break;
-                }
-
+                ApplyLandCover(
+                    leafArea: new[] { 0.5d, 0.5d, 0.6d, 1.8d, 3.3d, 4.7d, 5d, 3.2d, 0d, 0.3d, 0.3d, 0.5d },
+                    canopy: new[] { 40d, 40d, 40d, 40d, 40d, 40d, 125d, 300d, 100d, 40d, 40d, 40d },
+                    height: new[] { 0.08d, 0.08d, 0.08d, 0.14d, 0.35d, 0.7d, 0.8d, 0.5d, 0.05d, 0.08d, 0.08d, 0.08d });
+                break;
         }
+    }
 
+    private void ApplyLandCover(double[] leafArea, double[] canopy, double[] height)
+    {
+        for (int i = 0; i < 12; i++)
+        {
+            _leafAreaIndex[i] = leafArea[i];
+            _canopyResistance[i] = canopy[i];
+            _height[i] = height[i];
+        }
+    }
+
+    private static double[] CreateArray(double value)
+    {
+        return Enumerable.Repeat(value, 12).ToArray();
     }
 
     private void CalculatePotentialEvapotranspiration(int indexMonth, ref double pet, ref double ratio, ref double delta, ref double radiation)
     {
-
         // Calculate monthly mean potential evapotranspiration (mm/day) based
         // on Penman-Monteith formula for the currently selected land cover,
         // and the efficiency ratio of evaporation from the plant canopy.
@@ -1790,35 +1719,27 @@ public class MeanClimateDrainageModel
 
         try
         {
-
-
             tmpDC = alpha / Math.Abs(alpha) * 2d / Math.Pow(beta, 0.5d);
 
-            if (CalculateNormalVariate(probability, ref tmpDU) == false)
+            if (!CalculateNormalVariate(probability, ref tmpDU))
+            {
                 return calculateGammaQuantileRet;
+            }
 
             if (tmpDC < 1d)
             {
-
                 tmpDK = tmpDC * (tmpDU - tmpDC / 6d) / 6d + 1d;
                 tmpDK = Math.Pow(tmpDK, 3d);
                 tmpDK = tmpDK - 1d;
                 tmpDK = tmpDK * 2d / tmpDC;
             }
-
             else if (tmpDC < 9.75d)
             {
-
                 tmpDG = -0.00385205d + 1.00426d * tmpDC + 0.00651207d * Math.Pow(tmpDC, 2d) + -0.0149166d * Math.Pow(tmpDC, 3d) + 0.00163945d * Math.Pow(tmpDC, 4d) + -0.0000583804d * Math.Pow(tmpDC, 5d);
-
                 tmpDA = 0.00199447d + 0.48489d * tmpDC + 0.0230935d * Math.Pow(tmpDC, 2d) + -0.0152435d * Math.Pow(tmpDC, 3d) + 0.00160597d * Math.Pow(tmpDC, 4d) + -0.000055869d * Math.Pow(tmpDC, 5d);
-
                 tmpDB = 0.990562d + 0.0319647d * tmpDC + -0.0274231d * Math.Pow(tmpDC, 2d) + 0.00777405d * Math.Pow(tmpDC, 3d) + -0.000571184d * Math.Pow(tmpDC, 4d) + 0.0000142077d * Math.Pow(tmpDC, 5d);
-
                 tmpDA = 1d / tmpDA;
-
                 tmpDH = Math.Pow(tmpDB - 2d / tmpDC / tmpDA, 1d / 3d);
-
                 tmpDK = 1d - Math.Pow(tmpDG / 6d, 2d) + tmpDU * (tmpDG / 6d);
 
                 if (tmpDK < tmpDH)
@@ -1829,15 +1750,12 @@ public class MeanClimateDrainageModel
                 tmpDK = Math.Pow(tmpDK, 3d);
                 tmpDK = (tmpDK - tmpDB) * tmpDA;
             }
-
             else
             {
                 throw new Exception("Algorithm Range Error");
-                //Information.Err().Raise(Constants.vbObjectError + 100, Description: "Algorithm Range Error");
             }
 
             tmpDQ = alpha * beta + tmpDK * Math.Pow(Math.Pow(alpha, 2d) * beta, 0.5d);
-
             quantile = tmpDQ;
 
             // Return value:
@@ -1855,14 +1773,12 @@ public class MeanClimateDrainageModel
 
     private bool CalculateNormalVariate(double probability, ref double variate)
     {
-        bool calculateNormalVariateRet = default;
+        bool calculateNormalVariateRet = false;
 
         // Calculate the standard normal variate corresponding to a
         // probability of non-exceedence, using the approximate
         // solution of Abramowitz and Stegun (1965).
 
-        // Default return:
-        calculateNormalVariateRet = false;
 
         double tmpDW;
         double tmpDP;
@@ -1872,9 +1788,6 @@ public class MeanClimateDrainageModel
 
         try
         {
-
-
-
             tmpDP = 1d - probability;
             if (tmpDP > 0.5d)
             {
@@ -1882,11 +1795,8 @@ public class MeanClimateDrainageModel
             }
 
             tmpDW = Math.Pow(-2.0d * Math.Log(tmpDP), 0.5d);
-
             tmpDen = 1.0d + 1.432788d * tmpDW + 0.189269d * Math.Pow(tmpDW, 2d) + 0.001308d * Math.Pow(tmpDW, 3d);
-
             tmpNum = 2.515517d + 0.802853d * tmpDW + 0.010328d * Math.Pow(tmpDW, 2d);
-
             tmpDU = tmpDW - tmpNum / tmpDen;
 
             if (1d - probability > 0.5d)
@@ -1899,14 +1809,12 @@ public class MeanClimateDrainageModel
             // Return Value:
             calculateNormalVariateRet = true;
         }
-
         catch (Exception ex)
         {
             throw new Exception("Error: " + ex.Message);
         }
 
         return calculateNormalVariateRet;
-
     }
 
 
@@ -1935,7 +1843,6 @@ public class MeanClimateDrainageModel
 
     private void CalculateSoilAirWater(ref double soil, ref double air, ref double water)
     {
-
         // Calculate the proportional soil, air and water contents
         // of the soil at field capacity, above the depth of soil
         // temperature observation.
@@ -1965,24 +1872,19 @@ public class MeanClimateDrainageModel
             water = water + (_depth - 0.3d) * phi05;
             water = water / _depth;
         }
-
         else
         {
-
             water = phi05;
-
         }
 
         water = water * 0.01d;
         water = Max(0d, water);
         water = Min(air, water);
         air = air - water;
-
     }
 
     private void CalculateAvailableWater(ref double am02, ref double am15)
     {
-
         // Calculate the plant available water held in the soil profile
         // between field capacity and a tension of 2 bar (AM02) and
         // between the tensions of 2 and 15 bar (AM15), using a particle
@@ -1997,7 +1899,7 @@ public class MeanClimateDrainageModel
         am02 = 0d;
         am15 = 0d;
 
-        if (_euniceTexture == true)
+        if (_euniceTexture)
         {
             am02 = am02 + _topSoilAWCEasy * 0.01d * 300d;
             am15 = am15 + (_topSoilAWCHard - _topSoilAWCEasy) * 0.01d * 300d;
@@ -2041,67 +1943,57 @@ public class MeanClimateDrainageModel
 
         // Sub soil water content is dependent upon the depth
         // of rooting (300-?mm):
-        if (_euniceTexture == true)
+        if (_euniceTexture)
         {
-
             switch (_landCover)
             {
-
                 case LandCover.BareSoil:
                     {
                         am02 = am02 + _subSoilAWCEasy * 0.01d * 0d;
                         am15 = am15 + (_subSoilAWCHard - _subSoilAWCEasy) * 0.01d * 0d;
                         break;
                     }
-
                 case LandCover.ManagedGrass:
                     {
                         am02 = am02 + _subSoilAWCEasy * 0.01d * 700d;
                         am15 = am15 + (_subSoilAWCHard - _subSoilAWCEasy) * 0.01d * 400d;
                         break;
                     }
-
                 case LandCover.WinterWheat:
                     {
                         am02 = am02 + _subSoilAWCEasy * 0.01d * 900d;
                         am15 = am15 + (_subSoilAWCHard - _subSoilAWCEasy) * 0.01d * 200d;
                         break;
                     }
-
             }
         }
         else
         {
-
             switch (_landCover)
             {
-
                 case LandCover.BareSoil:
                     {
                         am02 = am02 + (phi05 - phi02) * 0.01d * 0d;
                         am15 = am15 + (phi02 - phi15) * 0.01d * 0d;
                         break;
                     }
-
                 case LandCover.ManagedGrass:
                     {
                         am02 = am02 + (phi05 - phi02) * 0.01d * 700d;
                         am15 = am15 + (phi02 - phi15) * 0.01d * 400d;
                         break;
                     }
-
                 case LandCover.WinterWheat:
                     {
                         am02 = am02 + (phi05 - phi02) * 0.01d * 900d;
                         am15 = am15 + (phi02 - phi15) * 0.01d * 200d;
                         break;
                     }
-
             }
         }
     }
 
-    private double Max(double lhs, double rhs)
+    private static double Max(double lhs, double rhs)
     {
         double maxRet = default;
         if (lhs > rhs)
@@ -2116,7 +2008,7 @@ public class MeanClimateDrainageModel
         return maxRet;
     }
 
-    private double Min(double lhs, double rhs)
+    private static double Min(double lhs, double rhs)
     {
         double MinRet = default;
         if (lhs < rhs)
@@ -2135,7 +2027,6 @@ public class MeanClimateDrainageModel
 
     public void Calculate()
     {
-
         // Calculate monthly mean values of potential evapotranspiration and
         // efficiency of canopy evaporation, and radiation and delta modifiers
         // for calculate of surface temperature:
@@ -2167,7 +2058,6 @@ public class MeanClimateDrainageModel
 
         for (iMonth = 0; iMonth <= 11; iMonth++)
         {
-
             Interception[iMonth] = 0d;
             SurfaceRunOff[iMonth] = 0d;
 
@@ -2178,7 +2068,6 @@ public class MeanClimateDrainageModel
             // Integration across 100 discrete steps:
             for (Probability = 0.005d; Probability <= 0.995d; Probability += 0.01d)
             {
-
                 CalculateGammaQuantile(Probability, beta, alpha, ref Quantile);
                 Quantile = Max(Quantile, 0.1d);
 
@@ -2193,9 +2082,7 @@ public class MeanClimateDrainageModel
 
                 // Calculate surface runoff:
                 RunOff = CalculateRunOff(iMonth, Quantile);
-
                 SurfaceRunOff[iMonth] = SurfaceRunOff[iMonth] + RunOff;
-
             }
 
             SurfaceRunOff[iMonth] = _rainDays[iMonth] * SurfaceRunOff[iMonth] / 100d;
@@ -2208,7 +2095,6 @@ public class MeanClimateDrainageModel
             // Store results:
             _surfaceRunOff[iMonth] = SurfaceRunOff[iMonth];
             _canopyEvaporation[iMonth] = Interception[iMonth];
-
         }
 
         // Calculate actual evapotranspiration and soil drainage by the
@@ -2246,8 +2132,6 @@ public class MeanClimateDrainageModel
         {
             for (iMonth = 0; iMonth <= 11; iMonth++)
             {
-
-
                 // Revised model calculations;
                 // Debug.Print m_TopSoilAWC + m_SubSoilAWC
                 tmp_B = AM02 + AM15 + 25d; // m_TopSoilAWC + m_SubSoilAWC
@@ -2268,6 +2152,7 @@ public class MeanClimateDrainageModel
                 ActualEvapotranspiration[iMonth] = tmp_Y - SoilMoistureDeficit[iMonth];
 
                 SoilMoistureDeficit[iMonth] = SoilMoistureDeficit[Index] - ActualEvapotranspiration[iMonth];
+
                 SoilMoistureDeficit[iMonth] = SoilMoistureDeficit[iMonth] + Rainfall[iMonth] - SurfaceRunOff[iMonth];
 
                 if (SoilMoistureDeficit[iMonth] > tmp_B)
@@ -2280,8 +2165,6 @@ public class MeanClimateDrainageModel
                     SoilDrainage[iMonth] = 0d;
                 }
 
-                // If (ActiveWorkbook.ActiveSheet.Cells(15, 12) = True) Then
-
                 tmp_Ratio = GetRainDays(iMonth) / 30d;
 
                 SoilDrainage[iMonth] = tmp_Ratio * SoilDrainage[iMonth] + (1d - tmp_Ratio) * (tmp_W - tmp_Y);
@@ -2293,7 +2176,7 @@ public class MeanClimateDrainageModel
                     SoilDrainage[iMonth] = SoilDrainage[iMonth] + (SoilMoistureDeficit[iMonth] - tmp_B);
                     SoilMoistureDeficit[iMonth] = tmp_B;
                 }
-                // End If
+
 
                 SoilDrainage[iMonth] = SoilDrainage[iMonth] + SurfaceRunOff[iMonth];
 
@@ -2356,73 +2239,115 @@ public class MeanClimateDrainageModel
 
         // Update calculation edit status:
         _dirty = false;
-
     }
 
     // -- Private class constructor / destructor ---------------------------------------------
-
     private void InitialiseParams()
     {
+        InitialiseArray(_diurnalAve, new[] { 0.488, 0.481, 0.474, 0.454, 0.469, 0.481, 0.473, 0.261, 0.453, 0.472, 0.478, 0.5 });
+        InitialiseArray(_diurnalAmpOne, new[] { -0.232, -0.305, -0.359, -0.389, -0.416, -0.41, -0.429, -0.416, -0.385, -0.332, -0.278, -0.191 });
+        InitialiseArray(_diurnalPhaseOne, new[] { -0.768, -0.821, -0.819, -0.957, -0.977, -0.974, -1.072, -1.052, -0.964, -0.924, -0.663, -0.791 });
+        InitialiseArray(_diurnalAmpTwo, new[] { 0.109, 0.129, 0.109, 0.071, 0.034, 0.014, 0.015, 0.053, 0.106, 0.124, 0.129, 0.105 });
+        InitialiseArray(_diurnalPhaseTwo, new[] { -0.917, -0.945, -0.966, -1.202, -1.117, -0.886, -1.065, -1.207, -1.223, -0.164, -0.765, -0.864 });
 
-        // Reference parameters for the calculation of the diurnal variation
-        // of air temperatures. For each month, air temperatures are assumed
-        // to follow a fixed hourly pattern, varying between the daily minimum
-        // and maximum, described by two fourier harmonics. The parameters of the
-        // harmonics were derived empirically by the author from an analysis of
-        // hourly temperature measurements at Cambridge.
-
-       // object Var;
-        int iMonth;
-        double iHour;
-        double Value;
-
-
-        var dava = new object[] { 0.488d, 0.481d, 0.474d, 0.454d, 0.469d, 0.481d, 0.473d, 0.261d, 0.453d, 0.472d, 0.478d, 0.5d };
-        for (iMonth = 0; iMonth <= 11; iMonth++)
-            _diurnalAve[iMonth] = Convert.ToDouble(dava[iMonth]);
-
-        var ampone = new object[] { -0.232d, -0.305d, -0.359d, -0.389d, -0.416d, -0.41d, -0.429d, -0.416d, -0.385d, -0.332d, -0.278d, -0.191d };
-        for (iMonth = 0; iMonth <= 11; iMonth++)
-            _diurnalAmpOne[iMonth] = Convert.ToDouble(ampone[iMonth]);
-
-        var phaseone = new object[] { -0.768d, -0.821d, -0.819d, -0.957d, -0.977d, -0.974d, -1.072d, -1.052d, -0.964d, -0.924d, -0.663d, -0.791d };
-        for (iMonth = 0; iMonth <= 11; iMonth++)
-            _diurnalPhaseOne[iMonth] = Convert.ToDouble(phaseone[iMonth]);
-
-        var amptwo = new object[] { 0.109d, 0.129d, 0.109d, 0.071d, 0.034d, 0.014d, 0.015d, 0.053d, 0.106d, 0.124d, 0.129d, 0.105d };
-        for (iMonth = 0; iMonth <= 11; iMonth++)
-            _diurnalAmpTwo[iMonth] = Convert.ToDouble(amptwo[iMonth]);
-
-        var phasetwo = new object[] { -0.917d, -0.945d, -0.966d, -1.202d, -1.117d, -0.886d, -1.065d, -1.207d, -1.223d, -0.164d, -0.765d, -0.864d };
-        for (iMonth = 0; iMonth <= 11; iMonth++)
-            _diurnalPhaseTwo[iMonth] = Convert.ToDouble(phasetwo[iMonth]);
-
-        for (iMonth = 0; iMonth <= 11; iMonth++)
+        for (int month = 0; month < 12; month++)
         {
+            CalculateDiurnalMinMax(month);
+        }
+    }
 
-            _diurnalMax[iMonth] = -999;
-            _diurnalMin[iMonth] = -999;
+    private static void InitialiseArray(double[] target, double[] source)
+    {
+        for (int i = 0; i < source.Length; i++)
+        {
+            target[i] = source[i];
+        }
+    }
 
-            for (iHour = 1d; iHour <= 24d; iHour++)
-            {
+    private void CalculateDiurnalMinMax(int month)
+    {
+        double min = double.MaxValue;
+        double max = double.MinValue;
 
-                Value = _diurnalAve[iMonth] + Math.Cos(iHour * 2d * PI / 24d + _diurnalPhaseOne[iMonth]) * _diurnalAmpOne[iMonth] + Math.Cos(iHour * 2d * PI / 12d + _diurnalPhaseTwo[iMonth]) * _diurnalAmpTwo[iMonth];
+        for (int hour = 1; hour <= 24; hour++)
+        {
+            double value = CalculateDiurnalValue(month, hour);
 
-                if (_diurnalMax[iMonth] == -999 | Value > _diurnalMax[iMonth])
-                {
-                    _diurnalMax[iMonth] = Value;
-                }
-
-                if (_diurnalMin[iMonth] == -999 | Value < _diurnalMin[iMonth])
-                {
-                    _diurnalMin[iMonth] = Value;
-                }
-
-            }
-
+            if (value > max) max = value;
+            if (value < min) min = value;
         }
 
+        _diurnalMax[month] = max;
+        _diurnalMin[month] = min;
     }
+
+    private double CalculateDiurnalValue(int month, int hour)
+    {
+        return _diurnalAve[month]
+            + Math.Cos(hour * 2d * PI / 24d + _diurnalPhaseOne[month]) * _diurnalAmpOne[month]
+            + Math.Cos(hour * 2d * PI / 12d + _diurnalPhaseTwo[month]) * _diurnalAmpTwo[month];
+    }
+
+    //private void InitialiseParams()
+    //{
+    //    // Reference parameters for the calculation of the diurnal variation
+    //    // of air temperatures. For each month, air temperatures are assumed
+    //    // to follow a fixed hourly pattern, varying between the daily minimum
+    //    // and maximum, described by two fourier harmonics. The parameters of the
+    //    // harmonics were derived empirically by the author from an analysis of
+    //    // hourly temperature measurements at Cambridge.
+
+    //    int iMonth;
+    //    double iHour;
+    //    double Value;
+
+    //    var dava = new object[] { 0.488d, 0.481d, 0.474d, 0.454d, 0.469d, 0.481d, 0.473d, 0.261d, 0.453d, 0.472d, 0.478d, 0.5d };
+    //    for (iMonth = 0; iMonth <= 11; iMonth++)
+    //    {
+    //        _diurnalAve[iMonth] = Convert.ToDouble(dava[iMonth]);
+    //    }
+
+    //    var ampone = new object[] { -0.232d, -0.305d, -0.359d, -0.389d, -0.416d, -0.41d, -0.429d, -0.416d, -0.385d, -0.332d, -0.278d, -0.191d };
+    //    for (iMonth = 0; iMonth <= 11; iMonth++)
+    //    {
+    //        _diurnalAmpOne[iMonth] = Convert.ToDouble(ampone[iMonth]);
+    //    }
+
+    //    var phaseone = new object[] { -0.768d, -0.821d, -0.819d, -0.957d, -0.977d, -0.974d, -1.072d, -1.052d, -0.964d, -0.924d, -0.663d, -0.791d };
+    //    for (iMonth = 0; iMonth <= 11; iMonth++)
+    //        _diurnalPhaseOne[iMonth] = Convert.ToDouble(phaseone[iMonth]);
+
+    //    var amptwo = new object[] { 0.109d, 0.129d, 0.109d, 0.071d, 0.034d, 0.014d, 0.015d, 0.053d, 0.106d, 0.124d, 0.129d, 0.105d };
+    //    for (iMonth = 0; iMonth <= 11; iMonth++)
+    //        _diurnalAmpTwo[iMonth] = Convert.ToDouble(amptwo[iMonth]);
+
+    //    var phasetwo = new object[] { -0.917d, -0.945d, -0.966d, -1.202d, -1.117d, -0.886d, -1.065d, -1.207d, -1.223d, -0.164d, -0.765d, -0.864d };
+    //    for (iMonth = 0; iMonth <= 11; iMonth++)
+    //    {
+    //        _diurnalPhaseTwo[iMonth] = Convert.ToDouble(phasetwo[iMonth]);
+    //    }
+
+    //    for (iMonth = 0; iMonth <= 11; iMonth++)
+    //    {
+    //        _diurnalMax[iMonth] = -999;
+    //        _diurnalMin[iMonth] = -999;
+
+    //        for (iHour = 1d; iHour <= 24d; iHour++)
+    //        {
+    //            Value = _diurnalAve[iMonth] + Math.Cos(iHour * 2d * PI / 24d + _diurnalPhaseOne[iMonth]) * _diurnalAmpOne[iMonth] + Math.Cos(iHour * 2d * PI / 12d + _diurnalPhaseTwo[iMonth]) * _diurnalAmpTwo[iMonth];
+
+    //            if (_diurnalMax[iMonth] == -999 || Value > _diurnalMax[iMonth])
+    //            {
+    //                _diurnalMax[iMonth] = Value;
+    //            }
+
+    //            if (_diurnalMin[iMonth] == -999 || Value < _diurnalMin[iMonth])
+    //            {
+    //                _diurnalMin[iMonth] = Value;
+    //            }
+    //        }
+    //    }
+    //}
 
     private void ClassInitializeRenamed()
     {
