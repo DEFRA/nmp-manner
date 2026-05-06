@@ -165,6 +165,9 @@ public class MeanClimateDrainageModel
     private double _hour; // Hour of observation of soil temperatures (n; 0-24)
     private double _depth; // Depth of observation of soil temperatures (n)
 
+    private const double _epsilon = 0.000001;
+
+
     private double _topSoilAWC;
     private double _subSoilAWC;
 
@@ -874,11 +877,14 @@ public class MeanClimateDrainageModel
 
     public void SetLocation(double latitude, double altitude = -1)
     {
+        const double epsilon = 1e-6;
+
+        bool isMinusOne = Math.Abs(altitude + 1) < epsilon;
         if (latitude < 0d || latitude > 90d)
         {
             throw new ArgumentOutOfRangeException(nameof(latitude), latitude, "Invalid Latitude Value");
         }
-        else if (altitude != -1 && altitude < 0d)
+        else if (!isMinusOne && altitude < 0d)
         {
             throw new ArgumentOutOfRangeException(nameof(altitude), altitude, "Invalid Altitude Value");
         }
@@ -886,7 +892,7 @@ public class MeanClimateDrainageModel
         {
             _latitude = latitude;
 
-            if (altitude == -1)
+            if (isMinusOne)
             {
                 _altitude = 0d;
             }
@@ -948,27 +954,39 @@ public class MeanClimateDrainageModel
         _dirty = true;
     }
 
-    private static void ValidateSoilInputs(double sand, double silt, double clay, double density, double carbon)
+    private const double Epsilon = 0.0001;
+
+    private static bool IsApproximately(double value, double target) =>
+        Math.Abs(value - target) < Epsilon;
+
+    private static bool IsProvided(double value, double sentinel = -1d) =>
+        Math.Abs(value - sentinel) > Epsilon;
+
+    private static bool IsInRange(double value, double min, double max) =>
+        value >= min && value <= max;
+
+    private static void ValidateSoilInputs(double sand, double silt, double clay, double carbon, double density)
     {
-        if (sand + silt + clay != 100d ||
-            sand < 1d || sand > 100d ||
-            silt < 1d || silt > 100d ||
-            clay < 1d || clay > 100d)
+        if (!IsApproximately(sand + silt + clay, 100d) ||
+            !IsInRange(sand, 1d, 100d) ||
+            !IsInRange(silt, 1d, 100d) ||
+            !IsInRange(clay, 1d, 100d))
         {
             throw new ArgumentOutOfRangeException(nameof(sand), sand, "Invalid Particle Size Distribution");
         }
 
-        if (carbon != -1 && (carbon < 1d || carbon > 100d))
+        if (IsProvided(carbon) && !IsInRange(carbon, 1d, 100d))
         {
             throw new ArgumentOutOfRangeException(nameof(carbon), carbon, "Invalid Carbon Content");
         }
 
-        if (density != -1 && (density < 1d || density > 2d))
+        if (IsProvided(density) && !IsInRange(density, 1d, 2d))
         {
             throw new ArgumentOutOfRangeException(nameof(density), density, "Invalid Bulk Density");
         }
     }
 
+    
     private void SetTexture(bool isTop, double sand, double silt, double clay)
     {
         if (isTop)
@@ -1001,7 +1019,7 @@ public class MeanClimateDrainageModel
 
     private void SetDensity(bool isTop, double density)
     {
-        double value = density != -1 ? density : 1.2d;
+        double value = IsProvided(density) ? density : 1.2d;
 
         if (isTop)
         {
