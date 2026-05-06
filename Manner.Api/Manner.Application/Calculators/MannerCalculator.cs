@@ -115,7 +115,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             CalculateFinalResults(calculatedTotalN, calculatedPotentialN, calculatedVolatilisedN, calculatedN2O, calculatedN2, calculatedcropUptakeFactor, calculatedMineralisedN, calculatedLeachedN);
 
 
-            if (this.IsPaperCrumble(_manureType.ID))
+            if (IsPaperCrumble(_manureType.ID))
             {
                 CalculateNAvailableResultsPaperCrumble();
             }
@@ -192,11 +192,11 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             double applicationDateAE, appDateRain;
             double soilDrainageAE, soilDrainageRain;
 
-            appDateRain = this.GetClimateType(applicationDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
-            applicationDateAE = this.GetClimateType(applicationDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
+            appDateRain = GetClimateType(applicationDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
+            applicationDateAE = GetClimateType(applicationDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
 
-            soilDrainageRain = this.GetClimateType(endSoilDrainageDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
-            soilDrainageAE = this.GetClimateType(endSoilDrainageDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
+            soilDrainageRain = GetClimateType(endSoilDrainageDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
+            soilDrainageAE = GetClimateType(endSoilDrainageDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
 
 
             // DO NOT ADD ONE MONTH TO THE DATE OF APPLICATION TO MIMIC EXISTING CODE AND MANNER PAPER
@@ -278,8 +278,8 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                     // Add one month to appDate
                     appDate = appDate.AddMonths(1);
 
-                    appDateRain = this.GetClimateType(appDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
-                    applicationDateAE = this.GetClimateType(appDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
+                    appDateRain = GetClimateType(appDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
+                    applicationDateAE = GetClimateType(appDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
 
 
                     if (applicationDateAE > appDateRain)
@@ -1187,7 +1187,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
         // c.f. Email from Fiona Nicholson on 16/02/2006 and updated technical guide
 
         // 07 Nov 2012 C Lam - Return zero for paper crumbles
-        if (this.IsPaperCrumble(_manureType.ID))
+        if (IsPaperCrumble(_manureType.ID))
         {
             return 0d;
         }
@@ -1685,16 +1685,16 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                 // the previous month to the month of application.  Agreed following conversation with E. Lord on 26/7/2006.
                 // As the count starts at zero then iMonthApp -.
 
-                dSMDCurMonth = this.GetClimateType(monthApp, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit);
+                dSMDCurMonth = GetClimateType(monthApp, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit);
 
                 if (monthApp == 1)
                 {
                     // if month is january take december as previous month
-                    dSMDPrevMonth = this.GetClimateType(12, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit);
+                    dSMDPrevMonth = GetClimateType(12, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit);
                 }
                 else
                 {
-                    dSMDPrevMonth = this.GetClimateType(monthApp - 1, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit);
+                    dSMDPrevMonth = GetClimateType(monthApp - 1, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit);
                 }
 
                 // Even out the SMD factor depending on how far along the month we are.
