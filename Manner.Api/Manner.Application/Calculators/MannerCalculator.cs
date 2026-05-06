@@ -19,15 +19,11 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     private readonly TopSoilDto _topSoil = topSoil;
     private readonly SubSoilDto _subSoil = subSoil;
     private readonly List<ClimateTypeDto> _climateTypes = climateTypes;
-    private DTOs.Outputs _outputs = new();
-    private ClimateCalculator _climateCalculator = new();
+    private readonly DTOs.Outputs _outputs = new();
+    private readonly ClimateCalculator _climateCalculator = new();
     private double _rainfallTotal;
     private double _evapotranspirationTotal;
     private readonly int _runType = runType;
-
-    //public const double NVZ_ESW_Total_N_Limit = 250;
-    //public const double NVZ_ESW_GREEN_COMPOST_LOWER_LIMIT = 500;
-    //public const double NVZ_ESW_GREEN_COMPOST_UPPER_LIMIT = 1000;
 
     public DTOs.Outputs MannerEngine
     {
@@ -105,8 +101,8 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             // Leached N
             // -------------------------------------------------------------
             // Calculate soil volumetric water content
-            double vmWaterTopSoil = _topSoil.VolumetricMeasure; // Convert.ToDouble(objManData.GetDataField(MannerApplication.RunType, Enums.MannerData.XmlLookups.Soil, "SoilID", "TopSoilVM", (int)MannerApplication.FieldData.Topsoil));
-            double vmWaterTotal = vmWaterTopSoil + _subSoil.VolumetricMeasure; //Convert.ToDouble(objManData.GetDataField(MannerApplication.RunType, MannerLib.MannerData.XmlLookups.Soil, "SoilID", "SubSoilVM", (int)MannerApplication.FieldData.Subsoil));
+            double vmWaterTopSoil = _topSoil.VolumetricMeasure;
+            double vmWaterTotal = vmWaterTopSoil + _subSoil.VolumetricMeasure;
 
             double calculatedLeachedN = CalculateLeachedN(mineralN4, vmWaterTotal, vmWaterTopSoil);
             double nMineralised4 = mineralN4 - calculatedLeachedN;
@@ -133,11 +129,6 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                             break;
                         }
                     case "Arable":
-                        {
-                            _outputs.ResultantNAvailable = (int)Math.Round((mineralN3 - calculatedLeachedN + calculatedMineralisedN + calculatedcropUptakeFactor) * 10.0d) / 10d;
-                            _outputs.ResultantNAvailableSecondCut = 0d;
-                            break;
-                        }
                     default:
                         {
                             _outputs.ResultantNAvailable = (int)Math.Round((mineralN3 - calculatedLeachedN + calculatedMineralisedN + calculatedcropUptakeFactor) * 10.0d) / 10d;
@@ -169,30 +160,16 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     // Aug 2012  C Lam: added IsCalcRainfall parameter, to allow a user supplied value to be used
     private void CalculateClimate(bool haveSuppliedOwnClimateData = false, bool isCalcRainfall = true)
     {
-        try
+
+        if (_climate != null)
         {
-            if (_climate != null)
-            {
-                _climateCalculator.GetClimate(_climate, _field.CropTypeID, _field.TopsoilID, _field.SubsoilID, _topSoil.AvailableWaterCapacity, _subSoil.AvailableWaterCapacity, haveSuppliedOwnClimateData);
-            }
-            //else
-            //{
-            //    _climateCalculator.GetClimate(_climate, _mannerApplication.Easting, _mannerApplication.Northing, _field.CropTypeID, _field.TopsoilID, _field.SubsoilId, _topSoil.AvailableWaterCapacity, _subSoil.AvailableWaterCapacity, haveSuppliedOwnClimateData);
-            //}
-
-
-            if (isCalcRainfall && _manureApplication.ApplicationDate.Day > 0 && _manureApplication.EndOfDrainageDate.Day > 0)
-            {
-                this.CalculateRainfall(_manureApplication.ApplicationDate, _manureApplication.EndOfDrainageDate);
-            }
-
-        }
-        catch (Exception)
-        {
-            //TS.TraceEvent(TraceEventType.Error, 0, ex.Message);
-            throw;
+            _climateCalculator.GetClimate(_climate, _field.CropTypeID, _field.TopsoilID, _field.SubsoilID, _topSoil.AvailableWaterCapacity, _subSoil.AvailableWaterCapacity, haveSuppliedOwnClimateData);
         }
 
+        if (isCalcRainfall && _manureApplication.ApplicationDate.Day > 0 && _manureApplication.EndOfDrainageDate.Day > 0)
+        {
+            this.CalculateRainfall(_manureApplication.ApplicationDate, _manureApplication.EndOfDrainageDate);
+        }
     }
 
     /// <summary>
@@ -203,7 +180,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     /// <param name="applicationDate"></param>
     /// <param name="endSoilDrainageDate"></param>
     private void CalculateRainfall(DateOnly applicationDate, DateOnly endSoilDrainageDate)
-    {  
+    {
         try
         {
             DateTime appDate;
@@ -213,7 +190,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             double propstart;
             double propend;
             double applicationDateAE, appDateRain;
-            double soilDrainageAE, soilDrainageRain;            
+            double soilDrainageAE, soilDrainageRain;
 
             appDateRain = this.GetClimateType(applicationDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
             applicationDateAE = this.GetClimateType(applicationDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
@@ -326,36 +303,33 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                     _rainfallTotal = 0d;
                 }
                 _evapotranspirationTotal = (double)(long)Math.Round(sumEvap + 0.5d);
-
             }
-
-            //TS.TraceEvent(TraceEventType.Information, 0, "Calculated rainfall:  " + MannerApplication.Weather.RainfallTotal);
-            //TS.TraceEvent(TraceEventType.Information, 0, "Calculated Evapotranspiration:  " + MannerApplication.Weather.EvapotranspirationTotal);
         }
-
-
         catch (Exception)
-        {
-            //TS.TraceEvent(TraceEventType.Error, 0, ex.Message);
+        {            
             throw;
         }
-
     }
 
     private void CheckAndChangeNegativeNResults()
     {
-        if (_manureType.ID != (int)Enums.Enumerations.ManureTypes.PaperCrumbleChemicallyPhysicallyTreated)
+        if (_manureType.ID != (int)Enums.Enumerations.ManureTypes.PaperCrumbleChemicallyPhysicallyTreated && _outputs.ResultantNAvailable < 0d)
         {
-            if (_outputs.ResultantNAvailable < 0d)
                 _outputs.ResultantNAvailable = 0d;
         }
 
         if (_outputs.MineralisedN < 0d)
+        {
             _outputs.MineralisedN = 0d;
+        }
         if (_outputs.ResultantNAvailableYear2 < 0d)
+        {
             _outputs.ResultantNAvailableYear2 = 0d;
+        }
         if (_outputs.ResultantNAvailableSecondCut < 0d)
+        {
             _outputs.ResultantNAvailableSecondCut = 0d;
+        }
     }
 
     /// <summary>
@@ -466,11 +440,11 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     /// <summary>
     /// Calculates the leached N of the mineralised N susceptible to leaching for the following crop.
     /// </summary>
-    /// <param name="NMin3"></param>
-    /// <param name="VMTotal"></param>
+    /// <param name="nmin3"></param>
+    /// <param name="vmTotal"></param>
     /// <returns></returns>
     /// <remarks></remarks>
-    private double CalculateLeachedNNext(double NMin3, double VMTotal)
+    private double CalculateLeachedNNext(double nmin3, double vmTotal)
     {
         try
         {
@@ -486,8 +460,8 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             double dLProp;
             dHER = 0d;
 
-            dMinN4 = NMin3;      // passed into the function
-            dVMTotal = VMTotal;  // also passed into the function
+            dMinN4 = nmin3;      // passed into the function
+            dVMTotal = vmTotal;  // also passed into the function
 
             // NOTE: Nitrification not required for the following crop
 
@@ -539,27 +513,20 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             // Return the value of the leached N for Nitrogen Crop Year 2
             // -------------------------------------------------------------------------------------------
 
-            //TS.TraceEvent(TraceEventType.Information, 0, "Calculates the leached N of the mineralised N susceptible to leaching for the following crop.:  " + dMinN4 * dLProp);
-
             return dMinN4 * dLProp;
         }
 
         catch (Exception)
-        {
-            //TS.TraceEvent(TraceEventType.Error, 0, ex.Message);
-            //throw ex;
+        {            
             return 0d;
         }
-
     }
 
     private double GetHer(int month)
     {
-        double iHer;
-        //var objManData = new MannerLib.MannerData();
+        double iHer;        
         var climateType = _climateTypes.FirstOrDefault(c => c.MonthNumber == month);
-        iHer = Convert.ToDouble(climateType?.HER ?? 0m); // Convert.ToDouble(objManData.GetDataField(MannerApplication.RunType, MannerLib.MannerData.XmlLookups.Climate, "MonthNo", "HER", month));
-
+        iHer = Convert.ToDouble(climateType?.HER ?? 0m); 
         return iHer;
     }
 
@@ -584,10 +551,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
         _outputs.K2OCropAvailable = Convert.ToDouble(_manureType.K2O * _manureApplication.ApplicationRate.Value * percentageK2OCropAvailable);
         _outputs.MgOTotal = Convert.ToDouble(_manureType.MgO * _manureApplication.ApplicationRate.Value);
         _outputs.SO3Total = Convert.ToDouble(_manureType.SO3 * _manureApplication.ApplicationRate.Value);
-        _outputs.SO3CropAvailable = CalculateSO3CropAvailable();
-        //_outputs.P2O5CropAvailable = Convert.ToDouble(_manureType.P2O5 * (Convert.ToDouble(_manureApplication.ApplicationRate.Value) * (_manureType.P2O5Available/100)));
-
-
+        _outputs.SO3CropAvailable = CalculateSO3CropAvailable();        
     }
 
     private double? CalculateSO3CropAvailable()
@@ -692,14 +656,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             var dTemp1 = default(double); // temporary variable
             var dTemp2 = default(double); // temporary variable
 
-            //var objManData = new MannerLib.MannerData();
-            //string cropuse;
-            //bool iApplicationManType;
             double nmaxConstant;
-            //int IncorporationCumulativeHours;
-            //cropuse = objManData.GetDataField(MannerApplication.RunType, MannerLib.MannerData.XmlLookups.Crops, "CROPID", "CropUse", (int)MannerApplication.FieldData.CropTypeEnum);
-            //iApplicationManType =  Convert.ToInt32(objManData.GetDataField(MannerApplication.RunType, MannerLib.MannerData.XmlLookups.ApplicationMethod, "ApplicationMethodID", "MANTYPE", (int)MannerApplication.Application.ApplicationMethodEnum));
-            //IncorporationCumulativeHours = Convert.ToInt32(objManData.GetDataField(MannerApplication.RunType, MannerLib.MannerData.XmlLookups.ApplicationDelay, "ID", "CumulativeHours", (int)MannerApplication.Application.DelayToIncorporationEnum));
             nmaxConstant = (double)_manureType.NMaxConstant; // MannerApplication.ManureType.NMaxConst;
 
 
@@ -796,7 +753,6 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                             dPVN4 = dPVN3 * proportionOfNMax;
                             break;
                         }
-
                     case (int)Enums.Enumerations.ApplicationMethodEnum.ShallowInjection: // "Shallow Injection"
                         {
                             double proportionOfNMax = 0.3d;
@@ -808,19 +764,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                             dPVN4 = dPVN3 * proportionOfNMax;
                             break;
                         }
-
                     case (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingHose: // "Band Spreader - Trailing Hose"
-                        {
-                            double proportionOfNMax = 0.7d;
-                            // A.C new algorithim for Digistate Whole Food based
-                            if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
-                            {
-                                proportionOfNMax = 0.55d;
-                            }
-                            dPVN4 = dPVN3 * proportionOfNMax;
-                            break;
-                        }
-
                     case (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingShoeShortGrass: // "Band Spreader - Trailing Shoe (Short Grass)"
                         {
                             double proportionOfNMax = 0.7d;
@@ -832,7 +776,6 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                             dPVN4 = dPVN3 * proportionOfNMax;
                             break;
                         }
-
                     case (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingShoeLongGrass: // "Band Spreader - Trailing Shoe (Long Grass)"
                         {
                             double proportionOfNMax = 0.4d;
@@ -841,12 +784,10 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                             {
                                 proportionOfNMax = 0.31d;
                             }
-
                             // else - in this case broadcast spreading
                             dPVN4 = dPVN3 * proportionOfNMax;
                             break;
                         }
-
                     default:
                         {
                             dPVN4 = dPVN3;
@@ -869,25 +810,21 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                 // Adjust the NMax for wind speed
                 switch (_manureApplication.WindspeedID)
                 {
-
                     case (int)Enums.Enumerations.WindSpeed.Moderate4to5BeaufortScale:  // "Moderate (4-5 Beaufort Scale)"
                         {
                             dPVN5 = dPVN4 * 1.2d;
                             break;
                         }
-
                     case (int)Enums.Enumerations.WindSpeed.StrongBreeze6to7BeaufortScale: // "Strong Breeze (6-7 Beaufort Scale)"
                         {
                             dPVN5 = dPVN4 * 1.6d;
                             break;
                         }
-
                     default:
                         {
                             dPVN5 = dPVN4;
                             break;
                         }
-
                 }
             }
             else
@@ -984,16 +921,13 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                                 }
                                 // Else when there is no rainfall within 6 hours of spreading
                             }
-
                             break;
                         }
-
                     default:
                         {
                             dPVN7 = dPVN5;
                             break;
                         }
-
                 }
             }
             else
@@ -1157,33 +1091,24 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                         else
                         {
                             dPVN9 = dPVN8 * 0.1d;
-
                             // Everything else
                         }
-
                         break;
                     }
-
                 default:
                     {
                         dPVN9 = dPVN8;
                         break;
                     }
-
             }
-
-            //TS.TraceEvent(TraceEventType.Information, 0, "Total ammonia volatilisation (kg/ha):  " + (dTemp1 + dTemp2 + dPVN9));
-
+            
             // Total ammonia lost (kg/ha)
             return dTemp1 + dTemp2 + dPVN9;
         }
         catch (Exception)
-        {
-            //TS.TraceEvent(TraceEventType.Error, 0, ex.Message);
+        {            
             throw;
         }
-
-
     }
 
     /// <summary>
@@ -1199,7 +1124,6 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     {
         try
         {
-
             // if date of manure application was in late summer/autumn (1st July - 31st October) then subtract the Autumn
             // Crop N Uptake (kg/ha) for the selected crop  'Now changed to 1st August - 31st October (November 2007)
 
@@ -1214,14 +1138,11 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                 CropUpdateFactor = GetCropUptakeFactor(month);
             }
 
-            // TS.TraceEvent(TraceEventType.Information, 0, "Calculated the uptake of manure N by a crop planted after a late summer/autumn manure application.:  " + CropUpdateFactor);
-
             return CropUpdateFactor;
         }
 
         catch (Exception)
-        {
-            //TS.TraceEvent(TraceEventType.Error, 0, ex.Message);
+        {            
             throw;
             //return 0d;
         }
@@ -1246,7 +1167,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
         {
             CropuptakeFactor = 0;
         }
-        
+
         return CropuptakeFactor;
     }
 
@@ -1295,13 +1216,12 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
         }
 
         dN2OEmission = mineralN1 / 100d * N2OEmissionFactor;
-
-        //TS.TraceEvent(TraceEventType.Information, 0, "Calculated N2O loss:  " + dN2OEmission);
+        
         return dN2OEmission;
 
     }
 
-    private bool IsPaperCrumble(int manureTypeId)
+    private static bool IsPaperCrumble(int manureTypeId)
     {
         bool isPaperCrumble = manureTypeId == (int)Enums.Enumerations.ManureTypes.PaperCrumble;
         isPaperCrumble = isPaperCrumble || manureTypeId == (int)Enums.Enumerations.ManureTypes.PaperCrumbleBiologicallyTreated;
@@ -1321,13 +1241,13 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
         // N2:N2O ratio: 2.9
 
         // 07 Nov 2012 C Lam - Return zero for paper crumbles
-        if (this.IsPaperCrumble(_manureType.ID))
+        if (IsPaperCrumble(_manureType.ID))
         {
             return 0d;
         }
 
         double dN2Emission;
-        dN2Emission = calculatedN2O * 2.9d;        
+        dN2Emission = calculatedN2O * 2.9d;
         return dN2Emission;
     }
 
@@ -1354,7 +1274,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     {
         try
         {
-            if (this.IsPaperCrumble(_manureType.ID))
+            if (IsPaperCrumble(_manureType.ID))
             {
                 mineralN1 = 0d;
                 organicN3 = 0d;
@@ -1374,8 +1294,8 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             var dCDD1 = default(double);
             var dCDD2 = default(double);
             var dCDD2A = default(double);
-            
-            string cropUse = _cropType.Use; // objMannerData.GetDataField(MannerApplication.RunType, Enums.MannerData.XmlLookups.Crops, "CROPID", "CropUse", (int)MannerApplication.FieldData.CropTypeEnum);
+
+            string cropUse = _cropType.Use; 
 
             // This array is a temporary one to allow the mineralisation and leaching to be tested before applying to specific parts of the country
             int[] tempArray = CreateTempArray();
@@ -1521,8 +1441,6 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                         break;
                     }
             }
-
-
             // ------------------------------------------------------------------------------------
             // Step 4 - Calculate the amount of organic N remaining
             // ------------------------------------------------------------------------------------
@@ -1538,7 +1456,6 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                         dNOrganic3 = dNOrganic2 - dNMineralised2;
                         break;
                     }
-
                 default:
                     {
                         dNOrganic3 = dNOrganic2 - dNMineralised2;
@@ -1717,14 +1634,14 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
         double dLFactor1;
         double dLIndex;
         double dLProp;
-                
+
         int incorporationDelayHours;
 
         try
         {
 
-            incorporationDelayHours = _incorporationDelay.Hours ?? 0; 
-            
+            incorporationDelayHours = _incorporationDelay.Hours ?? 0;
+
             // Reset the Leached N variables to zero
             double calculateLeachedNRet = 0d;
             dHEREffective = 0d;
@@ -1746,15 +1663,15 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             datCurApp = datCurApp.AddDays(lNitrificationDelay);
 
             // set the application month variable to the date of the current manure application
-            monthApp = datCurApp.Month; 
-            
+            monthApp = datCurApp.Month;
+
 
             // set the variable for the date of end of drainage
             datEndDrain = _manureApplication.EndOfDrainageDate;
             // 
             // 'Find the month of the end of soil drainage
             monthEOD = datEndDrain.Month;
-            
+
 
             // STEP 3 - Determine soil properties
             // ----------------------------------------------------------------------------------
@@ -1838,7 +1755,6 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                                 dInc = 0d; // catch all, but shouldn't get here
                                 break;
                             }
-
                         default:
                             {
                                 dInc = 0d;
@@ -1846,16 +1762,11 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                             }
                     }
 
-                    // if delay before incorporation > 7 days then
-                    // dInc = dInc * .5
+                    // if delay before incorporation > 7 days then                    
                     if (incorporationDelayHours > 168)
                     {
                         dInc *= 0.5d;
-                    }
-                    //else
-                    //{
-                    //    dInc = dInc;
-                    //}
+                    }                    
 
                     // Calculate 'leaching ratio'
                     // check for divide by zero error
@@ -2017,16 +1928,11 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                 // value.  I'm also making the assumption that if the application date is
                 // after the end of soil drainage no leaching can occur.
                 calculateLeachedNRet = 0d;
-
             }
-
-
-            
             return calculateLeachedNRet;
         }
         catch (Exception)
-        {          
-            //throw ex;
+        {            
             return 0d;
         }
 
@@ -2041,9 +1947,8 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     /// <param name="climateType"></param>
     /// <returns></returns>
     /// <remarks></remarks>
-    public double GetClimateType(int month, ClimateCalculator climate, Enumerations.ClimateDataType climateType)
+    public static double GetClimateType(int month, ClimateCalculator climate, Enumerations.ClimateDataType climateType)
     {
-
         var climateMonths = new DTOs.ClimateMonths();
         var retVal = default(double);
 
@@ -2145,7 +2050,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     /// <param name="dateOfApplication"></param>
     /// <returns type="Integer"></returns>
     /// <remarks></remarks>
-    private int CalculateNitrificationDelay(DateOnly dateOfApplication)
+    private static int CalculateNitrificationDelay(DateOnly dateOfApplication)
     {
         // ********************************************************************************
         DateOnly datDateofApplication;
@@ -2155,8 +2060,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
         datDateofApplication = dateOfApplication;
 
         // get the month of application from the date of application
-        monthNumber = datDateofApplication.Month; // System.Threading.Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(datDateofApplication);
-
+        monthNumber = datDateofApplication.Month; 
         // based on the month of application find the number of days for the nitrification delay
         switch (monthNumber)
         {
@@ -2222,7 +2126,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                 }
         }
 
-        
+
         // Return the number of days for the nitrification delay
         return lNoofDays;
 
