@@ -182,133 +182,125 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     /// <param name="endSoilDrainageDate"></param>
     private void CalculateRainfall(DateOnly applicationDate, DateOnly endSoilDrainageDate)
     {
-        try
+        DateTime appDate;
+        DateTime endDate;
+        var sumRain = default(double);
+        var sumEvap = default(double);
+        double propstart;
+        double propend;
+        double applicationDateAE, appDateRain;
+        double soilDrainageAE, soilDrainageRain;
+
+        appDateRain = GetClimateType(applicationDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
+        applicationDateAE = GetClimateType(applicationDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
+
+        soilDrainageRain = GetClimateType(endSoilDrainageDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
+        soilDrainageAE = GetClimateType(endSoilDrainageDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
+
+
+        // DO NOT ADD ONE MONTH TO THE DATE OF APPLICATION TO MIMIC EXISTING CODE AND MANNER PAPER
+        appDate = new DateTime(applicationDate.Year, applicationDate.Month, applicationDate.Day, 0, 0, 0, DateTimeKind.Local);
+        endDate = new DateTime(endSoilDrainageDate.Year, endSoilDrainageDate.Month, endSoilDrainageDate.Day, 0, 0, 0, DateTimeKind.Local);
+        // #### NOTE -    Any manure application AFTER 31/07/98 is associated with the next years End of Soil Drainage
+
+        if ((endDate - appDate).Days <= 0)
         {
-            DateTime appDate;
-            DateTime endDate;
-            var sumRain = default(double);
-            var sumEvap = default(double);
-            double propstart;
-            double propend;
-            double applicationDateAE, appDateRain;
-            double soilDrainageAE, soilDrainageRain;
-
-            appDateRain = GetClimateType(applicationDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
-            applicationDateAE = GetClimateType(applicationDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
-
-            soilDrainageRain = GetClimateType(endSoilDrainageDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
-            soilDrainageAE = GetClimateType(endSoilDrainageDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
-
-
-            // DO NOT ADD ONE MONTH TO THE DATE OF APPLICATION TO MIMIC EXISTING CODE AND MANNER PAPER
-            appDate = new DateTime(applicationDate.Year, applicationDate.Month, applicationDate.Day, 0, 0, 0, DateTimeKind.Local);
-            endDate = new DateTime(endSoilDrainageDate.Year, endSoilDrainageDate.Month, endSoilDrainageDate.Day, 0, 0, 0, DateTimeKind.Local);
-            // #### NOTE -    Any manure application AFTER 31/07/98 is associated with the next years End of Soil Drainage
-
-            if ((endDate - appDate).Days <= 0)
-            {
-                // if date of Application is after End of Soil Drainage then return zero rainfall and zero evap.
-                _rainfallTotal = 0d;
-                _evapotranspirationTotal = 0d;
-            }
-            else
-            {
-                // else calculate rainfall
-                propstart = Thread.CurrentThread.CurrentCulture.Calendar.GetDayOfMonth(appDate) /
-                           (new DateTime(Thread.CurrentThread.CurrentCulture.Calendar.GetYear(appDate), Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(appDate), 1, 0, 0, 0, DateTimeKind.Local).AddMonths(1) -
-                                   new DateTime(
-                                       Thread.CurrentThread.CurrentCulture.Calendar.GetYear(appDate),
-                                       Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(appDate),
-                                       1, 0, 0, 0, DateTimeKind.Local)).TotalDays;
-
-                // Calculate propend
-                propend = Thread.CurrentThread.CurrentCulture.Calendar.GetDayOfMonth(endDate) /
-                                (new DateTime(
-                                            Thread.CurrentThread.CurrentCulture.Calendar.GetYear(endDate),
-                                            Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(endDate),
-                                            1, 0, 0, 0, DateTimeKind.Local)
-                                        .AddMonths(1) -
-                                        new DateTime(
-                                            Thread.CurrentThread.CurrentCulture.Calendar.GetYear(endDate),
-                                            Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(endDate),
-                                            1, 0, 0, 0, DateTimeKind.Local)).TotalDays;
-                // check to make sure that month for app date and end soil drainage is not the same. If it is only to diff at end of period
-                if (((endDate.Year - appDate.Year) * 12) + endDate.Month - appDate.Month > 0L)
-                {
-                    if (applicationDateAE > appDateRain)
-                    {
-                        sumRain = appDateRain * (1.0d - propstart);
-                        sumEvap = sumRain;
-                    }
-                    else
-                    {
-                        sumRain = appDateRain * (1.0d - propstart);
-                        sumEvap = applicationDateAE * (1.0d - propstart);
-                    }
-
-                    if (soilDrainageAE > soilDrainageRain)
-                    {
-                        sumRain += soilDrainageRain * propend;
-                        sumEvap += soilDrainageRain * propend;
-                    }
-                    else
-                    {
-                        sumRain += soilDrainageRain * propend;
-                        sumEvap += soilDrainageAE * propend;
-                    }
-                }
-
-                else if (((endDate.Year - appDate.Year) * 12) + endDate.Month - appDate.Month == 0L)
-                {
-
-                    if (soilDrainageAE > soilDrainageRain)
-                    {
-                        sumRain += soilDrainageRain * (propend - propstart);
-                        sumEvap += soilDrainageRain * (propend - propstart);
-                    }
-                    else
-                    {
-                        sumRain += soilDrainageRain * (propend - propstart);
-                        sumEvap += soilDrainageAE * (propend - propstart);
-                    }
-
-                }
-
-                while (((endDate.Year - appDate.Year) * 12) + endDate.Month - appDate.Month > 1)
-                {
-                    // Add one month to appDate
-                    appDate = appDate.AddMonths(1);
-
-                    appDateRain = GetClimateType(appDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
-                    applicationDateAE = GetClimateType(appDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
-
-
-                    if (applicationDateAE > appDateRain)
-                    {
-                        sumRain += appDateRain;
-                        sumEvap += appDateRain;
-                    }
-                    else
-                    {
-                        sumRain += appDateRain;
-                        sumEvap += applicationDateAE;
-                    }
-
-                }
-
-                // always round up
-                _rainfallTotal = (double)(long)Math.Round(sumRain + 0.5d);
-
-                if (_rainfallTotal < 0d)
-                {
-                    _rainfallTotal = 0d;
-                }
-                _evapotranspirationTotal = (double)(long)Math.Round(sumEvap + 0.5d);
-            }
+            // if date of Application is after End of Soil Drainage then return zero rainfall and zero evap.
+            _rainfallTotal = 0d;
+            _evapotranspirationTotal = 0d;
         }
-        catch (Exception)
+        else
         {
-            throw;
+            // else calculate rainfall
+            propstart = Thread.CurrentThread.CurrentCulture.Calendar.GetDayOfMonth(appDate) /
+                       (new DateTime(Thread.CurrentThread.CurrentCulture.Calendar.GetYear(appDate), Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(appDate), 1, 0, 0, 0, DateTimeKind.Local).AddMonths(1) -
+                               new DateTime(
+                                   Thread.CurrentThread.CurrentCulture.Calendar.GetYear(appDate),
+                                   Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(appDate),
+                                   1, 0, 0, 0, DateTimeKind.Local)).TotalDays;
+
+            // Calculate propend
+            propend = Thread.CurrentThread.CurrentCulture.Calendar.GetDayOfMonth(endDate) /
+                            (new DateTime(
+                                        Thread.CurrentThread.CurrentCulture.Calendar.GetYear(endDate),
+                                        Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(endDate),
+                                        1, 0, 0, 0, DateTimeKind.Local)
+                                    .AddMonths(1) -
+                                    new DateTime(
+                                        Thread.CurrentThread.CurrentCulture.Calendar.GetYear(endDate),
+                                        Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(endDate),
+                                        1, 0, 0, 0, DateTimeKind.Local)).TotalDays;
+            // check to make sure that month for app date and end soil drainage is not the same. If it is only to diff at end of period
+            if (((endDate.Year - appDate.Year) * 12) + endDate.Month - appDate.Month > 0L)
+            {
+                if (applicationDateAE > appDateRain)
+                {
+                    sumRain = appDateRain * (1.0d - propstart);
+                    sumEvap = sumRain;
+                }
+                else
+                {
+                    sumRain = appDateRain * (1.0d - propstart);
+                    sumEvap = applicationDateAE * (1.0d - propstart);
+                }
+
+                if (soilDrainageAE > soilDrainageRain)
+                {
+                    sumRain += soilDrainageRain * propend;
+                    sumEvap += soilDrainageRain * propend;
+                }
+                else
+                {
+                    sumRain += soilDrainageRain * propend;
+                    sumEvap += soilDrainageAE * propend;
+                }
+            }
+
+            else if (((endDate.Year - appDate.Year) * 12) + endDate.Month - appDate.Month == 0L)
+            {
+
+                if (soilDrainageAE > soilDrainageRain)
+                {
+                    sumRain += soilDrainageRain * (propend - propstart);
+                    sumEvap += soilDrainageRain * (propend - propstart);
+                }
+                else
+                {
+                    sumRain += soilDrainageRain * (propend - propstart);
+                    sumEvap += soilDrainageAE * (propend - propstart);
+                }
+
+            }
+
+            while (((endDate.Year - appDate.Year) * 12) + endDate.Month - appDate.Month > 1)
+            {
+                // Add one month to appDate
+                appDate = appDate.AddMonths(1);
+
+                appDateRain = GetClimateType(appDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
+                applicationDateAE = GetClimateType(appDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
+
+
+                if (applicationDateAE > appDateRain)
+                {
+                    sumRain += appDateRain;
+                    sumEvap += appDateRain;
+                }
+                else
+                {
+                    sumRain += appDateRain;
+                    sumEvap += applicationDateAE;
+                }
+            }
+
+            // always round up
+            _rainfallTotal = (double)(long)Math.Round(sumRain + 0.5d);
+
+            if (_rainfallTotal < 0d)
+            {
+                _rainfallTotal = 0d;
+            }
+            _evapotranspirationTotal = (double)(long)Math.Round(sumEvap + 0.5d);
         }
     }
 
@@ -633,470 +625,745 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
         _outputs.ResultantNAvailableYear2 = 0d;
     }
 
+    //private double CalculateAmmoniaVolatilisation(double potentialNAvailable, string cropuse, int incorporationCumulativeHours)
+    //{        
+    //        double dPVN0; // Potentially Volatilisable N - step 0
+    //        double dPVN1; // Potentially volatilisable N - step 1
+    //                      // soil moisture status (cattle slurry only) - step 2
+    //        double dPVN2; // land use adjustment (cattle slurry only) - step 3
+    //        double dPVN3; // dry matter adjustment (slurry only) - step 4
+    //        double dPVN4; // application technique adjustment (slurry only) - step 5
+    //        double dPVN5; // wind-speed adjustment (slurry only) - step 6
+    //        double dPVN6; // temporary rainfall adjustment (slurry only) - step 7
+    //        var dPVN7 = default(double); // final rainfall adjustment (slurry only) - step 7
+    //        var dPVN8 = default(double); // incorporation timing (all manures) - step 8
+    //                                     // (PVN7 - amount of ammonia lost up to the point of incorporation)
+    //        double dPVN9; // incorporation technique (all manures)
+    //                      // PVN8 figure adjusted for incorporation technique
+    //                      // data consistent with the current version of NARSES
+
+    //        var dTemp1 = default(double); // temporary variable
+    //        var dTemp2 = default(double); // temporary variable
+
+    //        double nmaxConstant;
+    //        nmaxConstant = (double)_manureType.NMaxConstant;
+
+    //        // Potentially Volatilisable N
+    //        dPVN0 = potentialNAvailable * (nmaxConstant / 100);
+
+    //        // Soil moisture adjustment (cattle slurry and liquid digested sludge only)
+    //        // ------------------------------------------------------------------------
+    //        // If the selected manure is cattle slurry or liquid digested sludge and the soil moisture status is dry then
+
+    //        if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Dry) || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Dry))
+    //        {
+    //            dPVN1 = dPVN0 * 1.3d;
+    //        }
+    //        // Else if the soil moisture status is moist then
+    //        else if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Moist) || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Moist))
+    //        {
+    //            dPVN1 = dPVN0 * 0.7d;
+    //        }
+    //        else
+    //        {
+    //            // Else all other manures remain unchanged
+    //            dPVN1 = dPVN0;
+    //        }
+
+    //        // REMOVED SEASONAL ADJUSTMENT BECAUSE IT DIDN'T SEEM TO ALLOW FOR SOIL MOISTURE
+    //        // WHICH HAS A GREATER EFFECT THAN SEASON - UPDATED TECHNICAL GUIDE
+
+    //        // Land use adjustment(cattle slurry and liquid digested sludge only)
+    //        // ------------------------------------------------------------------------
+    //        // If the selected manure is cattle slurry or liquid digested sludge and the land use is arable
+
+    //        if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && cropuse == _arableKey) || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && cropuse == _arableKey))
+    //        {
+    //            dPVN2 = dPVN1 * 0.85d;
+    //        }
+    //        // else if the manure is cattle slurry or liquid digest sludge and the land use is grass
+    //        else if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && cropuse == _grassKey) || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && cropuse == _grassKey))
+    //        {
+    //            dPVN2 = dPVN1 * 1.15d;
+    //        }
+    //        // Else all other manures remain unchanged
+    //        else
+    //        {
+    //            dPVN2 = dPVN1;
+    //        }
+
+    //        if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && cropuse == _arableKey) || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && cropuse == _arableKey))
+    //        {
+    //            dPVN2 = dPVN1 * 0.85d;
+    //        }
+    //        // else if the manure is cattle slurry or liquid digest sludge and the land use is grass
+    //        else if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && cropuse == _grassKey) || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && cropuse == _grassKey))
+    //        {
+    //            dPVN2 = dPVN1 * 1.15d;
+    //        }
+    //        // Else all other manures remain unchanged
+    //        else
+    //        {
+    //            dPVN2 = dPVN1;
+    //        }
+
+    //        // Dry matter adjustment (slurry or liquid digested sludge only)
+    //        // -------------------------------------------------------------------------
+    //        // if cattle slurry then
+    //        if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Moist) || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Moist))
+    //        {
+    //            // Not ((month(CurAppDate)) >= 5 And (month(CurAppDate)) <= 7) Then
+    //            dPVN3 = (8.3d * (double)_manureType.DryMatter + 50.2d) / 100d * dPVN2;
+    //        }
+    //        // else if pig slurry then
+    //        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Moist)
+    //        {
+    //            dPVN3 = (12.3d * (double)_manureType.DryMatter + 50.8d) / 100d * dPVN2;
+    //        }
+    //        // else all other manures and for dry soil PVN3 remains unchanged
+    //        else
+    //        {
+    //            dPVN3 = dPVN2;
+    //        }
+
+    //        // Application technique (slurry or liquid digested sludge only)
+    //        // -------------------------------------------------------------------------
+    //        // If the application method is for a slurry then we are dealing with either a cattle, pig slurry or liquid digested sludge
+    //        if (_manureType.IsLiquid)
+    //        {
+    //            // Select the application method name
+    //            switch (_manureApplication.ApplicationMethodID)
+    //            {
+    //                // Adjust PVN4 depending on the application type
+    //                case (int)Enums.Enumerations.ApplicationMethodEnum.DeepInjection: // "Deep Injection"
+    //                    {
+    //                        double proportionOfNMax = 0.1d;
+    //                        dPVN4 = dPVN3 * proportionOfNMax;
+    //                        break;
+    //                    }
+    //                case (int)Enums.Enumerations.ApplicationMethodEnum.ShallowInjection: // "Shallow Injection"
+    //                    {
+    //                        double proportionOfNMax = 0.3d;
+    //                        // A.C new algorithim for Digistate Whole Food based
+    //                        if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
+    //                        {
+    //                            proportionOfNMax = 0.55d;
+    //                        }
+    //                        dPVN4 = dPVN3 * proportionOfNMax;
+    //                        break;
+    //                    }
+    //                case (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingHose: // "Band Spreader - Trailing Hose"
+    //                case (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingShoeShortGrass: // "Band Spreader - Trailing Shoe (Short Grass)"
+    //                    {
+    //                        double proportionOfNMax = 0.7d;
+    //                        // A.C new algorithim for Digistate Whole Food based
+    //                        if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
+    //                        {
+    //                            proportionOfNMax = 0.55d;
+    //                        }
+    //                        dPVN4 = dPVN3 * proportionOfNMax;
+    //                        break;
+    //                    }
+    //                case (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingShoeLongGrass: // "Band Spreader - Trailing Shoe (Long Grass)"
+    //                    {
+    //                        double proportionOfNMax = 0.4d;
+    //                        // A.C new algorithim for Digistate Whole Food based
+    //                        if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
+    //                        {
+    //                            proportionOfNMax = 0.31d;
+    //                        }
+    //                        // else - in this case broadcast spreading
+    //                        dPVN4 = dPVN3 * proportionOfNMax;
+    //                        break;
+    //                    }
+    //                default:
+    //                    {
+    //                        dPVN4 = dPVN3;
+    //                        break;
+    //                    }
+    //            }
+    //        }
+    //        else
+    //        {
+    //            // for all other slurries and application methods there is no adjustment
+    //            dPVN4 = dPVN3;
+    //        }
+
+    //        // Windspeed (slurry only)
+    //        // -------------------------------------------------------------------------
+    //        // if the manure type is a slurry (of any kind) or a liquid digested sludge
+    //        if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
+    //        {
+
+    //            // Adjust the NMax for wind speed
+    //            switch (_manureApplication.WindspeedID)
+    //            {
+    //                case (int)Enums.Enumerations.WindSpeed.Moderate4to5BeaufortScale:  // "Moderate (4-5 Beaufort Scale)"
+    //                    {
+    //                        dPVN5 = dPVN4 * 1.2d;
+    //                        break;
+    //                    }
+    //                case (int)Enums.Enumerations.WindSpeed.StrongBreeze6to7BeaufortScale: // "Strong Breeze (6-7 Beaufort Scale)"
+    //                    {
+    //                        dPVN5 = dPVN4 * 1.6d;
+    //                        break;
+    //                    }
+    //                default:
+    //                    {
+    //                        dPVN5 = dPVN4;
+    //                        break;
+    //                    }
+    //            }
+    //        }
+    //        else
+    //        {
+    //            // For all other manure types
+    //            dPVN5 = dPVN4;
+    //        }
+
+    //        // Rainfall adjustment (slurry only)
+    //        // -------------------------------------------------------------------------
+    //        if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry)
+    //        {
+
+    //            switch (_manureApplication.RainTypeID)
+    //            {
+
+    //                // this uses the Michaelis Menton equation
+    //                // dPVN6 is used as Nmax
+    //                // time (t) is 6 hours
+    //                // dTemp1 is the amount of ammonia lost after 6 hours
+    //                // (referred to as A1 in the technical guide)
+    //                // Ammonia lost at time (t) = Nmax * (t/(t+Km))
+
+    //                // Values of Km
+    //                // Cattle slurry = 7.5
+    //                // Pig slurry = 11.6
+    //                // FYM (cattle, pig and duck) = 14.9
+    //                // Poultry manure = 40.4
+    //                // DigestateWholeFoodBased = 4.5
+
+    //                // Light rainfall adjustment
+    //                case (int)Enums.Enumerations.Rainfall.LightRainLessthan5mmWithin6Hours: // "Light rain (<5 mm) within 6 hours"
+    //                    {
+    //                        if (incorporationCumulativeHours <= 6)
+    //                        {
+    //                            dPVN7 = dPVN5;
+    //                        }
+    //                        else
+    //                        {
+    //                            dPVN6 = dPVN5 * 0.5d;
+
+    //                            // If the manure is cattle slurry or liquid digested sludge
+    //                            if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
+    //                            {
+    //                                dTemp1 = dPVN6 * (6d / (6d + 7.5d));
+    //                                dPVN7 = dPVN6 - dTemp1;
+    //                            }
+    //                            // Else if the manure is pig slurry
+    //                            else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry)
+    //                            {
+    //                                double KM = 11.6d;
+    //                                // A.C new algorithim for Digistate Whole Food based
+    //                                if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
+    //                                {
+    //                                    KM = 4.5d;
+    //                                }
+    //                                dTemp1 = dPVN6 * (6d / (6d + KM));
+    //                                dPVN7 = dPVN6 - dTemp1;
+    //                            }
+    //                        }
+
+    //                        break;
+    //                    }
+
+    //                // Heavy rainfall adjustment
+    //                case (int)Enums.Enumerations.Rainfall.HeavyRainGreaterThan5mmWithin6hours: // "Heavy rain (>5 mm) within 6 hours"
+    //                    {
+    //                        if (incorporationCumulativeHours <= 6)
+    //                        {
+    //                            dPVN7 = dPVN5;
+    //                        }
+    //                        else
+    //                        {
+    //                            dPVN6 = dPVN5 * 0.3d;
+
+    //                            // (Incorporation(IncorporationSel).CumulativeHours
+    //                            // If the manure is cattle slurry or liquid digested sludge
+    //                            if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
+    //                            {
+    //                                dTemp1 = dPVN6 * (6d / (6d + 7.5d));
+    //                                dPVN7 = dPVN6 - dTemp1;
+    //                            }
+    //                            // Elseif the manure is pig slurry
+    //                            else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry)
+    //                            {
+    //                                double KM = 11.6d;
+    //                                // A.C new algorithim for Digistate Whole Food based
+    //                                if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
+    //                                {
+    //                                    KM = 4.5d;
+    //                                }
+    //                                dTemp1 = dPVN6 * (6d / (6d + KM));
+    //                                dPVN7 = dPVN6 - dTemp1;
+    //                            }
+    //                            // Else when there is no rainfall within 6 hours of spreading
+    //                        }
+    //                        break;
+    //                    }
+    //                default:
+    //                    {
+    //                        dPVN7 = dPVN5;
+    //                        break;
+    //                    }
+    //            }
+    //        }
+    //        else
+    //        {
+    //            // for all other slurries and manures it remains the same
+    //            dPVN7 = dPVN5;
+    //        }
+
+
+    //        // Incorporation Timing (all manures)
+    //        // -------------------------------------------------------------------------
+    //        // If the manure is not incorporated then there is no adjustment for incorporation timing
+    //        if (_manureApplication.IncorporationMethodID == (int)Enums.Enumerations.MethodOfIncorporationEnum.NotIncorporated) // "Not Incorporated" Then
+    //        {
+    //            dPVN8 = dPVN7; // PVN8 = PVN7
+    //        }
+    //        else
+    //        {
+    //            // Else an adjustment is made for different manure types and different incorporation timings.
+    //            switch (_manureType.ManureTypeCategoryID)
+    //            {
+    //                // Use Michaelis-Menton equation 1 in the Technical Guide.
+    //                // Ammonia lost at time (t) = Nmax * (t/(t + Km))
+
+    //                // KM
+    //                // Cattle slurry:             7.5
+    //                // Pig slurry:                11.6
+    //                // FYM(cattle, pig and duck): 14.9
+    //                // Poultry manure:            40.4
+    //                // Digestate Whole Food Based 4.5
+
+    //                case (int)Enums.Enumerations.ManureCategory.FYM:  // Manure: FYM
+    //                    {
+    //                        dTemp2 = dPVN7 * (incorporationCumulativeHours / (incorporationCumulativeHours + 14.9d));
+    //                        dPVN8 = dPVN7 - dTemp2;
+    //                        break;
+    //                    }
+    //                case (int)Enums.Enumerations.ManureCategory.Poultry:  // Manure: Poultry
+    //                case (int)Enums.Enumerations.ManureCategory.SolidSludge: // Solid sludge (treated the same as poultry manure c.f. e-mail 12/07/07)
+    //                    {
+    //                        dTemp2 = dPVN7 * (incorporationCumulativeHours / (incorporationCumulativeHours + 40.4d));
+    //                        dPVN8 = dPVN7 - dTemp2;
+    //                        break;
+    //                    }
+    //                case (int)Enums.Enumerations.ManureCategory.CattleSlurry:  // Manure: Cattle Slurry
+    //                case (int)Enums.Enumerations.ManureCategory.LiquidSludge: // Liquid sludge (treated the same as cattle slurry c.f. e-mail 12/07/07)
+    //                    {
+    //                        dTemp2 = dPVN7 * (incorporationCumulativeHours / (incorporationCumulativeHours + 7.5d));
+    //                        dPVN8 = dPVN7 - dTemp2;
+    //                        break;
+    //                    }
+    //                case (int)Enums.Enumerations.ManureCategory.PigSlurry:  // Manure: Pig Slurry
+    //                    {
+    //                        double KM = 11.6d;
+    //                        // A.C new algorithim for Digistate Whole Food based
+    //                        if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
+    //                        {
+    //                            KM = 4.5d;
+    //                        }
+    //                        dTemp2 = dPVN7 * (incorporationCumulativeHours / (incorporationCumulativeHours + KM));
+    //                        dPVN8 = dPVN7 - dTemp2;
+    //                        break;
+    //                    }
+    //            }
+    //        }
+
+    //        // Incorporation Technique (all manures)
+    //        // -------------------------------------------------------------------------
+    //        // Need to make an adjustment based on the incorporation method and the manure type.  These data are consistent with NARSES, except for the
+    //        // rotavator data which are not included in NARSES.  This "second phase" of ammonia loss after incorporation is PVN9.
+
+    //        switch (_manureApplication.IncorporationMethodID) // IncorporationMethods(IncMethodSel).Name
+    //        {
+
+    //            case (int)Enums.Enumerations.MethodOfIncorporationEnum.TineCultivator: // "Tine Cultivator"
+    //                {
+    //                    // Slurry or liquid digested sludge
+    //                    if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
+    //                    {
+    //                        dPVN9 = dPVN8 * 0.3d;
+    //                    }
+    //                    // Poultry or solid sewage sludges
+    //                    else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.SolidSludge)
+    //                    {
+    //                        dPVN9 = dPVN8 * 0.3d;
+    //                    }
+    //                    // FYM
+    //                    else
+    //                    {
+    //                        dPVN9 = dPVN8 * 0.7d;
+    //                    }
+
+    //                    break;
+    //                }
+
+    //            case (int)Enums.Enumerations.MethodOfIncorporationEnum.Discs: // "Discs"
+    //                {
+    //                    // Slurry or liquid digested sludge
+    //                    if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
+    //                    {
+    //                        dPVN9 = dPVN8 * 0.2d;
+    //                    }
+    //                    // Poultry or solid sewage sludges
+    //                    else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.SolidSludge)
+    //                    {
+    //                        dPVN9 = dPVN8 * 0.2d;
+    //                    }
+    //                    // FYM
+    //                    else
+    //                    {
+    //                        dPVN9 = dPVN8 * 0.3d;
+    //                    }
+
+    //                    break;
+    //                }
+
+    //            case (int)Enums.Enumerations.MethodOfIncorporationEnum.RotaryCultivator: // "Rotary Cultivator"
+    //                {
+    //                    // Slurry or liquid digested sludge
+    //                    if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
+    //                    {
+    //                        dPVN9 = dPVN8 * 0.15d;
+    //                    }
+    //                    // Poultry or solid sewage sludges
+    //                    else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.SolidSludge)
+    //                    {
+    //                        dPVN9 = dPVN8 * 0.1d;
+    //                    }
+    //                    // FYM
+    //                    else
+    //                    {
+    //                        dPVN9 = dPVN8 * 0.2d;
+    //                    }
+
+    //                    break;
+    //                }
+
+    //            case (int)Enums.Enumerations.MethodOfIncorporationEnum.MouldboardPlough: // "Mouldboard Plough"
+    //                {
+    //                    // Slurry or liquid digested sludge
+    //                    if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
+    //                    {
+    //                        dPVN9 = dPVN8 * 0.1d;
+    //                    }
+    //                    // Poultry or solid sewage sludges
+    //                    else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.SolidSludge)
+    //                    {
+    //                        dPVN9 = dPVN8 * 0.05d;
+    //                    }
+    //                    // FYM
+    //                    else
+    //                    {
+    //                        dPVN9 = dPVN8 * 0.1d;
+    //                        // Everything else
+    //                    }
+    //                    break;
+    //                }
+    //            default:
+    //                {
+    //                    dPVN9 = dPVN8;
+    //                    break;
+    //                }
+    //        }
+
+    //        // Total ammonia lost (kg/ha)
+    //        return dTemp1 + dTemp2 + dPVN9;
+
+    //}
+
     private double CalculateAmmoniaVolatilisation(double potentialNAvailable, string cropuse, int incorporationCumulativeHours)
     {
-        try
+        double pvn0 = potentialNAvailable * ((double)_manureType.NMaxConstant / 100);
+        // Soil moisture adjustment (cattle slurry and liquid digested sludge only)
+        double pvn1 = ApplySoilMoistureAdjustment(pvn0);
+
+        double pvn2 = ApplyLandUseAdjustment(pvn1, cropuse);
+        double pvn3 = ApplyDryMatterAdjustment(pvn2);
+        double pvn4 = ApplyApplicationTechniqueAdjustment(pvn3);
+        double pvn5 = ApplyWindSpeedAdjustment(pvn4);
+
+        (double pvn7, double temp1) = ApplyRainfallAdjustment(pvn5, incorporationCumulativeHours);
+
+        (double pvn8, double temp2) = ApplyIncorporationTimingAdjustment(pvn7, incorporationCumulativeHours);
+
+        double pvn9 = ApplyIncorporationTechniqueAdjustment(pvn8);
+
+        // Total ammonia lost (kg/ha)
+        return temp1 + temp2 + pvn9;
+    }
+
+    private double ApplySoilMoistureAdjustment(double pvn0)
+    {
+        
+        if (!IsCattleOrLiquidSludge())
         {
-            double dPVN0; // Potentially Volatilisable N - step 0
-            double dPVN1; // Potentially volatilisable N - step 1
-                          // soil moisture status (cattle slurry only) - step 2
-            double dPVN2; // land use adjustment (cattle slurry only) - step 3
-            double dPVN3; // dry matter adjustment (slurry only) - step 4
-            double dPVN4; // application technique adjustment (slurry only) - step 5
-            double dPVN5; // wind-speed adjustment (slurry only) - step 6
-            double dPVN6; // temporary rainfall adjustment (slurry only) - step 7
-            var dPVN7 = default(double); // final rainfall adjustment (slurry only) - step 7
-            var dPVN8 = default(double); // incorporation timing (all manures) - step 8
-                                         // (PVN7 - amount of ammonia lost up to the point of incorporation)
-            double dPVN9; // incorporation technique (all manures)
-                          // PVN8 figure adjusted for incorporation technique
-                          // data consistent with the current version of NARSES
-
-            var dTemp1 = default(double); // temporary variable
-            var dTemp2 = default(double); // temporary variable
-
-            double nmaxConstant;
-            nmaxConstant = (double)_manureType.NMaxConstant;
-
-            // Potentially Volatilisable N
-            dPVN0 = potentialNAvailable * (nmaxConstant / 100);
-
-            // Soil moisture adjustment (cattle slurry and liquid digested sludge only)
-            // ------------------------------------------------------------------------
-            // If the selected manure is cattle slurry or liquid digested sludge and the soil moisture status is dry then
-
-            if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Dry) || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Dry))
-            {
-                dPVN1 = dPVN0 * 1.3d;
-            }
-            // Else if the soil moisture status is moist then
-            else if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Moist) || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Moist))
-            {
-                dPVN1 = dPVN0 * 0.7d;
-            }
-            else
-            {
-                // Else all other manures remain unchanged
-                dPVN1 = dPVN0;
-            }
-
-            // REMOVED SEASONAL ADJUSTMENT BECAUSE IT DIDN'T SEEM TO ALLOW FOR SOIL MOISTURE
-            // WHICH HAS A GREATER EFFECT THAN SEASON - UPDATED TECHNICAL GUIDE
-
-            // Land use adjustment(cattle slurry and liquid digested sludge only)
-            // ------------------------------------------------------------------------
-            // If the selected manure is cattle slurry or liquid digested sludge and the land use is arable
-
-            if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && cropuse == _arableKey) || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && cropuse == _arableKey))
-            {
-                dPVN2 = dPVN1 * 0.85d;
-            }
-            // else if the manure is cattle slurry or liquid digest sludge and the land use is grass
-            else if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && cropuse == _grassKey) || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && cropuse == _grassKey))
-            {
-                dPVN2 = dPVN1 * 1.15d;
-            }
-            // Else all other manures remain unchanged
-            else
-            {
-                dPVN2 = dPVN1;
-            }
-
-            if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && cropuse == _arableKey) || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && cropuse == _arableKey))
-            {
-                dPVN2 = dPVN1 * 0.85d;
-            }
-            // else if the manure is cattle slurry or liquid digest sludge and the land use is grass
-            else if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && cropuse == _grassKey) || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && cropuse == _grassKey))
-            {
-                dPVN2 = dPVN1 * 1.15d;
-            }
-            // Else all other manures remain unchanged
-            else
-            {
-                dPVN2 = dPVN1;
-            }
-
-            // Dry matter adjustment (slurry or liquid digested sludge only)
-            // -------------------------------------------------------------------------
-            // if cattle slurry then
-            if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Moist) || (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Moist))
-            {
-                // Not ((month(CurAppDate)) >= 5 And (month(CurAppDate)) <= 7) Then
-                dPVN3 = (8.3d * (double)_manureType.DryMatter + 50.2d) / 100d * dPVN2;
-            }
-            // else if pig slurry then
-            else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry && _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Moist)
-            {
-                dPVN3 = (12.3d * (double)_manureType.DryMatter + 50.8d) / 100d * dPVN2;
-            }
-            // else all other manures and for dry soil PVN3 remains unchanged
-            else
-            {
-                dPVN3 = dPVN2;
-            }
-
-            // Application technique (slurry or liquid digested sludge only)
-            // -------------------------------------------------------------------------
-            // If the application method is for a slurry then we are dealing with either a cattle, pig slurry or liquid digested sludge
-            if (_manureType.IsLiquid)
-            {
-                // Select the application method name
-                switch (_manureApplication.ApplicationMethodID)
-                {
-                    // Adjust PVN4 depending on the application type
-                    case (int)Enums.Enumerations.ApplicationMethodEnum.DeepInjection: // "Deep Injection"
-                        {
-                            double proportionOfNMax = 0.1d;
-                            dPVN4 = dPVN3 * proportionOfNMax;
-                            break;
-                        }
-                    case (int)Enums.Enumerations.ApplicationMethodEnum.ShallowInjection: // "Shallow Injection"
-                        {
-                            double proportionOfNMax = 0.3d;
-                            // A.C new algorithim for Digistate Whole Food based
-                            if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
-                            {
-                                proportionOfNMax = 0.55d;
-                            }
-                            dPVN4 = dPVN3 * proportionOfNMax;
-                            break;
-                        }
-                    case (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingHose: // "Band Spreader - Trailing Hose"
-                    case (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingShoeShortGrass: // "Band Spreader - Trailing Shoe (Short Grass)"
-                        {
-                            double proportionOfNMax = 0.7d;
-                            // A.C new algorithim for Digistate Whole Food based
-                            if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
-                            {
-                                proportionOfNMax = 0.55d;
-                            }
-                            dPVN4 = dPVN3 * proportionOfNMax;
-                            break;
-                        }
-                    case (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingShoeLongGrass: // "Band Spreader - Trailing Shoe (Long Grass)"
-                        {
-                            double proportionOfNMax = 0.4d;
-                            // A.C new algorithim for Digistate Whole Food based
-                            if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
-                            {
-                                proportionOfNMax = 0.31d;
-                            }
-                            // else - in this case broadcast spreading
-                            dPVN4 = dPVN3 * proportionOfNMax;
-                            break;
-                        }
-                    default:
-                        {
-                            dPVN4 = dPVN3;
-                            break;
-                        }
-                }
-            }
-            else
-            {
-                // for all other slurries and application methods there is no adjustment
-                dPVN4 = dPVN3;
-            }
-
-            // Windspeed (slurry only)
-            // -------------------------------------------------------------------------
-            // if the manure type is a slurry (of any kind) or a liquid digested sludge
-            if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
-            {
-
-                // Adjust the NMax for wind speed
-                switch (_manureApplication.WindspeedID)
-                {
-                    case (int)Enums.Enumerations.WindSpeed.Moderate4to5BeaufortScale:  // "Moderate (4-5 Beaufort Scale)"
-                        {
-                            dPVN5 = dPVN4 * 1.2d;
-                            break;
-                        }
-                    case (int)Enums.Enumerations.WindSpeed.StrongBreeze6to7BeaufortScale: // "Strong Breeze (6-7 Beaufort Scale)"
-                        {
-                            dPVN5 = dPVN4 * 1.6d;
-                            break;
-                        }
-                    default:
-                        {
-                            dPVN5 = dPVN4;
-                            break;
-                        }
-                }
-            }
-            else
-            {
-                // For all other manure types
-                dPVN5 = dPVN4;
-            }
-
-            // Rainfall adjustment (slurry only)
-            // -------------------------------------------------------------------------
-            if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry)
-            {
-
-                switch (_manureApplication.RainTypeID)
-                {
-
-                    // this uses the Michaelis Menton equation
-                    // dPVN6 is used as Nmax
-                    // time (t) is 6 hours
-                    // dTemp1 is the amount of ammonia lost after 6 hours
-                    // (referred to as A1 in the technical guide)
-                    // Ammonia lost at time (t) = Nmax * (t/(t+Km))
-
-                    // Values of Km
-                    // Cattle slurry = 7.5
-                    // Pig slurry = 11.6
-                    // FYM (cattle, pig and duck) = 14.9
-                    // Poultry manure = 40.4
-                    // DigestateWholeFoodBased = 4.5
-
-                    // Light rainfall adjustment
-                    case (int)Enums.Enumerations.Rainfall.LightRainLessthan5mmWithin6Hours: // "Light rain (<5 mm) within 6 hours"
-                        {
-                            if (incorporationCumulativeHours <= 6)
-                            {
-                                dPVN7 = dPVN5;
-                            }
-                            else
-                            {
-                                dPVN6 = dPVN5 * 0.5d;
-
-                                // If the manure is cattle slurry or liquid digested sludge
-                                if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
-                                {
-                                    dTemp1 = dPVN6 * (6d / (6d + 7.5d));
-                                    dPVN7 = dPVN6 - dTemp1;
-                                }
-                                // Else if the manure is pig slurry
-                                else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry)
-                                {
-                                    double KM = 11.6d;
-                                    // A.C new algorithim for Digistate Whole Food based
-                                    if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
-                                    {
-                                        KM = 4.5d;
-                                    }
-                                    dTemp1 = dPVN6 * (6d / (6d + KM));
-                                    dPVN7 = dPVN6 - dTemp1;
-                                }
-                            }
-
-                            break;
-                        }
-
-                    // Heavy rainfall adjustment
-                    case (int)Enums.Enumerations.Rainfall.HeavyRainGreaterThan5mmWithin6hours: // "Heavy rain (>5 mm) within 6 hours"
-                        {
-                            if (incorporationCumulativeHours <= 6)
-                            {
-                                dPVN7 = dPVN5;
-                            }
-                            else
-                            {
-                                dPVN6 = dPVN5 * 0.3d;
-
-                                // (Incorporation(IncorporationSel).CumulativeHours
-                                // If the manure is cattle slurry or liquid digested sludge
-                                if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
-                                {
-                                    dTemp1 = dPVN6 * (6d / (6d + 7.5d));
-                                    dPVN7 = dPVN6 - dTemp1;
-                                }
-                                // Elseif the manure is pig slurry
-                                else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry)
-                                {
-                                    double KM = 11.6d;
-                                    // A.C new algorithim for Digistate Whole Food based
-                                    if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
-                                    {
-                                        KM = 4.5d;
-                                    }
-                                    dTemp1 = dPVN6 * (6d / (6d + KM));
-                                    dPVN7 = dPVN6 - dTemp1;
-                                }
-                                // Else when there is no rainfall within 6 hours of spreading
-                            }
-                            break;
-                        }
-                    default:
-                        {
-                            dPVN7 = dPVN5;
-                            break;
-                        }
-                }
-            }
-            else
-            {
-                // for all other slurries and manures it remains the same
-                dPVN7 = dPVN5;
-            }
-
-
-            // Incorporation Timing (all manures)
-            // -------------------------------------------------------------------------
-            // If the manure is not incorporated then there is no adjustment for incorporation timing
-            if (_manureApplication.IncorporationMethodID == (int)Enums.Enumerations.MethodOfIncorporationEnum.NotIncorporated) // "Not Incorporated" Then
-            {
-                dPVN8 = dPVN7; // PVN8 = PVN7
-            }
-            else
-            {
-                // Else an adjustment is made for different manure types and different incorporation timings.
-                switch (_manureType.ManureTypeCategoryID)
-                {
-                    // Use Michaelis-Menton equation 1 in the Technical Guide.
-                    // Ammonia lost at time (t) = Nmax * (t/(t + Km))
-
-                    // KM
-                    // Cattle slurry:             7.5
-                    // Pig slurry:                11.6
-                    // FYM(cattle, pig and duck): 14.9
-                    // Poultry manure:            40.4
-                    // Digestate Whole Food Based 4.5
-
-                    case (int)Enums.Enumerations.ManureCategory.FYM:  // Manure: FYM
-                        {
-                            dTemp2 = dPVN7 * (incorporationCumulativeHours / (incorporationCumulativeHours + 14.9d));
-                            dPVN8 = dPVN7 - dTemp2;
-                            break;
-                        }
-                    case (int)Enums.Enumerations.ManureCategory.Poultry:  // Manure: Poultry
-                    case (int)Enums.Enumerations.ManureCategory.SolidSludge: // Solid sludge (treated the same as poultry manure c.f. e-mail 12/07/07)
-                        {
-                            dTemp2 = dPVN7 * (incorporationCumulativeHours / (incorporationCumulativeHours + 40.4d));
-                            dPVN8 = dPVN7 - dTemp2;
-                            break;
-                        }
-                    case (int)Enums.Enumerations.ManureCategory.CattleSlurry:  // Manure: Cattle Slurry
-                    case (int)Enums.Enumerations.ManureCategory.LiquidSludge: // Liquid sludge (treated the same as cattle slurry c.f. e-mail 12/07/07)
-                        {
-                            dTemp2 = dPVN7 * (incorporationCumulativeHours / (incorporationCumulativeHours + 7.5d));
-                            dPVN8 = dPVN7 - dTemp2;
-                            break;
-                        }
-                    case (int)Enums.Enumerations.ManureCategory.PigSlurry:  // Manure: Pig Slurry
-                        {
-                            double KM = 11.6d;
-                            // A.C new algorithim for Digistate Whole Food based
-                            if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
-                            {
-                                KM = 4.5d;
-                            }
-                            dTemp2 = dPVN7 * (incorporationCumulativeHours / (incorporationCumulativeHours + KM));
-                            dPVN8 = dPVN7 - dTemp2;
-                            break;
-                        }
-                }
-            }
-
-            // Incorporation Technique (all manures)
-            // -------------------------------------------------------------------------
-            // Need to make an adjustment based on the incorporation method and the manure type.  These data are consistent with NARSES, except for the
-            // rotavator data which are not included in NARSES.  This "second phase" of ammonia loss after incorporation is PVN9.
-
-            switch (_manureApplication.IncorporationMethodID) // IncorporationMethods(IncMethodSel).Name
-            {
-
-                case (int)Enums.Enumerations.MethodOfIncorporationEnum.TineCultivator: // "Tine Cultivator"
-                    {
-                        // Slurry or liquid digested sludge
-                        if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
-                        {
-                            dPVN9 = dPVN8 * 0.3d;
-                        }
-                        // Poultry or solid sewage sludges
-                        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.SolidSludge)
-                        {
-                            dPVN9 = dPVN8 * 0.3d;
-                        }
-                        // FYM
-                        else
-                        {
-                            dPVN9 = dPVN8 * 0.7d;
-                        }
-
-                        break;
-                    }
-
-                case (int)Enums.Enumerations.MethodOfIncorporationEnum.Discs: // "Discs"
-                    {
-                        // Slurry or liquid digested sludge
-                        if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
-                        {
-                            dPVN9 = dPVN8 * 0.2d;
-                        }
-                        // Poultry or solid sewage sludges
-                        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.SolidSludge)
-                        {
-                            dPVN9 = dPVN8 * 0.2d;
-                        }
-                        // FYM
-                        else
-                        {
-                            dPVN9 = dPVN8 * 0.3d;
-                        }
-
-                        break;
-                    }
-
-                case (int)Enums.Enumerations.MethodOfIncorporationEnum.RotaryCultivator: // "Rotary Cultivator"
-                    {
-                        // Slurry or liquid digested sludge
-                        if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
-                        {
-                            dPVN9 = dPVN8 * 0.15d;
-                        }
-                        // Poultry or solid sewage sludges
-                        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.SolidSludge)
-                        {
-                            dPVN9 = dPVN8 * 0.1d;
-                        }
-                        // FYM
-                        else
-                        {
-                            dPVN9 = dPVN8 * 0.2d;
-                        }
-
-                        break;
-                    }
-
-                case (int)Enums.Enumerations.MethodOfIncorporationEnum.MouldboardPlough: // "Mouldboard Plough"
-                    {
-                        // Slurry or liquid digested sludge
-                        if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
-                        {
-                            dPVN9 = dPVN8 * 0.1d;
-                        }
-                        // Poultry or solid sewage sludges
-                        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.SolidSludge)
-                        {
-                            dPVN9 = dPVN8 * 0.05d;
-                        }
-                        // FYM
-                        else
-                        {
-                            dPVN9 = dPVN8 * 0.1d;
-                            // Everything else
-                        }
-                        break;
-                    }
-                default:
-                    {
-                        dPVN9 = dPVN8;
-                        break;
-                    }
-            }
-
-            // Total ammonia lost (kg/ha)
-            return dTemp1 + dTemp2 + dPVN9;
+            return pvn0;
         }
-        catch (Exception)
+
+        return _manureApplication.TopsoilMoistureID switch
         {
-            throw;
+            (int)Enums.Enumerations.TopsoilMoistureEnum.Dry => pvn0 * 1.3d,
+            (int)Enums.Enumerations.TopsoilMoistureEnum.Moist => pvn0 * 0.7d,
+            _ => pvn0
+        };
+    }
+
+    private double ApplyLandUseAdjustment(double pvn1, string cropuse)
+    {
+        if (!IsCattleOrLiquidSludge())
+        {
+            return pvn1;
         }
+
+        if (cropuse == _arableKey)
+        {
+            return pvn1 * 0.85d;
+        }
+
+        if (cropuse == _grassKey)
+        {
+            return pvn1 * 1.15d;
+        }
+
+        return pvn1;
+    }
+
+    private double ApplyDryMatterAdjustment(double pvn2)
+    {
+        bool isMoist = _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Moist;
+
+        if (!isMoist)
+        {
+            return pvn2;
+        }
+
+        if (IsCattleOrLiquidSludge())
+        {
+            return ((8.3d * (double)_manureType.DryMatter + 50.2d) / 100d) * pvn2;
+        }
+
+        if (_manureType.ManureTypeCategoryID ==
+            (int)Enums.Enumerations.ManureCategory.PigSlurry)
+        {
+            return ((12.3d * (double)_manureType.DryMatter + 50.8d) / 100d) * pvn2;
+        }
+
+        return pvn2;
+    }
+
+    private double ApplyApplicationTechniqueAdjustment(double pvn3)
+    {
+        if (!_manureType.IsLiquid)
+        {
+            return pvn3;
+        }
+
+        double proportion = GetApplicationMethodProportion();
+
+        return pvn3 * proportion;
+    }
+
+    private double GetApplicationMethodProportion()
+    {
+        bool isDigestate =
+            _manureType.ID ==
+            (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased;
+
+        return _manureApplication.ApplicationMethodID switch
+        {
+            (int)Enums.Enumerations.ApplicationMethodEnum.DeepInjection => 0.1d,
+
+            (int)Enums.Enumerations.ApplicationMethodEnum.ShallowInjection =>
+                isDigestate ? 0.55d : 0.3d,
+
+            (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingHose =>
+                isDigestate ? 0.55d : 0.7d,
+
+            (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingShoeShortGrass =>
+                isDigestate ? 0.55d : 0.7d,
+
+            (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingShoeLongGrass =>
+                isDigestate ? 0.31d : 0.4d,
+
+            _ => 1d
+        };
+    }
+
+    private double ApplyWindSpeedAdjustment(double pvn4)
+    {
+        if (!IsSlurryType())
+        {
+            return pvn4;
+        }
+
+        return _manureApplication.WindspeedID switch
+        {
+            (int)Enums.Enumerations.WindSpeed.Moderate4to5BeaufortScale => pvn4 * 1.2d,
+
+            (int)Enums.Enumerations.WindSpeed.StrongBreeze6to7BeaufortScale => pvn4 * 1.6d,
+
+            _ => pvn4
+        };
+    }
+
+    private (double pvn7, double temp1) ApplyRainfallAdjustment(double pvn5,int incorporationHours)
+    {
+        if (!IsSlurryType())
+        {
+            return (pvn5, 0d);
+        }
+
+        return _manureApplication.RainTypeID switch
+        {
+            (int)Enums.Enumerations.Rainfall.LightRainLessthan5mmWithin6Hours =>
+                CalculateRainAdjustedPvn(pvn5, incorporationHours, 0.5d),
+
+            (int)Enums.Enumerations.Rainfall.HeavyRainGreaterThan5mmWithin6hours =>
+                CalculateRainAdjustedPvn(pvn5, incorporationHours, 0.3d),
+
+            _ => (pvn5, 0d)
+        };
+    }
+
+    private (double pvn7, double temp1) CalculateRainAdjustedPvn(double pvn5,int incorporationHours,double rainfallFactor)
+    {
+        if (incorporationHours <= 6)
+        {
+            return (pvn5, 0d);
+        }
+
+        double pvn6 = pvn5 * rainfallFactor;
+        double km = GetKmValue();
+
+        double temp1 = pvn6 * (6d / (6d + km));
+
+        return (pvn6 - temp1, temp1);
+    }
+
+    private (double pvn8, double temp2) ApplyIncorporationTimingAdjustment(double pvn7, int incorporationHours)
+    {
+        if (_manureApplication.IncorporationMethodID == (int)Enums.Enumerations.MethodOfIncorporationEnum.NotIncorporated)
+        {
+            return (pvn7, 0d);
+        }
+
+        double km = GetIncorporationKmValue();
+        double temp2 = pvn7 * (incorporationHours / (incorporationHours + km));
+
+        return (pvn7 - temp2, temp2);
+    }
+
+    private double ApplyIncorporationTechniqueAdjustment(double pvn8)
+    {
+        return _manureApplication.IncorporationMethodID switch
+        {
+            (int)Enums.Enumerations.MethodOfIncorporationEnum.TineCultivator =>
+                pvn8 * GetIncorporationFactor(0.3d, 0.3d, 0.7d),
+
+            (int)Enums.Enumerations.MethodOfIncorporationEnum.Discs =>
+                pvn8 * GetIncorporationFactor(0.2d, 0.2d, 0.3d),
+
+            (int)Enums.Enumerations.MethodOfIncorporationEnum.RotaryCultivator =>
+                pvn8 * GetIncorporationFactor(0.15d, 0.1d, 0.2d),
+
+            (int)Enums.Enumerations.MethodOfIncorporationEnum.MouldboardPlough =>
+                pvn8 * GetIncorporationFactor(0.1d, 0.05d, 0.1d),
+
+            _ => pvn8
+        };
+    }
+
+    private double GetIncorporationFactor(double slurryFactor, double poultryFactor, double fymFactor)
+    {
+        if (IsSlurryType())
+        {
+            return slurryFactor;
+        }
+
+        if (IsPoultryOrSolidSludge())
+        {
+            return poultryFactor;
+        }
+
+        return fymFactor;
+    }
+
+    private double GetKmValue()
+    {
+        if (_manureType.ID ==
+            (int)Enums.Enumerations.ManureTypes.DigestateWholeFoodBased)
+        {
+            return 4.5d;
+        }
+
+        return _manureType.ManureTypeCategoryID switch
+        {
+            (int)Enums.Enumerations.ManureCategory.CattleSlurry => 7.5d,
+            (int)Enums.Enumerations.ManureCategory.LiquidSludge => 7.5d,
+            (int)Enums.Enumerations.ManureCategory.PigSlurry => 11.6d,
+            _ => 14.9d
+        };
+    }
+
+    private double GetIncorporationKmValue()
+    {
+        return _manureType.ManureTypeCategoryID switch
+        {
+            (int)Enums.Enumerations.ManureCategory.FYM => 14.9d,
+
+            (int)Enums.Enumerations.ManureCategory.Poultry => 40.4d,
+
+            (int)Enums.Enumerations.ManureCategory.SolidSludge => 40.4d,
+
+            (int)Enums.Enumerations.ManureCategory.CattleSlurry => 7.5d,
+
+            (int)Enums.Enumerations.ManureCategory.LiquidSludge => 7.5d,
+
+            (int)Enums.Enumerations.ManureCategory.PigSlurry => GetKmValue(),
+
+            _ => 14.9d
+        };
+    }
+
+    private bool IsCattleOrLiquidSludge()
+    {
+        // If the selected manure is cattle slurry or liquid digested sludge 
+        return _manureType.ManureTypeCategoryID ==
+                   (int)Enums.Enumerations.ManureCategory.CattleSlurry
+               || _manureType.ManureTypeCategoryID ==
+                   (int)Enums.Enumerations.ManureCategory.LiquidSludge;
+    }
+
+    private bool IsSlurryType()
+    {
+        return _manureType.ManureTypeCategoryID ==
+                   (int)Enums.Enumerations.ManureCategory.CattleSlurry
+               || _manureType.ManureTypeCategoryID ==
+                   (int)Enums.Enumerations.ManureCategory.PigSlurry
+               || _manureType.ManureTypeCategoryID ==
+                   (int)Enums.Enumerations.ManureCategory.LiquidSludge;
+    }
+
+    private bool IsPoultryOrSolidSludge()
+    {
+        return _manureType.ManureTypeCategoryID ==
+                   (int)Enums.Enumerations.ManureCategory.Poultry
+               || _manureType.ManureTypeCategoryID ==
+                   (int)Enums.Enumerations.ManureCategory.SolidSludge;
     }
 
     /// <summary>
