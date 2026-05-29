@@ -16,7 +16,9 @@ namespace Manner.Api.Controllers;
 [ApiController]
 [Route("api/v1/")]
 [Authorize]
+#pragma warning disable S6960
 public class MannerController : ControllerBase
+#pragma warning restore S6960
 {
     private readonly ILogger<MannerController> _logger;
     private readonly IIncorporationDelayService _incorporationDelayService;
