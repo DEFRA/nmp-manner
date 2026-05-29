@@ -1837,7 +1837,9 @@ public class MeanClimateDrainageModel
     }
 
 
+#pragma warning disable S1172
     private static double CalculateRunOff(int indexMonth, double rainfall)
+#pragma warning restore S1172
     {
         double calculateRunOffRet = default;
 
