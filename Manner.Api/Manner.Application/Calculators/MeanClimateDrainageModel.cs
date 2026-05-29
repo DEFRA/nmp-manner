@@ -136,9 +136,10 @@ public class MeanClimateDrainageModel
 
     // -- Property variable declarations ------------------------------------------------------
 
+#pragma warning disable S1104
     public double _latitude; // Latitude of location (deg)
     public double _altitude; // Altitude of location (m)
-
+#pragma warning restore S1104
     private double _topSand; // Soil percentage sand content (%)
     private double _topClay; // Soil percentage clay content (%)
     private double _topSilt; // Soil percentage silt content (%)
@@ -1715,7 +1716,9 @@ public class MeanClimateDrainageModel
 
     }
 
-    private bool CalculateGammaQuantile(double probability, double beta, double alpha, ref double quantile)
+#pragma warning disable S3241
+    private static bool CalculateGammaQuantile(double probability, double beta, double alpha, ref double quantile)
+#pragma warning restore S3241
     {
         bool calculateGammaQuantileRet = default;
 
