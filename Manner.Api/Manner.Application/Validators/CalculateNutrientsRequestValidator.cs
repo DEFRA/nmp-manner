@@ -40,20 +40,24 @@ namespace Manner.Application.Validators
         }
 
        
-        private bool NotDefaultValue(int Id)
+        private static bool NotDefaultValue(int Id)
         {
             // Validates that the date is between 1st Jan and 30th Apr of any year accouting for leap years.
             return Id != default;
         }
 
-        private bool NotDefaultValue(double value)
+#pragma warning disable S1144
+        private static bool NotDefaultValue(double value)
+#pragma warning restore S1144
         {
             // Validates that the date is between 1st Jan and 30th Apr of any year accouting for leap years.
-            return value != default;
+            return Math.Abs(value - default(double)) > 0.0001d;
         }
-               
 
-        private bool NotDefaultValue(decimal value)
+
+#pragma warning disable S1144
+        private static bool NotDefaultValue(decimal value)
+#pragma warning restore S1144
         {
             // Validates that the date is between 1st Jan and 30th Apr of any year accouting for leap years.
             return value != default;

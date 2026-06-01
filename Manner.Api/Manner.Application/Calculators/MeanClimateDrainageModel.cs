@@ -136,9 +136,10 @@ public class MeanClimateDrainageModel
 
     // -- Property variable declarations ------------------------------------------------------
 
+#pragma warning disable S1104
     public double _latitude; // Latitude of location (deg)
     public double _altitude; // Altitude of location (m)
-
+#pragma warning restore S1104
     private double _topSand; // Soil percentage sand content (%)
     private double _topClay; // Soil percentage clay content (%)
     private double _topSilt; // Soil percentage silt content (%)
@@ -166,7 +167,8 @@ public class MeanClimateDrainageModel
     private double _depth; // Depth of observation of soil temperatures (n)
 
     private const double _epsilon = 0.000001;
-
+    private const double DefaultCarbonValue = 1d;
+    private const double SentinelTolerance = 0.0001d;
 
     private double _topSoilAWC;
     private double _subSoilAWC;
@@ -1001,9 +1003,13 @@ public class MeanClimateDrainageModel
         }
     }
 
+    
+
     private void SetCarbon(bool isTop, double carbon)
     {
-        double value = carbon != -1 ? carbon : 1d;
+        double value = Math.Abs(carbon + 1d) > SentinelTolerance
+            ? carbon
+            : DefaultCarbonValue;
 
         if (isTop)
         {
@@ -1366,7 +1372,11 @@ public class MeanClimateDrainageModel
             * Math.Cos((month + 0.5d) * 2d * PI / 12d + meanPhase + seasonalPhase);
     }
 
-    private bool HasObservationHour() => _hour != -1;
+    private const double UnspecifiedHour = -1d;
+    private const double FloatingPointTolerance = 0.0001d;
+
+    private bool HasObservationHour() =>
+        Math.Abs(_hour - UnspecifiedHour) > FloatingPointTolerance;
 
     private double GetObservationCorrection(int month)
     {
@@ -1440,32 +1450,29 @@ public class MeanClimateDrainageModel
 
     }
 
+    private const double UndefinedDiffusivity = -1d;    
+
     public double CalculateDiffusivity()
     {
-        double calculateDiffusivityRet = default;
+        double density = CalculateDensity();
 
-        double density;
+        if (Math.Abs(_diffusivity - UndefinedDiffusivity) < FloatingPointTolerance)
+        {
+            return 0.000001d * CalculateThermalConductivity()
+                   / (density * CalculateHeatCapacity());
+        }
 
+        return _diffusivity;
+    }
+
+    private double CalculateDensity()
+    {
         if (_depth > 0.3d)
         {
-            density = (0.3d * _topDensity + (_depth - 0.3d) * _subDensity) / _depth;
-        }
-        else
-        {
-            density = _topDensity;
+            return (0.3d * _topDensity + (_depth - 0.3d) * _subDensity) / _depth;
         }
 
-        if (_diffusivity == -1)
-        {
-            calculateDiffusivityRet = 0.000001d * CalculateThermalConductivity() / (density * CalculateHeatCapacity());
-        }
-        else
-        {
-            calculateDiffusivityRet = _diffusivity;
-        }
-
-        return calculateDiffusivityRet;
-
+        return _topDensity;
     }
 
     private double CalculateThermalConductivity()
@@ -1709,7 +1716,9 @@ public class MeanClimateDrainageModel
 
     }
 
-    private bool CalculateGammaQuantile(double probability, double beta, double alpha, ref double quantile)
+#pragma warning disable S3241
+    private static bool CalculateGammaQuantile(double probability, double beta, double alpha, ref double quantile)
+#pragma warning restore S3241
     {
         bool calculateGammaQuantileRet = default;
 
@@ -1831,7 +1840,9 @@ public class MeanClimateDrainageModel
     }
 
 
+#pragma warning disable S1172
     private static double CalculateRunOff(int indexMonth, double rainfall)
+#pragma warning restore S1172
     {
         double calculateRunOffRet = default;
 

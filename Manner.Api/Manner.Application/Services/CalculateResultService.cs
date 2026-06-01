@@ -16,8 +16,7 @@ public class CalculateResultService(
     IClimateRepository climateRepository,
     ICropTypeRepository cropTypeRepository,
     IManureTypeRepository manureTypeRepository,
-    IMapper mapper,
-    IIncorporationMethodRepository incorporationMethodRepository,
+    IMapper mapper,    
     IIncorporationDelayRepository incorporationDelayRepository,
     ITopSoilRepository topSoilRepository,
     ISubSoilRepository subSoilRepository,
@@ -26,8 +25,7 @@ public class CalculateResultService(
     private readonly IClimateRepository _climateRepository = climateRepository;
     private readonly ICropTypeRepository _cropTypeRepository = cropTypeRepository;
     private readonly IManureTypeRepository _manureTypeRepository = manureTypeRepository;
-    private readonly IMapper _mapper = mapper;
-    private readonly IIncorporationMethodRepository _incorporationMethodRepository = incorporationMethodRepository;
+    private readonly IMapper _mapper = mapper;    
     private readonly IIncorporationDelayRepository _incorporationDelayRepository = incorporationDelayRepository;
     private readonly ITopSoilRepository _topSoilRepository = topSoilRepository;
     private readonly ISubSoilRepository _subSoilRepository = subSoilRepository;
@@ -36,7 +34,7 @@ public class CalculateResultService(
 
     public async Task<NutrientsResponse> CalculateNutrientsAsync(CalculateNutrientsRequest calculateNutrientsRequest)
     {
-        _logger.LogTrace($"CalculateResultService : CalculateNutrientsAsync() callled");
+        _logger.LogTrace("CalculateResultService : CalculateNutrientsAsync() callled");
         NutrientsResponse ret = new NutrientsResponse();
         ret.FieldID = calculateNutrientsRequest.Field.FieldID;
         ret.FieldName = calculateNutrientsRequest.Field.FieldName;
@@ -113,7 +111,7 @@ public class CalculateResultService(
         ret.CurrentCropAvailableN = Convert.ToInt32(Math.Round(outputs.ResultantNAvailable, 0));
         ret.NextGrassNCropCurrentYear = Convert.ToInt32(Math.Round(outputs.ResultantNAvailableSecondCut, 0));
         ret.FollowingCropYear2AvailableN = Convert.ToInt32(Math.Round(outputs.ResultantNAvailableYear2,0));
-        ret.NitrogenEfficiencePercentage = outputs.TotalNitrogenApplied == 0? 0: Convert.ToInt32(Math.Round((outputs.ResultantNAvailable + outputs.ResultantNAvailableSecondCut) * 100 / outputs.TotalNitrogenApplied, 0));
+        ret.NitrogenEfficiencePercentage = Math.Abs(outputs.TotalNitrogenApplied) < 0.0001d ? 0: Convert.ToInt32(Math.Round((outputs.ResultantNAvailable + outputs.ResultantNAvailableSecondCut) * 100 / outputs.TotalNitrogenApplied, 0));
         ret.TotalP2O5 = Convert.ToInt32(Math.Round(outputs.P2O5Total, 0));
         ret.CropAvailableP2O5 = Convert.ToInt32(Math.Round(outputs.P2O5CropAvailable, 0));
         ret.TotalK2O= Convert.ToInt32(Math.Round(outputs.K2OTotal, 0));
