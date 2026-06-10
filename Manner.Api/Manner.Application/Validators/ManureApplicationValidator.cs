@@ -12,7 +12,7 @@ namespace Manner.Application.Validators
     {
         public ManureApplicationValidator()
         {
-            //TODO: Need to reviste to apply validation
+            //TO: Need to reviste to apply validation
             //if ((int)MannerApplication.Application.ApplicationMethodEnum == default(int))
             //{
             //    canproc = false;
@@ -97,7 +97,7 @@ namespace Manner.Application.Validators
 
         }
 
-        private bool ValidateApplication(ManureApplication application)
+        private static bool ValidateApplication(ManureApplication application)
         {
             return application.ApplicationDate > application.EndOfDrainageDate;
         }

@@ -20,11 +20,11 @@ namespace Manner.Application.Validators
             // Validate that Postcode is not null or empty
             RuleFor(x => (x.ClimateDataPostcode.Length > 4) ? x.ClimateDataPostcode.Substring(0, 4).Trim() : x.ClimateDataPostcode.Trim())
                 .NotEmpty().WithMessage("Postcode is required.")
-                .MinimumLength(3).WithMessage("Postcode must be at least 3 characters long.")
+                .MinimumLength(2).WithMessage("Postcode must be at least 2 characters long.")
                 .MaximumLength(4).WithMessage("Only the first half of the postcode is required. A maximum of 4 characters");
         }
 
-        private bool BeWithinValidRange(DateOnly date)
+        private static bool BeWithinValidRange(DateOnly date)
         {
             // Validates that the date is between 1st Jan and 30th Apr of any year accouting for leap years.
             return (date.Month == 1) ||
