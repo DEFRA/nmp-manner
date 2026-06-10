@@ -210,9 +210,9 @@ public class CalculateResultService(
             ret.CropAvailableP2O5 = Convert.ToInt32(output.P2O5CropAvailable);
             ret.TotalK2O = Convert.ToInt32(output.K2OTotal);
             ret.CropAvailableK2O = Convert.ToInt32(output.K2OCropAvailable);
-            ret.TotalSO3 = Convert.ToInt32(output?.SO3Total);
-            ret.CropAvailableSO3 = output?.SO3CropAvailable == null ? null : Convert.ToInt32(output?.SO3CropAvailable);
-            ret.TotalMgO = Convert.ToInt32(output?.MgOTotal);
+            ret.TotalSO3 = Convert.ToInt32(output.SO3Total);
+            ret.CropAvailableSO3 = output.SO3CropAvailable == null ? null : Convert.ToInt32(output.SO3CropAvailable);
+            ret.TotalMgO = Convert.ToInt32(output.MgOTotal);
             rets.Add(ret);
         }
         
