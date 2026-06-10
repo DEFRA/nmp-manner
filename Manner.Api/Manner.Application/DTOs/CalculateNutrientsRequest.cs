@@ -9,7 +9,7 @@ public class CalculateNutrientsRequest
         Field= new FieldDetail();
         ManureApplications = new List<ManureApplication>();
         Postcode= string.Empty;
-        CountryID = default(int);
+        CountryID = default(int);       
     }
     /// <summary>
     /// MannerEngland = 1,
@@ -26,7 +26,8 @@ public class CalculateNutrientsRequest
 
     public List<ManureApplication> ManureApplications { get; set; }
 
-    
+    [System.ComponentModel.DefaultValue(false)]
+    public bool IndivisualApplicationOutput { get; set; } = false;
 
 }
 

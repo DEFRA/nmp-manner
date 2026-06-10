@@ -20,7 +20,10 @@ public class HomeController : ControllerBase
     }
 
     [HttpGet("/")]
-    [SwaggerOperation(Summary = "Health Check", Description = "Health Check of API.", Tags = ["Health Checks"])]
+    [SwaggerOperation(
+        Summary = "Health Check", 
+        Description = "Health Check of API.", 
+        Tags = ["Health Checks"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     public async Task<ActionResult<StandardResponse?>> Index()
@@ -50,7 +53,7 @@ public class HomeController : ControllerBase
             ret.Success = false;
             ret.Message = "API is not OK";
             ret.Errors.Add(ex.Message);
-            _logger.LogCritical(ex,ex.Message);
+            _logger.LogCritical(ex, ex.Message);
             return BadRequest(ex.Message);
         }
     }

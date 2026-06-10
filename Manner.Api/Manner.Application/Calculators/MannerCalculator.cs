@@ -40,7 +40,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
         double mineralN2;
         double mineralN3;
         double mineralN4; // manure N remaining after losses through NH3 volatilisation + any nitrate N in the original manure application
-        int incorporationCumulativeHours = _incorporationDelay.CumulativeHours ?? 0;
+        int incorporationCumulativeHours = _incorporationDelay?.CumulativeHours ?? 0;
 
         string cropUse = _cropType?.Use ?? string.Empty;
         if (_manureType != null)
