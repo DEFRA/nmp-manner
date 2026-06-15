@@ -3164,7 +3164,7 @@ GO
 --    UPDATE [dbo].[Windspeeds] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 3;
 --END
 
-
+DECLARE @OrganicMatter NVARCHAR(150)=N'Organic (10-20% organic matter)';
 
 -- Populating TopSoils table with relevant data
 IF NOT EXISTS (SELECT 1 FROM [dbo].[TopSoils])
@@ -3184,18 +3184,19 @@ BEGIN
         (10, N'Sandy clay', 130, 50),
         (11, N'Silty clay', 145, 65),
         (12, N'Clay', 145, 50),
-        (13, N'Organic (10 to 20% organic matter)', 125, 80),
+        (13, @OrganicMatter, 125, 80),
         (14, N'Peaty', 135, 90),
         (15, N'Peat', 150, 100),
         (16, N'Chalk', 90, 70),
         (17, N'Rock (not chalk)', 45, 35)
     SET IDENTITY_INSERT [dbo].[TopSoils] OFF
 END
---ELSE
---BEGIN
---    UPDATE [dbo].[TopSoils] SET [Name] = N'Organic (10 to 20% organic matter)' WHERE ID=13
---END
-GO
+
+
+IF  EXISTS (SELECT 1 FROM [dbo].[TopSoils] WHERE [NAME]=N'Organic (10 to 20% organic matter)')
+BEGIN
+    UPDATE [dbo].[TopSoils] SET [Name] = @OrganicMatter WHERE ID=13
+END
 
 -- Populating SubSoils table with relevant data
 IF NOT EXISTS (SELECT 1 FROM [dbo].[SubSoils])
@@ -3215,17 +3216,20 @@ BEGIN
         (10, N'Sandy clay', 225, 85),
         (11, N'Silty clay', 240, 90),
         (12, N'Clay', 270, 100),
-        (13, N'Organic (10 to 20% organic matter)', 200, 130),
+        (13, @OrganicMatter, 200, 130),
         (14, N'Peaty', 240, 160),
         (15, N'Peat', 240, 200),
         (16, N'Chalk', 200, 120),
         (17, N'Rock (not chalk)', 60, 50)
     SET IDENTITY_INSERT [dbo].[SubSoils] OFF
 END
---ELSE
---BEGIN
---    UPDATE [dbo].[SubSoils] SET [Name] = N'Organic (10 to 20% organic matter)' WHERE ID=13
---END
+
+--Update SubSoil and TopSoil
+IF  EXISTS (SELECT 1 FROM [dbo].[SubSoils] WHERE [NAME]=N'Organic (10 to 20% organic matter)')
+BEGIN
+    UPDATE [dbo].[SubSoils] SET [Name] = @OrganicMatter WHERE ID=13
+END
+
 
 GO
 
