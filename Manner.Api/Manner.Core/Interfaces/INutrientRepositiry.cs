@@ -6,8 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Manner.Core.Interfaces;
-public interface IRepository<T> where T : class
-{
-    Task<IEnumerable<T>?> FetchAllAsync();
-    Task<T?> FetchByIdAsync(int id);
+
+public interface INutrientRepository : IRepository<Nutrient>
+{    
 }

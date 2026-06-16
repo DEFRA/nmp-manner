@@ -14,13 +14,13 @@ public class CropTypeRepository(ILogger<CropTypeRepository> logger, ApplicationD
     private readonly ILogger<CropTypeRepository> _logger = logger;
     public async Task<IEnumerable<CropType>?> FetchAllAsync()
     {
-        _logger.LogTrace($"CropTypeRepository : FetchAllAsync() callled");
+        _logger.LogTrace("CropTypeRepository : FetchAllAsync() callled");
         return await _context.CropTypes.ToListAsync();
     }
 
     public async Task<CropType?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"CropTypeRepository : FetchByIdAsync({id}) callled");
+        _logger.LogTrace("CropTypeRepository : FetchByIdAsync({Id}) callled", id);
         return await _context.CropTypes.FirstOrDefaultAsync(a => a.ID == id);
     }
 }

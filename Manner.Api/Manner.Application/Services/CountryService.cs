@@ -18,13 +18,13 @@ public class CountryService(ILogger<CountryService> logger, ICountryRepository c
 
     public async Task<IEnumerable<CountryDto>?> FetchAllAsync()
     {
-        _logger.LogTrace($"CountryService : FetchAllAsync() callled");
+        _logger.LogTrace("CountryService : FetchAllAsync() callled");
         return _mapper.Map<IEnumerable<CountryDto>>(await _countryRepository.FetchAllAsync());
     }
 
     public async Task<CountryDto?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"CountryService : FetchByIdAsync({id}) callled");
+        _logger.LogTrace("CountryService : FetchByIdAsync({Id}) callled", id);
         return _mapper.Map<CountryDto>(await _countryRepository.FetchByIdAsync(id));
     }
 }

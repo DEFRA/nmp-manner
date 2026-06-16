@@ -78,6 +78,8 @@
     <Build Include="DBO\Tables\IncorpMethodsIncorpDelays.sql" />
     <Build Include="DBO\Tables\Countries.sql" />
     <Build Include="DBO\Tables\ClimateTypes.sql" />
+    <Build Include="DBO\Tables\Nutrients.sql" />
+    <Build Include="DBO\Tables\NutrientProducts.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
