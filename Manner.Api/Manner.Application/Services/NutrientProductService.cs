@@ -2,6 +2,7 @@
 using Manner.Application.DTOs;
 using Manner.Application.Interfaces;
 using Manner.Core.Attributes;
+using Manner.Core.Entities;
 using Manner.Core.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -24,5 +25,12 @@ public class NutrientProductService(ILogger<NutrientProductService> logger, INut
     {
         _logger.LogTrace("NutrientProductService : FetchByIdAsync({Id}) callled", id);
         return _mapper.Map<NutrientProductDto>(await _nutrientProductRepository.FetchByIdAsync(id));
+    }
+
+   
+    public async Task<IEnumerable<NutrientProductDto>?> FetchByNutrientIdAsync(int nutrientId)
+    {
+        _logger.LogTrace("NutrientProductService : FetchByNutrientIdAsync({NutrientId}) callled", nutrientId);
+        return _mapper.Map<IEnumerable<NutrientProductDto>>(await _nutrientProductRepository.FetchByNutrientIdAsync(nutrientId));
     }
 }

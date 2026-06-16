@@ -25,4 +25,10 @@ public class NutrientProductRepository(ILogger<NutrientProductRepository> logger
         _logger.LogTrace("NutrientProductRepository : FetchByIdAsync({Id}) callled", id);
         return await _context.NutrientProducts.FirstOrDefaultAsync(a => a.ID == id);
     }
+
+    public async Task<IEnumerable<NutrientProduct>?> FetchByNutrientIdAsync(int nutrientId)
+    {
+        _logger.LogTrace("NutrientProductRepository : FetchByNutrientIdAsync({NutrientId}) callled", nutrientId);
+        return await _context.NutrientProducts.Where(a => a.NutrientID == nutrientId).ToListAsync();
+    }
 }

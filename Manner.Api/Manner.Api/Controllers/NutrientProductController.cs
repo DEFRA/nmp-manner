@@ -1,6 +1,5 @@
 ﻿using Manner.Application.DTOs;
 using Manner.Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -8,7 +7,7 @@ namespace Manner.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/")]
-[Authorize]
+//[Authorize]
 public class NutrientProductController : ControllerBase
 {
     private readonly ILogger<NutrientProductController> _logger;
@@ -48,6 +47,20 @@ public class NutrientProductController : ControllerBase
     {
         _logger.LogTrace("NutrientProductController: nutrient-products/{Id} called.", id);
         var nutrientProduct = await _nutrientProductService.FetchByIdAsync(id);
+        return nutrientProduct != null
+            ? Ok(new StandardResponse { Success = true, Data = nutrientProduct })
+            : NotFound(new StandardResponse { Success = false, Message = "Nutrient product not found." });
+    }
+
+    [HttpGet("nutrient-products/by-nutrient-id/{nutrientId}")]
+    [SwaggerOperation(Summary = "Retrieve nutrient product by nutrient ID", Description = "Fetches a specific nutrient product by its nutrient ID.", Tags = ["Nutrient Products"])]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public async Task<ActionResult<StandardResponse>> NutrientProductsByNutrientId(int nutrientId)
+    {
+        _logger.LogTrace("NutrientProductController: nutrient-products/by-nutrient-id/{NutrientId} called.", nutrientId);
+        var nutrientProduct = await _nutrientProductService.FetchByNutrientIdAsync(nutrientId);
         return nutrientProduct != null
             ? Ok(new StandardResponse { Success = true, Data = nutrientProduct })
             : NotFound(new StandardResponse { Success = false, Message = "Nutrient product not found." });
