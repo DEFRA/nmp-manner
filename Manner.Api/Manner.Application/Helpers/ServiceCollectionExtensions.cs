@@ -14,11 +14,11 @@ namespace Manner.Api.Helpers
     {
         public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {            
-            return AddServices(services,  configuration);
+            return AddServices(services);
         }
                
 
-        private static IServiceCollection AddServices(IServiceCollection services, IConfiguration configuration)
+        private static IServiceCollection AddServices(IServiceCollection services)
         {
 
             Assembly assembly = Assembly.GetExecutingAssembly(); 

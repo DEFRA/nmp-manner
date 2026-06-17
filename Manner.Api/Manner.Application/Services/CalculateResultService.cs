@@ -67,7 +67,19 @@ public class CalculateResultService(
             manureType.SO3 = application.ManureDetails.SO3 ?? manureType.SO3;
             manureType.MgO = application.ManureDetails.MgO ?? manureType.MgO;
 
-            MannerCalculator calculator = new MannerCalculator(calculateNutrientsRequest.Field, climate, cropType, application, manureType, incorporationDelay, topSoil, subSoil, climateTypes, runType);
+            MannerCalculator calculator = new MannerCalculator(new MannerCalculatorInput
+            {
+                Field = calculateNutrientsRequest.Field,
+                Climate = climate,
+                CropType = cropType,
+                ManureApplication = application,
+                ManureType = manureType,
+                IncorporationDelay = incorporationDelay,
+                TopSoil = topSoil,
+                SubSoil = subSoil,
+                ClimateTypes = climateTypes,
+                RunType = runType
+            });
             calculator.Calculate();
 
             outputs.TotalNitrogenApplied += Math.Round(calculator.MannerEngine.TotalNitrogenApplied, 0);
@@ -159,7 +171,19 @@ public class CalculateResultService(
             manureType.SO3 = application.ManureDetails.SO3 ?? manureType.SO3;
             manureType.MgO = application.ManureDetails.MgO ?? manureType.MgO;
 
-            MannerCalculator calculator = new MannerCalculator(calculateNutrientsRequest.Field, climate, cropType, application, manureType, incorporationDelay, topSoil, subSoil, climateTypes, runType);
+            MannerCalculator calculator = new MannerCalculator(new MannerCalculatorInput
+            {
+                Field = calculateNutrientsRequest.Field,
+                Climate = climate,
+                CropType = cropType,
+                ManureApplication = application,
+                ManureType = manureType,
+                IncorporationDelay = incorporationDelay,
+                TopSoil = topSoil,
+                SubSoil = subSoil,
+                ClimateTypes = climateTypes,
+                RunType = runType
+            });
             calculator.Calculate();
 
             output.TotalNitrogenApplied = Math.Round(calculator.MannerEngine.TotalNitrogenApplied, 0);

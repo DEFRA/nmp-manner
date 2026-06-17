@@ -1,29 +1,29 @@
 ﻿using Manner.Application.DTOs;
 using Manner.Application.Interfaces;
 using Manner.Application.Enums;
-using Manner.Core.Attributes;
-using Manner.Core.Entities;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
-using System.Diagnostics;
+using Manner.Core.Attributes;
+
 namespace Manner.Application.Calculators;
-//[Service(ServiceLifetime.Transient)]
-public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto cropType, ManureApplication manureApplication, ManureTypeDto manureType, IncorporationDelayDto incorporationDelay, TopSoilDto topSoil, SubSoilDto subSoil, List<ClimateTypeDto> climateTypes, int runType) : IMannerCalculator
+
+public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
 {
-    private readonly FieldDetail _field = field;
-    private readonly ManureApplication _manureApplication = manureApplication;
-    private readonly ManureTypeDto _manureType = manureType;
-    private readonly ClimateDto _climate = climate;
-    private readonly CropTypeDto _cropType = cropType;
-    private readonly IncorporationDelayDto _incorporationDelay = incorporationDelay;
-    private readonly TopSoilDto _topSoil = topSoil;
-    private readonly SubSoilDto _subSoil = subSoil;
-    private readonly List<ClimateTypeDto> _climateTypes = climateTypes;
+    private readonly FieldDetail _field = input.Field;
+    private readonly ManureApplication _manureApplication = input.ManureApplication;
+    private readonly ManureTypeDto _manureType = input.ManureType;
+    private readonly ClimateDto _climate = input.Climate;
+    private readonly CropTypeDto _cropType = input.CropType;
+    private readonly IncorporationDelayDto? _incorporationDelay = input.IncorporationDelay;
+    private readonly TopSoilDto _topSoil = input.TopSoil;
+    private readonly SubSoilDto _subSoil = input.SubSoil;
+    private readonly List<ClimateTypeDto> _climateTypes = input.ClimateTypes;
     private readonly DTOs.Outputs _outputs = new();
     private readonly ClimateCalculator _climateCalculator = new();
+#pragma warning disable S1450
     private double _rainfallTotal;
+#pragma warning restore S1450
     private double _evapotranspirationTotal;
-    private readonly int _runType = runType;
+    private readonly int _runType = input.RunType;
     private const string _arableKey = "Arable";
     private const string _grassKey = "Grass";
     public DTOs.Outputs MannerEngine
@@ -91,12 +91,14 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
 
             // Mineralised N
             // --------------------------------------------------------------
-            var mineralisedN2A = default(double);
-            var mineralisedN3 = default(double);
-            var cdd1 = default(double);
-            var cdd2 = default(double);
-            var cdd2a = default(double);
-            double calculatedMineralisedN = this.CalculateMineralisedN(calculatedTotalN, calculatedPotentialN, ref mineralN1, ref mineralisedN3, ref mineralisedN2A, ref cdd1, ref cdd2, ref cdd2a);
+            var mineralisedResult = this.CalculateMineralisedN(calculatedTotalN, calculatedPotentialN);
+            double calculatedMineralisedN = mineralisedResult.MineralisedN;
+            var mineralisedN2A = mineralisedResult.MineralisedN2A;
+            var mineralisedN3 = mineralisedResult.OrganicN3;
+            var cdd1 = mineralisedResult.Cdd1;
+            var cdd2 = mineralisedResult.Cdd2;
+            var cdd2a = mineralisedResult.Cdd2A;
+            mineralN1 = mineralisedResult.MineralN1;
 
             mineralN4 = mineralN3 + mineralN1;
             // Leached N
@@ -153,7 +155,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
         }
         else
         {
-            throw new Exception("Manure not found");
+            throw new InvalidOperationException("Manure not found");
         }
 
     }
@@ -182,126 +184,79 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     /// <param name="endSoilDrainageDate"></param>
     private void CalculateRainfall(DateOnly applicationDate, DateOnly endSoilDrainageDate)
     {
-        DateTime appDate;
-        DateTime endDate;
-        var sumRain = default(double);
-        var sumEvap = default(double);
-        double propstart;
-        double propend;
-        double applicationDateAE, appDateRain;
-        double soilDrainageAE, soilDrainageRain;
-
-        appDateRain = GetClimateType(applicationDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
-        applicationDateAE = GetClimateType(applicationDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
-
-        soilDrainageRain = GetClimateType(endSoilDrainageDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
-        soilDrainageAE = GetClimateType(endSoilDrainageDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
-
-
         // DO NOT ADD ONE MONTH TO THE DATE OF APPLICATION TO MIMIC EXISTING CODE AND MANNER PAPER
-        appDate = new DateTime(applicationDate.Year, applicationDate.Month, applicationDate.Day, 0, 0, 0, DateTimeKind.Local);
-        endDate = new DateTime(endSoilDrainageDate.Year, endSoilDrainageDate.Month, endSoilDrainageDate.Day, 0, 0, 0, DateTimeKind.Local);
-        // #### NOTE -    Any manure application AFTER 31/07/98 is associated with the next years End of Soil Drainage
+        DateTime appDate = new DateTime(applicationDate.Year, applicationDate.Month, applicationDate.Day, 0, 0, 0, DateTimeKind.Local);
+        DateTime endDate = new DateTime(endSoilDrainageDate.Year, endSoilDrainageDate.Month, endSoilDrainageDate.Day, 0, 0, 0, DateTimeKind.Local);
 
+        // #### NOTE -    Any manure application AFTER 31/07/98 is associated with the next years End of Soil Drainage
         if ((endDate - appDate).Days <= 0)
         {
-            // if date of Application is after End of Soil Drainage then return zero rainfall and zero evap.
             _rainfallTotal = 0d;
             _evapotranspirationTotal = 0d;
+            return;
         }
-        else
+
+        double appDateRain = GetClimateType(applicationDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
+        double applicationDateAE = GetClimateType(applicationDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
+        double soilDrainageRain = GetClimateType(endSoilDrainageDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
+        double soilDrainageAE = GetClimateType(endSoilDrainageDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
+
+        double sumRain = 0d;
+        double sumEvap = 0d;
+        double propstart = GetMonthProgress(appDate);
+        double propend = GetMonthProgress(endDate);
+        int monthDifference = GetMonthDifference(appDate, endDate);
+
+        if (monthDifference > 0)
         {
-            // else calculate rainfall
-            propstart = Thread.CurrentThread.CurrentCulture.Calendar.GetDayOfMonth(appDate) /
-                       (new DateTime(Thread.CurrentThread.CurrentCulture.Calendar.GetYear(appDate), Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(appDate), 1, 0, 0, 0, DateTimeKind.Local).AddMonths(1) -
-                               new DateTime(
-                                   Thread.CurrentThread.CurrentCulture.Calendar.GetYear(appDate),
-                                   Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(appDate),
-                                   1, 0, 0, 0, DateTimeKind.Local)).TotalDays;
-
-            // Calculate propend
-            propend = Thread.CurrentThread.CurrentCulture.Calendar.GetDayOfMonth(endDate) /
-                            (new DateTime(
-                                        Thread.CurrentThread.CurrentCulture.Calendar.GetYear(endDate),
-                                        Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(endDate),
-                                        1, 0, 0, 0, DateTimeKind.Local)
-                                    .AddMonths(1) -
-                                    new DateTime(
-                                        Thread.CurrentThread.CurrentCulture.Calendar.GetYear(endDate),
-                                        Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(endDate),
-                                        1, 0, 0, 0, DateTimeKind.Local)).TotalDays;
-            // check to make sure that month for app date and end soil drainage is not the same. If it is only to diff at end of period
-            if (((endDate.Year - appDate.Year) * 12) + endDate.Month - appDate.Month > 0L)
-            {
-                if (applicationDateAE > appDateRain)
-                {
-                    sumRain = appDateRain * (1.0d - propstart);
-                    sumEvap = sumRain;
-                }
-                else
-                {
-                    sumRain = appDateRain * (1.0d - propstart);
-                    sumEvap = applicationDateAE * (1.0d - propstart);
-                }
-
-                if (soilDrainageAE > soilDrainageRain)
-                {
-                    sumRain += soilDrainageRain * propend;
-                    sumEvap += soilDrainageRain * propend;
-                }
-                else
-                {
-                    sumRain += soilDrainageRain * propend;
-                    sumEvap += soilDrainageAE * propend;
-                }
-            }
-
-            else if (((endDate.Year - appDate.Year) * 12) + endDate.Month - appDate.Month == 0L)
-            {
-
-                if (soilDrainageAE > soilDrainageRain)
-                {
-                    sumRain += soilDrainageRain * (propend - propstart);
-                    sumEvap += soilDrainageRain * (propend - propstart);
-                }
-                else
-                {
-                    sumRain += soilDrainageRain * (propend - propstart);
-                    sumEvap += soilDrainageAE * (propend - propstart);
-                }
-
-            }
-
-            while (((endDate.Year - appDate.Year) * 12) + endDate.Month - appDate.Month > 1)
-            {
-                // Add one month to appDate
-                appDate = appDate.AddMonths(1);
-
-                appDateRain = GetClimateType(appDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
-                applicationDateAE = GetClimateType(appDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
-
-
-                if (applicationDateAE > appDateRain)
-                {
-                    sumRain += appDateRain;
-                    sumEvap += appDateRain;
-                }
-                else
-                {
-                    sumRain += appDateRain;
-                    sumEvap += applicationDateAE;
-                }
-            }
-
-            // always round up
-            _rainfallTotal = (double)(long)Math.Round(sumRain + 0.5d);
-
-            if (_rainfallTotal < 0d)
-            {
-                _rainfallTotal = 0d;
-            }
-            _evapotranspirationTotal = (double)(long)Math.Round(sumEvap + 0.5d);
+            AddBoundedRainAndEvap(appDateRain, applicationDateAE, 1.0d - propstart, ref sumRain, ref sumEvap);
+            AddBoundedRainAndEvap(soilDrainageRain, soilDrainageAE, propend, ref sumRain, ref sumEvap);
         }
+        else if (monthDifference == 0)
+        {
+            AddBoundedRainAndEvap(soilDrainageRain, soilDrainageAE, propend - propstart, ref sumRain, ref sumEvap);
+        }
+
+        while (GetMonthDifference(appDate, endDate) > 1)
+        {
+            appDate = appDate.AddMonths(1);
+            appDateRain = GetClimateType(appDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
+            applicationDateAE = GetClimateType(appDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
+            AddBoundedRainAndEvap(appDateRain, applicationDateAE, 1d, ref sumRain, ref sumEvap);
+        }
+
+        // always round up
+        _rainfallTotal = (double)(long)Math.Round(sumRain + 0.5d);
+
+        if (_rainfallTotal < 0d)
+        {
+            _rainfallTotal = 0d;
+        }
+
+        _evapotranspirationTotal = (double)(long)Math.Round(sumEvap + 0.5d);
+    }
+
+    private static int GetMonthDifference(DateTime startDate, DateTime endDate)
+    {
+        return ((endDate.Year - startDate.Year) * 12) + endDate.Month - startDate.Month;
+    }
+
+    private static double GetMonthProgress(DateTime date)
+    {
+        var calendar = Thread.CurrentThread.CurrentCulture.Calendar;
+        int year = calendar.GetYear(date);
+        int month = calendar.GetMonth(date);
+        double day = calendar.GetDayOfMonth(date);
+        double daysInMonth = (new DateTime(year, month, 1, 0, 0, 0, DateTimeKind.Local).AddMonths(1) - new DateTime(year, month, 1, 0, 0, 0, DateTimeKind.Local)).TotalDays;
+
+        return day / daysInMonth;
+    }
+
+    private static void AddBoundedRainAndEvap(double rain, double evapotranspiration, double proportion, ref double sumRain, ref double sumEvap)
+    {
+        double rainAmount = rain * proportion;
+        sumRain += rainAmount;
+        sumEvap += Math.Min(evapotranspiration, rain) * proportion;
     }
 
     private void CheckAndChangeNegativeNResults()
@@ -1064,19 +1019,15 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     /// Calculates the mineralised N for the next crop.  
     /// Refer to Mineralisation Module Technical Guide (November 2007)
     /// </remarks>
-    private double CalculateMineralisedN(double calculatedTotalN, double calculatedPotentialN, ref double mineralN1, ref double organicN3, ref double mineralisedN2a, ref double cdd1, ref double cdd2, ref double cdd2a)
+    private sealed record MineralisedNCalculationResult(double MineralisedN, double MineralN1, double OrganicN3, double MineralisedN2A, double Cdd1, double Cdd2, double Cdd2A);
+
+    private MineralisedNCalculationResult CalculateMineralisedN(double calculatedTotalN, double calculatedPotentialN)
     {
         try
         {
             if (IsPaperCrumble(_manureType.ID))
             {
-                mineralN1 = 0d;
-                organicN3 = 0d;
-                mineralisedN2a = 0d;
-                cdd1 = 0d;
-                cdd2 = 0d;
-                cdd2a = 0d;
-                return 0d;
+                return new MineralisedNCalculationResult(0d, 0d, 0d, 0d, 0d, 0d, 0d);
             }
 
             var dNOrganic2 = default(double);
@@ -1104,7 +1055,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             // --------------------------------------------------------------------------------------
             // Step 2 - Check the date of application
             // --------------------------------------------------------------------------------------
-            int month = (int)_manureApplication.ApplicationDate.Month;
+            int month = _manureApplication.ApplicationDate.Month;
 
             switch (cropUse ?? "")
             {
@@ -1257,21 +1208,12 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
                     }
             }
 
-            // Set a module level variables 
-            mineralN1 = dNMineralised1;
-            cdd1 = dCDD1;
-            cdd2 = dCDD2;
-            cdd2a = dCDD2A;
-            mineralisedN2a = dNMineralised2A;
-            organicN3 = dNOrganic3;
-
-            // Return total mineralised N for the next crop            
-            return dNMineralised2;
+            return new MineralisedNCalculationResult(dNMineralised2, dNMineralised1, dNOrganic3, dNMineralised2A, dCDD1, dCDD2, dCDD2A);
         }
 
         catch (Exception)
         {
-            return 0d;
+            return new MineralisedNCalculationResult(0d, 0d, 0d, 0d, 0d, 0d, 0d);
         }
     }
 
