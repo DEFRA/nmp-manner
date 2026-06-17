@@ -2775,24 +2775,8 @@ BEGIN
     INSERT [dbo].[ManureGroups] ([ID], [Name],[SortOrder]) VALUES (4, N'Digestate',3)
     SET IDENTITY_INSERT [dbo].[ManureGroups] OFF
 END
---ELSE
---BEGIN
---    UPDATE [dbo].[ManureGroups] SET  [SortOrder] = 1 WHERE [ID] = 1;
---    UPDATE [dbo].[ManureGroups] SET  [SortOrder] = 2 WHERE [ID] = 2;
---    UPDATE [dbo].[ManureGroups] SET  [SortOrder] = 4 WHERE [ID] = 3;
---    UPDATE [dbo].[ManureGroups] SET  [SortOrder] = 3 WHERE [ID] = 4;
---END
+
 GO
-
---IF EXISTS (SELECT 1 FROM [dbo].[ManureGroups] WHERE [ID] = 3)
---BEGIN
---    UPDATE [dbo].[ManureGroups] SET  [Name] = N'Another type of organic material' WHERE [ID] = 3;
---END
-
---IF EXISTS (SELECT 1 FROM [dbo].[ManureGroups] WHERE [ID] = 4)
---BEGIN
---    UPDATE [dbo].[ManureGroups] SET  [Name] = N'Digestate' WHERE [ID] = 4;
---END
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[ManureTypeCategories])
 BEGIN
@@ -2804,13 +2788,7 @@ BEGIN
     INSERT [dbo].[ManureTypeCategories] ([ID], [Name]) VALUES (6, N'Liquid Sludge')
     INSERT [dbo].[ManureTypeCategories] ([ID], [Name]) VALUES (7, N'None')
 END
---ELSE
---BEGIN
---    UPDATE [dbo].[ManureTypeCategories] SET [Name] =N'Cattle Slurry' WHERE [ID]=3
---    UPDATE [dbo].[ManureTypeCategories] SET [Name] =N'Pig Slurry' WHERE [ID]=4
---    UPDATE [dbo].[ManureTypeCategories] SET [Name] =N'Solid Sludge' WHERE [ID]=5
---    UPDATE [dbo].[ManureTypeCategories] SET [Name] =N'Liquid Sludge' WHERE [ID]=6
---END
+
 GO
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[ManureTypes])
@@ -2867,44 +2845,6 @@ BEGIN
 END
 GO
 
---IF EXISTS (SELECT 1 FROM [dbo].[ManureTypes] WHERE [ID] = 43)
---BEGIN
---    UPDATE [dbo].[ManureTypes] SET [Name] = 'Other - Solid materials' WHERE [ID] = 43;
---END                                          
---IF EXISTS (SELECT 1 FROM [dbo].[ManureTypes] WHERE [ID] = 44)
---BEGIN
---    UPDATE [dbo].[ManureTypes] SET [Name] = 'Other - Liquid materials' WHERE [ID] = 44;
---END
---IF EXISTS (SELECT 1 FROM [dbo].[ManureTypes] WHERE [ID] = 8)
---BEGIN
---    UPDATE [dbo].[ManureTypes] SET [IsSlurry] = 1 WHERE [ID] = 8;
---END
---IF EXISTS (SELECT 1 FROM [dbo].[ManureTypes] WHERE [ID] = 12)
---BEGIN
---    UPDATE [dbo].[ManureTypes] SET [IsSlurry] = 1 WHERE [ID] = 12;
---END
---IF EXISTS (SELECT 1 FROM [dbo].[ManureTypes] WHERE [ID] = 13)
---BEGIN
---    UPDATE [dbo].[ManureTypes] SET [IsSlurry] = 1 WHERE [ID] = 13;
---END
---IF EXISTS (SELECT 1 FROM [dbo].[ManureTypes] WHERE [ID] = 14)
---BEGIN
---    UPDATE [dbo].[ManureTypes] SET [IsSlurry] = 1 WHERE [ID] = 14;
---END
---IF EXISTS (SELECT 1 FROM [dbo].[ManureTypes] WHERE [ID] = 15)
---BEGIN
---    UPDATE [dbo].[ManureTypes] SET [IsSlurry] = 1 WHERE [ID] = 15;
---END
---IF EXISTS (SELECT 1 FROM [dbo].[ManureTypes] WHERE [ID] = 18)
---BEGIN
---    UPDATE [dbo].[ManureTypes] SET [IsSlurry] = 1 WHERE [ID] =18;
---END
---IF EXISTS (SELECT 1 FROM [dbo].[ManureTypes] WHERE [ID] = 45)
---BEGIN
---    UPDATE [dbo].[ManureTypes] SET [IsSlurry] = 1 WHERE [ID] = 45;
---END
-
-GO
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[ApplicationMethods])
 BEGIN
@@ -2917,19 +2857,7 @@ BEGIN
     INSERT [dbo].[ApplicationMethods] ([ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]) VALUES (7, N'Band spreader - trailing shoe (long grass i.e. greater than 7cm)', N'L', NULL,4)
     SET IDENTITY_INSERT [dbo].[ApplicationMethods] OFF
 END
---ELSE
---BEGIN
---    UPDATE [dbo].[ApplicationMethods] SET [Name]= N'Deep injection (25 to 30cm)' WHERE ID= 3
---    UPDATE [dbo].[ApplicationMethods] SET [Name]= N'Shallow injection (5 to 7cm)' WHERE ID= 4
---    UPDATE [dbo].[ApplicationMethods] SET [SortOrder]= 2 WHERE ID= 5
---    UPDATE [dbo].[ApplicationMethods] SET [SortOrder]= 3 WHERE ID= 6
---    UPDATE [dbo].[ApplicationMethods] SET [SortOrder]= 4 WHERE ID= 7
---    UPDATE [dbo].[ApplicationMethods] SET [SortOrder]= 5 WHERE ID= 2
---    UPDATE [dbo].[ApplicationMethods] SET [SortOrder]= 6 WHERE ID= 4
---    UPDATE [dbo].[ApplicationMethods] SET [SortOrder]= 7 WHERE ID= 3
---     UPDATE [dbo].[ApplicationMethods] SET [Name]= N'Band spreader - trailing shoe (short grass i.e. less than or equal to 7cm)' WHERE ID= 6
---    UPDATE [dbo].[ApplicationMethods] SET [Name]= N'Band spreader - trailing shoe (long grass i.e. greater than 7cm)' WHERE ID= 7
---END
+
 GO
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[IncorporationMethods])
@@ -2944,16 +2872,7 @@ BEGIN
     INSERT [dbo].[IncorporationMethods] ([ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]) VALUES (7, N'Not incorporated', N'B', N'B',7)
     SET IDENTITY_INSERT [dbo].[IncorporationMethods] OFF
 END
---ELSE
---BEGIN
---    UPDATE [dbo].[IncorporationMethods] SET [SortOrder]= 0 WHERE ID= 1
---    UPDATE [dbo].[IncorporationMethods] SET [SortOrder]= 1 WHERE ID= 2
---    UPDATE [dbo].[IncorporationMethods] SET [SortOrder]= 5 WHERE ID= 3
---    UPDATE [dbo].[IncorporationMethods] SET [SortOrder]= 4 WHERE ID= 4
---    UPDATE [dbo].[IncorporationMethods] SET [SortOrder]= 6 WHERE ID= 5
---    UPDATE [dbo].[IncorporationMethods] SET [SortOrder]= 3 WHERE ID= 6
---    UPDATE [dbo].[IncorporationMethods] SET [SortOrder]= 7 WHERE ID= 7
---END
+
 GO
 
 
@@ -2979,46 +2898,6 @@ BEGIN
     INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (17, N'Not incorporated', 1000, 9999, NULL)
     SET IDENTITY_INSERT [dbo].[IncorporationDelays] OFF
 END
---ELSE
---BEGIN
---    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 9)
---    BEGIN
---        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'3 to 5 days',[Hours]=96, [CumulativeHours]=120, [ApplicableFor]=N'P' WHERE [ID] = 9;
---    END
---    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 10)
---    BEGIN
---        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'3 to 7 days',[Hours]=120, [CumulativeHours]=168, [ApplicableFor]=N'L' WHERE [ID] = 10;
---    END
---    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 11)
---    BEGIN
---        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'6 to 12 days',[Hours]=216, [CumulativeHours]=288, [ApplicableFor]=N'S' WHERE [ID] = 11;
---    END
---    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 12)
---    BEGIN
---        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'More than 7 days',[Hours]=1000, [CumulativeHours]=10000, [ApplicableFor]=N'L' WHERE [ID] = 12;
---    END
---    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 13)
---    BEGIN
---        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'6 to 12 days',[Hours]=216, [CumulativeHours]=288, [ApplicableFor]=N'P' WHERE [ID] = 13;
---    END
---    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 14)
---    BEGIN
---        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'More than 12 days',[Hours]=1000, [CumulativeHours]=10000, [ApplicableFor]=N'S' WHERE [ID] = 14;
---    END
---    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 15)
---    BEGIN
---        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'12 to 32 days',[Hours]=528, [CumulativeHours]=768, [ApplicableFor]=N'P' WHERE [ID] = 15;
---    END
---    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 16)
---    BEGIN
---        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'More than 32 days',[Hours]=1000, [CumulativeHours]=10000, [ApplicableFor]=N'P' WHERE [ID] = 16;
---    END
---    IF EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays] WHERE [ID] = 17)
---    BEGIN
---        UPDATE [dbo].[IncorporationDelays] SET [Name] = N'Not incorporated',[Hours]=1000, [CumulativeHours]=9999, [ApplicableFor]=NULL WHERE [ID] = 17;
---    END
---END
-
 
 GO
 
@@ -3134,12 +3013,6 @@ BEGIN
     INSERT [dbo].[RainTypes] ([ID], [Name], [RainInMM]) VALUES (3, N'Heavy rain (greater than or equal to 5mm) within 6 hours of application', 6)
     SET IDENTITY_INSERT [dbo].[RainTypes] OFF
 END
---ELSE
---BEGIN
---    UPDATE [dbo].[RainTypes] SET [Name] = N'No rainfall within 6 hours of application' WHERE ID=1
---    UPDATE [dbo].[RainTypes] SET [Name] = N'Light rain (less than 5mm) within 6 hours of application' WHERE ID=2
---    UPDATE [dbo].[RainTypes] SET [Name] = N'Heavy rain (greater than or equal to 5mm) within 6 hours of application' WHERE ID=3
---END
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[Windspeeds])
 BEGIN
@@ -3151,18 +3024,6 @@ BEGIN
 END
 GO
 
---IF EXISTS (SELECT 1 FROM [dbo].[Windspeeds] WHERE [ID] = 1 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[Windspeeds] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 1;
---END
---IF EXISTS (SELECT 1 FROM [dbo].[Windspeeds] WHERE [ID] = 2 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[Windspeeds] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 2;
---END
---IF EXISTS (SELECT 1 FROM [dbo].[Windspeeds] WHERE [ID] = 3 AND [Name] LIKE '%-%')
---BEGIN
---    UPDATE [dbo].[Windspeeds] SET [Name] = REPLACE([Name], '-', ' to ') WHERE [ID] = 3;
---END
 
 DECLARE @OrganicMatter NVARCHAR(150)=N'Organic (10-20% organic matter)';
 
@@ -3254,14 +3115,18 @@ BEGIN
 END
 GO
 
+DECLARE @MeasurementUnit NVARCHAR(150)=N'per kg';
+DECLARE @MeasurementUnitPerTonne NVARCHAR(150)=N'per kg';
+DECLARE @CurrencyCode NVARCHAR(150)=N'GBP';
+
 IF NOT EXISTS (SELECT 1 FROM [dbo].[Nutrients])
 BEGIN
     SET IDENTITY_INSERT [dbo].[Nutrients] ON 
     INSERT INTO [dbo].[Nutrients] ([ID], [Name], [Symbol], [MeasurementUnit], [UnitRate], [CurrencyCode])
     VALUES
-        (1, N'Nitrogen', N'N', N'per kg', 0.90, N'GBP'),
-        (2, N'Phosphate', N'P2O5', N'per kg', 0.80, N'GBP'),
-        (3, N'Potash', N'K', N'per kg', 0.60, N'GBP')        
+        (1, N'Nitrogen', N'N', @MeasurementUnit, 0.90, @CurrencyCode),
+        (2, N'Phosphate', N'P2O5', @MeasurementUnit, 0.80, @CurrencyCode),
+        (3, N'Potash', N'K', @MeasurementUnit, 0.60, @CurrencyCode)        
     SET IDENTITY_INSERT [dbo].[Nutrients] OFF
 END
 
@@ -3270,10 +3135,10 @@ BEGIN
     SET IDENTITY_INSERT [dbo].[NutrientProducts] ON 
     INSERT INTO [dbo].[NutrientProducts] ([ID], [Name], [NutrientID], [NutrientPercentage], [IsNutrientDefaultProduct], [MeasurementUnit])
     VALUES
-        (1, N'Ammonium nitrate', 1, 34.5, 1, N'per tonne'),
-        (2, N'Calcium ammonium nitrate', 1, 27, 0, N'per tonne'),
-        (3, N'Triple superphoshphate', 2, 46, 1, N'per tonne'),
-        (4, N'Muriate of potash', 3, 60, 1, N'per tonne')        
+        (1, N'Ammonium nitrate', 1, 34.5, 1, @MeasurementUnitPerTonne),
+        (2, N'Calcium ammonium nitrate', 1, 27, 0, @MeasurementUnitPerTonne),
+        (3, N'Triple superphoshphate', 2, 46, 1, @MeasurementUnitPerTonne),
+        (4, N'Muriate of potash', 3, 60, 1, @MeasurementUnitPerTonne)        
     SET IDENTITY_INSERT [dbo].[NutrientProducts] OFF
 END
 
