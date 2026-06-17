@@ -9,9 +9,6 @@
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
---TRUNCATE TABLE [dbo].[ManureTypes]
 
---IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'IncorpMethodsIncorpDelays' AND TABLE_SCHEMA = 'DBO')
---BEGIN
---TRUNCATE TABLE IncorpMethodsIncorpDelays
---END
+
+GO
