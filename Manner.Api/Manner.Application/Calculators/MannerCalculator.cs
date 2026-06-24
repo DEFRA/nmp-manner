@@ -1317,333 +1317,139 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
     /// <remarks>Removed from the calcManner routine to allow more flexibility</remarks>
     private double CalculateLeachedN(double mineralN4, double vmTotal, double vmTop)
     {
-
         // 07 Nov 2012 C Lam - Return zero for paper crumbles
         if (IsPaperCrumble(_manureType.ID))
         {
             return 0d;
         }
 
-        DateOnly datCurApp;
-        DateOnly datEndDrain;
-        double dMinN4;
-        int lNitrificationDelay;
-
-
-        int monthApp;
-
-        double dDefAdjustFactor;
-        double dVMEffective;
-        var dHER = default(double);
-        double dHEREffective;
-
-        double dSMD;      // soil moisture deficit
-        double dSMDCurMonth;      // soil moisture deficit this month
-        double dSMDPrevMonth;     // soil moisture deficit previous month
-
-        // Mostly matrix algorithm variables
-        double dLRatio;
-        double dLFactor1;
-        double dLIndex;
-        double dLProp;
-
-        int incorporationDelayHours;
-
         try
         {
-
-            incorporationDelayHours = _incorporationDelay.Hours ?? 0;
-
-            // Reset the Leached N variables to zero
-            double calculateLeachedNRet = 0d;
-            dHEREffective = 0d;
-
-            dMinN4 = mineralN4;
-
-            // STEP 1 - Calculate Nitrification
-            // The nitrification delay is dealt with in the Nitrification Technical Guide.
-            // ----------------------------------------------------------------------------------
-            // Date of application
-            datCurApp = _manureApplication.ApplicationDate;
-
-            // Calculate the nitrification delay
-            lNitrificationDelay = CalculateNitrificationDelay(datCurApp);
-
-            // For simplicity the nitrification delay is added to the date of application
-            // rather than treated as a range.
-            // Reset the current application date to allow for this delay.
+            int incorporationDelayHours = _incorporationDelay?.Hours ?? 0;
+            DateOnly datCurApp = _manureApplication.ApplicationDate;
+            int lNitrificationDelay = CalculateNitrificationDelay(datCurApp);
             datCurApp = datCurApp.AddDays(lNitrificationDelay);
 
-            // set the application month variable to the date of the current manure application
-            monthApp = datCurApp.Month;
-
-
-            // set the variable for the date of end of drainage
-            datEndDrain = _manureApplication.EndOfDrainageDate;
-
-            // STEP 3 - Determine soil properties
-            // ----------------------------------------------------------------------------------
-            // Leaching calculation starts here   'check the date of application is less than the end of soil drainage
-            if (datCurApp < datEndDrain)
+            DateOnly datEndDrain = _manureApplication.EndOfDrainageDate;
+            if (datCurApp >= datEndDrain)
             {
-
-                // adjustment for moisture deficit and for incorporation, which differs from that for permeable soil because of the effects on bypass flow and surface runoff.
-
-                // Get soil moisture deficit from MCDM.  Note: because MCDM calculates soil moisture deficit at the end of the month we use the SMD from
-                // the previous month to the month of application.  Agreed following conversation with E. Lord on 26/7/2006.
-                // As the count starts at zero then iMonthApp -.
-
-                dSMDCurMonth = GetClimateType(monthApp, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit);
-
-                if (monthApp == 1)
-                {
-                    // if month is january take december as previous month
-                    dSMDPrevMonth = GetClimateType(12, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit);
-                }
-                else
-                {
-                    dSMDPrevMonth = GetClimateType(monthApp - 1, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit);
-                }
-
-                // Even out the SMD factor depending on how far along the month we are.
-                double SMDpropstart;
-                SMDpropstart = (double)datCurApp.Day / (double)DateTime.DaysInMonth((int)_manureApplication.ApplicationDate.Year, (int)_manureApplication.ApplicationDate.Month);
-
-                dSMD = dSMDPrevMonth + SMDpropstart * (dSMDCurMonth - dSMDPrevMonth);
-
-                // Calculate the effective HER from effective application date to end of drainage.
-
-                // If there was a soil moisture deficit then this affects adjustment factor
-
-                if (dSMD > 0d)
-                {
-                    dHER = _manureApplication.RainfallPostApplication - _evapotranspirationTotal;
-                    dHEREffective = dHER;
-                }
-
-                // STEP 4 - Apply appropriate leaching algorithm
-                // ----------------------------------------------------------------------------------
-                // The subsoil contains the word CLAY
-                // use the drained clay soil leaching algorithm
-                // ----------------------------------------------------------------------------------
-                // if the result of the string search for the word clay is greater than 0 then we have a clay soil
-
-                if (_subSoil.ID == (int)Enums.Enumerations.SoilType.Clay || _subSoil.ID == (int)Enums.Enumerations.SoilType.ClayLoam || _subSoil.ID == (int)Enums.Enumerations.SoilType.SandyClay || _subSoil.ID == (int)Enums.Enumerations.SoilType.SandyClayLoam || _subSoil.ID == (int)Enums.Enumerations.SoilType.SiltyClay || _subSoil.ID == (int)Enums.Enumerations.SoilType.SiltyClayLoam)
-                {
-
-                    double dLProp1;
-                    double dLProp2;
-                    double dLProp3;
-                    double dLRatioMod;
-                    var dLAdjust = default(double);
-                    double dInc;      // adjustment for method of incorporation
-
-                    // Check if manure was incorporated (any value other than 'not incorporated'.
-                    // IncorpFlag = ……
-                    switch (_manureApplication.IncorporationMethodID)
-                    {
-                        // If the manure has been ploughed down
-                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.MouldboardPlough: // "Mouldboard Plough"
-                            {
-                                dInc = 0.9d;
-                                break;
-                            }
-                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.TineCultivator: // "Tine Cultivator"
-                            {
-                                dInc = 0.4d;
-                                break;
-                            }
-                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.RotaryCultivator: // "Rotary Cultivator"
-                            {
-                                dInc = 0.4d;
-                                break;
-                            }
-                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.NotIncorporated: // "Not Incorporated"
-                            {
-                                dInc = 0d; // catch all, but shouldn't get here
-                                break;
-                            }
-                        default:
-                            {
-                                dInc = 0d;
-                                break;
-                            }
-                    }
-
-                    // if delay before incorporation > 7 days then                    
-                    if (incorporationDelayHours > 168)
-                    {
-                        dInc *= 0.5d;
-                    }
-
-                    // Calculate 'leaching ratio'
-                    // check for divide by zero error
-                    if (vmTotal <= 0d)
-                    {
-                        dLRatio = 0d;
-                    }
-                    else
-                    {
-                        dLRatio = dHEREffective / vmTotal;
-                    }
-
-                    // dLProp1 accounts for initial N loss due to surface and crack flow.
-                    dLProp1 = Math.Min(0.13d, Math.Max(0d, dLRatio));
-
-                    dLProp1 = dLProp1 * (1d - dInc) * (1d - Math.Min(dSMD / 50d, 1d));
-
-                    // NB perhaps this can be omitted if the manure is incorporated, and this would simplify the incorporation adjustment
-                    dLProp2 = 0.51d * dLRatio;
-
-                    // Lprop3 covers non-linearity under very wet climatic conditions
-                    // and is calculated for the range Lratio > 0.75
-                    if (dLRatio > 0.75d)
-                    {
-                        dLProp3 = -0.335d * (dLRatio - 0.75d);
-                    }
-                    else
-                    {
-                        dLProp3 = 0d;
-                    }
-
-                    // Total proportion leached is the sum of the three.
-                    // Lprop is constrained to be between 0 and 1
-                    dLProp = Math.Min(1d, Math.Max(0d, dLProp1 + dLProp2 + dLProp3));
-
-
-                    // Modifications to the result of Lprop to allow for deficit at the effective date of application, and incorporation, are as follows:
-                    if (dSMD > 0d || dInc > 0d)
-                    {
-                        // If Lratio > 0.75 then Lratiomod = 0.75 else Lratiomod = Lratio
-                        if (dLRatio > 0.75d)
-                        {
-                            dLRatioMod = 0.75d;
-                        }
-                        else
-                        {
-                            dLRatioMod = dLRatio;
-                        }
-
-                        // dLAdjust = dLRatioMod * dDefAdjustFactor
-                        dDefAdjustFactor = 0.002d * dSMD;
-                        dLAdjust = dLRatioMod * dDefAdjustFactor;
-                    }
-
-                    // These equations cause leaching to be reduced by up to 25% of total nitrate at risk (or up to about 40% of the nitrate actually lost from
-                    // surface applications) when manure is applied to a soil with deficit, or is incorporated promptly.
-                    // Then:
-                    dLProp -= dLAdjust;
-                    calculateLeachedNRet = dMinN4 * dLProp;
-                }
-
-                // ----------------------------------------------------------------------------------
-                // Else the subsoil does not contain the word CLAY
-                // use the MATRIX LEACHING ALGORITHM
-                // ----------------------------------------------------------------------------------
-                else
-                {
-                    // Calculate the EFFECTIVE water capacity through which nitrate has to move:
-                    switch (_manureApplication.IncorporationMethodID)
-                    {
-                        // If the manure has been cultivated or ploughed down within a month ie at all
-                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.MouldboardPlough: // "Mouldboard Plough"
-                            {
-                                dVMEffective = vmTotal - 0.5d * vmTop;
-                                break;
-                            }
-                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.TineCultivator: // "Tine Cultivator"
-                            {
-                                dVMEffective = vmTotal - 0.25d * vmTop;
-                                break;
-                            }
-                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.RotaryCultivator: // "Rotary Cultivator"
-                            {
-                                dVMEffective = vmTotal - 0.25d * vmTop;
-                                break;
-                            }
-                        // If it hasn't been incorporated then nothing changes
-                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.NotIncorporated: // "Not Incorporated"
-                            {
-                                dVMEffective = vmTotal; // catch all, but shouldn't get here
-                                break;
-                            }
-                        default:
-                            {
-                                dVMEffective = vmTotal;
-                                break;
-                            }
-                    }
-
-                    dHEREffective = dHER + dSMD * 0.7d;
-
-                    if (dHEREffective < 0d)
-                    {
-                        dHEREffective = 0d;
-                    }
-
-                    // Calculate leaching ratio
-                    if (dVMEffective <= 0d)
-                    {
-                        dLRatio = 0d;
-                    }
-                    else
-                    {
-                        dLRatio = Math.Min(1.896d, dHEREffective / dVMEffective);
-                    }
-
-                    // Calculate Lfactor1
-                    if (dLRatio <= 1d)
-                    {
-                        // Lfactor1 = (1-power(L, 0.5)
-                        dLFactor1 = 1d - Math.Pow(dLRatio, 0.5d);
-                    }
-                    else
-                    {
-                        // Lfactor1 = (power(L, 0.5) -1)
-                        dLFactor1 = Math.Pow(dLRatio, 0.5d) - 1d;
-                    }
-
-                    // Calculate leaching index
-                    dLIndex = 2.27d * Math.Pow(dLFactor1, 3d) - 4.5d * Math.Pow(dLFactor1, 2d) + 2.7d * dLFactor1;
-
-                    // Calculate proportion leached
-                    if (dLRatio < 0.25d)
-                    {
-                        dLProp = 0d;
-                    }
-                    else if (dLRatio < 1d)
-                    {
-                        dLProp = 0.5d - dLIndex;
-                    }
-                    else
-                    {
-                        dLProp = 0.5d + dLIndex;
-                    }
-
-                    if (dLProp > 1d)
-                        dLProp = 1d;
-                    if (dLProp < 0d)
-                        dLProp = 0d;
-
-                    // Return Leached N value
-                    // N leached (kg/ha) = (nitrate-N added for the period) * Lprop
-                    calculateLeachedNRet = (double)dMinN4 * dLProp;
-                }
+                return 0d;
             }
-            else
+
+            int monthApp = datCurApp.Month;
+            double dSMD = CalculateSoilMoistureDeficit(datCurApp, monthApp);
+            double dHER = dSMD > 0d ? _manureApplication.RainfallPostApplication - _evapotranspirationTotal : 0d;
+
+            if (IsClaySubSoil())
             {
-                // This is a bit of a catch all situation and allows the function to return a
-                // value.  I'm also making the assumption that if the application date is
-                // after the end of soil drainage no leaching can occur.
-                calculateLeachedNRet = 0d;
+                return CalculateClaySoilLeachedN(mineralN4, vmTotal, dSMD, dHER, incorporationDelayHours);
             }
-            return calculateLeachedNRet;
+
+            return CalculateMatrixSoilLeachedN(mineralN4, vmTotal, vmTop, dSMD, dHER);
         }
         catch (Exception)
         {
             return 0d;
         }
+    }
 
+    private bool IsClaySubSoil()
+    {
+        return _subSoil.ID == (int)Enums.Enumerations.SoilType.Clay
+            || _subSoil.ID == (int)Enums.Enumerations.SoilType.ClayLoam
+            || _subSoil.ID == (int)Enums.Enumerations.SoilType.SandyClay
+            || _subSoil.ID == (int)Enums.Enumerations.SoilType.SandyClayLoam
+            || _subSoil.ID == (int)Enums.Enumerations.SoilType.SiltyClay
+            || _subSoil.ID == (int)Enums.Enumerations.SoilType.SiltyClayLoam;
+    }
+
+    private double CalculateSoilMoistureDeficit(DateOnly datCurApp, int monthApp)
+    {
+        double dSMDCurMonth = GetClimateType(monthApp, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit);
+        double dSMDPrevMonth = monthApp == 1
+            ? GetClimateType(12, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit)
+            : GetClimateType(monthApp - 1, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit);
+
+        double smdPropStart = (double)datCurApp.Day /
+                              (double)DateTime.DaysInMonth((int)_manureApplication.ApplicationDate.Year, (int)_manureApplication.ApplicationDate.Month);
+
+        return dSMDPrevMonth + smdPropStart * (dSMDCurMonth - dSMDPrevMonth);
+    }
+
+    private double CalculateClaySoilLeachedN(double mineralN4, double vmTotal, double dSMD, double dHereEffective, int incorporationDelayHours)
+    {
+        double dInc = GetClayIncorporationAdjustment(incorporationDelayHours);
+        double dLRatio = vmTotal <= 0d ? 0d : dHereEffective / vmTotal;
+
+        double dLProp1 = Math.Min(0.13d, Math.Max(0d, dLRatio));
+        dLProp1 = dLProp1 * (1d - dInc) * (1d - Math.Min(dSMD / 50d, 1d));
+
+        double dLProp2 = 0.51d * dLRatio;
+        double dLProp3 = dLRatio > 0.75d ? -0.335d * (dLRatio - 0.75d) : 0d;
+        double dLProp = Math.Min(1d, Math.Max(0d, dLProp1 + dLProp2 + dLProp3));
+
+        if (dSMD > 0d || dInc > 0d)
+        {
+            double dLRatioMod = dLRatio > 0.75d ? 0.75d : dLRatio;
+            double dDefAdjustFactor = 0.002d * dSMD;
+            double dLAdjust = dLRatioMod * dDefAdjustFactor;
+            dLProp -= dLAdjust;
+        }
+
+        return mineralN4 * dLProp;
+    }
+
+    private double GetClayIncorporationAdjustment(int incorporationDelayHours)
+    {
+        double dInc = _manureApplication.IncorporationMethodID switch
+        {
+            (int)Enums.Enumerations.MethodOfIncorporationEnum.MouldboardPlough => 0.9d,
+            (int)Enums.Enumerations.MethodOfIncorporationEnum.TineCultivator => 0.4d,
+            (int)Enums.Enumerations.MethodOfIncorporationEnum.RotaryCultivator => 0.4d,
+            _ => 0d
+        };
+
+        if (incorporationDelayHours > 168)
+        {
+            dInc *= 0.5d;
+        }
+
+        return dInc;
+    }
+
+    private double CalculateMatrixSoilLeachedN(double mineralN4, double vmTotal, double vmTop, double dSMD, double dHER)
+    {
+        double dVMEffective = GetMatrixEffectiveWaterCapacity(vmTotal, vmTop);
+
+        double dHEREffective = dHER + dSMD * 0.7d;
+        if (dHEREffective < 0d)
+        {
+            dHEREffective = 0d;
+        }
+
+        double dLRatio = dVMEffective <= 0d ? 0d : Math.Min(1.896d, dHEREffective / dVMEffective);
+        double dLFactor1 = dLRatio <= 1d ? 1d - Math.Pow(dLRatio, 0.5d) : Math.Pow(dLRatio, 0.5d) - 1d;
+
+        double dLIndex = 2.27d * Math.Pow(dLFactor1, 3d) - 4.5d * Math.Pow(dLFactor1, 2d) + 2.7d * dLFactor1;
+        double dLProp = dLRatio < 0.25d ? 0d : dLRatio < 1d ? 0.5d - dLIndex : 0.5d + dLIndex;
+
+        if (dLProp > 1d)
+            dLProp = 1d;
+        if (dLProp < 0d)
+            dLProp = 0d;
+
+        return mineralN4 * dLProp;
+    }
+
+    private double GetMatrixEffectiveWaterCapacity(double vmTotal, double vmTop)
+    {
+        return _manureApplication.IncorporationMethodID switch
+        {
+            (int)Enums.Enumerations.MethodOfIncorporationEnum.MouldboardPlough => vmTotal - 0.5d * vmTop,
+            (int)Enums.Enumerations.MethodOfIncorporationEnum.TineCultivator => vmTotal - 0.25d * vmTop,
+            (int)Enums.Enumerations.MethodOfIncorporationEnum.RotaryCultivator => vmTotal - 0.25d * vmTop,
+            _ => vmTotal
+        };
     }
 
 
