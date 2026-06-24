@@ -165,14 +165,10 @@ public class MeanClimateDrainageModel
     private double _diffusivity; // Soil heat diffusivity (m2 /s)
     private double _hour; // Hour of observation of soil temperatures (n; 0-24)
     private double _depth; // Depth of observation of soil temperatures (n)
-
-    private const double _epsilon = 0.000001;
+        
     private const double DefaultCarbonValue = 1d;
     private const double SentinelTolerance = 0.0001d;
-
-    private double _topSoilAWC;
-    private double _subSoilAWC;
-
+        
     // -- Calculated variable declarations -------------------------------------------
 
     private bool _dirty; // Flag indicating user update of property (b)
@@ -923,11 +919,6 @@ public class MeanClimateDrainageModel
         }
     }
 
-    public void SetAWC(double topSoilAWC, double subSoilAWC)
-    {
-        _topSoilAWC = topSoilAWC;
-        _subSoilAWC = subSoilAWC;
-    }
 
     public void SetPercentTopsoilAWC(Texture soil, short topSoilAWCHard, short topSoilAWCEasy)
     {
@@ -1774,7 +1765,7 @@ public class MeanClimateDrainageModel
             }
             else
             {
-                throw new Exception("Algorithm Range Error");
+                throw new InvalidOperationException("Algorithm Range Error");
             }
 
             tmpDQ = alpha * beta + tmpDK * Math.Pow(Math.Pow(alpha, 2d) * beta, 0.5d);
@@ -2051,223 +2042,201 @@ public class MeanClimateDrainageModel
 
     public void Calculate()
     {
-        // Calculate monthly mean values of potential evapotranspiration and
-        // efficiency of canopy evaporation, and radiation and delta modifiers
-        // for calculate of surface temperature:
+        var potentialEvapotranspiration = new double[12];
+        var canopyEfficiency = new double[12];
 
-        int iMonth;
-        var PotentialEvapotranspiration = new double[12];
-        var CanopyEfficiency = new double[12];
+        CalculatePotentialEvapotranspirationForYear(potentialEvapotranspiration, canopyEfficiency);
 
-        for (iMonth = 0; iMonth <= 11; iMonth++)
-        {
-            CalculatePotentialEvapotranspiration(iMonth, ref PotentialEvapotranspiration[iMonth], ref CanopyEfficiency[iMonth], ref _delta[iMonth], ref _radiation[iMonth]);
-            _potentialEvapotranspiration[iMonth] = PotentialEvapotranspiration[iMonth] * 30d;
-        }
+        var rainfall = new double[12];
+        var surfaceRunOff = new double[12];
+        CalculateEffectiveRainfallAndRunoff(potentialEvapotranspiration, canopyEfficiency, rainfall, surfaceRunOff);
 
-        // Calculate net rainfall, surface runoff and effective potential evapotranspiration
-        // after evaporation of intercepted water from the plant canopy, by integration
-        // across the distribution of rainfall per rain day for each month:
-
-        double Probability;
-        double alpha;
-        double beta;
-
-        var Interception = new double[12];
-        var Rainfall = new double[12];
-        var SurfaceRunOff = new double[12];
-        double Intercept;
-        double RunOff;
-        var Quantile = default(double);
-
-        for (iMonth = 0; iMonth <= 11; iMonth++)
-        {
-            Interception[iMonth] = 0d;
-            SurfaceRunOff[iMonth] = 0d;
-
-            // Gamma rainfall distribution parameters:
-            alpha = 1d + _rainfall[iMonth] / _rainDays[iMonth];
-            beta = _rainfall[iMonth] / _rainDays[iMonth] / alpha;
-
-            // Integration across 100 discrete steps:
-            for (Probability = 0.005d; Probability <= 0.995d; Probability += 0.01d)
-            {
-                CalculateGammaQuantile(Probability, beta, alpha, ref Quantile);
-                Quantile = Max(Quantile, 0.1d);
-
-                // Calculate canopy interception and evaporation:
-                Intercept = Min(Quantile, _leafAreaIndex[iMonth] * 0.2d);
-                Intercept = Min(PotentialEvapotranspiration[iMonth] * CanopyEfficiency[iMonth], Intercept);
-
-                // Intercept = 0
-
-                Interception[iMonth] = Interception[iMonth] + Intercept;
-                Quantile = Quantile - Intercept;
-
-                // Calculate surface runoff:
-                RunOff = CalculateRunOff(iMonth, Quantile);
-                SurfaceRunOff[iMonth] = SurfaceRunOff[iMonth] + RunOff;
-            }
-
-            SurfaceRunOff[iMonth] = _rainDays[iMonth] * SurfaceRunOff[iMonth] / 100d;
-            Interception[iMonth] = _rainDays[iMonth] * Interception[iMonth] / 100d;
-
-            // Calculate effective rainfall and potential evapotranspiration:
-            Rainfall[iMonth] = _rainfall[iMonth] - SurfaceRunOff[iMonth] - Interception[iMonth];
-            PotentialEvapotranspiration[iMonth] = _potentialEvapotranspiration[iMonth] - Interception[iMonth] / CanopyEfficiency[iMonth];
-
-            // Store results:
-            _surfaceRunOff[iMonth] = SurfaceRunOff[iMonth];
-            _canopyEvaporation[iMonth] = Interception[iMonth];
-        }
-
-        // Calculate actual evapotranspiration and soil drainage by the
-        // monthly book-keeping methodology of Thomas:
-
-        var AM02 = default(double);
-        var AM15 = default(double);
-
-        // Calculate plant available water:
-        CalculateAvailableWater(ref AM02, ref AM15);
-
-        // Apply Thomas book-keeping methodology:
-        int index;
-        var ActualEvapotranspiration = new double[12];
-        var SoilMoistureDeficit = new double[12];
-        var SoilDrainage = new double[12];
-        var Drainage = default(double);
-        int Iteration;
-
-        for (iMonth = 0; iMonth <= 11; iMonth++)
-        {
-            SoilMoistureDeficit[iMonth] = 0d;
-            SoilDrainage[iMonth] = 0d;
-        }
-
-        // Iteration changed from 499 to 999 based on SGA's revised model
-        // MMG 29 January 2007
-        double tmp_W;
-        double tmp_Y;
-        double tmp_B;
-        
-        double tmp_A;
-        double tmp_Ratio;
-        for (Iteration = 0; Iteration <= 999; Iteration++)
-        {
-            for (iMonth = 0; iMonth <= 11; iMonth++)
-            {
-                // Revised model calculations;
-                // Debug.Print m_TopSoilAWC + m_SubSoilAWC
-                tmp_B = AM02 + AM15 + 25d; // m_TopSoilAWC + m_SubSoilAWC
-                tmp_A = 1d;
-
-                index = iMonth - 1;
-                if (index == -1)
-                    index = 11;
-
-                tmp_W = Rainfall[iMonth] + SoilMoistureDeficit[index] - SurfaceRunOff[iMonth];
-
-                tmp_Y = (tmp_W + tmp_B) / (2d * tmp_A) - Math.Pow(Math.Pow((tmp_W + tmp_B) / (2d * tmp_A), 2d) - tmp_W * tmp_B / tmp_A, 0.5d);
-
-                SoilMoistureDeficit[iMonth] = tmp_Y * Math.Exp(-1 * PotentialEvapotranspiration[iMonth] / tmp_B);
-
-                SoilDrainage[iMonth] = tmp_W - tmp_Y;
-
-                ActualEvapotranspiration[iMonth] = tmp_Y - SoilMoistureDeficit[iMonth];
-
-                SoilMoistureDeficit[iMonth] = SoilMoistureDeficit[index] - ActualEvapotranspiration[iMonth];
-
-#pragma warning disable S4143
-                SoilMoistureDeficit[iMonth] = SoilMoistureDeficit[iMonth] + Rainfall[iMonth] - SurfaceRunOff[iMonth];
-#pragma warning restore S4143
-
-                if (SoilMoistureDeficit[iMonth] > tmp_B)
-                {
-                    SoilDrainage[iMonth] = SoilMoistureDeficit[iMonth] - tmp_B;
-                    SoilMoistureDeficit[iMonth] = tmp_B;
-                }
-                else
-                {
-                    SoilDrainage[iMonth] = 0d;
-                }
-
-                tmp_Ratio = GetRainDays(iMonth) / 30d;
-
-                SoilDrainage[iMonth] = tmp_Ratio * SoilDrainage[iMonth] + (1d - tmp_Ratio) * (tmp_W - tmp_Y);
-
-                SoilMoistureDeficit[iMonth] = SoilMoistureDeficit[index] + Rainfall[iMonth] - SurfaceRunOff[iMonth] - ActualEvapotranspiration[iMonth] - SoilDrainage[iMonth];
-
-                if (SoilMoistureDeficit[iMonth] > tmp_B)
-                {
-                    SoilDrainage[iMonth] = SoilDrainage[iMonth] + (SoilMoistureDeficit[iMonth] - tmp_B);
-                    SoilMoistureDeficit[iMonth] = tmp_B;
-                }
-
-
-                SoilDrainage[iMonth] = SoilDrainage[iMonth] + SurfaceRunOff[iMonth];
-
-                // Drainage = SoilDrainage(Month)
-                // 
-                // Index = Month - 1
-                // If Index = -1 Then Index = 11
-                // 
-                // ' Calculate Wi ...
-                // tmp_dTempOne = Rainfall(Month) + SoilMoistureDeficit(Index)
-                // 
-                // ' Calculate Yi ...
-                // tmp_dTempTwo = (tmp_dTempOne + ((AM02 + AM15))) / 2 - _
-                // '                            (((tmp_dTempOne + (AM02 + AM15)) * 0.5) ^ 2 _
-                // '                            - tmp_dTempOne * (AM02 + AM15)) ^ 0.5
-                // 
-                // SoilMoistureDeficit(Month) = tmp_dTempTwo * Exp(-1# * PotentialEvapotranspiration(Month) _
-                // '                                        / (AM02 + AM15))
-                // 
-                // ActualEvapotranspiration(Month) = tmp_dTempTwo - SoilMoistureDeficit(Month)
-                // 
-                // SoilDrainage(Month) = tmp_dTempOne - tmp_dTempTwo
-
-                if (Math.Abs(SoilDrainage[iMonth] - Drainage) > 1d)
-                {
-                    // need to wright some code here
-                }
-
-            }
-
-            // MMG Removed flag 29-01-07
-            // Originally put in to speed up PSYCHIC
-            // If flag = true Then Exit For
-
-        }
-
-        // Calculate true SMD and zero negative soil drainage (small number problem),
-        // and round output data. Note that soil moisture deficit is for end of month.
-
-        for (iMonth = 0; iMonth <= 11; iMonth++)
-        {
-
-            if (SoilDrainage[iMonth] < 0d)
-            {
-                SoilDrainage[iMonth] = 0d;
-            }
-
-            SoilMoistureDeficit[iMonth] = AM02 + AM15 + 25d - SoilMoistureDeficit[iMonth];
-#pragma warning disable S4143
-            SoilMoistureDeficit[iMonth] = Math.Round(SoilMoistureDeficit[iMonth], 1);
-#pragma warning restore S4143
-            _soilMoistureDeficit[iMonth] = SoilMoistureDeficit[iMonth];
-
-            SoilDrainage[iMonth] = Math.Round(SoilDrainage[iMonth], 1);
-            _soilDrainage[iMonth] = SoilDrainage[iMonth];
-
-            ActualEvapotranspiration[iMonth] = Math.Round(ActualEvapotranspiration[iMonth], 1);
-            _actualEvapotranspiration[iMonth] = ActualEvapotranspiration[iMonth];
-
-        }
+        var thomasResults = CalculateThomasBookKeeping(rainfall, surfaceRunOff, potentialEvapotranspiration);
+        StoreWaterBalanceOutputs(thomasResults);
 
         CalculateSoilTemperature();
-
-        // Update calculation edit status:
         _dirty = false;
+    }
+
+    private sealed record ThomasBookKeepingResult(double[] ActualEvapotranspiration, double[] SoilMoistureDeficit, double[] SoilDrainage, double AM02, double AM15);
+
+    private void CalculatePotentialEvapotranspirationForYear(double[] potentialEvapotranspiration, double[] canopyEfficiency)
+    {
+        for (int month = 0; month <= 11; month++)
+        {
+            CalculatePotentialEvapotranspiration(month, ref potentialEvapotranspiration[month], ref canopyEfficiency[month], ref _delta[month], ref _radiation[month]);
+            _potentialEvapotranspiration[month] = potentialEvapotranspiration[month] * 30d;
+        }
+    }
+
+    private void CalculateEffectiveRainfallAndRunoff(double[] potentialEvapotranspiration, double[] canopyEfficiency, double[] rainfall, double[] surfaceRunOff)
+    {
+        var interception = new double[12];
+
+        for (int month = 0; month <= 11; month++)
+        {
+            interception[month] = 0d;
+            surfaceRunOff[month] = 0d;
+
+            double alpha = 1d + _rainfall[month] / _rainDays[month];
+            double beta = _rainfall[month] / _rainDays[month] / alpha;
+            double quantile = 0d;
+
+            for (double probability = 0.005d; probability <= 0.995d; probability += 0.01d)
+            {
+                CalculateGammaQuantile(probability, beta, alpha, ref quantile);
+                quantile = Max(quantile, 0.1d);
+
+                double intercept = Min(quantile, _leafAreaIndex[month] * 0.2d);
+                intercept = Min(potentialEvapotranspiration[month] * canopyEfficiency[month], intercept);
+
+                interception[month] += intercept;
+                quantile -= intercept;
+
+                double runOff = CalculateRunOff(month, quantile);
+                surfaceRunOff[month] += runOff;
+            }
+
+            double rainDaysFactor = _rainDays[month] / 100d;
+            surfaceRunOff[month] *= rainDaysFactor;
+            interception[month] *= rainDaysFactor;
+
+            rainfall[month] = _rainfall[month] - surfaceRunOff[month] - interception[month];
+            potentialEvapotranspiration[month] = _potentialEvapotranspiration[month] - interception[month] / canopyEfficiency[month];
+
+            _surfaceRunOff[month] = surfaceRunOff[month];
+            _canopyEvaporation[month] = interception[month];
+        }
+    }
+
+    private ThomasBookKeepingResult CalculateThomasBookKeeping(double[] rainfall, double[] surfaceRunOff, double[] potentialEvapotranspiration)
+    {
+        var am02 = default(double);
+        var am15 = default(double);
+        CalculateAvailableWater(ref am02, ref am15);
+
+        var actualEvapotranspiration = new double[12];
+        var soilMoistureDeficit = new double[12];
+        var soilDrainage = new double[12];
+        var drainage = default(double);
+
+        var workingSet = new ThomasBookKeepingWorkingSet
+        {
+            AM02 = am02,
+            AM15 = am15,
+            Rainfall = rainfall,
+            SurfaceRunOff = surfaceRunOff,
+            PotentialEvapotranspiration = potentialEvapotranspiration,
+            ActualEvapotranspiration = actualEvapotranspiration,
+            SoilMoistureDeficit = soilMoistureDeficit,
+            SoilDrainage = soilDrainage,
+            Drainage = drainage
+        };
+
+        for (int month = 0; month <= 11; month++)
+        {
+            soilMoistureDeficit[month] = 0d;
+            soilDrainage[month] = 0d;
+        }
+
+        for (int iteration = 0; iteration <= 999; iteration++)
+        {
+            for (int month = 0; month <= 11; month++)
+            {
+                ApplyThomasBookKeepingForMonth(month, workingSet);
+            }
+        }
+
+        return new ThomasBookKeepingResult(actualEvapotranspiration, soilMoistureDeficit, soilDrainage, am02, am15);
+    }
+
+    private sealed class ThomasBookKeepingWorkingSet
+    {
+        public required double AM02 { get; init; }
+        public required double AM15 { get; init; }
+        public required double[] Rainfall { get; init; }
+        public required double[] SurfaceRunOff { get; init; }
+        public required double[] PotentialEvapotranspiration { get; init; }
+        public required double[] ActualEvapotranspiration { get; init; }
+        public required double[] SoilMoistureDeficit { get; init; }
+        public required double[] SoilDrainage { get; init; }
+        public required double Drainage { get; init; }
+    }
+
+    private void ApplyThomasBookKeepingForMonth(
+        int month,
+        ThomasBookKeepingWorkingSet workingSet)
+    {
+        double tmp_B = workingSet.AM02 + workingSet.AM15 + 25d;
+        double tmp_A = 1d;
+
+        int index = month - 1;
+        if (index == -1)
+            index = 11;
+
+        double tmp_W = workingSet.Rainfall[month] + workingSet.SoilMoistureDeficit[index] - workingSet.SurfaceRunOff[month];
+        double tmp_Y = (tmp_W + tmp_B) / (2d * tmp_A) - Math.Pow(Math.Pow((tmp_W + tmp_B) / (2d * tmp_A), 2d) - tmp_W * tmp_B / tmp_A, 0.5d);
+
+        workingSet.SoilMoistureDeficit[month] = tmp_Y * Math.Exp(-1 * workingSet.PotentialEvapotranspiration[month] / tmp_B);
+        workingSet.SoilDrainage[month] = tmp_W - tmp_Y;
+        workingSet.ActualEvapotranspiration[month] = tmp_Y - workingSet.SoilMoistureDeficit[month];
+
+        workingSet.SoilMoistureDeficit[month] = workingSet.SoilMoistureDeficit[index] - workingSet.ActualEvapotranspiration[month];
+
+#pragma warning disable S4143
+        workingSet.SoilMoistureDeficit[month] = workingSet.SoilMoistureDeficit[month] + workingSet.Rainfall[month] - workingSet.SurfaceRunOff[month];
+#pragma warning restore S4143
+
+        if (workingSet.SoilMoistureDeficit[month] > tmp_B)
+        {
+            workingSet.SoilDrainage[month] = workingSet.SoilMoistureDeficit[month] - tmp_B;
+            workingSet.SoilMoistureDeficit[month] = tmp_B;
+        }
+        else
+        {
+            workingSet.SoilDrainage[month] = 0d;
+        }
+
+        double tmp_Ratio = GetRainDays(month) / 30d;
+        workingSet.SoilDrainage[month] = tmp_Ratio * workingSet.SoilDrainage[month] + (1d - tmp_Ratio) * (tmp_W - tmp_Y);
+
+        workingSet.SoilMoistureDeficit[month] = workingSet.SoilMoistureDeficit[index] + workingSet.Rainfall[month] - workingSet.SurfaceRunOff[month] - workingSet.ActualEvapotranspiration[month] - workingSet.SoilDrainage[month];
+
+        if (workingSet.SoilMoistureDeficit[month] > tmp_B)
+        {
+            workingSet.SoilDrainage[month] = workingSet.SoilDrainage[month] + (workingSet.SoilMoistureDeficit[month] - tmp_B);
+            workingSet.SoilMoistureDeficit[month] = tmp_B;
+        }
+
+        workingSet.SoilDrainage[month] = workingSet.SoilDrainage[month] + workingSet.SurfaceRunOff[month];
+
+        if (Math.Abs(workingSet.SoilDrainage[month] - workingSet.Drainage) > 1d)
+        {
+            // need to wright some code here
+        }
+    }
+
+    private void StoreWaterBalanceOutputs(ThomasBookKeepingResult result)
+    {
+        for (int month = 0; month <= 11; month++)
+        {
+            if (result.SoilDrainage[month] < 0d)
+            {
+                result.SoilDrainage[month] = 0d;
+            }
+
+            result.SoilMoistureDeficit[month] = result.AM02 + result.AM15 + 25d - result.SoilMoistureDeficit[month];
+#pragma warning disable S4143
+            result.SoilMoistureDeficit[month] = Math.Round(result.SoilMoistureDeficit[month], 1);
+#pragma warning restore S4143
+            _soilMoistureDeficit[month] = result.SoilMoistureDeficit[month];
+
+            result.SoilDrainage[month] = Math.Round(result.SoilDrainage[month], 1);
+            _soilDrainage[month] = result.SoilDrainage[month];
+
+            result.ActualEvapotranspiration[month] = Math.Round(result.ActualEvapotranspiration[month], 1);
+            _actualEvapotranspiration[month] = result.ActualEvapotranspiration[month];
+        }
     }
 
     // -- Private class constructor / destructor ---------------------------------------------

@@ -1371,7 +1371,7 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
             : GetClimateType(monthApp - 1, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit);
 
         double smdPropStart = (double)datCurApp.Day /
-                              (double)DateTime.DaysInMonth((int)_manureApplication.ApplicationDate.Year, (int)_manureApplication.ApplicationDate.Month);
+                              (double)DateTime.DaysInMonth(_manureApplication.ApplicationDate.Year, _manureApplication.ApplicationDate.Month);
 
         return dSMDPrevMonth + smdPropStart * (dSMDCurMonth - dSMDPrevMonth);
     }
@@ -1431,7 +1431,19 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         double dLFactor1 = dLRatio <= 1d ? 1d - Math.Pow(dLRatio, 0.5d) : Math.Pow(dLRatio, 0.5d) - 1d;
 
         double dLIndex = 2.27d * Math.Pow(dLFactor1, 3d) - 4.5d * Math.Pow(dLFactor1, 2d) + 2.7d * dLFactor1;
-        double dLProp = dLRatio < 0.25d ? 0d : dLRatio < 1d ? 0.5d - dLIndex : 0.5d + dLIndex;
+        double dLProp;
+        if (dLRatio < 0.25d)
+        {
+            dLProp = 0d;
+        }
+        else if (dLRatio < 1d)
+        {
+            dLProp = 0.5d - dLIndex;
+        }
+        else
+        {
+            dLProp = 0.5d + dLIndex;
+        }
 
         if (dLProp > 1d)
             dLProp = 1d;

@@ -60,9 +60,6 @@ public class ClimateCalculator
 
         mcdm.SetEuniceTexture(true);
 
-        // Set the topsoil and subsoil AWC
-        mcdm.SetAWC(topSoilAWC, subSoilAWC);
-
         // Set the topsoil percentage AWC for the soil texture
         // Figures from the IRRIGUIDE look up table
         switch (topSoilID)
