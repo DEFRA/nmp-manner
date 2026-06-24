@@ -1020,6 +1020,30 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
     /// Refer to Mineralisation Module Technical Guide (November 2007)
     /// </remarks>
     private sealed record MineralisedNCalculationResult(double MineralisedN, double MineralN1, double OrganicN3, double MineralisedN2A, double Cdd1, double Cdd2, double Cdd2A);
+    private sealed class MineralisedNState
+    {
+        public double NOrganic2 { get; set; }
+        public double NOrganic2A { get; set; }
+        public double NMineralised1 { get; set; }
+        public double NMineralised2 { get; set; }
+        public double NMineralised2A { get; set; }
+        public double CDD1 { get; set; }
+        public double CDD2 { get; set; }
+        public double CDD2A { get; set; }
+    }
+
+    private enum ApplicationPeriod
+    {
+        Autumn,
+        JanuaryToApril,
+        MayToJuly,
+        Other
+    }
+
+    private static MineralisedNCalculationResult EmptyMineralisedNCalculationResult()
+    {
+        return new MineralisedNCalculationResult(0d, 0d, 0d, 0d, 0d, 0d, 0d);
+    }
 
     private MineralisedNCalculationResult CalculateMineralisedN(double calculatedTotalN, double calculatedPotentialN)
     {
@@ -1027,194 +1051,127 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         {
             if (IsPaperCrumble(_manureType.ID))
             {
-                return new MineralisedNCalculationResult(0d, 0d, 0d, 0d, 0d, 0d, 0d);
+                return EmptyMineralisedNCalculationResult();
             }
 
-            var dNOrganic2 = default(double);
-            var dNOrganic2A = default(double);
-            double dNOrganic3;
-            var dNMineralised1 = default(double);
-            var dNMineralised2 = default(double);
-            var dNMineralised2A = default(double);
-            var dCDD1 = default(double);
-            var dCDD2 = default(double);
-            var dCDD2A = default(double);
-
-            string cropUse = _cropType.Use;
-
-            // This array is a temporary one to allow the mineralisation and leaching to be tested before applying to specific parts of the country
             int[] tempArray = CreateTempArray();
-
-            // ------------------------------------------------------------------------------------
-            // N AVAILABLE TO THE NEXT CROP GROWN
-            // ------------------------------------------------------------------------------------
-            // Step 1 - Calculate initial organic N component (NOrg1) of the manure
-            // ------------------------------------------------------------------------------------
             double organicN1 = calculatedTotalN - calculatedPotentialN;
-
-            // --------------------------------------------------------------------------------------
-            // Step 2 - Check the date of application
-            // --------------------------------------------------------------------------------------
             int month = _manureApplication.ApplicationDate.Month;
+            string cropUse = _cropType.Use ?? string.Empty;
+            var state = new MineralisedNState();
 
-            switch (cropUse ?? "")
+            if (cropUse == _grassKey)
             {
-                case _grassKey:
-                    {
-                        if (month >= 8 && month < 13)
-                        {
-                            // Calculate the cumulative day degrees (CDD) for the months between the Date of Application and Date of End of Drainage in the first year.
-                            dCDD1 = CalculateCddForMineralisedN(tempArray, month, 13, false);
-
-                            // ------------------------------------------------------------------------------------
-                            // Step 3 - Calculate the N available to the next crop grown.  This will always
-                            // be less than 2300.  This is only calculated if the application is an autumn
-                            // application
-                            // ------------------------------------------------------------------------------------
-                            // Check that CDD1 is less than 2300
-                            if (dCDD1 >= 2300d)
-                            {
-                                dCDD1 = 2299d;
-                            }
-                            else
-                            {
-                                dNMineralised1 = CalculateMineralisedNForPeriod(dCDD1, organicN1);
-                            }
-
-                            // calculate the amount of organic N remaining
-                            dNOrganic2 = organicN1 - dNMineralised1;
-
-                            // Step 6 - Calculate NMin2
-                            // ------------------------------------------------------------------------------------
-                            month = 1;
-                            dCDD2 = CalculateCddForMineralisedN(tempArray, month, 5, false);
-                            dNMineralised2 = CalculateMineralisedNForPeriod(dCDD2, dNOrganic2);
-
-                            // Now calculate the mineralisation for a subsequent cut/graze between
-                            // 30th April and 31st July
-                            dNOrganic2A = dNOrganic2 - dNMineralised2;
-
-                            // Step 7 - Calculate NMin2A
-                            // ------------------------------------------------------------------------------------
-                            dCDD2A = 786d;
-                            dNMineralised2A = CalculateMineralisedNForPeriod(dCDD2A, dNOrganic2A);
-                        }
-                        else if (_manureApplication.ApplicationDate.Month == 1 || _manureApplication.ApplicationDate.Month == 2 || _manureApplication.ApplicationDate.Month == 3 || _manureApplication.ApplicationDate.Month == 4)
-                        {
-                            // calculate the amount of organic N remaining
-                            dNMineralised1 = 0d;
-                            dNOrganic2 = organicN1 - dNMineralised1;
-
-                            // Step 6 - Calculate NMin2
-                            // ------------------------------------------------------------------------------------
-                            dCDD2 = CalculateCddForMineralisedN(tempArray, month, 5, false);
-                            dNMineralised2 = CalculateMineralisedNForPeriod(dCDD2, dNOrganic2);
-
-                            // Now calculate the mineralisation for a subsequent cut/graze between
-                            // 30th April and 31st July
-                            dNOrganic2A = dNOrganic2 - dNMineralised2;
-
-                            // Step 7 - Calculate NMin2A
-                            // ------------------------------------------------------------------------------------
-                            dCDD2A = 786d;
-                            dNMineralised2A = CalculateMineralisedNForPeriod(dCDD2A, dNOrganic2A);
-                        }
-
-                        else if (_manureApplication.ApplicationDate.Month == 5 || _manureApplication.ApplicationDate.Month == 6 || _manureApplication.ApplicationDate.Month == 7)
-                        {
-                            dNMineralised1 = 0d;
-                            dNMineralised2 = 0d;
-
-                            dNOrganic2A = organicN1;
-
-                            // Step 6 - Calculate NMin2
-                            // ------------------------------------------------------------------------------------
-                            dCDD2A = CalculateCddForMineralisedN(tempArray, month, 8, true);
-                            dNMineralised2A = CalculateMineralisedNForPeriod(dCDD2A, dNOrganic2A);
-                            // *******************
-                            // ARABLE
-                            // *******************
-                        }
-                        break;
-                    }
-                default:
-                    {
-                        // If date of application is between 1/08 and 31/12 then
-                        if (month >= 8 && month < 13)
-                        {
-                            // Calculate the cumulative day degrees (CDD) for the months between the Date of Application and Date of End of Drainage in the first year.
-                            dCDD1 = CalculateCddForMineralisedN(tempArray, month, 13, false);
-
-                            // ------------------------------------------------------------------------------------
-                            // Step 3 - Calculate the N available to the next crop grown.  This will always
-                            // be less than 2300.  This is only calculated if the application is an autumn
-                            // application
-                            // ------------------------------------------------------------------------------------
-                            // Check that CDD1 is less than 2300
-                            if (dCDD1 >= 2300d)
-                            {
-                                dCDD1 = 2299d;
-                            }
-                            else
-                            {
-                                dNMineralised1 = CalculateMineralisedNForPeriod(dCDD1, organicN1);
-                            }
-
-                            // calculate the amount of organic N remaining
-                            dNOrganic2 = organicN1 - dNMineralised1;
-
-                            // Step 6 - Calculate NMin2
-                            // ------------------------------------------------------------------------------------
-                            month = 1;
-                            dCDD2 = CalculateCddForMineralisedN(tempArray, month, 8, true);
-                            dNMineralised2 = CalculateMineralisedNForPeriod(dCDD2, dNOrganic2);
-                            dNMineralised2 = AdjustMineralisedN2ForArableCrop(ref dNMineralised2, 0.6d);
-                        }
-                        else if (_manureApplication.ApplicationDate.Month >= 1 || _manureApplication.ApplicationDate.Month <= 8)
-                        {
-                            // calculate the amount of organic N remaining
-                            // no manure application was made between August and December
-                            dNMineralised1 = 0d;
-                            dNOrganic2 = organicN1 - dNMineralised1;
-
-                            // Step 6 - Calculate NMin2
-                            // ------------------------------------------------------------------------------------
-                            dCDD2 = CalculateCddForMineralisedN(tempArray, month, 8, true);
-                            dNMineralised2 = CalculateMineralisedNForPeriod(dCDD2, dNOrganic2);
-                            dNMineralised2 = AdjustMineralisedN2ForArableCrop(ref dNMineralised2, 0.6d);
-                        }
-                        break;
-                    }
+                CalculateGrassMineralisedN(month, organicN1, tempArray, state);
             }
-            // ------------------------------------------------------------------------------------
-            // Step 4 - Calculate the amount of organic N remaining
-            // ------------------------------------------------------------------------------------
-            switch (cropUse ?? "")
+            else
             {
-                case _grassKey:
-                    {
-                        dNOrganic3 = dNOrganic2A - dNMineralised2A;
-                        break;
-                    }
-                case _arableKey:
-                    {
-                        dNOrganic3 = dNOrganic2 - dNMineralised2;
-                        break;
-                    }
-                default:
-                    {
-                        dNOrganic3 = dNOrganic2 - dNMineralised2;
-                        break;
-                    }
+                CalculateArableMineralisedN(month, organicN1, tempArray, state);
             }
 
-            return new MineralisedNCalculationResult(dNMineralised2, dNMineralised1, dNOrganic3, dNMineralised2A, dCDD1, dCDD2, dCDD2A);
+            double organicN3 = cropUse == _grassKey
+                ? state.NOrganic2A - state.NMineralised2A
+                : state.NOrganic2 - state.NMineralised2;
+
+            return new MineralisedNCalculationResult(state.NMineralised2, state.NMineralised1, organicN3, state.NMineralised2A, state.CDD1, state.CDD2, state.CDD2A);
         }
-
         catch (Exception)
         {
-            return new MineralisedNCalculationResult(0d, 0d, 0d, 0d, 0d, 0d, 0d);
+            return EmptyMineralisedNCalculationResult();
         }
+    }
+
+    private void CalculateGrassMineralisedN(int month, double organicN1, int[] tempArray, MineralisedNState state)
+    {
+        switch (GetApplicationPeriod(month))
+        {
+            case ApplicationPeriod.Autumn:
+                state.NMineralised1 = CalculateAutumnFirstPeriodMineralisedN(month, organicN1, tempArray, out var cdd1);
+                state.CDD1 = cdd1;
+                state.NOrganic2 = organicN1 - state.NMineralised1;
+
+                state.CDD2 = CalculateCddForMineralisedN(tempArray, 1, 5, false);
+                state.NMineralised2 = CalculateMineralisedNForPeriod(state.CDD2, state.NOrganic2);
+
+                state.NOrganic2A = state.NOrganic2 - state.NMineralised2;
+                state.CDD2A = 786d;
+                state.NMineralised2A = CalculateMineralisedNForPeriod(state.CDD2A, state.NOrganic2A);
+                break;
+
+            case ApplicationPeriod.JanuaryToApril:
+                state.NMineralised1 = 0d;
+                state.NOrganic2 = organicN1;
+
+                state.CDD2 = CalculateCddForMineralisedN(tempArray, month, 5, false);
+                state.NMineralised2 = CalculateMineralisedNForPeriod(state.CDD2, state.NOrganic2);
+
+                state.NOrganic2A = state.NOrganic2 - state.NMineralised2;
+                state.CDD2A = 786d;
+                state.NMineralised2A = CalculateMineralisedNForPeriod(state.CDD2A, state.NOrganic2A);
+                break;
+
+            case ApplicationPeriod.MayToJuly:
+                state.NMineralised1 = 0d;
+                state.NMineralised2 = 0d;
+
+                state.NOrganic2A = organicN1;
+                state.CDD2A = CalculateCddForMineralisedN(tempArray, month, 8, true);
+                state.NMineralised2A = CalculateMineralisedNForPeriod(state.CDD2A, state.NOrganic2A);
+                break;
+        }
+    }
+
+    private void CalculateArableMineralisedN(int month, double organicN1, int[] tempArray, MineralisedNState state)
+    {
+        if (GetApplicationPeriod(month) == ApplicationPeriod.Autumn)
+        {
+            state.NMineralised1 = CalculateAutumnFirstPeriodMineralisedN(month, organicN1, tempArray, out var cdd1);
+            state.CDD1 = cdd1;
+            state.NOrganic2 = organicN1 - state.NMineralised1;
+            state.CDD2 = CalculateCddForMineralisedN(tempArray, 1, 8, true);
+        }
+        else
+        {
+            state.NMineralised1 = 0d;
+            state.NOrganic2 = organicN1;
+            state.CDD2 = CalculateCddForMineralisedN(tempArray, month, 8, true);
+        }
+
+        state.NMineralised2 = CalculateMineralisedNForPeriod(state.CDD2, state.NOrganic2);
+        state.NMineralised2 = AdjustMineralisedN2ForArableCrop(state.NMineralised2, 0.6d);
+    }
+
+    private double CalculateAutumnFirstPeriodMineralisedN(int month, double organicN1, int[] tempArray, out double cdd1)
+    {
+        cdd1 = CalculateCddForMineralisedN(tempArray, month, 13, false);
+
+        if (cdd1 >= 2300d)
+        {
+            cdd1 = 2299d;
+            return 0d;
+        }
+
+        return CalculateMineralisedNForPeriod(cdd1, organicN1);
+    }
+
+    private static ApplicationPeriod GetApplicationPeriod(int month)
+    {
+        if (month >= 8 && month <= 12)
+        {
+            return ApplicationPeriod.Autumn;
+        }
+
+        if (month >= 1 && month <= 4)
+        {
+            return ApplicationPeriod.JanuaryToApril;
+        }
+
+        if (month >= 5 && month <= 7)
+        {
+            return ApplicationPeriod.MayToJuly;
+        }
+
+        return ApplicationPeriod.Other;
     }
 
     private static int[] CreateTempArray()
@@ -1304,7 +1261,7 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         return mannerTypeID == (int)Enums.Enumerations.ManureTypes.BiosolidsLiquidDigested;
     }
 
-    private double AdjustMineralisedN2ForArableCrop(ref double mineralisedN2, double adjustmentFactor)
+    private double AdjustMineralisedN2ForArableCrop(double mineralisedN2, double adjustmentFactor)
     {
         // Now adjust the value of NMin2 depending on the crop type
         // For cereals or oilseed rape multiply NMin2 by 0.6
