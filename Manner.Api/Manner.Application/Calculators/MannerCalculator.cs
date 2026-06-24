@@ -108,14 +108,24 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
             double vmWaterTotal = vmWaterTopSoil + _subSoil.VolumetricMeasure;
 
             double calculatedLeachedN = CalculateLeachedN(mineralN4, vmWaterTotal, vmWaterTopSoil);
+#pragma warning disable S1481
             double nMineralised4 = mineralN4 - calculatedLeachedN;
+#pragma warning restore S1481
 
             // Modification required to multiply mineralisation by 2 for poultry only.
             calculatedMineralisedN *= ApplyMineralisationFactor();
             mineralisedN2A *= ApplyMineralisationFactor();
 
             // Calculate final results and assign to public variables
-            CalculateFinalResults(calculatedTotalN, calculatedPotentialN, calculatedVolatilisedN, calculatedN2O, calculatedN2, calculatedcropUptakeFactor, calculatedMineralisedN, calculatedLeachedN);
+            CalculateFinalResults(new FinalResultsInput(
+                calculatedTotalN,
+                calculatedPotentialN,
+                calculatedVolatilisedN,
+                calculatedN2O,
+                calculatedN2,
+                calculatedcropUptakeFactor,
+                calculatedMineralisedN,
+                calculatedLeachedN));
 
 
             if (IsPaperCrumble(_manureType.ID))
@@ -148,7 +158,7 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
             // -----------------------------------------------------------------------------------
             // Mineralised N for next crop
             // --------------------------------------------------------------
-            double calculatedMineralisedNNextCrop = CalculateMineralisedNNextCrop(nMineralised4, vmWaterTotal, cdd1, cdd2, cdd2a, mineralisedN3);
+            double calculatedMineralisedNNextCrop = CalculateMineralisedNNextCrop(vmWaterTotal, cdd1, cdd2, cdd2a, mineralisedN3);
             _outputs.ResultantNAvailableYear2 = (double)(int)Math.Round(calculatedMineralisedNNextCrop * 10.0d / 10d);
 
             CheckAndChangeNegativeNResults();
@@ -290,7 +300,7 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
     /// <param name="cdd2a">Cumulative Day Degrees for the months between Date of Application and 31st July</param>
     /// <param name="organicN3">Organic N remaining</param>
     /// <returns type="Double">Mineralised N value for next crop</returns>
-    private double CalculateMineralisedNNextCrop(double mineralisedN4, double volumetricWaterContentTotal, double cdd1, double cdd2, double cdd2a, double organicN3)
+    private double CalculateMineralisedNNextCrop(double volumetricWaterContentTotal, double cdd1, double cdd2, double cdd2a, double organicN3)
     {
 
         try
@@ -476,16 +486,26 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         return iHer;
     }
 
-    private void CalculateFinalResults(double calculatedTotalN, double calculatedPotentialN, double calculatedVolatilisedN, double calculatedN2O, double calculatedN2, double cropUptakeFactor, double calculatedMineralisedN, double calculatedLeachedN)
+    private sealed record FinalResultsInput(
+        double CalculatedTotalN,
+        double CalculatedPotentialN,
+        double CalculatedVolatilisedN,
+        double CalculatedN2O,
+        double CalculatedN2,
+        double CropUptakeFactor,
+        double CalculatedMineralisedN,
+        double CalculatedLeachedN);
+
+    private void CalculateFinalResults(FinalResultsInput input)
     {
-        _outputs.TotalNitrogenApplied = (long)Math.Round(calculatedTotalN * 10.0d) / 10d;
-        _outputs.PotentialCropAvailableN = (int)Math.Round(calculatedPotentialN * 10.0d) / 10d;
-        _outputs.NH3NLoss = (int)Math.Round(calculatedVolatilisedN * 10.0d) / 10d;
-        _outputs.N2ONLoss = (int)Math.Round(calculatedN2O * 10.0d) / 10d;
-        _outputs.N2NLoss = (int)Math.Round(calculatedN2 * 10.0d) / 10d;
-        _outputs.MineralisedN = (int)Math.Round(calculatedMineralisedN * 10.0d) / 10d;
-        _outputs.NO3NLoss = (int)Math.Round(calculatedLeachedN * 10.0d) / 10d;
-        _outputs.CropUptake = cropUptakeFactor;
+        _outputs.TotalNitrogenApplied = (long)Math.Round(input.CalculatedTotalN * 10.0d) / 10d;
+        _outputs.PotentialCropAvailableN = (int)Math.Round(input.CalculatedPotentialN * 10.0d) / 10d;
+        _outputs.NH3NLoss = (int)Math.Round(input.CalculatedVolatilisedN * 10.0d) / 10d;
+        _outputs.N2ONLoss = (int)Math.Round(input.CalculatedN2O * 10.0d) / 10d;
+        _outputs.N2NLoss = (int)Math.Round(input.CalculatedN2 * 10.0d) / 10d;
+        _outputs.MineralisedN = (int)Math.Round(input.CalculatedMineralisedN * 10.0d) / 10d;
+        _outputs.NO3NLoss = (int)Math.Round(input.CalculatedLeachedN * 10.0d) / 10d;
+        _outputs.CropUptake = input.CropUptakeFactor;
     }
     private void CalculateNutrientsOutputsValues()
     {
