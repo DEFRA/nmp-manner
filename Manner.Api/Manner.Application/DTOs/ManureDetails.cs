@@ -1,5 +1,4 @@
 ﻿namespace Manner.Application.DTOs;
-
 public class ManureDetails()
 {        
     public int ManureID { get; set; }
@@ -14,5 +13,4 @@ public class ManureDetails()
     public decimal? K2O { get; set; }
     public decimal? SO3 { get; set; }
     public decimal? MgO { get; set; }
-
 }

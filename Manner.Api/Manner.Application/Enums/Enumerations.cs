@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Specialized;
 
 namespace Manner.Application.Enums;
 public partial class Enumerations
@@ -433,7 +428,7 @@ public partial class Enumerations
 
             default:
                 {
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.CropTypeRb209 [" + enumValue.ToString() + "]");
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.CropTypeRb209 [" + enumValue.ToString() + "]");                   
                 }
         }
     }
@@ -2525,11 +2520,8 @@ public partial class Enumerations
 
             default:
                 {
-                    // ##HAND_CODED_BLOCK_START ID="Default Enum Enums.Enumerations.TopSoilMoisture"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.TopSoilMoisture [" + enumValue + "]");
-                    // ##HAND_CODED_BLOCK_END ID="Default Enum Enums.Enumerations.TopSoilMoisture"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
+                    return TopsoilMoistureEnum.Dry;
                 }
-
         }
     }
 
@@ -2538,7 +2530,9 @@ public partial class Enumerations
         var ret = new StringCollection();
         var t = typeof(TopsoilMoistureEnum);
         foreach (TopsoilMoistureEnum e in Enum.GetValues(t))
+        {
             ret.Add(TopsoilMoistureToString(e));
+        }
         return ret;
     }
 
@@ -2624,7 +2618,7 @@ public partial class Enumerations
 
             default:
                 {
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.SoilEngland [" + enumValue.ToString() + "]");
+                    throw new NotImplementedException("Unknown enumeration value for Enums.Enumerations.SoilEngland [" + enumValue.ToString() + "]");                    
                 }
         }
     }
@@ -2707,11 +2701,8 @@ public partial class Enumerations
 
             default:
                 {
-                    // ##HAND_CODED_BLOCK_START ID="Default Enum Enums.Enumerations.SoilEngland"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.SoilEngland [" + enumValue + "]");
-                    // ##HAND_CODED_BLOCK_END ID="Default Enum Enums.Enumerations.SoilEngland"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
+                    throw new NotImplementedException("Unknown enumeration value for Enums.Enumerations.SoilEngland [" + enumValue + "]");                    
                 }
-
         }
     }
 
@@ -2720,7 +2711,9 @@ public partial class Enumerations
         var ret = new StringCollection();
         var t = typeof(SoilType);
         foreach (SoilType e in Enum.GetValues(t))
+        {
             ret.Add(SoilTypeToString(e));
+        }
         return ret;
     }
 

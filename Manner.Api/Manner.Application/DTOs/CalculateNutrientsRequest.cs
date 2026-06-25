@@ -1,6 +1,4 @@
-﻿using Manner.Application.Interfaces;
-
-namespace Manner.Application.DTOs;
+﻿namespace Manner.Application.DTOs;
 
 public class CalculateNutrientsRequest 
 {
