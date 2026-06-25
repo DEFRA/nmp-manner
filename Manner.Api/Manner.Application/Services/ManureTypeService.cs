@@ -19,7 +19,7 @@ namespace Manner.Application.Services
         private readonly ILogger<ManureTypeService> _logger = logger;
         public async Task<IEnumerable<ManureTypeDto>?> FetchAllAsync()
         {
-            _logger.LogTrace($"ManureTypeService : FetchAllAsync() callled");
+            _logger.LogTrace("ManureTypeService : FetchAllAsync() callled");
             return _mapper.Map<IEnumerable<ManureTypeDto>>(await _manureTypeRepository.FetchAllAsync());
         }
 

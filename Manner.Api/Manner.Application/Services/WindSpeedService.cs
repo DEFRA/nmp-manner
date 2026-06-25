@@ -16,13 +16,13 @@ public class WindspeedService(ILogger<WindspeedService> logger, IWindspeedReposi
     private readonly ILogger<WindspeedService> _logger = logger;
     public async Task<IEnumerable<WindspeedDto>?> FetchAllAsync()
     {
-        _logger.LogTrace($"WindspeedService : FetchAllAsync() callled");
+        _logger.LogTrace("WindspeedService : FetchAllAsync() callled");
         return _mapper.Map<IEnumerable<WindspeedDto>>(await _windspeedRepository.FetchAllAsync());
     }
 
     public async Task<WindspeedDto?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"WindspeedService : FetchByIdAsync({id}) callled");
+        _logger.LogTrace("WindspeedService : FetchByIdAsync({Id}) callled", id);
         return _mapper.Map<WindspeedDto>(await _windspeedRepository.FetchByIdAsync(id));
     }
 }

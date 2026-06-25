@@ -1,5 +1,4 @@
-﻿
-using Manner.Core.Attributes;
+﻿using Manner.Core.Attributes;
 using Manner.Core.Entities;
 using Manner.Core.Interfaces;
 using Manner.Infrastructure.Data;

@@ -17,13 +17,13 @@ public class RainTypeService(ILogger<RainTypeService> logger, IRainTypeRepositor
     private readonly ILogger<RainTypeService> _logger = logger;
     public async Task<IEnumerable<RainTypeDto>?> FetchAllAsync()
     {
-        _logger.LogTrace($"RainTypeService : FetchAllAsync() callled");
+        _logger.LogTrace("RainTypeService : FetchAllAsync() callled");
         return _mapper.Map<IEnumerable<RainTypeDto>>(await _rainTypeRepository.FetchAllAsync());
     }
 
     public async Task<RainTypeDto?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"RainTypeService : FetchByIdAsync({id}) callled");
+        _logger.LogTrace("RainTypeService : FetchByIdAsync({Id}) callled", id);
         return _mapper.Map<RainTypeDto>(await _rainTypeRepository.FetchByIdAsync(id));
     }
 }
