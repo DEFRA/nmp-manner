@@ -1,13 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
-namespace Manner.Infrastructure.Configuration
+namespace Manner.Infrastructure.Configuration;
+public class ServiceRegistrar : IServiceRegistrar
 {
-    public class ServiceRegistrar : IServiceRegistrar
+    public void RegisterServices(IServiceCollection services, IConfiguration configuration)
     {
-        public void RegisterServices(IServiceCollection services, IConfiguration configuration)
-        {
-            services.RegisterDependencies(configuration);
-        }
+        services.RegisterDependencies(configuration);
     }
 }

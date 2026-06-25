@@ -20,29 +20,29 @@ namespace Manner.Application.Services
 
         public async Task<IEnumerable<IncorporationMethodDto>?> FetchAllAsync()
         {
-            _logger.LogTrace($"IncorporationMethodService : FetchAllAsync() callled");
+            _logger.LogTrace("IncorporationMethodService : FetchAllAsync() callled");
             var methods = await _incorporationMethodRepository.FetchAllAsync();
             return _mapper.Map<IEnumerable<IncorporationMethodDto>>(methods);
         }
 
         public async Task<IncorporationMethodDto?> FetchByIdAsync(int id)
         {
-            _logger.LogTrace($"IncorporationMethodService : FetchByIdAsync({id}) callled");
+            _logger.LogTrace("IncorporationMethodService : FetchByIdAsync({Id}) callled", id);
             var method = await _incorporationMethodRepository.FetchByIdAsync(id);
             return _mapper.Map<IncorporationMethodDto>(method);
         }
 
         public async Task<IEnumerable<IncorporationMethodDto>?> FetchByAppMethodIdAsync(int methodId)
         {
-            _logger.LogTrace($"IncorporationMethodService : FetchByAppMethodIdAsync({methodId}) callled");
+            _logger.LogTrace("IncorporationMethodService : FetchByAppMethodIdAsync({MethodId}) callled", methodId);
             var methods = await _incorporationMethodRepository.FetchByAppMethodIdAsync(methodId);
             return _mapper.Map<IEnumerable<IncorporationMethodDto>>(methods);
         }
 
-        public async Task<IEnumerable<IncorporationMethodDto>?> FetchByAppMethodIdAndApploicableForAsync(int methodId, string applicableFor)
+        public async Task<IEnumerable<IncorporationMethodDto>?> FetchByAppMethodIdAndApplicableForAsync(int methodId, string applicableFor)
         {
-            _logger.LogTrace($"IncorporationMethodService : FetchByAppMethodIdAndApploicableForAsync({methodId},{applicableFor}) callled");
-            var methods = await _incorporationMethodRepository.FetchByAppMethodIdAndApploicableForAsync(methodId, applicableFor);
+            _logger.LogTrace("IncorporationMethodService : FetchByAppMethodIdAndApplicableForAsync({MethodId},{ApplicableFor}) callled", methodId, applicableFor);
+            var methods = await _incorporationMethodRepository.FetchByAppMethodIdAndApplicableForAsync(methodId, applicableFor);
             return _mapper.Map<IEnumerable<IncorporationMethodDto>>(methods);
         }
     }

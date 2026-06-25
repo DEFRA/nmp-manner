@@ -14,13 +14,13 @@ public class RainTypeRepository(ILogger<RainTypeRepository> logger, ApplicationD
     private readonly ILogger<RainTypeRepository> _logger = logger;
     public async Task<IEnumerable<RainType>?> FetchAllAsync()
     {
-        _logger.LogTrace($"RainTypeRepository : FetchAllAsync() callled");
+        _logger.LogTrace("RainTypeRepository : FetchAllAsync() callled");
         return await _context.RainTypes.ToListAsync();
     }
 
     public async Task<RainType?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"RainTypeRepository : FetchByIdAsync({id}) callled");
+        _logger.LogTrace("RainTypeRepository : FetchByIdAsync({Id}) callled", id);
         return await _context.RainTypes.FirstOrDefaultAsync(a => a.ID == id);
     }
 }

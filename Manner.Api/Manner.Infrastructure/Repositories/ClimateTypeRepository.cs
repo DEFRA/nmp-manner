@@ -20,10 +20,10 @@ public class ClimateTypeRepository(ILogger<ClimateTypeRepository> logger, Applic
         return await _context.ClimateTypes.ToListAsync();
     }
 
-    public async Task<ClimateType?> FetchByIdAsync(int monthNumber)
+    public async Task<ClimateType?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"ClimateTypeRepository : FetchByIdAsync({monthNumber}) callled");
-        return await _context.ClimateTypes.FirstOrDefaultAsync(a => a.MonthNumber == monthNumber);
+        _logger.LogTrace("ClimateTypeRepository : FetchByIdAsync({Id}) callled", id);
+        return await _context.ClimateTypes.FirstOrDefaultAsync(a => a.MonthNumber == id);
     }
 
 }

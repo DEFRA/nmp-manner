@@ -40,18 +40,7 @@ namespace Manner.Infrastructure
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
                 }
             }
-
-            //// Find the implementation of IServiceRegistrar
-            //var registrarType = assembly.GetTypes()
-            //    .FirstOrDefault(t => typeof(IServiceRegistrar).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
-
-            //if (registrarType != null)
-            //{
-            //    // Create an instance of the registrar and call RegisterServices
-            //    var registrar = (IServiceRegistrar)Activator.CreateInstance(registrarType);
-            //    registrar?.RegisterServices(services, configuration);
-            //}
-
+            
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("MannerApiConnection")));
             

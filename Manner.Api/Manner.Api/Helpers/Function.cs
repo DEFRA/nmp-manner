@@ -1,5 +1,4 @@
 ﻿namespace Manner.Api.Helpers;
-
 public static class Function
 {
     public const string InvalidPostcodeMessage = "Invalid Postcode.";

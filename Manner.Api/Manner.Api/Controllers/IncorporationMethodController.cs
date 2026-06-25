@@ -85,7 +85,7 @@ public class IncorporationMethodController : ControllerBase
     public async Task<ActionResult<StandardResponse>> IncorporationMethodsByMethodIdAndApplicableFor(int methodId, [FromQuery, SwaggerParameter("Filter by ApplicableFor ('G' for Grass, 'A' for Arable and Horticulture, 'B' for Both, 'NULL' for N/A)", Required = true)] string applicableFor)
     {
         _logger.LogTrace("IncorporationMethodController: incorporation-methods/by-app-method-and-applicable-for/{MethodId}/{ApplicableFor} called.", methodId, applicableFor);
-        var methods = await _incorporationMethodService.FetchByAppMethodIdAndApploicableForAsync(methodId, applicableFor);
+        var methods = await _incorporationMethodService.FetchByAppMethodIdAndApplicableForAsync(methodId, applicableFor);
         return methods != null && methods.Any()
             ? Ok(new StandardResponse { Success = true, Data = methods })
             : NotFound(new StandardResponse { Success = false, Message = "No incorporation methods found for the given application method ID and Applicable for" });

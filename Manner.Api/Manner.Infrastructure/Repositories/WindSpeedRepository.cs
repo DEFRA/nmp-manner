@@ -14,13 +14,13 @@ public class WindspeedRepository(ILogger<WindspeedRepository> logger, Applicatio
     private readonly ILogger<WindspeedRepository> _logger = logger;
     public async Task<IEnumerable<Windspeed>?> FetchAllAsync()
     {
-        _logger.LogTrace($"WindspeedRepository : FetchAllAsync() callled");
+        _logger.LogTrace("WindspeedRepository : FetchAllAsync() callled");
         return await _context.Windspeeds.ToListAsync();
     }
 
     public async Task<Windspeed?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"WindspeedRepository : FetchByIdAsync({id}) callled");
+        _logger.LogTrace("WindspeedRepository : FetchByIdAsync({Id}) callled", id);
         return await _context.Windspeeds.FirstOrDefaultAsync(a => a.ID == id);
     }
 }
