@@ -2,9 +2,9 @@
 public partial class Enumerations
 {
     
-    #region Enumeration 'ApplicationMethod'
+    #region Enumeration 'ApplicationMethods'
 
-    public enum ApplicationMethodEnum
+    public enum ApplicationMethods
     {
         DischargeSpreader = 1,
         BroadcastSpreader = 2,

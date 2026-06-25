@@ -49,7 +49,7 @@ public class ClimateCalculator
         mcdm.SetLocation(latitude, mcdm.Altitude);
 
         // Set the land cover
-        if (cropTypeID == (int)Enums.Enumerations.CropTypeEnum.Grass)
+        if (cropTypeID == (int)Enums.Enumerations.CropTypes.Grass)
         {
             mcdm.SetLandCover(MeanClimateDrainageModel.LandCover.ManagedGrass);
         }

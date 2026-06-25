@@ -5,7 +5,7 @@ public partial class Enumerations
 
     #region Enumeration 'TopsoilMoistureEnum'
 
-    public enum TopsoilMoistureEnum
+    public enum TopsoilMoistures
     {
         Dry = 1,
         Moist = 2

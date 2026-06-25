@@ -525,7 +525,7 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         double? so3 = null;
         if (_manureApplication.ApplicationDate.Month >= 8 && _manureApplication.ApplicationDate.Month <= 12)
         {
-            if (_cropType.ID == (int)Enumerations.CropTypeEnum.Grass || _cropType.ID == (int)Enumerations.CropTypeEnum.SpringCerealOilseedRape || _cropType.ID == (int)Enumerations.CropTypeEnum.EarlyEstablishedWinterOilseedRape || _cropType.ID == (int)Enumerations.CropTypeEnum.LateEstablishedWinterOilseedRape)
+            if (_cropType.ID == (int)Enumerations.CropTypes.Grass || _cropType.ID == (int)Enumerations.CropTypes.SpringCerealOilseedRape || _cropType.ID == (int)Enumerations.CropTypes.EarlyEstablishedWinterOilseedRape || _cropType.ID == (int)Enumerations.CropTypes.LateEstablishedWinterOilseedRape)
             {
                 if (_manureType.SO3AvaiableAutumnOsrGrass > 0)
                 {
@@ -631,8 +631,8 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
 
         return _manureApplication.TopsoilMoistureID switch
         {
-            (int)Enums.Enumerations.TopsoilMoistureEnum.Dry => pvn0 * 1.3d,
-            (int)Enums.Enumerations.TopsoilMoistureEnum.Moist => pvn0 * 0.7d,
+            (int)Enums.Enumerations.TopsoilMoistures.Dry => pvn0 * 1.3d,
+            (int)Enums.Enumerations.TopsoilMoistures.Moist => pvn0 * 0.7d,
             _ => pvn0
         };
     }
@@ -659,7 +659,7 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
 
     private double ApplyDryMatterAdjustment(double pvn2)
     {
-        bool isMoist = _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Moist;
+        bool isMoist = _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistures.Moist;
 
         if (!isMoist)
         {
@@ -700,18 +700,18 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
 
         return _manureApplication.ApplicationMethodID switch
         {
-            (int)Enums.Enumerations.ApplicationMethodEnum.DeepInjection => 0.1d,
+            (int)Enums.Enumerations.ApplicationMethods.DeepInjection => 0.1d,
 
-            (int)Enums.Enumerations.ApplicationMethodEnum.ShallowInjection =>
+            (int)Enums.Enumerations.ApplicationMethods.ShallowInjection =>
                 isDigestate ? 0.55d : 0.3d,
 
-            (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingHose =>
+            (int)Enums.Enumerations.ApplicationMethods.BandSpreaderTrailingHose =>
                 isDigestate ? 0.55d : 0.7d,
 
-            (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingShoeShortGrass =>
+            (int)Enums.Enumerations.ApplicationMethods.BandSpreaderTrailingShoeShortGrass =>
                 isDigestate ? 0.55d : 0.7d,
 
-            (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingShoeLongGrass =>
+            (int)Enums.Enumerations.ApplicationMethods.BandSpreaderTrailingShoeLongGrass =>
                 isDigestate ? 0.31d : 0.4d,
 
             _ => 1d
@@ -771,7 +771,7 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
 
     private (double pvn8, double temp2) ApplyIncorporationTimingAdjustment(double pvn7, int incorporationHours)
     {
-        if (_manureApplication.IncorporationMethodID == (int)Enums.Enumerations.MethodOfIncorporationEnum.NotIncorporated)
+        if (_manureApplication.IncorporationMethodID == (int)Enums.Enumerations.MethodOfIncorporations.NotIncorporated)
         {
             return (pvn7, 0d);
         }
@@ -786,16 +786,16 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
     {
         return _manureApplication.IncorporationMethodID switch
         {
-            (int)Enums.Enumerations.MethodOfIncorporationEnum.TineCultivator =>
+            (int)Enums.Enumerations.MethodOfIncorporations.TineCultivator =>
                 pvn8 * GetIncorporationFactor(0.3d, 0.3d, 0.7d),
 
-            (int)Enums.Enumerations.MethodOfIncorporationEnum.Discs =>
+            (int)Enums.Enumerations.MethodOfIncorporations.Discs =>
                 pvn8 * GetIncorporationFactor(0.2d, 0.2d, 0.3d),
 
-            (int)Enums.Enumerations.MethodOfIncorporationEnum.RotaryCultivator =>
+            (int)Enums.Enumerations.MethodOfIncorporations.RotaryCultivator =>
                 pvn8 * GetIncorporationFactor(0.15d, 0.1d, 0.2d),
 
-            (int)Enums.Enumerations.MethodOfIncorporationEnum.MouldboardPlough =>
+            (int)Enums.Enumerations.MethodOfIncorporations.MouldboardPlough =>
                 pvn8 * GetIncorporationFactor(0.1d, 0.05d, 0.1d),
 
             _ => pvn8
@@ -1287,14 +1287,14 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         // For cereals or oilseed rape multiply NMin2 by 0.6
         switch (_cropType.ID)
         {
-            case (int)Enums.Enumerations.CropTypeEnum.EarlySownWinterCereal:
-            case (int)Enums.Enumerations.CropTypeEnum.LateSownWinterCereal:
-            case (int)Enums.Enumerations.CropTypeEnum.EarlyEstablishedWinterOilseedRape:
-            case (int)Enums.Enumerations.CropTypeEnum.LateEstablishedWinterOilseedRape:
-            case (int)Enums.Enumerations.CropTypeEnum.SpringCerealOilseedRape:
-            case (int)Enums.Enumerations.CropTypeEnum.Potatoes:
-            case (int)Enums.Enumerations.CropTypeEnum.Sugarbeet:
-            case (int)Enums.Enumerations.CropTypeEnum.Other:
+            case (int)Enums.Enumerations.CropTypes.EarlySownWinterCereal:
+            case (int)Enums.Enumerations.CropTypes.LateSownWinterCereal:
+            case (int)Enums.Enumerations.CropTypes.EarlyEstablishedWinterOilseedRape:
+            case (int)Enums.Enumerations.CropTypes.LateEstablishedWinterOilseedRape:
+            case (int)Enums.Enumerations.CropTypes.SpringCerealOilseedRape:
+            case (int)Enums.Enumerations.CropTypes.Potatoes:
+            case (int)Enums.Enumerations.CropTypes.Sugarbeet:
+            case (int)Enums.Enumerations.CropTypes.Other:
                 {
 
                     return mineralisedN2 * adjustmentFactor;
@@ -1403,9 +1403,9 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
     {
         double dInc = _manureApplication.IncorporationMethodID switch
         {
-            (int)Enums.Enumerations.MethodOfIncorporationEnum.MouldboardPlough => 0.9d,
-            (int)Enums.Enumerations.MethodOfIncorporationEnum.TineCultivator => 0.4d,
-            (int)Enums.Enumerations.MethodOfIncorporationEnum.RotaryCultivator => 0.4d,
+            (int)Enums.Enumerations.MethodOfIncorporations.MouldboardPlough => 0.9d,
+            (int)Enums.Enumerations.MethodOfIncorporations.TineCultivator => 0.4d,
+            (int)Enums.Enumerations.MethodOfIncorporations.RotaryCultivator => 0.4d,
             _ => 0d
         };
 
@@ -1457,9 +1457,9 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
     {
         return _manureApplication.IncorporationMethodID switch
         {
-            (int)Enums.Enumerations.MethodOfIncorporationEnum.MouldboardPlough => vmTotal - 0.5d * vmTop,
-            (int)Enums.Enumerations.MethodOfIncorporationEnum.TineCultivator => vmTotal - 0.25d * vmTop,
-            (int)Enums.Enumerations.MethodOfIncorporationEnum.RotaryCultivator => vmTotal - 0.25d * vmTop,
+            (int)Enums.Enumerations.MethodOfIncorporations.MouldboardPlough => vmTotal - 0.5d * vmTop,
+            (int)Enums.Enumerations.MethodOfIncorporations.TineCultivator => vmTotal - 0.25d * vmTop,
+            (int)Enums.Enumerations.MethodOfIncorporations.RotaryCultivator => vmTotal - 0.25d * vmTop,
             _ => vmTotal
         };
     }

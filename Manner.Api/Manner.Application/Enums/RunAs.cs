@@ -1,7 +1,7 @@
 ﻿namespace Manner.Application.Enums;
 public partial class Enumerations
 {
-    public enum RunAs : int
+    public enum RunAs
     {
         MannerEngland = 1,
         MannerScotland = 2,

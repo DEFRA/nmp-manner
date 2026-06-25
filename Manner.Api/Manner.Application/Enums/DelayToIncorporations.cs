@@ -2,7 +2,7 @@
 public partial class Enumerations
 {    
     #region Enumeration 'DelayToIncorporation'        
-    public enum DelayToIncorporationEnum
+    public enum DelayToIncorporations
     {
         Injection = 1,
         LessThan2Hours = 2,

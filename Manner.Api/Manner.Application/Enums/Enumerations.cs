@@ -4,7 +4,14 @@ namespace Manner.Application.Enums;
 public partial class Enumerations
 {
 
-#region Enumeration 'CropTypeRb209'
+    public const string DeepInjection = "Deep injection";
+    public const string ShallowInjection = "Shallow injection";
+    public const string Grass = "Grass";
+    public const string Other = "Other";
+    public const string PigSlurry = "Pig slurry";
+    public const string CattleSlurry = "Cattle slurry";
+    public const string NotIncorporated = "Not incorporated";
+    #region Enumeration 'CropTypeRb209'
 
     /// <summary>
     /// 	Converts a string to a CropTypeRb209 enumeration
@@ -315,7 +322,7 @@ public partial class Enumerations
                 }
             case CropTypeRb209.Grass:
                 {
-                    return "Grass";
+                    return Grass;
                 }
             case CropTypeRb209.PotatoVarietyGroup1:
                 {
@@ -335,7 +342,7 @@ public partial class Enumerations
                 }
             case CropTypeRb209.Other:
                 {
-                    return "Other";
+                    return Other;
                 }
             case CropTypeRb209.BarleySpringUndersown:
                 {
@@ -740,7 +747,7 @@ public partial class Enumerations
                 {
                     return CropTypeRb209.Hops;
                 }
-            case "Grass":
+            case Grass:
                 {
                     return CropTypeRb209.Grass;
                 }
@@ -760,7 +767,7 @@ public partial class Enumerations
                 {
                     return CropTypeRb209.PotatoVarietyGroup4;
                 }
-            case "Other":
+            case Other:
                 {
                     return CropTypeRb209.Other;
                 }
@@ -1366,7 +1373,7 @@ public partial class Enumerations
                 }
             case ManureTypes.PigSlurry:
                 {
-                    return "Pig slurry";
+                    return PigSlurry;
                 }
             case ManureTypes.CattleSlurryStrainerBoxLiquid:
                 {
@@ -1498,7 +1505,7 @@ public partial class Enumerations
                 }
             case ManureTypes.CattleSlurry:
                 {
-                    return "Cattle slurry";
+                    return CattleSlurry;
                 }
             case ManureTypes.DigestateWholeFoodBased:
                 {
@@ -1574,7 +1581,7 @@ public partial class Enumerations
                 {
                     return ManureTypes.BeefSlurry;
                 }
-            case "Pig slurry":
+            case PigSlurry:
                 {
                     return ManureTypes.PigSlurry;
                 }
@@ -1706,7 +1713,7 @@ public partial class Enumerations
                 {
                     return ManureTypes.OtherLiquidMaterials;
                 }
-            case "Cattle slurry":
+            case CattleSlurry:
                 {
                     return ManureTypes.CattleSlurry;
                 }
@@ -1747,36 +1754,36 @@ public partial class Enumerations
     /// <summary>
     /// 	Converts a string to a ApplicationMethod enumeration
     /// </summary>
-    public static string ApplicationMethodToString(ApplicationMethodEnum enumValue)
+    public static string ApplicationMethodToString(ApplicationMethods enumValue)
     {
         switch (enumValue)
         {
 
-            case ApplicationMethodEnum.DischargeSpreader:
+            case ApplicationMethods.DischargeSpreader:
                 {
                     return "Discharge spreader";
                 }
-            case ApplicationMethodEnum.BroadcastSpreader:
+            case ApplicationMethods.BroadcastSpreader:
                 {
                     return "Broadcast spreader";
                 }
-            case ApplicationMethodEnum.DeepInjection:
+            case ApplicationMethods.DeepInjection:
                 {
-                    return "Deep injection";
+                    return DeepInjection;
                 }
-            case ApplicationMethodEnum.ShallowInjection:
+            case ApplicationMethods.ShallowInjection:
                 {
-                    return "Shallow injection";
+                    return ShallowInjection;
                 }
-            case ApplicationMethodEnum.BandSpreaderTrailingHose:
+            case ApplicationMethods.BandSpreaderTrailingHose:
                 {
                     return "Band spreader - trailing hose";
                 }
-            case ApplicationMethodEnum.BandSpreaderTrailingShoeShortGrass:
+            case ApplicationMethods.BandSpreaderTrailingShoeShortGrass:
                 {
                     return "Band spreader - trailing shoe (short grass)";
                 }
-            case ApplicationMethodEnum.BandSpreaderTrailingShoeLongGrass:
+            case ApplicationMethods.BandSpreaderTrailingShoeLongGrass:
                 {
                     return "Band spreader - trailing shoe (long grass)";
                 }
@@ -1791,37 +1798,37 @@ public partial class Enumerations
     /// <summary>
     /// 	Converts a ApplicationMethod enumeration to a string (suitable for the XML document)
     /// </summary>
-    public static ApplicationMethodEnum ApplicationMethodFromString(string enumValue)
+    public static ApplicationMethods ApplicationMethodFromString(string enumValue)
     {
         switch (enumValue)
         {
             case "Discharge spreader":
                 {
-                    return ApplicationMethodEnum.DischargeSpreader;
+                    return ApplicationMethods.DischargeSpreader;
                 }
             case "Broadcast spreader":
                 {
-                    return ApplicationMethodEnum.BroadcastSpreader;
+                    return ApplicationMethods.BroadcastSpreader;
                 }
-            case "Deep injection":
+            case DeepInjection:
                 {
-                    return ApplicationMethodEnum.DeepInjection;
+                    return ApplicationMethods.DeepInjection;
                 }
-            case "Shallow injection":
+            case ShallowInjection:
                 {
-                    return ApplicationMethodEnum.ShallowInjection;
+                    return ApplicationMethods.ShallowInjection;
                 }
             case "Band spreader - trailing hose":
                 {
-                    return ApplicationMethodEnum.BandSpreaderTrailingHose;
+                    return ApplicationMethods.BandSpreaderTrailingHose;
                 }
             case "Band spreader - trailing shoe (short grass)":
                 {
-                    return ApplicationMethodEnum.BandSpreaderTrailingShoeShortGrass;
+                    return ApplicationMethods.BandSpreaderTrailingShoeShortGrass;
                 }
             case "Band spreader - trailing shoe (long grass)":
                 {
-                    return ApplicationMethodEnum.BandSpreaderTrailingShoeLongGrass;
+                    return ApplicationMethods.BandSpreaderTrailingShoeLongGrass;
                 }
 
             default:
@@ -1834,8 +1841,8 @@ public partial class Enumerations
     public static StringCollection ApplicationMethodNames()
     {
         var ret = new StringCollection();
-        var t = typeof(ApplicationMethodEnum);
-        foreach (ApplicationMethodEnum e in Enum.GetValues(t))
+        var t = typeof(ApplicationMethods);
+        foreach (ApplicationMethods e in Enum.GetValues(t))
         {
             ret.Add(ApplicationMethodToString(e));
         }
@@ -1916,38 +1923,38 @@ public partial class Enumerations
     /// <summary>
     /// 	Converts a string to a MethodOfIncorporation enumeration
     /// </summary>
-    public static string MethodOfIncorporationToString(MethodOfIncorporationEnum enumValue)
+    public static string MethodOfIncorporationToString(MethodOfIncorporations enumValue)
     {
         switch (enumValue)
         {
 
-            case MethodOfIncorporationEnum.ShallowInjection:
+            case MethodOfIncorporations.ShallowInjection:
                 {
-                    return "Shallow injection";
+                    return ShallowInjection;
                 }
-            case MethodOfIncorporationEnum.DeepInjection:
+            case MethodOfIncorporations.DeepInjection:
                 {
-                    return "Deep injection";
+                    return DeepInjection;
                 }
-            case MethodOfIncorporationEnum.TineCultivator:
+            case MethodOfIncorporations.TineCultivator:
                 {
                     return "Tine cultivator";
                 }
-            case MethodOfIncorporationEnum.Discs:
+            case MethodOfIncorporations.Discs:
                 {
                     return "Discs";
                 }
-            case MethodOfIncorporationEnum.RotaryCultivator:
+            case MethodOfIncorporations.RotaryCultivator:
                 {
                     return "Rotary cultivator";
                 }
-            case MethodOfIncorporationEnum.MouldboardPlough:
+            case MethodOfIncorporations.MouldboardPlough:
                 {
                     return "Mouldboard plough";
                 }
-            case MethodOfIncorporationEnum.NotIncorporated:
+            case MethodOfIncorporations.NotIncorporated:
                 {
-                    return "Not incorporated";
+                    return NotIncorporated;
                 }
 
             default:
@@ -1960,37 +1967,37 @@ public partial class Enumerations
     /// <summary>
     /// 	Converts a MethodOfIncorporation enumeration to a string (suitable for the XML document)
     /// </summary>
-    public static MethodOfIncorporationEnum MethodOfIncorporationFromString(string enumValue)
+    public static MethodOfIncorporations MethodOfIncorporationFromString(string enumValue)
     {
         switch (enumValue)
         {
-            case "Shallow injection":
+            case ShallowInjection:
                 {
-                    return MethodOfIncorporationEnum.ShallowInjection;
+                    return MethodOfIncorporations.ShallowInjection;
                 }
-            case "Deep injection":
+            case DeepInjection:
                 {
-                    return MethodOfIncorporationEnum.DeepInjection;
+                    return MethodOfIncorporations.DeepInjection;
                 }
             case "Tine cultivator":
                 {
-                    return MethodOfIncorporationEnum.TineCultivator;
+                    return MethodOfIncorporations.TineCultivator;
                 }
             case "Discs":
                 {
-                    return MethodOfIncorporationEnum.Discs;
+                    return MethodOfIncorporations.Discs;
                 }
             case "Rotary cultivator":
                 {
-                    return MethodOfIncorporationEnum.RotaryCultivator;
+                    return MethodOfIncorporations.RotaryCultivator;
                 }
             case "Mouldboard plough":
                 {
-                    return MethodOfIncorporationEnum.MouldboardPlough;
+                    return MethodOfIncorporations.MouldboardPlough;
                 }
-            case "Not incorporated":
+            case NotIncorporated:
                 {
-                    return MethodOfIncorporationEnum.NotIncorporated;
+                    return MethodOfIncorporations.NotIncorporated;
                 }
 
             default:
@@ -2003,8 +2010,8 @@ public partial class Enumerations
     public static StringCollection MethodOfIncorporationNames()
     {
         var ret = new StringCollection();
-        var t = typeof(MethodOfIncorporationEnum);
-        foreach (MethodOfIncorporationEnum e in Enum.GetValues(t))
+        var t = typeof(MethodOfIncorporations);
+        foreach (MethodOfIncorporations e in Enum.GetValues(t))
         {
             ret.Add(MethodOfIncorporationToString(e));
         }
@@ -2101,11 +2108,11 @@ public partial class Enumerations
                 }
             case ManureCategory.CattleSlurry:
                 {
-                    return "Cattle slurry";
+                    return CattleSlurry;
                 }
             case ManureCategory.PigSlurry:
                 {
-                    return "Pig slurry";
+                    return PigSlurry;
                 }
             case ManureCategory.SolidSludge:
                 {
@@ -2142,11 +2149,11 @@ public partial class Enumerations
                 {
                     return ManureCategory.Poultry;
                 }
-            case "Cattle slurry":
+            case CattleSlurry:
                 {
                     return ManureCategory.CattleSlurry;
                 }
-            case "Pig slurry":
+            case PigSlurry:
                 {
                     return ManureCategory.PigSlurry;
                 }
@@ -2187,45 +2194,45 @@ public partial class Enumerations
     /// <summary>
     /// 	Converts a string to a CropTypeEngland enumeration
     /// </summary>
-    public static string CropTypeEnumToString(CropTypeEnum enumValue)
+    public static string CropTypeEnumToString(CropTypes enumValue)
     {
         switch (enumValue)
         {
-            case CropTypeEnum.Grass:
+            case CropTypes.Grass:
                 {
-                    return "Grass";
+                    return Grass;
                 }
-            case CropTypeEnum.EarlySownWinterCereal:
+            case CropTypes.EarlySownWinterCereal:
                 {
                     return "Early sown winter cereal";
                 }
-            case CropTypeEnum.LateSownWinterCereal:
+            case CropTypes.LateSownWinterCereal:
                 {
                     return "Late sown winter cereal";
                 }
-            case CropTypeEnum.EarlyEstablishedWinterOilseedRape:
+            case CropTypes.EarlyEstablishedWinterOilseedRape:
                 {
                     return "Early established winter oilseed rape";
                 }
-            case CropTypeEnum.LateEstablishedWinterOilseedRape:
+            case CropTypes.LateEstablishedWinterOilseedRape:
                 {
                     return "Late established winter oilseed rape";
                 }
-            case CropTypeEnum.SpringCerealOilseedRape:
+            case CropTypes.SpringCerealOilseedRape:
                 {
                     return "Spring cereal/oilseed rape";
                 }
-            case CropTypeEnum.Potatoes:
+            case CropTypes.Potatoes:
                 {
                     return "Potatoes";
                 }
-            case CropTypeEnum.Sugarbeet:
+            case CropTypes.Sugarbeet:
                 {
                     return "Sugar beet";
                 }
-            case CropTypeEnum.Other:
+            case CropTypes.Other:
                 {
-                    return "Other";
+                    return Other;
                 }
 
             default:
@@ -2238,45 +2245,45 @@ public partial class Enumerations
     /// <summary>
     /// 	Converts a CropTypeEngland enumeration to a string (suitable for the XML document)
     /// </summary>
-    public static CropTypeEnum CropTypeEnumFromString(string enumValue)
+    public static CropTypes CropTypeEnumFromString(string enumValue)
     {
         switch (enumValue)
         {
-            case "Grass":
+            case Grass:
                 {
-                    return CropTypeEnum.Grass;
+                    return CropTypes.Grass;
                 }
             case "Early sown winter cereal":
                 {
-                    return CropTypeEnum.EarlySownWinterCereal;
+                    return CropTypes.EarlySownWinterCereal;
                 }
             case "Late sown winter cereal":
                 {
-                    return CropTypeEnum.LateSownWinterCereal;
+                    return CropTypes.LateSownWinterCereal;
                 }
             case "Early established winter oilseed rape":
                 {
-                    return CropTypeEnum.EarlyEstablishedWinterOilseedRape;
+                    return CropTypes.EarlyEstablishedWinterOilseedRape;
                 }
             case "Late established winter oilseed rape":
                 {
-                    return CropTypeEnum.LateEstablishedWinterOilseedRape;
+                    return CropTypes.LateEstablishedWinterOilseedRape;
                 }
             case "Spring cereal/oilseed rape":
                 {
-                    return CropTypeEnum.SpringCerealOilseedRape;
+                    return CropTypes.SpringCerealOilseedRape;
                 }
             case "Potatoes":
                 {
-                    return CropTypeEnum.Potatoes;
+                    return CropTypes.Potatoes;
                 }
             case "Sugar beet":
                 {
-                    return CropTypeEnum.Sugarbeet;
+                    return CropTypes.Sugarbeet;
                 }
-            case "Other":
+            case Other:
                 {
-                    return CropTypeEnum.Other;
+                    return CropTypes.Other;
                 }
 
             default:
@@ -2289,8 +2296,8 @@ public partial class Enumerations
     public static StringCollection CropTypeEnumNames()
     {
         var ret = new StringCollection();
-        var t = typeof(CropTypeEnum);
-        foreach (CropTypeEnum e in Enum.GetValues(t))
+        var t = typeof(CropTypes);
+        foreach (CropTypes e in Enum.GetValues(t))
         {
             ret.Add(CropTypeEnumToString(e));
         }
@@ -2303,70 +2310,70 @@ public partial class Enumerations
     /// <summary>
     /// 	Converts a string to a DelayToIncorporation enumeration
     /// </summary>
-    public static string DelayToIncorporationToString(DelayToIncorporationEnum enumValue)
+    public static string DelayToIncorporationToString(DelayToIncorporations enumValue)
     {
         switch (enumValue)
         {
 
-            case DelayToIncorporationEnum.Injection:
+            case DelayToIncorporations.Injection:
                 {
                     return "Injection";
                 }
-            case DelayToIncorporationEnum.LessThan2Hours:
+            case DelayToIncorporations.LessThan2Hours:
                 {
                     return "Less than 2 hours";
                 }
-            case DelayToIncorporationEnum.n2To4Hours:
+            case DelayToIncorporations.n2To4Hours:
                 {
                     return "2-4 hours";
                 }
-            case DelayToIncorporationEnum.n4To6Hours:
+            case DelayToIncorporations.n4To6Hours:
                 {
                     return "4-6 hours";
                 }
-            case DelayToIncorporationEnum.n6To12Hours:
+            case DelayToIncorporations.n6To12Hours:
                 {
                     return "6-12 hours";
                 }
-            case DelayToIncorporationEnum.n12To24Hours:
+            case DelayToIncorporations.n12To24Hours:
                 {
                     return "12-24 hours";
                 }
-            case DelayToIncorporationEnum.n1To2Days:
+            case DelayToIncorporations.n1To2Days:
                 {
                     return "1-2 days";
                 }
-            case DelayToIncorporationEnum.n3To5Days:
+            case DelayToIncorporations.n3To5Days:
                 {
                     return "3-5 days";
                 }
-            case DelayToIncorporationEnum.n3To7Days:
+            case DelayToIncorporations.n3To7Days:
                 {
                     return "3-7 days";
                 }
-            case DelayToIncorporationEnum.n6To12Days:
+            case DelayToIncorporations.n6To12Days:
                 {
                     return "6-12 days";
                 }
-            case DelayToIncorporationEnum.GreaterThan7Days:
+            case DelayToIncorporations.GreaterThan7Days:
                 {
                     return ">7 days";
                 }
-            case DelayToIncorporationEnum.GreaterThan12Days:
+            case DelayToIncorporations.GreaterThan12Days:
                 {
                     return ">12 days";
                 }
-            case DelayToIncorporationEnum.n12To32Days:
+            case DelayToIncorporations.n12To32Days:
                 {
                     return "12-32 days";
                 }
-            case DelayToIncorporationEnum.GreaterThan32Days:
+            case DelayToIncorporations.GreaterThan32Days:
                 {
                     return ">32 days";
                 }
-            case DelayToIncorporationEnum.NotIncorporated:
+            case DelayToIncorporations.NotIncorporated:
                 {
-                    return "Not incorporated";
+                    return NotIncorporated;
                 }
 
             default:
@@ -2379,69 +2386,69 @@ public partial class Enumerations
     /// <summary>
     /// 	Converts a DelayToIncorporation enumeration to a string (suitable for the XML document)
     /// </summary>
-    public static DelayToIncorporationEnum DelayToIncorporationFromString(string enumValue)
+    public static DelayToIncorporations DelayToIncorporationFromString(string enumValue)
     {
         switch (enumValue)
         {
             case "Injection":
                 {
-                    return DelayToIncorporationEnum.Injection;
+                    return DelayToIncorporations.Injection;
                 }
             case "Less than 2 hours":
                 {
-                    return DelayToIncorporationEnum.LessThan2Hours;
+                    return DelayToIncorporations.LessThan2Hours;
                 }
             case "2-4 hours":
                 {
-                    return DelayToIncorporationEnum.n2To4Hours;
+                    return DelayToIncorporations.n2To4Hours;
                 }
             case "4-6 hours":
                 {
-                    return DelayToIncorporationEnum.n4To6Hours;
+                    return DelayToIncorporations.n4To6Hours;
                 }
             case "6-12 hours":
                 {
-                    return DelayToIncorporationEnum.n6To12Hours;
+                    return DelayToIncorporations.n6To12Hours;
                 }
             case "12-24 hours":
                 {
-                    return DelayToIncorporationEnum.n12To24Hours;
+                    return DelayToIncorporations.n12To24Hours;
                 }
             case "1-2 days":
                 {
-                    return DelayToIncorporationEnum.n1To2Days;
+                    return DelayToIncorporations.n1To2Days;
                 }
             case "3-5 days":
                 {
-                    return DelayToIncorporationEnum.n3To5Days;
+                    return DelayToIncorporations.n3To5Days;
                 }
             case "3-7 days":
                 {
-                    return DelayToIncorporationEnum.n3To7Days;
+                    return DelayToIncorporations.n3To7Days;
                 }
             case "6-12 days":
                 {
-                    return DelayToIncorporationEnum.n6To12Days;
+                    return DelayToIncorporations.n6To12Days;
                 }
             case ">7 days":
                 {
-                    return DelayToIncorporationEnum.GreaterThan7Days;
+                    return DelayToIncorporations.GreaterThan7Days;
                 }
             case ">12 days":
                 {
-                    return DelayToIncorporationEnum.GreaterThan12Days;
+                    return DelayToIncorporations.GreaterThan12Days;
                 }
             case "12-32 days":
                 {
-                    return DelayToIncorporationEnum.n12To32Days;
+                    return DelayToIncorporations.n12To32Days;
                 }
             case ">32 days":
                 {
-                    return DelayToIncorporationEnum.GreaterThan32Days;
+                    return DelayToIncorporations.GreaterThan32Days;
                 }
-            case "Not incorporated":
+            case NotIncorporated:
                 {
-                    return DelayToIncorporationEnum.NotIncorporated;
+                    return DelayToIncorporations.NotIncorporated;
                 }
 
             default:
@@ -2454,8 +2461,8 @@ public partial class Enumerations
     public static StringCollection DelayToIncorporationNames()
     {
         var ret = new StringCollection();
-        var t = typeof(DelayToIncorporationEnum);
-        foreach (DelayToIncorporationEnum e in Enum.GetValues(t))
+        var t = typeof(DelayToIncorporations);
+        foreach (DelayToIncorporations e in Enum.GetValues(t))
         {
             ret.Add(DelayToIncorporationToString(e));
         }
@@ -2468,16 +2475,16 @@ public partial class Enumerations
     /// <summary>
     /// 	Converts a string to a TopSoilMoisture enumeration
     /// </summary>
-    public static string TopsoilMoistureToString(TopsoilMoistureEnum enumValue)
+    public static string TopsoilMoistureToString(TopsoilMoistures enumValue)
     {
         switch (enumValue)
         {
 
-            case TopsoilMoistureEnum.Dry:
+            case TopsoilMoistures.Dry:
                 {
                     return "Dry";
                 }
-            case TopsoilMoistureEnum.Moist:
+            case TopsoilMoistures.Moist:
                 {
                     return "Moist";
                 }
@@ -2492,22 +2499,22 @@ public partial class Enumerations
     /// <summary>
     /// 	Converts a TopSoilMoisture enumeration to a string (suitable for the XML document)
     /// </summary>
-    public static TopsoilMoistureEnum TopsoilMoistureFromString(string enumValue)
+    public static TopsoilMoistures TopsoilMoistureFromString(string enumValue)
     {
         switch (enumValue)
         {
             case "Dry":
                 {
-                    return TopsoilMoistureEnum.Dry;
+                    return TopsoilMoistures.Dry;
                 }
             case "Moist":
                 {
-                    return TopsoilMoistureEnum.Moist;
+                    return TopsoilMoistures.Moist;
                 }
 
             default:
                 {
-                    return TopsoilMoistureEnum.Dry;
+                    return TopsoilMoistures.Dry;
                 }
         }
     }
@@ -2515,8 +2522,8 @@ public partial class Enumerations
     public static StringCollection TopsoilMoistureNames()
     {
         var ret = new StringCollection();
-        var t = typeof(TopsoilMoistureEnum);
-        foreach (TopsoilMoistureEnum e in Enum.GetValues(t))
+        var t = typeof(TopsoilMoistures);
+        foreach (TopsoilMoistures e in Enum.GetValues(t))
         {
             ret.Add(TopsoilMoistureToString(e));
         }
