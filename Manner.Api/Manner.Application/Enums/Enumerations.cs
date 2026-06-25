@@ -855,11 +855,8 @@ public partial class Enumerations
 
             default:
                 {
-                    // ##HAND_CODED_BLOCK_START ID="Default Enum Enums.Enumerations.CropTypeRb209"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.CropTypeRb209 [" + enumValue + "]");
-                    // ##HAND_CODED_BLOCK_END ID="Default Enum Enums.Enumerations.CropTypeRb209"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.CropTypeRb209 [" + enumValue + "]");                    
                 }
-
         }
     }
 
@@ -1080,8 +1077,8 @@ public partial class Enumerations
                 }
 
             default:
-                {
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.ManureTypesRb209 [" + enumValue.ToString() + "]");
+                {                    
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.ManureTypesRb209 [" + enumValue.ToString() + "]");
                 }
         }
     }
@@ -1291,21 +1288,20 @@ public partial class Enumerations
                 }
 
             default:
-                {
-                    // ##HAND_CODED_BLOCK_START ID="Default Enum Enums.Enumerations.ManureTypesRb209"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.ManureTypesRb209 [" + enumValue + "]");
-                    // ##HAND_CODED_BLOCK_END ID="Default Enum Enums.Enumerations.ManureTypesRb209"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
+                {                    
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.ManureTypesRb209 [" + enumValue + "]");                    
                 }
-
         }
     }
 
     public static StringCollection ManureTypesRB209Names()
     {
         var ret = new StringCollection();
-        var t = typeof(ManureTypes);
-        foreach (ManureTypes e in Enum.GetValues(t))
-            ret.Add(ManureTypesToString(e));
+        var t = typeof(ManureTypesRb209);
+        foreach (ManureTypesRb209 e in Enum.GetValues(t))
+        {
+            ret.Add(ManureTypesRB209ToString(e));
+        }
         return ret;
     }
 
@@ -1516,10 +1512,9 @@ public partial class Enumerations
                 {
                     return "Digestate (whole), cattle slurry-based";
                 }
-
             default:
                 {
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.ManureTypes [" + enumValue.ToString() + "]");
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.ManureTypes [" + enumValue.ToString() + "]");
                 }
         }
     }
@@ -1730,11 +1725,8 @@ public partial class Enumerations
 
             default:
                 {
-                    // ##HAND_CODED_BLOCK_START ID="Default Enum Enums.Enumerations.ManureTypes"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.ManureTypes [" + enumValue + "]");
-                    // ##HAND_CODED_BLOCK_END ID="Default Enum Enums.Enumerations.ManureTypes"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.ManureTypes [" + enumValue + "]");                    
                 }
-
         }
     }
 
@@ -1743,7 +1735,9 @@ public partial class Enumerations
         var ret = new StringCollection();
         var t = typeof(ManureTypes);
         foreach (ManureTypes e in Enum.GetValues(t))
+        {
             ret.Add(ManureTypesToString(e));
+        }
         return ret;
     }
 
@@ -1789,7 +1783,7 @@ public partial class Enumerations
 
             default:
                 {
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.ApplicationMethod [" + enumValue.ToString() + "]");
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.ApplicationMethod [" + enumValue.ToString() + "]");
                 }
         }
     }
@@ -1831,10 +1825,8 @@ public partial class Enumerations
                 }
 
             default:
-                {
-                    // ##HAND_CODED_BLOCK_START ID="Default Enum Enums.Enumerations.ApplicationMethod"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.ApplicationMethod [" + enumValue + "]");
-                    // ##HAND_CODED_BLOCK_END ID="Default Enum Enums.Enumerations.ApplicationMethod"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
+                {                    
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.ApplicationMethod [" + enumValue + "]");                    
                 }
         }
     }
@@ -1844,7 +1836,9 @@ public partial class Enumerations
         var ret = new StringCollection();
         var t = typeof(ApplicationMethodEnum);
         foreach (ApplicationMethodEnum e in Enum.GetValues(t))
+        {
             ret.Add(ApplicationMethodToString(e));
+        }
         return ret;
     }
 
@@ -1871,10 +1865,9 @@ public partial class Enumerations
                 {
                     return "Strong Breeze (6-7 Beaufort Scale)";
                 }
-
             default:
                 {
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.WindSpeed [" + enumValue.ToString() + "]");
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.WindSpeed [" + enumValue.ToString() + "]");
                 }
         }
     }
@@ -1900,12 +1893,9 @@ public partial class Enumerations
                 }
 
             default:
-                {
-                    // ##HAND_CODED_BLOCK_START ID="Default Enum Enums.Enumerations.WindSpeed"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.WindSpeed [" + enumValue + "]");
-                    // ##HAND_CODED_BLOCK_END ID="Default Enum Enums.Enumerations.WindSpeed"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
+                {                    
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.WindSpeed [" + enumValue + "]");                    
                 }
-
         }
     }
 
@@ -1914,7 +1904,9 @@ public partial class Enumerations
         var ret = new StringCollection();
         var t = typeof(WindSpeed);
         foreach (WindSpeed e in Enum.GetValues(t))
+        {
             ret.Add(WindSpeedToString(e));
+        }
         return ret;
     }
 
@@ -1960,7 +1952,7 @@ public partial class Enumerations
 
             default:
                 {
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.MethodOfIncorporation [" + enumValue.ToString() + "]");
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.MethodOfIncorporation [" + enumValue.ToString() + "]");
                 }
         }
     }
@@ -2002,10 +1994,8 @@ public partial class Enumerations
                 }
 
             default:
-                {
-                    // ##HAND_CODED_BLOCK_START ID="Default Enum Enums.Enumerations.MethodOfIncorporation"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.MethodOfIncorporation [" + enumValue + "]");
-                    // ##HAND_CODED_BLOCK_END ID="Default Enum Enums.Enumerations.MethodOfIncorporation"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
+                {                    
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.MethodOfIncorporation [" + enumValue + "]");                    
                 }
         }
     }
@@ -2015,7 +2005,9 @@ public partial class Enumerations
         var ret = new StringCollection();
         var t = typeof(MethodOfIncorporationEnum);
         foreach (MethodOfIncorporationEnum e in Enum.GetValues(t))
+        {
             ret.Add(MethodOfIncorporationToString(e));
+        }
         return ret;
     }
 
@@ -2045,7 +2037,7 @@ public partial class Enumerations
 
             default:
                 {
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.Rainfall [" + enumValue.ToString() + "]");
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.Rainfall [" + enumValue.ToString() + "]");
                 }
         }
     }
@@ -2071,12 +2063,9 @@ public partial class Enumerations
                 }
 
             default:
-                {
-                    // ##HAND_CODED_BLOCK_START ID="Default Enum Enums.Enumerations.Rainfall"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.Rainfall [" + enumValue + "]");
-                    // ##HAND_CODED_BLOCK_END ID="Default Enum Enums.Enumerations.Rainfall"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
+                {                    
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.Rainfall [" + enumValue + "]");                    
                 }
-
         }
     }
 
@@ -2085,7 +2074,9 @@ public partial class Enumerations
         var ret = new StringCollection();
         var t = typeof(Rainfall);
         foreach (Rainfall e in Enum.GetValues(t))
+        {
             ret.Add(RainfallToString(e));
+        }
         return ret;
     }
 
@@ -2131,7 +2122,7 @@ public partial class Enumerations
 
             default:
                 {
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.ManureCategory [" + enumValue.ToString() + "]");
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.ManureCategory [" + enumValue.ToString() + "]");
                 }
         }
     }
@@ -2173,12 +2164,9 @@ public partial class Enumerations
                 }
 
             default:
-                {
-                    // ##HAND_CODED_BLOCK_START ID="Default Enum Enums.Enumerations.ManureCategory"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.ManureCategory [" + enumValue + "]");
-                    // ##HAND_CODED_BLOCK_END ID="Default Enum Enums.Enumerations.ManureCategory"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
+                {                    
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.ManureCategory [" + enumValue + "]");                    
                 }
-
         }
     }
 
@@ -2187,7 +2175,9 @@ public partial class Enumerations
         var ret = new StringCollection();
         var t = typeof(ManureCategory);
         foreach (ManureCategory e in Enum.GetValues(t))
+        {
             ret.Add(ManureCategoryToString(e));
+        }
         return ret;
     }
 
@@ -2201,7 +2191,6 @@ public partial class Enumerations
     {
         switch (enumValue)
         {
-
             case CropTypeEnum.Grass:
                 {
                     return "Grass";
@@ -2241,7 +2230,7 @@ public partial class Enumerations
 
             default:
                 {
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.CropTypeEngland [" + enumValue.ToString() + "]");
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.CropTypeEngland [" + enumValue.ToString() + "]");
                 }
         }
     }
@@ -2292,11 +2281,8 @@ public partial class Enumerations
 
             default:
                 {
-                    // ##HAND_CODED_BLOCK_START ID="Default Enum Enums.Enumerations.CropTypeEngland"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.CropTypeEngland [" + enumValue + "]");
-                    // ##HAND_CODED_BLOCK_END ID="Default Enum Enums.Enumerations.CropTypeEngland"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.CropTypeEngland [" + enumValue + "]");                    
                 }
-
         }
     }
 
@@ -2305,7 +2291,9 @@ public partial class Enumerations
         var ret = new StringCollection();
         var t = typeof(CropTypeEnum);
         foreach (CropTypeEnum e in Enum.GetValues(t))
+        {
             ret.Add(CropTypeEnumToString(e));
+        }
         return ret;
     }
 
@@ -2383,7 +2371,7 @@ public partial class Enumerations
 
             default:
                 {
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.DelayToIncorporation [" + enumValue.ToString() + "]");
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.DelayToIncorporation [" + enumValue.ToString() + "]");
                 }
         }
     }
@@ -2457,12 +2445,9 @@ public partial class Enumerations
                 }
 
             default:
-                {
-                    // ##HAND_CODED_BLOCK_START ID="Default Enum Enums.Enumerations.DelayToIncorporation"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.DelayToIncorporation [" + enumValue + "]");
-                    // ##HAND_CODED_BLOCK_END ID="Default Enum Enums.Enumerations.DelayToIncorporation"## DO NOT MODIFY ANYTHING OUTSIDE OF THESE TAGS
+                {                    
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.DelayToIncorporation [" + enumValue + "]");                    
                 }
-
         }
     }
 
@@ -2471,7 +2456,9 @@ public partial class Enumerations
         var ret = new StringCollection();
         var t = typeof(DelayToIncorporationEnum);
         foreach (DelayToIncorporationEnum e in Enum.GetValues(t))
+        {
             ret.Add(DelayToIncorporationToString(e));
+        }
         return ret;
     }
 
@@ -2497,7 +2484,7 @@ public partial class Enumerations
 
             default:
                 {
-                    throw new Exception("Unknown enumeration value for Enums.Enumerations.TopSoilMoisture [" + enumValue.ToString() + "]");
+                    throw new InvalidOperationException("Unknown enumeration value for Enums.Enumerations.TopSoilMoisture [" + enumValue.ToString() + "]");
                 }
         }
     }
