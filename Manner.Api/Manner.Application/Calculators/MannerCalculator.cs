@@ -501,8 +501,8 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         _outputs.TotalNitrogenApplied = (long)Math.Round(input.CalculatedTotalN * 10.0d) / 10d;
         _outputs.PotentialCropAvailableN = (int)Math.Round(input.CalculatedPotentialN * 10.0d) / 10d;
         _outputs.NH3NLoss = (int)Math.Round(input.CalculatedVolatilisedN * 10.0d) / 10d;
-        _outputs.N2ONLoss = (int)Math.Round(input.CalculatedN2O * 10.0d) / 10d;
-        _outputs.N2NLoss = (int)Math.Round(input.CalculatedN2 * 10.0d) / 10d;
+        _outputs.N2ONLoss = (int)(input.CalculatedN2O * 10.0d / 10d);
+        _outputs.N2NLoss = (int)(input.CalculatedN2 * 10.0d / 10d);
         _outputs.MineralisedN = (int)Math.Round(input.CalculatedMineralisedN * 10.0d) / 10d;
         _outputs.NO3NLoss = (int)Math.Round(input.CalculatedLeachedN * 10.0d) / 10d;
         _outputs.CropUptake = input.CropUptakeFactor;

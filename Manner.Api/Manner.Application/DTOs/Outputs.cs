@@ -31,6 +31,7 @@ public class Outputs
     public double N2ONLoss { get; set; }
     public double N2NLoss { get; set; }
     public double NO3NLoss { get; set; }
+    public double DenitrifiedNLoss { get; set; }    
     public double MineralisedN { get; set; }
     public double PotentialEconomicValue { get; set; }
     public double P2O5CropAvailable { get; set; }
