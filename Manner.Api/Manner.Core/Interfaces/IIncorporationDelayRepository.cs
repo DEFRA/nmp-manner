@@ -3,11 +3,8 @@
 namespace Manner.Core.Interfaces;
 
 public interface IIncorporationDelayRepository : IRepository<IncorporationDelay>
-{
-    //Task<IEnumerable<IncorporationDelay>?> FetchAllAsync();
+{    
     Task<IEnumerable<IncorporationDelay>?> FetchByApplicableForAsync(string applicableFor);
-    Task<IEnumerable<IncorporationDelay>?> FetchByIncorpMethodIdAndApplicableForAsync(int methodId, string applicableFor);
-
-    //Task<IncorporationDelay?> FetchByIdAsync(int id);
+    Task<IEnumerable<IncorporationDelay>?> FetchByIncorpMethodIdAndApplicableForAsync(int methodId, string applicableFor);    
     Task<IEnumerable<IncorporationDelay>?> FetchByIncorpMethodIdAsync(int methodId);
 }

@@ -14,19 +14,19 @@ public class IncorporationDelayRepository(ILogger<IncorporationDelayRepository> 
     private readonly ILogger<IncorporationDelayRepository> _logger = logger;
     public async Task<IEnumerable<IncorporationDelay>?> FetchAllAsync()
     {
-        _logger.LogTrace($"IncorporationDelayRepository : FetchAllAsync() callled");
+        _logger.LogTrace("IncorporationDelayRepository : FetchAllAsync() callled");
         return await _context.IncorporationDelays.ToListAsync();
     }
 
     public async Task<IncorporationDelay?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"IncorporationDelayRepository : FetchByIdAsync({id}) callled");
+        _logger.LogTrace("IncorporationDelayRepository : FetchByIdAsync({Id}) callled", id);
         return await _context.IncorporationDelays.FirstOrDefaultAsync(i => i.ID == id);
     }
 
     public async Task<IEnumerable<IncorporationDelay>?> FetchByIncorpMethodIdAsync(int methodId)
     {
-        _logger.LogTrace($"IncorporationDelayRepository : FetchByIncorpMethodIdAsync({methodId}) callled");
+        _logger.LogTrace("IncorporationDelayRepository : FetchByIncorpMethodIdAsync({MethodId}) callled", methodId);
         return await _context.IncorporationDelays
             .Where(d => _context.Set<IncorpMethodsIncorpDelays>()
                 .Any(link => link.IncorporationMethodID == methodId && link.IncorporationDelayID == d.ID))
@@ -35,7 +35,7 @@ public class IncorporationDelayRepository(ILogger<IncorporationDelayRepository> 
 
     public async Task<IEnumerable<IncorporationDelay>?> FetchByApplicableForAsync(string applicableFor)
     {
-        _logger.LogTrace($"IncorporationDelayRepository : FetchByApplicableForAsync({applicableFor}) callled");
+        _logger.LogTrace("IncorporationDelayRepository : FetchByApplicableForAsync({ApplicableFor}) callled", applicableFor);
         // Fetch delays where ApplicableFor is 'A' (All) or matches the specified filter
         if (applicableFor.ToLower() == "null")
         {
@@ -52,7 +52,7 @@ public class IncorporationDelayRepository(ILogger<IncorporationDelayRepository> 
 
     public async Task<IEnumerable<IncorporationDelay>?> FetchByIncorpMethodIdAndApplicableForAsync(int methodId, string applicableFor)
     {
-        _logger.LogTrace($"IncorporationDelayRepository : FetchByIncorpMethodIdAndApplicableForAsync({methodId},{applicableFor}) callled");
+        _logger.LogTrace("IncorporationDelayRepository : FetchByIncorpMethodIdAndApplicableForAsync({MethodId},{ApplicableFor}) callled", methodId, applicableFor);
         if (string.IsNullOrWhiteSpace(applicableFor))
         {
             return await _context.IncorporationDelays

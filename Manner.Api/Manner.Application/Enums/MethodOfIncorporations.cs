@@ -1,7 +1,7 @@
 ﻿namespace Manner.Application.Enums;
 public partial class Enumerations
 {    
-    public enum MethodOfIncorporationEnum
+    public enum MethodOfIncorporations
     {
         ShallowInjection = 1,
         DeepInjection = 2,

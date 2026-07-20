@@ -10,5 +10,7 @@ namespace Manner.Application.Interfaces
     public interface ICalculateResultService
     {
         Task<NutrientsResponse> CalculateNutrientsAsync(CalculateNutrientsRequest calculateNutrientsRequest);
+        Task<List<NutrientsResponse>> CalculateNutrientsIndivisualApplicationsAsync(CalculateNutrientsRequest calculateNutrientsRequest);
+        
     }
 }

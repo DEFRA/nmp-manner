@@ -18,33 +18,33 @@ public class IncorporationDelayService(ILogger<IncorporationDelayService> logger
 
     public async Task<IEnumerable<IncorporationDelayDto>?> FetchAllAsync()
     {
-        _logger.LogTrace($"IncorporationDelayService : FetchAllAsync() callled");
+        _logger.LogTrace("IncorporationDelayService : FetchAllAsync() callled");
         return _mapper.Map<IEnumerable<IncorporationDelayDto>>(await _incorporationDelayRepository.FetchAllAsync());
     }
 
     public async Task<IncorporationDelayDto?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"IncorporationDelayService : FetchByIdAsync({id}) callled");
+        _logger.LogTrace("IncorporationDelayService : FetchByIdAsync({Id}) callled", id);
         return _mapper.Map<IncorporationDelayDto>(await _incorporationDelayRepository.FetchByIdAsync(id));
     }
 
     public async Task<IEnumerable<IncorporationDelayDto>?> FetchByIncorpMethodIdAsync(int methodId)
     {
-        _logger.LogTrace($"IncorporationDelayService : FetchByIncorpMethodIdAsync({methodId}) callled");
+        _logger.LogTrace("IncorporationDelayService : FetchByIncorpMethodIdAsync({MethodId}) callled", methodId);
         var delays = await _incorporationDelayRepository.FetchByIncorpMethodIdAsync(methodId);
         return _mapper.Map<IEnumerable<IncorporationDelayDto>>(delays);
     }
 
     public async Task<IEnumerable<IncorporationDelayDto>?> FetchByApplicableForAsync(string applicableFor)
     {
-        _logger.LogTrace($"IncorporationDelayService : FetchByApplicableForAsync({applicableFor}) callled");
+        _logger.LogTrace("IncorporationDelayService : FetchByApplicableForAsync({ApplicableFor}) callled", applicableFor);
         var delays = await _incorporationDelayRepository.FetchByApplicableForAsync(applicableFor);
         return _mapper.Map<IEnumerable<IncorporationDelayDto>>(delays);
     }
 
     public async Task<IEnumerable<IncorporationDelayDto>?> FetchByIncorpMethodIdAndApplicableForAsync(int methodId, string applicableFor)
     {
-        _logger.LogTrace($"IncorporationDelayService : FetchByIncorpMethodIdAndApplicableForAsync({methodId},{applicableFor}) callled");
+        _logger.LogTrace("IncorporationDelayService : FetchByIncorpMethodIdAndApplicableForAsync({MethodId},{ApplicableFor}) callled", methodId, applicableFor);
         var delays = await _incorporationDelayRepository.FetchByIncorpMethodIdAndApplicableForAsync(methodId,applicableFor);
         return _mapper.Map<IEnumerable<IncorporationDelayDto>>(delays);
     }

@@ -3,7 +3,7 @@ public partial class Enumerations
 {    
     #region Enumeration 'CropTypeEnum'
 
-    public enum CropTypeEnum
+    public enum CropTypes
     {
         Grass = 1,
         EarlySownWinterCereal = 2,

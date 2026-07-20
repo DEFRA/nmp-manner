@@ -14,13 +14,13 @@ public class MoistureTypeRepository(ILogger<MoistureTypeRepository> logger, Appl
     private readonly ILogger<MoistureTypeRepository> _logger = logger;
     public async Task<IEnumerable<MoistureType>?> FetchAllAsync()
     {
-        _logger.LogTrace($"MoistureTypeRepository : FetchAllAsync() callled");
+        _logger.LogTrace("MoistureTypeRepository : FetchAllAsync() callled");
         return await _context.MoistureTypes.ToListAsync();
     }
 
     public async Task<MoistureType?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"MoistureTypeRepository : FetchByIdAsync({id}) callled");
+        _logger.LogTrace("MoistureTypeRepository : FetchByIdAsync({Id}) callled", id);
         return await _context.MoistureTypes.FirstOrDefaultAsync(a => a.ID == id);
     }
 }

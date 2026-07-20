@@ -1,29 +1,29 @@
 ﻿using Manner.Application.DTOs;
 using Manner.Application.Interfaces;
 using Manner.Application.Enums;
-using Manner.Core.Attributes;
-using Manner.Core.Entities;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
-using System.Diagnostics;
+using Manner.Core.Attributes;
+
 namespace Manner.Application.Calculators;
-//[Service(ServiceLifetime.Transient)]
-public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto cropType, ManureApplication manureApplication, ManureTypeDto manureType, IncorporationDelayDto incorporationDelay, TopSoilDto topSoil, SubSoilDto subSoil, List<ClimateTypeDto> climateTypes, int runType) : IMannerCalculator
+
+public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
 {
-    private readonly FieldDetail _field = field;
-    private readonly ManureApplication _manureApplication = manureApplication;
-    private readonly ManureTypeDto _manureType = manureType;
-    private readonly ClimateDto _climate = climate;
-    private readonly CropTypeDto _cropType = cropType;
-    private readonly IncorporationDelayDto _incorporationDelay = incorporationDelay;
-    private readonly TopSoilDto _topSoil = topSoil;
-    private readonly SubSoilDto _subSoil = subSoil;
-    private readonly List<ClimateTypeDto> _climateTypes = climateTypes;
+    private readonly FieldDetail _field = input.Field;
+    private readonly ManureApplication _manureApplication = input.ManureApplication;
+    private readonly ManureTypeDto _manureType = input.ManureType;
+    private readonly ClimateDto _climate = input.Climate;
+    private readonly CropTypeDto _cropType = input.CropType;
+    private readonly IncorporationDelayDto? _incorporationDelay = input.IncorporationDelay;
+    private readonly TopSoilDto _topSoil = input.TopSoil;
+    private readonly SubSoilDto _subSoil = input.SubSoil;
+    private readonly List<ClimateTypeDto> _climateTypes = input.ClimateTypes;
     private readonly DTOs.Outputs _outputs = new();
     private readonly ClimateCalculator _climateCalculator = new();
+#pragma warning disable S1450
     private double _rainfallTotal;
+#pragma warning restore S1450
     private double _evapotranspirationTotal;
-    private readonly int _runType = runType;
+    private readonly int _runType = input.RunType;
     private const string _arableKey = "Arable";
     private const string _grassKey = "Grass";
     public DTOs.Outputs MannerEngine
@@ -40,7 +40,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
         double mineralN2;
         double mineralN3;
         double mineralN4; // manure N remaining after losses through NH3 volatilisation + any nitrate N in the original manure application
-        int incorporationCumulativeHours = _incorporationDelay.CumulativeHours ?? 0;
+        int incorporationCumulativeHours = _incorporationDelay?.CumulativeHours ?? 0;
 
         string cropUse = _cropType?.Use ?? string.Empty;
         if (_manureType != null)
@@ -91,12 +91,14 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
 
             // Mineralised N
             // --------------------------------------------------------------
-            var mineralisedN2A = default(double);
-            var mineralisedN3 = default(double);
-            var cdd1 = default(double);
-            var cdd2 = default(double);
-            var cdd2a = default(double);
-            double calculatedMineralisedN = this.CalculateMineralisedN(calculatedTotalN, calculatedPotentialN, ref mineralN1, ref mineralisedN3, ref mineralisedN2A, ref cdd1, ref cdd2, ref cdd2a);
+            var mineralisedResult = this.CalculateMineralisedN(calculatedTotalN, calculatedPotentialN);
+            double calculatedMineralisedN = mineralisedResult.MineralisedN;
+            var mineralisedN2A = mineralisedResult.MineralisedN2A;
+            var mineralisedN3 = mineralisedResult.OrganicN3;
+            var cdd1 = mineralisedResult.Cdd1;
+            var cdd2 = mineralisedResult.Cdd2;
+            var cdd2a = mineralisedResult.Cdd2A;
+            mineralN1 = mineralisedResult.MineralN1;
 
             mineralN4 = mineralN3 + mineralN1;
             // Leached N
@@ -106,14 +108,24 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             double vmWaterTotal = vmWaterTopSoil + _subSoil.VolumetricMeasure;
 
             double calculatedLeachedN = CalculateLeachedN(mineralN4, vmWaterTotal, vmWaterTopSoil);
+#pragma warning disable S1481
             double nMineralised4 = mineralN4 - calculatedLeachedN;
+#pragma warning restore S1481
 
             // Modification required to multiply mineralisation by 2 for poultry only.
             calculatedMineralisedN *= ApplyMineralisationFactor();
             mineralisedN2A *= ApplyMineralisationFactor();
 
             // Calculate final results and assign to public variables
-            CalculateFinalResults(calculatedTotalN, calculatedPotentialN, calculatedVolatilisedN, calculatedN2O, calculatedN2, calculatedcropUptakeFactor, calculatedMineralisedN, calculatedLeachedN);
+            CalculateFinalResults(new FinalResultsInput(
+                calculatedTotalN,
+                calculatedPotentialN,
+                calculatedVolatilisedN,
+                calculatedN2O,
+                calculatedN2,
+                calculatedcropUptakeFactor,
+                calculatedMineralisedN,
+                calculatedLeachedN));
 
 
             if (IsPaperCrumble(_manureType.ID))
@@ -146,14 +158,14 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
             // -----------------------------------------------------------------------------------
             // Mineralised N for next crop
             // --------------------------------------------------------------
-            double calculatedMineralisedNNextCrop = CalculateMineralisedNNextCrop(nMineralised4, vmWaterTotal, cdd1, cdd2, cdd2a, mineralisedN3);
+            double calculatedMineralisedNNextCrop = CalculateMineralisedNNextCrop(vmWaterTotal, cdd1, cdd2, cdd2a, mineralisedN3);
             _outputs.ResultantNAvailableYear2 = (double)(int)Math.Round(calculatedMineralisedNNextCrop * 10.0d / 10d);
 
             CheckAndChangeNegativeNResults();
         }
         else
         {
-            throw new Exception("Manure not found");
+            throw new InvalidOperationException("Manure not found");
         }
 
     }
@@ -182,126 +194,79 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     /// <param name="endSoilDrainageDate"></param>
     private void CalculateRainfall(DateOnly applicationDate, DateOnly endSoilDrainageDate)
     {
-        DateTime appDate;
-        DateTime endDate;
-        var sumRain = default(double);
-        var sumEvap = default(double);
-        double propstart;
-        double propend;
-        double applicationDateAE, appDateRain;
-        double soilDrainageAE, soilDrainageRain;
-
-        appDateRain = GetClimateType(applicationDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
-        applicationDateAE = GetClimateType(applicationDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
-
-        soilDrainageRain = GetClimateType(endSoilDrainageDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
-        soilDrainageAE = GetClimateType(endSoilDrainageDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
-
-
         // DO NOT ADD ONE MONTH TO THE DATE OF APPLICATION TO MIMIC EXISTING CODE AND MANNER PAPER
-        appDate = new DateTime(applicationDate.Year, applicationDate.Month, applicationDate.Day, 0, 0, 0, DateTimeKind.Local);
-        endDate = new DateTime(endSoilDrainageDate.Year, endSoilDrainageDate.Month, endSoilDrainageDate.Day, 0, 0, 0, DateTimeKind.Local);
-        // #### NOTE -    Any manure application AFTER 31/07/98 is associated with the next years End of Soil Drainage
+        DateTime appDate = new DateTime(applicationDate.Year, applicationDate.Month, applicationDate.Day, 0, 0, 0, DateTimeKind.Local);
+        DateTime endDate = new DateTime(endSoilDrainageDate.Year, endSoilDrainageDate.Month, endSoilDrainageDate.Day, 0, 0, 0, DateTimeKind.Local);
 
+        // #### NOTE -    Any manure application AFTER 31/07/98 is associated with the next years End of Soil Drainage
         if ((endDate - appDate).Days <= 0)
         {
-            // if date of Application is after End of Soil Drainage then return zero rainfall and zero evap.
             _rainfallTotal = 0d;
             _evapotranspirationTotal = 0d;
+            return;
         }
-        else
+
+        double appDateRain = GetClimateType(applicationDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
+        double applicationDateAE = GetClimateType(applicationDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
+        double soilDrainageRain = GetClimateType(endSoilDrainageDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
+        double soilDrainageAE = GetClimateType(endSoilDrainageDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
+
+        double sumRain = 0d;
+        double sumEvap = 0d;
+        double propstart = GetMonthProgress(appDate);
+        double propend = GetMonthProgress(endDate);
+        int monthDifference = GetMonthDifference(appDate, endDate);
+
+        if (monthDifference > 0)
         {
-            // else calculate rainfall
-            propstart = Thread.CurrentThread.CurrentCulture.Calendar.GetDayOfMonth(appDate) /
-                       (new DateTime(Thread.CurrentThread.CurrentCulture.Calendar.GetYear(appDate), Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(appDate), 1, 0, 0, 0, DateTimeKind.Local).AddMonths(1) -
-                               new DateTime(
-                                   Thread.CurrentThread.CurrentCulture.Calendar.GetYear(appDate),
-                                   Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(appDate),
-                                   1, 0, 0, 0, DateTimeKind.Local)).TotalDays;
-
-            // Calculate propend
-            propend = Thread.CurrentThread.CurrentCulture.Calendar.GetDayOfMonth(endDate) /
-                            (new DateTime(
-                                        Thread.CurrentThread.CurrentCulture.Calendar.GetYear(endDate),
-                                        Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(endDate),
-                                        1, 0, 0, 0, DateTimeKind.Local)
-                                    .AddMonths(1) -
-                                    new DateTime(
-                                        Thread.CurrentThread.CurrentCulture.Calendar.GetYear(endDate),
-                                        Thread.CurrentThread.CurrentCulture.Calendar.GetMonth(endDate),
-                                        1, 0, 0, 0, DateTimeKind.Local)).TotalDays;
-            // check to make sure that month for app date and end soil drainage is not the same. If it is only to diff at end of period
-            if (((endDate.Year - appDate.Year) * 12) + endDate.Month - appDate.Month > 0L)
-            {
-                if (applicationDateAE > appDateRain)
-                {
-                    sumRain = appDateRain * (1.0d - propstart);
-                    sumEvap = sumRain;
-                }
-                else
-                {
-                    sumRain = appDateRain * (1.0d - propstart);
-                    sumEvap = applicationDateAE * (1.0d - propstart);
-                }
-
-                if (soilDrainageAE > soilDrainageRain)
-                {
-                    sumRain += soilDrainageRain * propend;
-                    sumEvap += soilDrainageRain * propend;
-                }
-                else
-                {
-                    sumRain += soilDrainageRain * propend;
-                    sumEvap += soilDrainageAE * propend;
-                }
-            }
-
-            else if (((endDate.Year - appDate.Year) * 12) + endDate.Month - appDate.Month == 0L)
-            {
-
-                if (soilDrainageAE > soilDrainageRain)
-                {
-                    sumRain += soilDrainageRain * (propend - propstart);
-                    sumEvap += soilDrainageRain * (propend - propstart);
-                }
-                else
-                {
-                    sumRain += soilDrainageRain * (propend - propstart);
-                    sumEvap += soilDrainageAE * (propend - propstart);
-                }
-
-            }
-
-            while (((endDate.Year - appDate.Year) * 12) + endDate.Month - appDate.Month > 1)
-            {
-                // Add one month to appDate
-                appDate = appDate.AddMonths(1);
-
-                appDateRain = GetClimateType(appDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
-                applicationDateAE = GetClimateType(appDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
-
-
-                if (applicationDateAE > appDateRain)
-                {
-                    sumRain += appDateRain;
-                    sumEvap += appDateRain;
-                }
-                else
-                {
-                    sumRain += appDateRain;
-                    sumEvap += applicationDateAE;
-                }
-            }
-
-            // always round up
-            _rainfallTotal = (double)(long)Math.Round(sumRain + 0.5d);
-
-            if (_rainfallTotal < 0d)
-            {
-                _rainfallTotal = 0d;
-            }
-            _evapotranspirationTotal = (double)(long)Math.Round(sumEvap + 0.5d);
+            AddBoundedRainAndEvap(appDateRain, applicationDateAE, 1.0d - propstart, ref sumRain, ref sumEvap);
+            AddBoundedRainAndEvap(soilDrainageRain, soilDrainageAE, propend, ref sumRain, ref sumEvap);
         }
+        else if (monthDifference == 0)
+        {
+            AddBoundedRainAndEvap(soilDrainageRain, soilDrainageAE, propend - propstart, ref sumRain, ref sumEvap);
+        }
+
+        while (GetMonthDifference(appDate, endDate) > 1)
+        {
+            appDate = appDate.AddMonths(1);
+            appDateRain = GetClimateType(appDate.Month, _climateCalculator, Enumerations.ClimateDataType.Rainfall);
+            applicationDateAE = GetClimateType(appDate.Month, _climateCalculator, Enumerations.ClimateDataType.ActualEvapotranspiration);
+            AddBoundedRainAndEvap(appDateRain, applicationDateAE, 1d, ref sumRain, ref sumEvap);
+        }
+
+        // always round up
+        _rainfallTotal = (double)(long)Math.Round(sumRain + 0.5d);
+
+        if (_rainfallTotal < 0d)
+        {
+            _rainfallTotal = 0d;
+        }
+
+        _evapotranspirationTotal = (double)(long)Math.Round(sumEvap + 0.5d);
+    }
+
+    private static int GetMonthDifference(DateTime startDate, DateTime endDate)
+    {
+        return ((endDate.Year - startDate.Year) * 12) + endDate.Month - startDate.Month;
+    }
+
+    private static double GetMonthProgress(DateTime date)
+    {
+        var calendar = Thread.CurrentThread.CurrentCulture.Calendar;
+        int year = calendar.GetYear(date);
+        int month = calendar.GetMonth(date);
+        double day = calendar.GetDayOfMonth(date);
+        double daysInMonth = (new DateTime(year, month, 1, 0, 0, 0, DateTimeKind.Local).AddMonths(1) - new DateTime(year, month, 1, 0, 0, 0, DateTimeKind.Local)).TotalDays;
+
+        return day / daysInMonth;
+    }
+
+    private static void AddBoundedRainAndEvap(double rain, double evapotranspiration, double proportion, ref double sumRain, ref double sumEvap)
+    {
+        double rainAmount = rain * proportion;
+        sumRain += rainAmount;
+        sumEvap += Math.Min(evapotranspiration, rain) * proportion;
     }
 
     private void CheckAndChangeNegativeNResults()
@@ -335,7 +300,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     /// <param name="cdd2a">Cumulative Day Degrees for the months between Date of Application and 31st July</param>
     /// <param name="organicN3">Organic N remaining</param>
     /// <returns type="Double">Mineralised N value for next crop</returns>
-    private double CalculateMineralisedNNextCrop(double mineralisedN4, double volumetricWaterContentTotal, double cdd1, double cdd2, double cdd2a, double organicN3)
+    private double CalculateMineralisedNNextCrop(double volumetricWaterContentTotal, double cdd1, double cdd2, double cdd2a, double organicN3)
     {
 
         try
@@ -521,16 +486,26 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
         return iHer;
     }
 
-    private void CalculateFinalResults(double calculatedTotalN, double calculatedPotentialN, double calculatedVolatilisedN, double calculatedN2O, double calculatedN2, double cropUptakeFactor, double calculatedMineralisedN, double calculatedLeachedN)
+    private sealed record FinalResultsInput(
+        double CalculatedTotalN,
+        double CalculatedPotentialN,
+        double CalculatedVolatilisedN,
+        double CalculatedN2O,
+        double CalculatedN2,
+        double CropUptakeFactor,
+        double CalculatedMineralisedN,
+        double CalculatedLeachedN);
+
+    private void CalculateFinalResults(FinalResultsInput input)
     {
-        _outputs.TotalNitrogenApplied = (long)Math.Round(calculatedTotalN * 10.0d) / 10d;
-        _outputs.PotentialCropAvailableN = (int)Math.Round(calculatedPotentialN * 10.0d) / 10d;
-        _outputs.NH3NLoss = (int)Math.Round(calculatedVolatilisedN * 10.0d) / 10d;
-        _outputs.N2ONLoss = (int)Math.Round(calculatedN2O * 10.0d) / 10d;
-        _outputs.N2NLoss = (int)Math.Round(calculatedN2 * 10.0d) / 10d;
-        _outputs.MineralisedN = (int)Math.Round(calculatedMineralisedN * 10.0d) / 10d;
-        _outputs.NO3NLoss = (int)Math.Round(calculatedLeachedN * 10.0d) / 10d;
-        _outputs.CropUptake = cropUptakeFactor;
+        _outputs.TotalNitrogenApplied = (long)Math.Round(input.CalculatedTotalN * 10.0d) / 10d;
+        _outputs.PotentialCropAvailableN = (int)Math.Round(input.CalculatedPotentialN * 10.0d) / 10d;
+        _outputs.NH3NLoss = (int)Math.Round(input.CalculatedVolatilisedN * 10.0d) / 10d;
+        _outputs.N2ONLoss = (int)Math.Round(input.CalculatedN2O * 10.0d) / 10d;
+        _outputs.N2NLoss = (int)Math.Round(input.CalculatedN2 * 10.0d) / 10d;
+        _outputs.MineralisedN = (int)Math.Round(input.CalculatedMineralisedN * 10.0d) / 10d;
+        _outputs.NO3NLoss = (int)Math.Round(input.CalculatedLeachedN * 10.0d) / 10d;
+        _outputs.CropUptake = input.CropUptakeFactor;
     }
     private void CalculateNutrientsOutputsValues()
     {
@@ -550,7 +525,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
         double? so3 = null;
         if (_manureApplication.ApplicationDate.Month >= 8 && _manureApplication.ApplicationDate.Month <= 12)
         {
-            if (_cropType.ID == (int)Enumerations.CropTypeEnum.Grass || _cropType.ID == (int)Enumerations.CropTypeEnum.SpringCerealOilseedRape || _cropType.ID == (int)Enumerations.CropTypeEnum.EarlyEstablishedWinterOilseedRape || _cropType.ID == (int)Enumerations.CropTypeEnum.LateEstablishedWinterOilseedRape)
+            if (_cropType.ID == (int)Enumerations.CropTypes.Grass || _cropType.ID == (int)Enumerations.CropTypes.SpringCerealOilseedRape || _cropType.ID == (int)Enumerations.CropTypes.EarlyEstablishedWinterOilseedRape || _cropType.ID == (int)Enumerations.CropTypes.LateEstablishedWinterOilseedRape)
             {
                 if (_manureType.SO3AvaiableAutumnOsrGrass > 0)
                 {
@@ -656,8 +631,8 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
 
         return _manureApplication.TopsoilMoistureID switch
         {
-            (int)Enums.Enumerations.TopsoilMoistureEnum.Dry => pvn0 * 1.3d,
-            (int)Enums.Enumerations.TopsoilMoistureEnum.Moist => pvn0 * 0.7d,
+            (int)Enums.Enumerations.TopsoilMoistures.Dry => pvn0 * 1.3d,
+            (int)Enums.Enumerations.TopsoilMoistures.Moist => pvn0 * 0.7d,
             _ => pvn0
         };
     }
@@ -684,7 +659,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
 
     private double ApplyDryMatterAdjustment(double pvn2)
     {
-        bool isMoist = _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistureEnum.Moist;
+        bool isMoist = _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistures.Moist;
 
         if (!isMoist)
         {
@@ -725,18 +700,18 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
 
         return _manureApplication.ApplicationMethodID switch
         {
-            (int)Enums.Enumerations.ApplicationMethodEnum.DeepInjection => 0.1d,
+            (int)Enums.Enumerations.ApplicationMethods.DeepInjection => 0.1d,
 
-            (int)Enums.Enumerations.ApplicationMethodEnum.ShallowInjection =>
+            (int)Enums.Enumerations.ApplicationMethods.ShallowInjection =>
                 isDigestate ? 0.55d : 0.3d,
 
-            (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingHose =>
+            (int)Enums.Enumerations.ApplicationMethods.BandSpreaderTrailingHose =>
                 isDigestate ? 0.55d : 0.7d,
 
-            (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingShoeShortGrass =>
+            (int)Enums.Enumerations.ApplicationMethods.BandSpreaderTrailingShoeShortGrass =>
                 isDigestate ? 0.55d : 0.7d,
 
-            (int)Enums.Enumerations.ApplicationMethodEnum.BandSpreaderTrailingShoeLongGrass =>
+            (int)Enums.Enumerations.ApplicationMethods.BandSpreaderTrailingShoeLongGrass =>
                 isDigestate ? 0.31d : 0.4d,
 
             _ => 1d
@@ -796,7 +771,7 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
 
     private (double pvn8, double temp2) ApplyIncorporationTimingAdjustment(double pvn7, int incorporationHours)
     {
-        if (_manureApplication.IncorporationMethodID == (int)Enums.Enumerations.MethodOfIncorporationEnum.NotIncorporated)
+        if (_manureApplication.IncorporationMethodID == (int)Enums.Enumerations.MethodOfIncorporations.NotIncorporated)
         {
             return (pvn7, 0d);
         }
@@ -811,16 +786,16 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     {
         return _manureApplication.IncorporationMethodID switch
         {
-            (int)Enums.Enumerations.MethodOfIncorporationEnum.TineCultivator =>
+            (int)Enums.Enumerations.MethodOfIncorporations.TineCultivator =>
                 pvn8 * GetIncorporationFactor(0.3d, 0.3d, 0.7d),
 
-            (int)Enums.Enumerations.MethodOfIncorporationEnum.Discs =>
+            (int)Enums.Enumerations.MethodOfIncorporations.Discs =>
                 pvn8 * GetIncorporationFactor(0.2d, 0.2d, 0.3d),
 
-            (int)Enums.Enumerations.MethodOfIncorporationEnum.RotaryCultivator =>
+            (int)Enums.Enumerations.MethodOfIncorporations.RotaryCultivator =>
                 pvn8 * GetIncorporationFactor(0.15d, 0.1d, 0.2d),
 
-            (int)Enums.Enumerations.MethodOfIncorporationEnum.MouldboardPlough =>
+            (int)Enums.Enumerations.MethodOfIncorporations.MouldboardPlough =>
                 pvn8 * GetIncorporationFactor(0.1d, 0.05d, 0.1d),
 
             _ => pvn8
@@ -1064,215 +1039,159 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     /// Calculates the mineralised N for the next crop.  
     /// Refer to Mineralisation Module Technical Guide (November 2007)
     /// </remarks>
-    private double CalculateMineralisedN(double calculatedTotalN, double calculatedPotentialN, ref double mineralN1, ref double organicN3, ref double mineralisedN2a, ref double cdd1, ref double cdd2, ref double cdd2a)
+    private sealed record MineralisedNCalculationResult(double MineralisedN, double MineralN1, double OrganicN3, double MineralisedN2A, double Cdd1, double Cdd2, double Cdd2A);
+    private sealed class MineralisedNState
+    {
+        public double NOrganic2 { get; set; }
+        public double NOrganic2A { get; set; }
+        public double NMineralised1 { get; set; }
+        public double NMineralised2 { get; set; }
+        public double NMineralised2A { get; set; }
+        public double CDD1 { get; set; }
+        public double CDD2 { get; set; }
+        public double CDD2A { get; set; }
+    }
+
+    private enum ApplicationPeriod
+    {
+        Autumn,
+        JanuaryToApril,
+        MayToJuly,
+        Other
+    }
+
+    private static MineralisedNCalculationResult EmptyMineralisedNCalculationResult()
+    {
+        return new MineralisedNCalculationResult(0d, 0d, 0d, 0d, 0d, 0d, 0d);
+    }
+
+    private MineralisedNCalculationResult CalculateMineralisedN(double calculatedTotalN, double calculatedPotentialN)
     {
         try
         {
             if (IsPaperCrumble(_manureType.ID))
             {
-                mineralN1 = 0d;
-                organicN3 = 0d;
-                mineralisedN2a = 0d;
-                cdd1 = 0d;
-                cdd2 = 0d;
-                cdd2a = 0d;
-                return 0d;
+                return EmptyMineralisedNCalculationResult();
             }
 
-            var dNOrganic2 = default(double);
-            var dNOrganic2A = default(double);
-            double dNOrganic3;
-            var dNMineralised1 = default(double);
-            var dNMineralised2 = default(double);
-            var dNMineralised2A = default(double);
-            var dCDD1 = default(double);
-            var dCDD2 = default(double);
-            var dCDD2A = default(double);
-
-            string cropUse = _cropType.Use;
-
-            // This array is a temporary one to allow the mineralisation and leaching to be tested before applying to specific parts of the country
             int[] tempArray = CreateTempArray();
-
-            // ------------------------------------------------------------------------------------
-            // N AVAILABLE TO THE NEXT CROP GROWN
-            // ------------------------------------------------------------------------------------
-            // Step 1 - Calculate initial organic N component (NOrg1) of the manure
-            // ------------------------------------------------------------------------------------
             double organicN1 = calculatedTotalN - calculatedPotentialN;
+            int month = _manureApplication.ApplicationDate.Month;
+            string cropUse = _cropType.Use ?? string.Empty;
+            var state = new MineralisedNState();
 
-            // --------------------------------------------------------------------------------------
-            // Step 2 - Check the date of application
-            // --------------------------------------------------------------------------------------
-            int month = (int)_manureApplication.ApplicationDate.Month;
-
-            switch (cropUse ?? "")
+            if (cropUse == _grassKey)
             {
-                case _grassKey:
-                    {
-                        if (month >= 8 && month < 13)
-                        {
-                            // Calculate the cumulative day degrees (CDD) for the months between the Date of Application and Date of End of Drainage in the first year.
-                            dCDD1 = CalculateCddForMineralisedN(tempArray, month, 13, false);
-
-                            // ------------------------------------------------------------------------------------
-                            // Step 3 - Calculate the N available to the next crop grown.  This will always
-                            // be less than 2300.  This is only calculated if the application is an autumn
-                            // application
-                            // ------------------------------------------------------------------------------------
-                            // Check that CDD1 is less than 2300
-                            if (dCDD1 >= 2300d)
-                            {
-                                dCDD1 = 2299d;
-                            }
-                            else
-                            {
-                                dNMineralised1 = CalculateMineralisedNForPeriod(dCDD1, organicN1);
-                            }
-
-                            // calculate the amount of organic N remaining
-                            dNOrganic2 = organicN1 - dNMineralised1;
-
-                            // Step 6 - Calculate NMin2
-                            // ------------------------------------------------------------------------------------
-                            month = 1;
-                            dCDD2 = CalculateCddForMineralisedN(tempArray, month, 5, false);
-                            dNMineralised2 = CalculateMineralisedNForPeriod(dCDD2, dNOrganic2);
-
-                            // Now calculate the mineralisation for a subsequent cut/graze between
-                            // 30th April and 31st July
-                            dNOrganic2A = dNOrganic2 - dNMineralised2;
-
-                            // Step 7 - Calculate NMin2A
-                            // ------------------------------------------------------------------------------------
-                            dCDD2A = 786d;
-                            dNMineralised2A = CalculateMineralisedNForPeriod(dCDD2A, dNOrganic2A);
-                        }
-                        else if (_manureApplication.ApplicationDate.Month == 1 || _manureApplication.ApplicationDate.Month == 2 || _manureApplication.ApplicationDate.Month == 3 || _manureApplication.ApplicationDate.Month == 4)
-                        {
-                            // calculate the amount of organic N remaining
-                            dNMineralised1 = 0d;
-                            dNOrganic2 = organicN1 - dNMineralised1;
-
-                            // Step 6 - Calculate NMin2
-                            // ------------------------------------------------------------------------------------
-                            dCDD2 = CalculateCddForMineralisedN(tempArray, month, 5, false);
-                            dNMineralised2 = CalculateMineralisedNForPeriod(dCDD2, dNOrganic2);
-
-                            // Now calculate the mineralisation for a subsequent cut/graze between
-                            // 30th April and 31st July
-                            dNOrganic2A = dNOrganic2 - dNMineralised2;
-
-                            // Step 7 - Calculate NMin2A
-                            // ------------------------------------------------------------------------------------
-                            dCDD2A = 786d;
-                            dNMineralised2A = CalculateMineralisedNForPeriod(dCDD2A, dNOrganic2A);
-                        }
-
-                        else if (_manureApplication.ApplicationDate.Month == 5 || _manureApplication.ApplicationDate.Month == 6 || _manureApplication.ApplicationDate.Month == 7)
-                        {
-                            dNMineralised1 = 0d;
-                            dNMineralised2 = 0d;
-
-                            dNOrganic2A = organicN1;
-
-                            // Step 6 - Calculate NMin2
-                            // ------------------------------------------------------------------------------------
-                            dCDD2A = CalculateCddForMineralisedN(tempArray, month, 8, true);
-                            dNMineralised2A = CalculateMineralisedNForPeriod(dCDD2A, dNOrganic2A);
-                            // *******************
-                            // ARABLE
-                            // *******************
-                        }
-                        break;
-                    }
-                default:
-                    {
-                        // If date of application is between 1/08 and 31/12 then
-                        if (month >= 8 && month < 13)
-                        {
-                            // Calculate the cumulative day degrees (CDD) for the months between the Date of Application and Date of End of Drainage in the first year.
-                            dCDD1 = CalculateCddForMineralisedN(tempArray, month, 13, false);
-
-                            // ------------------------------------------------------------------------------------
-                            // Step 3 - Calculate the N available to the next crop grown.  This will always
-                            // be less than 2300.  This is only calculated if the application is an autumn
-                            // application
-                            // ------------------------------------------------------------------------------------
-                            // Check that CDD1 is less than 2300
-                            if (dCDD1 >= 2300d)
-                            {
-                                dCDD1 = 2299d;
-                            }
-                            else
-                            {
-                                dNMineralised1 = CalculateMineralisedNForPeriod(dCDD1, organicN1);
-                            }
-
-                            // calculate the amount of organic N remaining
-                            dNOrganic2 = organicN1 - dNMineralised1;
-
-                            // Step 6 - Calculate NMin2
-                            // ------------------------------------------------------------------------------------
-                            month = 1;
-                            dCDD2 = CalculateCddForMineralisedN(tempArray, month, 8, true);
-                            dNMineralised2 = CalculateMineralisedNForPeriod(dCDD2, dNOrganic2);
-                            dNMineralised2 = AdjustMineralisedN2ForArableCrop(ref dNMineralised2, 0.6d);
-                        }
-                        else if (_manureApplication.ApplicationDate.Month >= 1 || _manureApplication.ApplicationDate.Month <= 8)
-                        {
-                            // calculate the amount of organic N remaining
-                            // no manure application was made between August and December
-                            dNMineralised1 = 0d;
-                            dNOrganic2 = organicN1 - dNMineralised1;
-
-                            // Step 6 - Calculate NMin2
-                            // ------------------------------------------------------------------------------------
-                            dCDD2 = CalculateCddForMineralisedN(tempArray, month, 8, true);
-                            dNMineralised2 = CalculateMineralisedNForPeriod(dCDD2, dNOrganic2);
-                            dNMineralised2 = AdjustMineralisedN2ForArableCrop(ref dNMineralised2, 0.6d);
-                        }
-                        break;
-                    }
+                CalculateGrassMineralisedN(month, organicN1, tempArray, state);
             }
-            // ------------------------------------------------------------------------------------
-            // Step 4 - Calculate the amount of organic N remaining
-            // ------------------------------------------------------------------------------------
-            switch (cropUse ?? "")
+            else
             {
-                case _grassKey:
-                    {
-                        dNOrganic3 = dNOrganic2A - dNMineralised2A;
-                        break;
-                    }
-                case _arableKey:
-                    {
-                        dNOrganic3 = dNOrganic2 - dNMineralised2;
-                        break;
-                    }
-                default:
-                    {
-                        dNOrganic3 = dNOrganic2 - dNMineralised2;
-                        break;
-                    }
+                CalculateArableMineralisedN(month, organicN1, tempArray, state);
             }
 
-            // Set a module level variables 
-            mineralN1 = dNMineralised1;
-            cdd1 = dCDD1;
-            cdd2 = dCDD2;
-            cdd2a = dCDD2A;
-            mineralisedN2a = dNMineralised2A;
-            organicN3 = dNOrganic3;
+            double organicN3 = cropUse == _grassKey
+                ? state.NOrganic2A - state.NMineralised2A
+                : state.NOrganic2 - state.NMineralised2;
 
-            // Return total mineralised N for the next crop            
-            return dNMineralised2;
+            return new MineralisedNCalculationResult(state.NMineralised2, state.NMineralised1, organicN3, state.NMineralised2A, state.CDD1, state.CDD2, state.CDD2A);
         }
-
         catch (Exception)
         {
+            return EmptyMineralisedNCalculationResult();
+        }
+    }
+
+    private void CalculateGrassMineralisedN(int month, double organicN1, int[] tempArray, MineralisedNState state)
+    {
+        switch (GetApplicationPeriod(month))
+        {
+            case ApplicationPeriod.Autumn:
+                state.NMineralised1 = CalculateAutumnFirstPeriodMineralisedN(month, organicN1, tempArray, out var cdd1);
+                state.CDD1 = cdd1;
+                state.NOrganic2 = organicN1 - state.NMineralised1;
+
+                state.CDD2 = CalculateCddForMineralisedN(tempArray, 1, 5, false);
+                state.NMineralised2 = CalculateMineralisedNForPeriod(state.CDD2, state.NOrganic2);
+
+                state.NOrganic2A = state.NOrganic2 - state.NMineralised2;
+                state.CDD2A = 786d;
+                state.NMineralised2A = CalculateMineralisedNForPeriod(state.CDD2A, state.NOrganic2A);
+                break;
+
+            case ApplicationPeriod.JanuaryToApril:
+                state.NMineralised1 = 0d;
+                state.NOrganic2 = organicN1;
+
+                state.CDD2 = CalculateCddForMineralisedN(tempArray, month, 5, false);
+                state.NMineralised2 = CalculateMineralisedNForPeriod(state.CDD2, state.NOrganic2);
+
+                state.NOrganic2A = state.NOrganic2 - state.NMineralised2;
+                state.CDD2A = 786d;
+                state.NMineralised2A = CalculateMineralisedNForPeriod(state.CDD2A, state.NOrganic2A);
+                break;
+
+            case ApplicationPeriod.MayToJuly:
+                state.NMineralised1 = 0d;
+                state.NMineralised2 = 0d;
+
+                state.NOrganic2A = organicN1;
+                state.CDD2A = CalculateCddForMineralisedN(tempArray, month, 8, true);
+                state.NMineralised2A = CalculateMineralisedNForPeriod(state.CDD2A, state.NOrganic2A);
+                break;
+        }
+    }
+
+    private void CalculateArableMineralisedN(int month, double organicN1, int[] tempArray, MineralisedNState state)
+    {
+        if (GetApplicationPeriod(month) == ApplicationPeriod.Autumn)
+        {
+            state.NMineralised1 = CalculateAutumnFirstPeriodMineralisedN(month, organicN1, tempArray, out var cdd1);
+            state.CDD1 = cdd1;
+            state.NOrganic2 = organicN1 - state.NMineralised1;
+            state.CDD2 = CalculateCddForMineralisedN(tempArray, 1, 8, true);
+        }
+        else
+        {
+            state.NMineralised1 = 0d;
+            state.NOrganic2 = organicN1;
+            state.CDD2 = CalculateCddForMineralisedN(tempArray, month, 8, true);
+        }
+
+        state.NMineralised2 = CalculateMineralisedNForPeriod(state.CDD2, state.NOrganic2);
+        state.NMineralised2 = AdjustMineralisedN2ForArableCrop(state.NMineralised2, 0.6d);
+    }
+
+    private double CalculateAutumnFirstPeriodMineralisedN(int month, double organicN1, int[] tempArray, out double cdd1)
+    {
+        cdd1 = CalculateCddForMineralisedN(tempArray, month, 13, false);
+
+        if (cdd1 >= 2300d)
+        {
+            cdd1 = 2299d;
             return 0d;
         }
+
+        return CalculateMineralisedNForPeriod(cdd1, organicN1);
+    }
+
+    private static ApplicationPeriod GetApplicationPeriod(int month)
+    {
+        if (month >= 8 && month <= 12)
+        {
+            return ApplicationPeriod.Autumn;
+        }
+
+        if (month >= 1 && month <= 4)
+        {
+            return ApplicationPeriod.JanuaryToApril;
+        }
+
+        if (month >= 5 && month <= 7)
+        {
+            return ApplicationPeriod.MayToJuly;
+        }
+
+        return ApplicationPeriod.Other;
     }
 
     private static int[] CreateTempArray()
@@ -1362,20 +1281,20 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
         return mannerTypeID == (int)Enums.Enumerations.ManureTypes.BiosolidsLiquidDigested;
     }
 
-    private double AdjustMineralisedN2ForArableCrop(ref double mineralisedN2, double adjustmentFactor)
+    private double AdjustMineralisedN2ForArableCrop(double mineralisedN2, double adjustmentFactor)
     {
         // Now adjust the value of NMin2 depending on the crop type
         // For cereals or oilseed rape multiply NMin2 by 0.6
         switch (_cropType.ID)
         {
-            case (int)Enums.Enumerations.CropTypeEnum.EarlySownWinterCereal:
-            case (int)Enums.Enumerations.CropTypeEnum.LateSownWinterCereal:
-            case (int)Enums.Enumerations.CropTypeEnum.EarlyEstablishedWinterOilseedRape:
-            case (int)Enums.Enumerations.CropTypeEnum.LateEstablishedWinterOilseedRape:
-            case (int)Enums.Enumerations.CropTypeEnum.SpringCerealOilseedRape:
-            case (int)Enums.Enumerations.CropTypeEnum.Potatoes:
-            case (int)Enums.Enumerations.CropTypeEnum.Sugarbeet:
-            case (int)Enums.Enumerations.CropTypeEnum.Other:
+            case (int)Enums.Enumerations.CropTypes.EarlySownWinterCereal:
+            case (int)Enums.Enumerations.CropTypes.LateSownWinterCereal:
+            case (int)Enums.Enumerations.CropTypes.EarlyEstablishedWinterOilseedRape:
+            case (int)Enums.Enumerations.CropTypes.LateEstablishedWinterOilseedRape:
+            case (int)Enums.Enumerations.CropTypes.SpringCerealOilseedRape:
+            case (int)Enums.Enumerations.CropTypes.Potatoes:
+            case (int)Enums.Enumerations.CropTypes.Sugarbeet:
+            case (int)Enums.Enumerations.CropTypes.Other:
                 {
 
                     return mineralisedN2 * adjustmentFactor;
@@ -1398,333 +1317,151 @@ public class MannerCalculator(FieldDetail field, ClimateDto climate, CropTypeDto
     /// <remarks>Removed from the calcManner routine to allow more flexibility</remarks>
     private double CalculateLeachedN(double mineralN4, double vmTotal, double vmTop)
     {
-
         // 07 Nov 2012 C Lam - Return zero for paper crumbles
         if (IsPaperCrumble(_manureType.ID))
         {
             return 0d;
         }
 
-        DateOnly datCurApp;
-        DateOnly datEndDrain;
-        double dMinN4;
-        int lNitrificationDelay;
-
-
-        int monthApp;
-
-        double dDefAdjustFactor;
-        double dVMEffective;
-        var dHER = default(double);
-        double dHEREffective;
-
-        double dSMD;      // soil moisture deficit
-        double dSMDCurMonth;      // soil moisture deficit this month
-        double dSMDPrevMonth;     // soil moisture deficit previous month
-
-        // Mostly matrix algorithm variables
-        double dLRatio;
-        double dLFactor1;
-        double dLIndex;
-        double dLProp;
-
-        int incorporationDelayHours;
-
         try
         {
-
-            incorporationDelayHours = _incorporationDelay.Hours ?? 0;
-
-            // Reset the Leached N variables to zero
-            double calculateLeachedNRet = 0d;
-            dHEREffective = 0d;
-
-            dMinN4 = mineralN4;
-
-            // STEP 1 - Calculate Nitrification
-            // The nitrification delay is dealt with in the Nitrification Technical Guide.
-            // ----------------------------------------------------------------------------------
-            // Date of application
-            datCurApp = _manureApplication.ApplicationDate;
-
-            // Calculate the nitrification delay
-            lNitrificationDelay = CalculateNitrificationDelay(datCurApp);
-
-            // For simplicity the nitrification delay is added to the date of application
-            // rather than treated as a range.
-            // Reset the current application date to allow for this delay.
+            int incorporationDelayHours = _incorporationDelay?.Hours ?? 0;
+            DateOnly datCurApp = _manureApplication.ApplicationDate;
+            int lNitrificationDelay = CalculateNitrificationDelay(datCurApp);
             datCurApp = datCurApp.AddDays(lNitrificationDelay);
 
-            // set the application month variable to the date of the current manure application
-            monthApp = datCurApp.Month;
-
-
-            // set the variable for the date of end of drainage
-            datEndDrain = _manureApplication.EndOfDrainageDate;
-
-            // STEP 3 - Determine soil properties
-            // ----------------------------------------------------------------------------------
-            // Leaching calculation starts here   'check the date of application is less than the end of soil drainage
-            if (datCurApp < datEndDrain)
+            DateOnly datEndDrain = _manureApplication.EndOfDrainageDate;
+            if (datCurApp >= datEndDrain)
             {
-
-                // adjustment for moisture deficit and for incorporation, which differs from that for permeable soil because of the effects on bypass flow and surface runoff.
-
-                // Get soil moisture deficit from MCDM.  Note: because MCDM calculates soil moisture deficit at the end of the month we use the SMD from
-                // the previous month to the month of application.  Agreed following conversation with E. Lord on 26/7/2006.
-                // As the count starts at zero then iMonthApp -.
-
-                dSMDCurMonth = GetClimateType(monthApp, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit);
-
-                if (monthApp == 1)
-                {
-                    // if month is january take december as previous month
-                    dSMDPrevMonth = GetClimateType(12, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit);
-                }
-                else
-                {
-                    dSMDPrevMonth = GetClimateType(monthApp - 1, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit);
-                }
-
-                // Even out the SMD factor depending on how far along the month we are.
-                double SMDpropstart;
-                SMDpropstart = (double)datCurApp.Day / (double)DateTime.DaysInMonth((int)_manureApplication.ApplicationDate.Year, (int)_manureApplication.ApplicationDate.Month);
-
-                dSMD = dSMDPrevMonth + SMDpropstart * (dSMDCurMonth - dSMDPrevMonth);
-
-                // Calculate the effective HER from effective application date to end of drainage.
-
-                // If there was a soil moisture deficit then this affects adjustment factor
-
-                if (dSMD > 0d)
-                {
-                    dHER = _manureApplication.RainfallPostApplication - _evapotranspirationTotal;
-                    dHEREffective = dHER;
-                }
-
-                // STEP 4 - Apply appropriate leaching algorithm
-                // ----------------------------------------------------------------------------------
-                // The subsoil contains the word CLAY
-                // use the drained clay soil leaching algorithm
-                // ----------------------------------------------------------------------------------
-                // if the result of the string search for the word clay is greater than 0 then we have a clay soil
-
-                if (_subSoil.ID == (int)Enums.Enumerations.SoilType.Clay || _subSoil.ID == (int)Enums.Enumerations.SoilType.ClayLoam || _subSoil.ID == (int)Enums.Enumerations.SoilType.SandyClay || _subSoil.ID == (int)Enums.Enumerations.SoilType.SandyClayLoam || _subSoil.ID == (int)Enums.Enumerations.SoilType.SiltyClay || _subSoil.ID == (int)Enums.Enumerations.SoilType.SiltyClayLoam)
-                {
-
-                    double dLProp1;
-                    double dLProp2;
-                    double dLProp3;
-                    double dLRatioMod;
-                    var dLAdjust = default(double);
-                    double dInc;      // adjustment for method of incorporation
-
-                    // Check if manure was incorporated (any value other than 'not incorporated'.
-                    // IncorpFlag = ……
-                    switch (_manureApplication.IncorporationMethodID)
-                    {
-                        // If the manure has been ploughed down
-                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.MouldboardPlough: // "Mouldboard Plough"
-                            {
-                                dInc = 0.9d;
-                                break;
-                            }
-                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.TineCultivator: // "Tine Cultivator"
-                            {
-                                dInc = 0.4d;
-                                break;
-                            }
-                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.RotaryCultivator: // "Rotary Cultivator"
-                            {
-                                dInc = 0.4d;
-                                break;
-                            }
-                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.NotIncorporated: // "Not Incorporated"
-                            {
-                                dInc = 0d; // catch all, but shouldn't get here
-                                break;
-                            }
-                        default:
-                            {
-                                dInc = 0d;
-                                break;
-                            }
-                    }
-
-                    // if delay before incorporation > 7 days then                    
-                    if (incorporationDelayHours > 168)
-                    {
-                        dInc *= 0.5d;
-                    }
-
-                    // Calculate 'leaching ratio'
-                    // check for divide by zero error
-                    if (vmTotal <= 0d)
-                    {
-                        dLRatio = 0d;
-                    }
-                    else
-                    {
-                        dLRatio = dHEREffective / vmTotal;
-                    }
-
-                    // dLProp1 accounts for initial N loss due to surface and crack flow.
-                    dLProp1 = Math.Min(0.13d, Math.Max(0d, dLRatio));
-
-                    dLProp1 = dLProp1 * (1d - dInc) * (1d - Math.Min(dSMD / 50d, 1d));
-
-                    // NB perhaps this can be omitted if the manure is incorporated, and this would simplify the incorporation adjustment
-                    dLProp2 = 0.51d * dLRatio;
-
-                    // Lprop3 covers non-linearity under very wet climatic conditions
-                    // and is calculated for the range Lratio > 0.75
-                    if (dLRatio > 0.75d)
-                    {
-                        dLProp3 = -0.335d * (dLRatio - 0.75d);
-                    }
-                    else
-                    {
-                        dLProp3 = 0d;
-                    }
-
-                    // Total proportion leached is the sum of the three.
-                    // Lprop is constrained to be between 0 and 1
-                    dLProp = Math.Min(1d, Math.Max(0d, dLProp1 + dLProp2 + dLProp3));
-
-
-                    // Modifications to the result of Lprop to allow for deficit at the effective date of application, and incorporation, are as follows:
-                    if (dSMD > 0d || dInc > 0d)
-                    {
-                        // If Lratio > 0.75 then Lratiomod = 0.75 else Lratiomod = Lratio
-                        if (dLRatio > 0.75d)
-                        {
-                            dLRatioMod = 0.75d;
-                        }
-                        else
-                        {
-                            dLRatioMod = dLRatio;
-                        }
-
-                        // dLAdjust = dLRatioMod * dDefAdjustFactor
-                        dDefAdjustFactor = 0.002d * dSMD;
-                        dLAdjust = dLRatioMod * dDefAdjustFactor;
-                    }
-
-                    // These equations cause leaching to be reduced by up to 25% of total nitrate at risk (or up to about 40% of the nitrate actually lost from
-                    // surface applications) when manure is applied to a soil with deficit, or is incorporated promptly.
-                    // Then:
-                    dLProp -= dLAdjust;
-                    calculateLeachedNRet = dMinN4 * dLProp;
-                }
-
-                // ----------------------------------------------------------------------------------
-                // Else the subsoil does not contain the word CLAY
-                // use the MATRIX LEACHING ALGORITHM
-                // ----------------------------------------------------------------------------------
-                else
-                {
-                    // Calculate the EFFECTIVE water capacity through which nitrate has to move:
-                    switch (_manureApplication.IncorporationMethodID)
-                    {
-                        // If the manure has been cultivated or ploughed down within a month ie at all
-                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.MouldboardPlough: // "Mouldboard Plough"
-                            {
-                                dVMEffective = vmTotal - 0.5d * vmTop;
-                                break;
-                            }
-                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.TineCultivator: // "Tine Cultivator"
-                            {
-                                dVMEffective = vmTotal - 0.25d * vmTop;
-                                break;
-                            }
-                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.RotaryCultivator: // "Rotary Cultivator"
-                            {
-                                dVMEffective = vmTotal - 0.25d * vmTop;
-                                break;
-                            }
-                        // If it hasn't been incorporated then nothing changes
-                        case (int)Enums.Enumerations.MethodOfIncorporationEnum.NotIncorporated: // "Not Incorporated"
-                            {
-                                dVMEffective = vmTotal; // catch all, but shouldn't get here
-                                break;
-                            }
-                        default:
-                            {
-                                dVMEffective = vmTotal;
-                                break;
-                            }
-                    }
-
-                    dHEREffective = dHER + dSMD * 0.7d;
-
-                    if (dHEREffective < 0d)
-                    {
-                        dHEREffective = 0d;
-                    }
-
-                    // Calculate leaching ratio
-                    if (dVMEffective <= 0d)
-                    {
-                        dLRatio = 0d;
-                    }
-                    else
-                    {
-                        dLRatio = Math.Min(1.896d, dHEREffective / dVMEffective);
-                    }
-
-                    // Calculate Lfactor1
-                    if (dLRatio <= 1d)
-                    {
-                        // Lfactor1 = (1-power(L, 0.5)
-                        dLFactor1 = 1d - Math.Pow(dLRatio, 0.5d);
-                    }
-                    else
-                    {
-                        // Lfactor1 = (power(L, 0.5) -1)
-                        dLFactor1 = Math.Pow(dLRatio, 0.5d) - 1d;
-                    }
-
-                    // Calculate leaching index
-                    dLIndex = 2.27d * Math.Pow(dLFactor1, 3d) - 4.5d * Math.Pow(dLFactor1, 2d) + 2.7d * dLFactor1;
-
-                    // Calculate proportion leached
-                    if (dLRatio < 0.25d)
-                    {
-                        dLProp = 0d;
-                    }
-                    else if (dLRatio < 1d)
-                    {
-                        dLProp = 0.5d - dLIndex;
-                    }
-                    else
-                    {
-                        dLProp = 0.5d + dLIndex;
-                    }
-
-                    if (dLProp > 1d)
-                        dLProp = 1d;
-                    if (dLProp < 0d)
-                        dLProp = 0d;
-
-                    // Return Leached N value
-                    // N leached (kg/ha) = (nitrate-N added for the period) * Lprop
-                    calculateLeachedNRet = (double)dMinN4 * dLProp;
-                }
+                return 0d;
             }
-            else
+
+            int monthApp = datCurApp.Month;
+            double dSMD = CalculateSoilMoistureDeficit(datCurApp, monthApp);
+            double dHER = dSMD > 0d ? _manureApplication.RainfallPostApplication - _evapotranspirationTotal : 0d;
+
+            if (IsClaySubSoil())
             {
-                // This is a bit of a catch all situation and allows the function to return a
-                // value.  I'm also making the assumption that if the application date is
-                // after the end of soil drainage no leaching can occur.
-                calculateLeachedNRet = 0d;
+                return CalculateClaySoilLeachedN(mineralN4, vmTotal, dSMD, dHER, incorporationDelayHours);
             }
-            return calculateLeachedNRet;
+
+            return CalculateMatrixSoilLeachedN(mineralN4, vmTotal, vmTop, dSMD, dHER);
         }
         catch (Exception)
         {
             return 0d;
         }
+    }
 
+    private bool IsClaySubSoil()
+    {
+        return _subSoil.ID == (int)Enums.Enumerations.SoilType.Clay
+            || _subSoil.ID == (int)Enums.Enumerations.SoilType.ClayLoam
+            || _subSoil.ID == (int)Enums.Enumerations.SoilType.SandyClay
+            || _subSoil.ID == (int)Enums.Enumerations.SoilType.SandyClayLoam
+            || _subSoil.ID == (int)Enums.Enumerations.SoilType.SiltyClay
+            || _subSoil.ID == (int)Enums.Enumerations.SoilType.SiltyClayLoam;
+    }
+
+    private double CalculateSoilMoistureDeficit(DateOnly datCurApp, int monthApp)
+    {
+        double dSMDCurMonth = GetClimateType(monthApp, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit);
+        double dSMDPrevMonth = monthApp == 1
+            ? GetClimateType(12, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit)
+            : GetClimateType(monthApp - 1, _climateCalculator, Enumerations.ClimateDataType.SoilMoistureDefecit);
+
+        double smdPropStart = (double)datCurApp.Day /
+                              (double)DateTime.DaysInMonth(_manureApplication.ApplicationDate.Year, _manureApplication.ApplicationDate.Month);
+
+        return dSMDPrevMonth + smdPropStart * (dSMDCurMonth - dSMDPrevMonth);
+    }
+
+    private double CalculateClaySoilLeachedN(double mineralN4, double vmTotal, double dSMD, double dHereEffective, int incorporationDelayHours)
+    {
+        double dInc = GetClayIncorporationAdjustment(incorporationDelayHours);
+        double dLRatio = vmTotal <= 0d ? 0d : dHereEffective / vmTotal;
+
+        double dLProp1 = Math.Min(0.13d, Math.Max(0d, dLRatio));
+        dLProp1 = dLProp1 * (1d - dInc) * (1d - Math.Min(dSMD / 50d, 1d));
+
+        double dLProp2 = 0.51d * dLRatio;
+        double dLProp3 = dLRatio > 0.75d ? -0.335d * (dLRatio - 0.75d) : 0d;
+        double dLProp = Math.Min(1d, Math.Max(0d, dLProp1 + dLProp2 + dLProp3));
+
+        if (dSMD > 0d || dInc > 0d)
+        {
+            double dLRatioMod = dLRatio > 0.75d ? 0.75d : dLRatio;
+            double dDefAdjustFactor = 0.002d * dSMD;
+            double dLAdjust = dLRatioMod * dDefAdjustFactor;
+            dLProp -= dLAdjust;
+        }
+
+        return mineralN4 * dLProp;
+    }
+
+    private double GetClayIncorporationAdjustment(int incorporationDelayHours)
+    {
+        double dInc = _manureApplication.IncorporationMethodID switch
+        {
+            (int)Enums.Enumerations.MethodOfIncorporations.MouldboardPlough => 0.9d,
+            (int)Enums.Enumerations.MethodOfIncorporations.TineCultivator => 0.4d,
+            (int)Enums.Enumerations.MethodOfIncorporations.RotaryCultivator => 0.4d,
+            _ => 0d
+        };
+
+        if (incorporationDelayHours > 168)
+        {
+            dInc *= 0.5d;
+        }
+
+        return dInc;
+    }
+
+    private double CalculateMatrixSoilLeachedN(double mineralN4, double vmTotal, double vmTop, double dSMD, double dHER)
+    {
+        double dVMEffective = GetMatrixEffectiveWaterCapacity(vmTotal, vmTop);
+
+        double dHEREffective = dHER + dSMD * 0.7d;
+        if (dHEREffective < 0d)
+        {
+            dHEREffective = 0d;
+        }
+
+        double dLRatio = dVMEffective <= 0d ? 0d : Math.Min(1.896d, dHEREffective / dVMEffective);
+        double dLFactor1 = dLRatio <= 1d ? 1d - Math.Pow(dLRatio, 0.5d) : Math.Pow(dLRatio, 0.5d) - 1d;
+
+        double dLIndex = 2.27d * Math.Pow(dLFactor1, 3d) - 4.5d * Math.Pow(dLFactor1, 2d) + 2.7d * dLFactor1;
+        double dLProp;
+        if (dLRatio < 0.25d)
+        {
+            dLProp = 0d;
+        }
+        else if (dLRatio < 1d)
+        {
+            dLProp = 0.5d - dLIndex;
+        }
+        else
+        {
+            dLProp = 0.5d + dLIndex;
+        }
+
+        if (dLProp > 1d)
+            dLProp = 1d;
+        if (dLProp < 0d)
+            dLProp = 0d;
+
+        return mineralN4 * dLProp;
+    }
+
+    private double GetMatrixEffectiveWaterCapacity(double vmTotal, double vmTop)
+    {
+        return _manureApplication.IncorporationMethodID switch
+        {
+            (int)Enums.Enumerations.MethodOfIncorporations.MouldboardPlough => vmTotal - 0.5d * vmTop,
+            (int)Enums.Enumerations.MethodOfIncorporations.TineCultivator => vmTotal - 0.25d * vmTop,
+            (int)Enums.Enumerations.MethodOfIncorporations.RotaryCultivator => vmTotal - 0.25d * vmTop,
+            _ => vmTotal
+        };
     }
 
 

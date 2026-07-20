@@ -49,7 +49,7 @@ public class ClimateCalculator
         mcdm.SetLocation(latitude, mcdm.Altitude);
 
         // Set the land cover
-        if (cropTypeID == (int)Enums.Enumerations.CropTypeEnum.Grass)
+        if (cropTypeID == (int)Enums.Enumerations.CropTypes.Grass)
         {
             mcdm.SetLandCover(MeanClimateDrainageModel.LandCover.ManagedGrass);
         }
@@ -59,9 +59,6 @@ public class ClimateCalculator
         }
 
         mcdm.SetEuniceTexture(true);
-
-        // Set the topsoil and subsoil AWC
-        mcdm.SetAWC(topSoilAWC, subSoilAWC);
 
         // Set the topsoil percentage AWC for the soil texture
         // Figures from the IRRIGUIDE look up table

@@ -1,5 +1,4 @@
 ﻿namespace Manner.Application.DTOs;
-
 public class ManureApplication()
 {
     public ManureDetails ManureDetails { get; set; } = new ManureDetails();
@@ -13,13 +12,7 @@ public class ManureApplication()
     public int RainfallPostApplication { get; set; } 
     public int WindspeedID { get; set; }
     public int RainTypeID { get; set; }
-    public int TopsoilMoistureID { get; set; }
-    
-    //public string Postcode { get; set; } = postcode;
-    //public int CountryID { get; set; } = countryID;
-    //public int Easting { get; private set; }
-    //public int Northing { get; private set; }
-
-    
+    public int TopsoilMoistureID { get; set; }   
+   
 }
 

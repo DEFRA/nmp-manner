@@ -19,13 +19,13 @@ namespace Manner.Application.Services
         private readonly ILogger<ManureTypeService> _logger = logger;
         public async Task<IEnumerable<ManureTypeDto>?> FetchAllAsync()
         {
-            _logger.LogTrace($"ManureTypeService : FetchAllAsync() callled");
+            _logger.LogTrace("ManureTypeService : FetchAllAsync() callled");
             return _mapper.Map<IEnumerable<ManureTypeDto>>(await _manureTypeRepository.FetchAllAsync());
         }
 
         public async Task<ManureTypeDto?> FetchByIdAsync(int id)
         {
-            _logger.LogTrace($"ManureTypeService : FetchByIdAsync({id}) callled");
+            _logger.LogTrace("ManureTypeService : FetchByIdAsync({Id}) callled", id);
             return _mapper.Map<ManureTypeDto>(await _manureTypeRepository.FetchByIdAsync(id));
         }
 
@@ -36,7 +36,7 @@ namespace Manner.Application.Services
             bool? highReadilyAvailableNitrogen = null,
             bool? isLiquid = null)
         {
-            _logger.LogTrace($"ManureTypeService : FetchByCriteriaAsync({manureGroupId},{manureTypeCategoryId},{countryId},{highReadilyAvailableNitrogen},{isLiquid}) callled");
+            _logger.LogTrace("ManureTypeService : FetchByCriteriaAsync({ManureGroupId},{ManureTypeCategoryId},{CountryId},{HighReadilyAvailableNitrogen},{IsLiquid}) callled", manureGroupId, manureTypeCategoryId, countryId, highReadilyAvailableNitrogen, isLiquid);
             var manureTypes = await _manureTypeRepository.FetchByCriteriaAsync(
                 manureGroupId,
                 manureTypeCategoryId,

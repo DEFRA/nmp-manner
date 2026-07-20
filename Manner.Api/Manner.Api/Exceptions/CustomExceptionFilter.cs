@@ -2,9 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Manner.Application.DTOs;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Manner.Application.Exceptions;
 
 namespace Manner.Api.Exceptions;
 

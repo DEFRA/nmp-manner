@@ -8,72 +8,62 @@ namespace Manner.Application.Calculators;
 [Service(ServiceLifetime.Transient)]
 public class RainfallCalculator : IRainfallCalculator
 {
-    public decimal CalculateRainfallPostApplication(ClimateDto climate, DateOnly applicationDate, DateOnly endOfSoilDrainageDate)
+    public decimal CalculateRainfallPostApplication(ClimateDto climate, DateOnly applicationDate, DateOnly endSoilDrainageDate)
     {
-        if (endOfSoilDrainageDate <= applicationDate)
+        if (endSoilDrainageDate <= applicationDate)
         {
             return 0;
         }
 
-        decimal totalRainfall = 0;
-
-        if (applicationDate.Month == endOfSoilDrainageDate.Month && applicationDate.Year == endOfSoilDrainageDate.Year)
+        if (IsSameMonth(applicationDate, endSoilDrainageDate))
         {
-            int daysBetween = (endOfSoilDrainageDate.Day - applicationDate.Day);
-            decimal totalrainFallInMonth = GetMonthlyRainfall(applicationDate.Month, climate);
-            totalRainfall = (totalrainFallInMonth / DateTime.DaysInMonth(applicationDate.Year, applicationDate.Month)) * daysBetween;
-            return Math.Ceiling(totalRainfall);
+            return Math.Ceiling(CalculateRainfallBetweenDatesInSameMonth(applicationDate, endSoilDrainageDate, climate));
         }
 
-        // Calculate proportional rainfall for the start and end months
-        decimal startMonthRainfall = CalculateRainfallForNumberofDays(applicationDate, true, climate); // CalculateProportionalRainfall(applicationDate, true, climate);
-        decimal endMonthRainfall = CalculateRainfallForNumberofDays(endOfSoilDrainageDate, false, climate); //CalculateProportionalRainfall(endOfSoilDrainageDate, false, climate);
-
-        totalRainfall += startMonthRainfall + endMonthRainfall;
-
-        // Get the month and year of the application and end dates
-        int startMonthIndex = applicationDate.Month;
-        int endMonthIndex = endOfSoilDrainageDate.Month;
-        int startYear = applicationDate.Year;
-        int endYear = endOfSoilDrainageDate.Year;
-
-        // Handle if the start and end dates are in different years
-        if (endYear > startYear || (endYear == startYear && endMonthIndex > startMonthIndex))
-        {
-            // Add rainfall for the months between the application date and end soil drainage date
-            for (int year = startYear; year <= endYear; year++)
-            {
-                int monthStart = (year == startYear) ? startMonthIndex + 1 : 1;
-                int monthEnd = (year == endYear) ? endMonthIndex - 1 : 12;
-
-                for (int month = monthStart; month <= monthEnd; month++)
-                {
-                    totalRainfall += GetMonthlyRainfall(month, climate);
-                }
-            }
-        }
+        decimal totalRainfall =
+            CalculateRainfallForNumberOfDays(applicationDate, true, climate) +
+            CalculateRainfallForNumberOfDays(endSoilDrainageDate, false, climate) +
+            CalculateRainfallForWholeMonthsBetween(applicationDate, endSoilDrainageDate, climate);
 
         return Math.Ceiling(totalRainfall);
     }
 
-    private decimal CalculateRainfallForNumberofDays(DateOnly date, bool isStartDate, ClimateDto climate)
+    private static bool IsSameMonth(DateOnly firstDate, DateOnly secondDate)
+    {
+        return firstDate.Month == secondDate.Month && firstDate.Year == secondDate.Year;
+    }
+
+    private static decimal CalculateRainfallBetweenDatesInSameMonth(DateOnly applicationDate, DateOnly endSoilDrainageDate, ClimateDto climate)
+    {
+        int daysBetween = endSoilDrainageDate.Day - applicationDate.Day;
+        decimal monthlyRainfall = GetMonthlyRainfall(applicationDate.Month, climate);
+
+        return monthlyRainfall / DateTime.DaysInMonth(applicationDate.Year, applicationDate.Month) * daysBetween;
+    }
+
+    private static decimal CalculateRainfallForNumberOfDays(DateOnly date, bool isStartDate, ClimateDto climate)
     {
         int daysInMonth = DateTime.DaysInMonth(date.Year, date.Month);
-        int daysBetween = isStartDate ? daysInMonth - (date.Day) : date.Day;
+        int daysBetween = isStartDate ? daysInMonth - date.Day : date.Day;
         return (daysInMonth == daysBetween) ? GetMonthlyRainfall(date.Month, climate) : (GetMonthlyRainfall(date.Month, climate) / daysInMonth) * daysBetween;
     }
 
-    private decimal CalculateProportionalRainfall(DateOnly date, bool isStartMonth, ClimateDto climate)
+    private static decimal CalculateRainfallForWholeMonthsBetween(DateOnly applicationDate, DateOnly endSoilDrainageDate, ClimateDto climate)
     {
-        int daysInMonth = DateTime.DaysInMonth(date.Year, date.Month);
-        decimal proportion = isStartMonth
-            ? 1 - ((decimal)date.Day / daysInMonth)
-            : (decimal)date.Day / daysInMonth;
+        decimal rainfall = 0;
+        DateOnly month = new DateOnly(applicationDate.Year, applicationDate.Month, 1).AddMonths(1);
+        DateOnly endMonth = new DateOnly(endSoilDrainageDate.Year, endSoilDrainageDate.Month, 1);
 
-        return GetMonthlyRainfall(date.Month, climate) * proportion;
+        while (month < endMonth)
+        {
+            rainfall += GetMonthlyRainfall(month.Month, climate);
+            month = month.AddMonths(1);
+        }
+
+        return rainfall;
     }
 
-    private decimal GetMonthlyRainfall(int month, ClimateDto climate)
+    private static decimal GetMonthlyRainfall(int month, ClimateDto climate)
     {
         return month switch
         {

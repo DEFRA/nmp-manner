@@ -14,13 +14,13 @@ public class ManureTypeCategoryRepository(ILogger<ManureTypeCategoryRepository> 
     private readonly ILogger<ManureTypeCategoryRepository> _logger = logger;
     public async Task<IEnumerable<ManureTypeCategory>?> FetchAllAsync()
     {
-        _logger.LogTrace($"ManureTypeCategoryRepository : FetchAllAsync() callled");
+        _logger.LogTrace("ManureTypeCategoryRepository : FetchAllAsync() callled");
         return await _context.ManureTypeCategories.ToListAsync();
     }
 
     public async Task<ManureTypeCategory?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"ManureTypeCategoryRepository : FetchByIdAsync({id}) callled");
+        _logger.LogTrace("ManureTypeCategoryRepository : FetchByIdAsync({Id}) callled",id);
         return await _context.ManureTypeCategories.FirstOrDefaultAsync(a => a.ID == id);
     }
 }

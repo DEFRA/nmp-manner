@@ -17,13 +17,13 @@ public class SubSoilService(ILogger<SubSoilService> logger, ISubSoilRepository s
     private readonly ILogger<SubSoilService> _logger = logger;
     public async Task<IEnumerable<SubSoilDto>?> FetchAllAsync()
     {
-        _logger.LogTrace($"SubSoilService : FetchAllAsync() callled");
+        _logger.LogTrace("SubSoilService : FetchAllAsync() callled");
         return _mapper.Map<IEnumerable<SubSoilDto>>(await _subSoilRepository.FetchAllAsync());
     }
 
     public async Task<SubSoilDto?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"SubSoilService : FetchByIdAsync({id}) callled");
+        _logger.LogTrace("SubSoilService : FetchByIdAsync({Id}) callled",id);
         return _mapper.Map<SubSoilDto>(await _subSoilRepository.FetchByIdAsync(id));
     }
 }

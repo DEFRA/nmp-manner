@@ -14,7 +14,7 @@ namespace Manner.Application.Validators
         {
             RuleFor(x => (x.Postcode.Length > 4) ? x.Postcode.Substring(0, 4).Trim() : x.Postcode.Trim())
                 .NotNull().NotEmpty().WithMessage("Postcode is required.")                
-                .MinimumLength(3).WithMessage("Postcode must be at least 3 characters long.")
+                .MinimumLength(2).WithMessage("Postcode must be at least 2 characters long.")
                 .MaximumLength(4).WithMessage("Only the first half of the postcode is required. A maximum of 4 characters");
             RuleFor(x => x.CountryID)
                .Must(NotDefaultValue).WithMessage("CountryID not set")

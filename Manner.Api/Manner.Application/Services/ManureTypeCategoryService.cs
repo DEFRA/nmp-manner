@@ -17,13 +17,13 @@ public class ManureTypeCategoryService(ILogger<ManureTypeCategoryService> logger
 
     public async Task<IEnumerable<ManureTypeCategoryDto>?> FetchAllAsync()
     {
-        _logger.LogTrace($"ManureTypeCategoryService : FetchAllAsync() callled");
+        _logger.LogTrace("ManureTypeCategoryService : FetchAllAsync() callled");
         return _mapper.Map<IEnumerable<ManureTypeCategoryDto>>(await _manureTypeCategoryRepository.FetchAllAsync());
     }
 
     public async Task<ManureTypeCategoryDto?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"ManureTypeCategoryService : FetchByIdAsync({id}) callled");
+        _logger.LogTrace("ManureTypeCategoryService : FetchByIdAsync({Id}) callled", id);
         return _mapper.Map<ManureTypeCategoryDto>(await _manureTypeCategoryRepository.FetchByIdAsync(id));
     }
 }

@@ -1,6 +1,4 @@
-﻿using Manner.Application.Enums;
-
-namespace Manner.Application.DTOs;
+﻿namespace Manner.Application.DTOs;
 
 public class NutrientsResponse
 {

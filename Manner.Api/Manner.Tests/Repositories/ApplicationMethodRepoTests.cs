@@ -183,6 +183,7 @@ public class ApplicationMethodRepositoryTests
 
 
     // Tear down in-memory database after each test
+    //[Fact]
     public void Dispose()
     {
         _context.Database.EnsureDeleted();

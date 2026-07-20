@@ -17,13 +17,13 @@ public class TopSoilService(ILogger<TopSoilService> logger, ITopSoilRepository t
     private readonly ILogger<TopSoilService> _logger = logger;
     public async Task<IEnumerable<TopSoilDto>?> FetchAllAsync()
     {
-        _logger.LogTrace($"TopSoilService : FetchAllAsync() callled");
+        _logger.LogTrace("TopSoilService : FetchAllAsync() callled");
         return _mapper.Map<IEnumerable<TopSoilDto>>(await _topSoilRepository.FetchAllAsync());
     }
 
     public async Task<TopSoilDto?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"TopSoilService : FetchByIdAsync({id}) callled");
+        _logger.LogTrace("TopSoilService : FetchByIdAsync({Id}) callled", id);
         return _mapper.Map<TopSoilDto>(await _topSoilRepository.FetchByIdAsync(id));
     }
 }
