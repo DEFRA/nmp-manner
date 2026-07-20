@@ -498,13 +498,13 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
 
     private void CalculateFinalResults(FinalResultsInput input)
     {
-        _outputs.TotalNitrogenApplied = (long)Math.Round(input.CalculatedTotalN * 10.0d) / 10d;
-        _outputs.PotentialCropAvailableN = (int)Math.Round(input.CalculatedPotentialN * 10.0d) / 10d;
-        _outputs.NH3NLoss = (int)Math.Round(input.CalculatedVolatilisedN * 10.0d) / 10d;
-        _outputs.N2ONLoss = (int)Math.Round(input.CalculatedN2O * 10.0d) / 10d;
-        _outputs.N2NLoss = (int)Math.Round(input.CalculatedN2 * 10.0d) / 10d;
-        _outputs.MineralisedN = (int)Math.Round(input.CalculatedMineralisedN * 10.0d) / 10d;
-        _outputs.NO3NLoss = (int)Math.Round(input.CalculatedLeachedN * 10.0d) / 10d;
+        _outputs.TotalNitrogenApplied = Math.Round(input.CalculatedTotalN * 10.0d) / 10d;
+        _outputs.PotentialCropAvailableN = Math.Round(input.CalculatedPotentialN * 10.0d) / 10d;
+        _outputs.NH3NLoss = Math.Round(input.CalculatedVolatilisedN * 10.0d) / 10d;
+        _outputs.N2ONLoss = Math.Round(input.CalculatedN2O * 10.0d) / 10d;
+        _outputs.N2NLoss = Math.Round(input.CalculatedN2 * 10.0d / 10d);
+        _outputs.MineralisedN = Math.Round(input.CalculatedMineralisedN * 10.0d) / 10d;
+        _outputs.NO3NLoss = Math.Round(input.CalculatedLeachedN * 10.0d) / 10d;
         _outputs.CropUptake = input.CropUptakeFactor;
     }
     private void CalculateNutrientsOutputsValues()
