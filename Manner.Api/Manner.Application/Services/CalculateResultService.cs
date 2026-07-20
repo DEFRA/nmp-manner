@@ -150,32 +150,32 @@ public class CalculateResultService(
     {
         return new Outputs
         {
-            TotalNitrogenApplied = Math.Round(calculator.MannerEngine.TotalNitrogenApplied),
-            PotentialCropAvailableN = Math.Round(calculator.MannerEngine.PotentialCropAvailableN),
-            NH3NLoss = Math.Round(calculator.MannerEngine.NH3NLoss),
-            N2ONLoss = Math.Round(calculator.MannerEngine.N2ONLoss),
-            N2NLoss = Math.Round(calculator.MannerEngine.N2NLoss),
-            NO3NLoss = Math.Round(calculator.MannerEngine.NO3NLoss),
-            DenitrifiedNLoss = Math.Round(calculator.MannerEngine.N2ONLoss + calculator.MannerEngine.N2NLoss),
-            MineralisedN = Math.Round(calculator.MannerEngine.MineralisedN),
-            PotentialEconomicValue = Math.Round(calculator.MannerEngine.PotentialEconomicValue),
-            P2O5CropAvailable = Math.Round(calculator.MannerEngine.P2O5CropAvailable),
-            P2O5Total = Math.Round(calculator.MannerEngine.P2O5Total),
-            K2OCropAvailable = Math.Round(calculator.MannerEngine.K2OCropAvailable),
-            K2OTotal = Math.Round(calculator.MannerEngine.K2OTotal),
+            TotalNitrogenApplied = calculator.MannerEngine.TotalNitrogenApplied,
+            PotentialCropAvailableN = calculator.MannerEngine.PotentialCropAvailableN,
+            NH3NLoss = calculator.MannerEngine.NH3NLoss,
+            N2ONLoss = calculator.MannerEngine.N2ONLoss,
+            N2NLoss = calculator.MannerEngine.N2NLoss,
+            NO3NLoss = calculator.MannerEngine.NO3NLoss,
+            DenitrifiedNLoss = calculator.MannerEngine.N2ONLoss + calculator.MannerEngine.N2NLoss,
+            MineralisedN = calculator.MannerEngine.MineralisedN,
+            PotentialEconomicValue = calculator.MannerEngine.PotentialEconomicValue,
+            P2O5CropAvailable = calculator.MannerEngine.P2O5CropAvailable,
+            P2O5Total = calculator.MannerEngine.P2O5Total,
+            K2OCropAvailable = calculator.MannerEngine.K2OCropAvailable,
+            K2OTotal = calculator.MannerEngine.K2OTotal,
             SO3Total = calculator.MannerEngine.SO3Total is null
                 ? null
-                : Math.Round(calculator.MannerEngine.SO3Total.Value),
+                : calculator.MannerEngine.SO3Total.Value,
             SO3CropAvailable = calculator.MannerEngine.SO3CropAvailable is null
                 ? null
-                : Math.Round(calculator.MannerEngine.SO3CropAvailable.Value),
+                : calculator.MannerEngine.SO3CropAvailable.Value,
             MgOTotal = calculator.MannerEngine.MgOTotal is null
                 ? null
-                : Math.Round(calculator.MannerEngine.MgOTotal.Value),
-            ResultantNAvailable = Math.Round(calculator.MannerEngine.ResultantNAvailable),
-            ResultantNAvailableSecondCut = Math.Round(calculator.MannerEngine.ResultantNAvailableSecondCut),
-            ResultantNAvailableYear2 = Math.Round(calculator.MannerEngine.ResultantNAvailableYear2),
-            CropUptake = Math.Round(calculator.MannerEngine.CropUptake)
+                : calculator.MannerEngine.MgOTotal.Value,
+            ResultantNAvailable = calculator.MannerEngine.ResultantNAvailable,// Math.Round(calculator.MannerEngine.ResultantNAvailable),
+            ResultantNAvailableSecondCut = calculator.MannerEngine.ResultantNAvailableSecondCut,// Math.Round(calculator.MannerEngine.ResultantNAvailableSecondCut),
+            ResultantNAvailableYear2 = calculator.MannerEngine.ResultantNAvailableYear2,// Math.Round(calculator.MannerEngine.ResultantNAvailableYear2),
+            CropUptake = calculator.MannerEngine.CropUptake
         };
     }
 
@@ -185,22 +185,22 @@ public class CalculateResultService(
         {
             FieldID = request.Field.FieldID,
             FieldName = request.Field.FieldName,
-            TotalN = (int)output.TotalNitrogenApplied,
-            MineralisedN = (int)output.MineralisedN,
-            NitrateNLoss = (int)output.NO3NLoss,
-            AmmoniaNLoss = (int)output.NH3NLoss,
-            DenitrifiedNLoss = (int)output.DenitrifiedNLoss,
-            CurrentCropAvailableN = (int)output.ResultantNAvailable,
-            NextGrassNCropCurrentYear = (int)output.ResultantNAvailableSecondCut,
-            FollowingCropYear2AvailableN = (int)output.ResultantNAvailableYear2,
+            TotalN = (int)Math.Round(output.TotalNitrogenApplied),
+            MineralisedN = (int)Math.Round(output.MineralisedN),
+            NitrateNLoss = (int)Math.Round(output.NO3NLoss),
+            AmmoniaNLoss = (int)Math.Round(output.NH3NLoss),
+            DenitrifiedNLoss = (int)Math.Round(output.DenitrifiedNLoss),
+            CurrentCropAvailableN = (int)Math.Round(output.ResultantNAvailable),
+            NextGrassNCropCurrentYear = (int)Math.Round(output.ResultantNAvailableSecondCut),
+            FollowingCropYear2AvailableN = (int)Math.Round(output.ResultantNAvailableYear2),
             NitrogenEfficiencePercentage = CalculateNitrogenEfficiency(output, request.Field.CropTypeID == 1),
-            TotalP2O5 = (int)output.P2O5Total,
-            CropAvailableP2O5 = (int)output.P2O5CropAvailable,
-            TotalK2O = (int)output.K2OTotal,
-            CropAvailableK2O = (int)output.K2OCropAvailable,
-            TotalSO3 = output.SO3Total.HasValue ? (int)output.SO3Total.Value : 0,
-            CropAvailableSO3 = output.SO3CropAvailable.HasValue ? (int)output.SO3CropAvailable.Value : null,
-            TotalMgO = output.MgOTotal.HasValue ? (int)output.MgOTotal.Value : 0
+            TotalP2O5 = (int)Math.Round(output.P2O5Total),
+            CropAvailableP2O5 = (int)Math.Round(output.P2O5CropAvailable),
+            TotalK2O = (int)Math.Round(output.K2OTotal),
+            CropAvailableK2O = (int)Math.Round(output.K2OCropAvailable),
+            TotalSO3 = output.SO3Total.HasValue ? (int)Math.Round(output.SO3Total.Value) : 0,
+            CropAvailableSO3 = output.SO3CropAvailable.HasValue ? (int)Math.Round(output.SO3CropAvailable.Value) : null,
+            TotalMgO = output.MgOTotal.HasValue ? (int)Math.Round(output.MgOTotal.Value) : 0
         };
     }
 
