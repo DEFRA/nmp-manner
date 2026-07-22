@@ -3054,8 +3054,6 @@ BEGIN
         (13, @OrganicMatter, 125, 80),
         (14, N'Peaty', 135, 90),
         (15, N'Peat', 150, 100),
-        (16, N'Chalk', 90, 70),
-        (17, N'Rock (not chalk)', 45, 35)
     SET IDENTITY_INSERT [dbo].[TopSoils] OFF
 END
 
@@ -3063,6 +3061,11 @@ END
 IF  EXISTS (SELECT 1 FROM [dbo].[TopSoils] WHERE [NAME]=N'Organic (10 to 20% organic matter)')
 BEGIN
     UPDATE [dbo].[TopSoils] SET [Name] = @OrganicMatter WHERE ID=13
+END
+
+IF  EXISTS (SELECT 1 FROM [dbo].[TopSoils] WHERE [ID] IN (16,17))
+BEGIN
+    DELETE FROM [TopSoils] WHERE [ID] IN (16,17)
 END
 
 -- Populating SubSoils table with relevant data
