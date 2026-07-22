@@ -3053,7 +3053,7 @@ BEGIN
         (12, N'Clay', 145, 50),
         (13, @OrganicMatter, 125, 80),
         (14, N'Peaty', 135, 90),
-        (15, N'Peat', 150, 100),
+        (15, N'Peat', 150, 100)
     SET IDENTITY_INSERT [dbo].[TopSoils] OFF
 END
 
