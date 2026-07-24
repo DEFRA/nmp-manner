@@ -1,14 +1,11 @@
 ﻿namespace Manner.Application.DTOs;
 
 public sealed class CalculationContext
-{
-    public ClimateDto Climate { get; set; } = default!;
-
-    public CropTypeDto CropType { get; set; } = default!;
-
-    public TopSoilDto TopSoil { get; set; } = default!;
-
-    public SubSoilDto SubSoil { get; set; } = default!;
+{    
+    public required ClimateDto Climate { get; set; }
+    public required CropTypeDto CropType { get; set; }
+    public required TopSoilDto TopSoil { get; set; }
+    public required SubSoilDto SubSoil { get; set; }
 
     public List<ClimateTypeDto> ClimateTypes { get; set; } = new();
 

@@ -33,7 +33,7 @@ public class ValidationMiddleware
             try
             {
                 context.Response.Body.Seek(0, SeekOrigin.Begin);
-                var body = await new StreamReader(context.Response.Body).ReadToEndAsync();
+                var body = await new StreamReader(context.Response.Body).ReadToEndAsync(CancellationToken.None);
                 var validationFailures = JsonConvert.DeserializeObject<ValidationError>(body);
                 context.Response.Clear();
                 context.Response.ContentType = "application/json";
@@ -57,7 +57,7 @@ public class ValidationMiddleware
                     }
                 }
                 context.Response.Body.Seek(0, SeekOrigin.Begin);
-                await context.Response.WriteAsync(JsonConvert.SerializeObject(standardResponse));
+                await context.Response.WriteAsync(JsonConvert.SerializeObject(standardResponse), CancellationToken.None);
             }
             catch (Exception)
             {
@@ -66,6 +66,6 @@ public class ValidationMiddleware
             
         }
         context.Response.Body.Seek(0, SeekOrigin.Begin);
-        await responseBody.CopyToAsync(originalBodyStream);
+        await responseBody.CopyToAsync(originalBodyStream, CancellationToken.None);
     }
 }
