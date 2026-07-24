@@ -52,7 +52,7 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
             // Readily Available N applied (NH4-N and uric acid N)
             // --------------------------------------------------------------
             // 18 Jan 2013 - Lizzie says "CalcPot = AppRate * (TotalAmmN + TotalUricN + TotalNitrateN)"
-            double calculatedPotentialN = (double)(_manureApplication.ApplicationRate.Value * (_manureType.NH4N + _manureType.Uric + _manureType.NO3N));
+            double calculatedPotentialN = Convert.ToDouble(_manureApplication.ApplicationRate.Value * (_manureType.NH4N + _manureType.Uric + _manureType.NO3N));
 
             double potentialNAvailable = (double)(_manureApplication.ApplicationRate.Value * (_manureType.NH4N + _manureType.Uric));
 
@@ -501,7 +501,7 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         _outputs.PotentialCropAvailableN = Math.Round(input.CalculatedPotentialN * 10.0d) / 10d;
         _outputs.NH3NLoss = Math.Round(input.CalculatedVolatilisedN * 10.0d) / 10d;
         _outputs.N2ONLoss = Math.Round(input.CalculatedN2O * 10.0d) / 10d;
-        _outputs.N2NLoss = Math.Round(input.CalculatedN2 * 10.0d / 10d);
+        _outputs.N2NLoss = Math.Round(input.CalculatedN2 * 10.0d) / 10d;
         _outputs.MineralisedN = Math.Round(input.CalculatedMineralisedN * 10.0d) / 10d;
         _outputs.NO3NLoss = Math.Round(input.CalculatedLeachedN * 10.0d) / 10d;
         _outputs.CropUptake = input.CropUptakeFactor;
@@ -978,30 +978,30 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         double dN2OEmission;
         double N2OEmissionFactor;
         // AC Three separate EFs: Slurry (0.85), FYM (0.73) & poultry manure (1.44)
-        if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || 
+        if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry ||
             _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry)
         {
             // Slurry
             N2OEmissionFactor = 0.85d;
         }
-        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry ||
-                _manureType.ID == (int)Enumerations.ManureTypes.DigestateSeparatedFibreFarmSourced ||
-                _manureType.ID ==(int) Enumerations.ManureTypes.DigestateSeparatedFibreFoodBased)
-        {
-            // Poultry
-            N2OEmissionFactor = 1.44d;
-        }
         else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.FYM &&
-            _manureType.ID !=(int) Enumerations.ManureTypes.DigestateSeparatedFibreFarmSourced &&
+            _manureType.ID != (int)Enumerations.ManureTypes.DigestateSeparatedFibreFarmSourced &&
                 _manureType.ID != (int)Enumerations.ManureTypes.DigestateSeparatedFibreFoodBased ||
-                _manureType.ID == (int) Enumerations.ManureTypes.BiosolidsThermallyHydrolysed ||
+                _manureType.ID == (int)Enumerations.ManureTypes.BiosolidsThermallyHydrolysed ||
                 _manureType.ID == (int)Enumerations.ManureTypes.BiosolidsThermallyDried ||
                 _manureType.ID == (int)Enumerations.ManureTypes.BiosolidsDigestedCake ||
-                _manureType.ID == (int)Enumerations.ManureTypes.BiosolidsLimeStabilised 
+                _manureType.ID == (int)Enumerations.ManureTypes.BiosolidsLimeStabilised
             )
         {
             // FYM
             N2OEmissionFactor = 0.73d;
+        }
+        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry ||
+                _manureType.ID == (int)Enumerations.ManureTypes.DigestateSeparatedFibreFarmSourced ||
+                _manureType.ID == (int)Enumerations.ManureTypes.DigestateSeparatedFibreFoodBased)
+        {
+            // Poultry
+            N2OEmissionFactor = 1.44d;
         }
         else
         {
@@ -1279,15 +1279,23 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
     {
         double mineralisedN;
 
-        if ((_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.FYM || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry) && !IsBiosolidLiquidDigested(_manureType.ID))
+        if((_manureType.ID == (int) Enumerations.ManureTypes.DigestateWholeFarmSourced ||
+            _manureType.ID == (int) Enumerations.ManureTypes.DigestateSeparatedLiquorFarmSourced ||
+            _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.FYM ||
+            _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry) &&
+            (!IsBiosolidLiquidDigested(_manureType.ID)))
         {
             mineralisedN = percentagedMineralisedNFymCattleSlurry * cumulativeDayDegrees / 100d * organicN;
-        }
-        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.None || IsPaperCrumble(_manureType.ID))
+        }        
+        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.None 
+            || IsPaperCrumble(_manureType.ID))
         {
             mineralisedN = 0d;
         }
-        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.SolidSludge || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
+        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry 
+            || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry 
+            || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.SolidSludge 
+            || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.LiquidSludge)
         {
             mineralisedN = percentagedMineralisedPultrySlurrySludgeAndDefault * cumulativeDayDegrees / 100d * organicN;
         }
