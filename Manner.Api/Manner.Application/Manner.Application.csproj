@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Manner.Core\Manner.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="AutoMapper">
       <HintPath>..\Lib\AutoMapper.dll</HintPath>
     </Reference>
@@ -22,6 +18,10 @@
 
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Manner.Core\Manner.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,8 +1,7 @@
 ﻿using Manner.Application.DTOs;
-using Manner.Application.Interfaces;
 using Manner.Application.Enums;
-using Microsoft.Extensions.DependencyInjection;
-using Manner.Core.Attributes;
+using Manner.Application.Interfaces;
+
 
 namespace Manner.Application.Calculators;
 
@@ -940,6 +939,20 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         return CropuptakeFactor;
     }
 
+    private static bool IsN2OEmissionZero(ManureTypeDto manureType)
+    {
+        bool isZero = false;
+        isZero = manureType.ID == (int)Enumerations.ManureTypes.BiosolidsComposted ||
+                manureType.ID == (int)Enumerations.ManureTypes.WaterTreatmentCake ||
+                manureType.ID == (int)Enumerations.ManureTypes.StrawMulch ||
+                manureType.ID == (int)Enumerations.ManureTypes.BiosolidsThermallyDried ||
+                manureType.ID == (int)Enumerations.ManureTypes.GreenCompost ||
+                manureType.ID == (int)Enumerations.ManureTypes.GreenFoodCompost ||
+                manureType.ID == (int)Enumerations.ManureTypes.MushroomCompost || IsPaperCrumble(manureType.ID);
+        
+                return isZero;
+    }
+
     private double CalculateN2OEmission(double mineralN1)
     {
         // ********************************************************************************
@@ -956,7 +969,8 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         // c.f. Email from Fiona Nicholson on 16/02/2006 and updated technical guide
 
         // 07 Nov 2012 C Lam - Return zero for paper crumbles
-        if (IsPaperCrumble(_manureType.ID))
+        // 04 Nov 2024 AC & LS New rules for EF depending the Manure Type
+        if (IsN2OEmissionZero(_manureType))
         {
             return 0d;
         }
@@ -964,17 +978,27 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         double dN2OEmission;
         double N2OEmissionFactor;
         // AC Three separate EFs: Slurry (0.85), FYM (0.73) & poultry manure (1.44)
-        if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry)
+        if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.CattleSlurry || 
+            _manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry)
         {
             // Slurry
             N2OEmissionFactor = 0.85d;
         }
-        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry)
+        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.Poultry ||
+                _manureType.ID == (int)Enumerations.ManureTypes.DigestateSeparatedFibreFarmSourced ||
+                _manureType.ID ==(int) Enumerations.ManureTypes.DigestateSeparatedFibreFoodBased)
         {
             // Poultry
             N2OEmissionFactor = 1.44d;
         }
-        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.FYM)
+        else if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.FYM &&
+            _manureType.ID !=(int) Enumerations.ManureTypes.DigestateSeparatedFibreFarmSourced &&
+                _manureType.ID != (int)Enumerations.ManureTypes.DigestateSeparatedFibreFoodBased ||
+                _manureType.ID == (int) Enumerations.ManureTypes.BiosolidsThermallyHydrolysed ||
+                _manureType.ID == (int)Enumerations.ManureTypes.BiosolidsThermallyDried ||
+                _manureType.ID == (int)Enumerations.ManureTypes.BiosolidsDigestedCake ||
+                _manureType.ID == (int)Enumerations.ManureTypes.BiosolidsLimeStabilised 
+            )
         {
             // FYM
             N2OEmissionFactor = 0.73d;

@@ -172,9 +172,9 @@ public class CalculateResultService(
             MgOTotal = calculator.MannerEngine.MgOTotal is null
                 ? null
                 : calculator.MannerEngine.MgOTotal.Value,
-            ResultantNAvailable = calculator.MannerEngine.ResultantNAvailable,// Math.Round(calculator.MannerEngine.ResultantNAvailable),
-            ResultantNAvailableSecondCut = calculator.MannerEngine.ResultantNAvailableSecondCut,// Math.Round(calculator.MannerEngine.ResultantNAvailableSecondCut),
-            ResultantNAvailableYear2 = calculator.MannerEngine.ResultantNAvailableYear2,// Math.Round(calculator.MannerEngine.ResultantNAvailableYear2),
+            ResultantNAvailable = calculator.MannerEngine.ResultantNAvailable,
+            ResultantNAvailableSecondCut = calculator.MannerEngine.ResultantNAvailableSecondCut,
+            ResultantNAvailableYear2 = calculator.MannerEngine.ResultantNAvailableYear2,
             CropUptake = calculator.MannerEngine.CropUptake
         };
     }
