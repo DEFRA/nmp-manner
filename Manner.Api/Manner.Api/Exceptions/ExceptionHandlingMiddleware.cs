@@ -36,7 +36,7 @@ public class ExceptionHandlingMiddleware
         standardResponse.Message = exception.Message ?? "Internal Server Error";
         standardResponse.Errors.Add(exception.InnerException?.Message ?? string.Empty);
         var json = Newtonsoft.Json.JsonConvert.SerializeObject(standardResponse);
-        return context.Response.WriteAsync(json);
+        return context.Response.WriteAsync(json, CancellationToken.None);
     }
             
 }
