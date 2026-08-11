@@ -7,27 +7,27 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-    public DbSet<ApplicationMethod> ApplicationMethods { get; set; } = null!;
-    public DbSet<Climate> Climates { get; set; } = null!;
-    public DbSet<ClimateType> ClimateTypes { get; set; } = null!;
-    public DbSet<Country> Countries { get; set; } = null!;
-    public DbSet<CropType> CropTypes { get; set; } = null!;
-    public DbSet<IncorporationDelay> IncorporationDelays { get; set; } = null!;
-    public DbSet<IncorporationMethod> IncorporationMethods { get; set; } = null!;
+    public DbSet<ApplicationMethod> ApplicationMethods { get; set; }
+    public DbSet<Climate> Climates { get; set; }
+    public DbSet<ClimateType> ClimateTypes { get; set; } 
+    public DbSet<Country> Countries { get; set; }
+    public DbSet<CropType> CropTypes { get; set; } 
+    public DbSet<IncorporationDelay> IncorporationDelays { get; set; } 
+    public DbSet<IncorporationMethod> IncorporationMethods { get; set; } 
 
     // Define the IncorpMethodsIncorpDelays as keyless
-    public DbSet<IncorpMethodsIncorpDelays> IncorpMethodsIncorpDelays { get; set; } = null!;
-    public DbSet<ApplicationMethodsIncorpMethods> ApplicationMethodsIncorpMethods { get; set; } = null!;
-    public DbSet<ManureGroup> ManureGroups { get; set; } = null!;
-    public DbSet<ManureType> ManureTypes { get; set; } = null!;
-    public DbSet<ManureTypeCategory> ManureTypeCategories { get; set; } = null!;
-    public DbSet<MoistureType> MoistureTypes { get; set; } = null!;
-    public DbSet<RainType> RainTypes { get; set; } = null!;
-    public DbSet<SubSoil> SubSoils { get; set; } = null!;
-    public DbSet<TopSoil> TopSoils { get; set; } = null!;
-    public DbSet<Windspeed> Windspeeds { get; set; } = null!;
-    public DbSet<Nutrient> Nutrients { get; set; } = null!;
-    public DbSet<NutrientProduct> NutrientProducts { get; set; } = null!;
+    public DbSet<IncorpMethodsIncorpDelays> IncorpMethodsIncorpDelays { get; set; }
+    public DbSet<ApplicationMethodsIncorpMethods> ApplicationMethodsIncorpMethods { get; set; }
+    public DbSet<ManureGroup> ManureGroups { get; set; }
+    public DbSet<ManureType> ManureTypes { get; set; }
+    public DbSet<ManureTypeCategory> ManureTypeCategories { get; set; }
+    public DbSet<MoistureType> MoistureTypes { get; set; }
+    public DbSet<RainType> RainTypes { get; set; }
+    public DbSet<SubSoil> SubSoils { get; set; }
+    public DbSet<TopSoil> TopSoils { get; set; }
+    public DbSet<Windspeed> Windspeeds { get; set; }
+    public DbSet<Nutrient> Nutrients { get; set; }
+    public DbSet<NutrientProduct> NutrientProducts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
