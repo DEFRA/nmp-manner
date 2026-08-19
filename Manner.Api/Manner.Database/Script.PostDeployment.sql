@@ -3145,7 +3145,7 @@ BEGIN
     INSERT INTO [dbo].[NutrientProducts] ([ID], [Name], [NutrientID], [NutrientPercentage], [IsNutrientDefaultProduct], [MeasurementUnit])
     VALUES
         (1, N'Ammonium nitrate', 1, 34.5, 1, @MeasurementUnitPerTonne),
-        (2, N'Calcium ammonium nitrate', 1, 27, 0, @MeasurementUnitPerTonne),
+        (2, N'Urea', 1, 27, 0, @MeasurementUnitPerTonne),
         (3, N'Triple superphosphate', 2, 46, 1, @MeasurementUnitPerTonne),
         (4, N'Muriate of potash', 3, 60, 1, @MeasurementUnitPerTonne)        
     SET IDENTITY_INSERT [dbo].[NutrientProducts] OFF
@@ -3155,5 +3155,11 @@ IF  EXISTS (SELECT 1 FROM [dbo].[NutrientProducts] WHERE ID=3 AND [NAME]=N'Tripl
 BEGIN
     UPDATE [dbo].[NutrientProducts] SET [Name] = N'Triple superphosphate' WHERE ID=3    
 END
+
+IF  EXISTS (SELECT 1 FROM [dbo].[NutrientProducts] WHERE ID=2 AND [NAME]=N'Calcium ammonium nitrate')
+BEGIN
+    UPDATE [dbo].[NutrientProducts] SET [Name] = N'Urea' WHERE ID=2  
+END
+
 
 GO
