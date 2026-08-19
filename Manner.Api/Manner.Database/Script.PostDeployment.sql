@@ -3158,7 +3158,7 @@ END
 
 IF  EXISTS (SELECT 1 FROM [dbo].[NutrientProducts] WHERE ID=2 AND [NAME]=N'Calcium ammonium nitrate')
 BEGIN
-    UPDATE [dbo].[NutrientProducts] SET [Name] = N'Urea' WHERE ID=2  
+    UPDATE [dbo].[NutrientProducts] SET [Name] = N'Urea' , [NutrientPercentage] = 46 WHERE ID=2  
 END
 
 
