@@ -3146,9 +3146,14 @@ BEGIN
     VALUES
         (1, N'Ammonium nitrate', 1, 34.5, 1, @MeasurementUnitPerTonne),
         (2, N'Calcium ammonium nitrate', 1, 27, 0, @MeasurementUnitPerTonne),
-        (3, N'Triple superphoshphate', 2, 46, 1, @MeasurementUnitPerTonne),
+        (3, N'Triple superphosphate', 2, 46, 1, @MeasurementUnitPerTonne),
         (4, N'Muriate of potash', 3, 60, 1, @MeasurementUnitPerTonne)        
     SET IDENTITY_INSERT [dbo].[NutrientProducts] OFF
+END
+
+IF  EXISTS (SELECT 1 FROM [dbo].[NutrientProducts] WHERE ID=3 AND [NAME]=N'Triple superphoshphate')
+BEGIN
+    UPDATE [dbo].[NutrientProducts] SET [Name] = N'Triple superphosphate' WHERE ID=3    
 END
 
 GO
