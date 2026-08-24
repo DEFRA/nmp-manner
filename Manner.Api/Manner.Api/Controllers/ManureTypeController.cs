@@ -91,7 +91,7 @@ public class ManureTypeController : ControllerBase
         ManureNutrientsDto manureNutrientsData = await _manureTypeService.CalculateNutrieltsByDryMatterPercentageAsync(manureNutrientsDto);
         return (manureNutrientsData != null)
             ? await Task.FromResult(Ok(new StandardResponse { Success = true, Data = manureNutrientsData }))
-            : NotFound(new StandardResponse { Success = false, Message = $"Manure type with ID {manureNutrientsDto.ID} not found." });
+            : BadRequest(new StandardResponse { Success = false, Message = $"Manure Nutrients calculation having an error." });
     }
 }
 
