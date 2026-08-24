@@ -86,13 +86,13 @@ public class ManureTypeController : ControllerBase
         Tags = ["Manure Types"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(400)]
-    public async Task<ActionResult<StandardResponse>> CalculateNutrientsBtDryMatterPercentage(ManureTypeDto manureTypeDto)
+    public async Task<ActionResult<StandardResponse>> CalculateNutrientsBtDryMatterPercentage(ManureNutrientsDto manureNutrientsDto)
     {
-        
-        ManureTypeDto? manureTypeDto = await _manureTypeService.CalculateNutrieltsByDryMatterPercentageAsync(manureTypeDto);
-        return (manureTypeDto != null)
-            ? await Task.FromResult(Ok(new StandardResponse { Success = true, Data = manureTypeDto }))
-            : NotFound(new StandardResponse { Success = false, Message = $"Manure type with ID {manureTypeDto.ID} not found." });
+        ManureNutrientsDto manureNutrientsData = await _manureTypeService.CalculateNutrieltsByDryMatterPercentageAsync(manureNutrientsDto);
+        return (manureNutrientsData != null)
+            ? await Task.FromResult(Ok(new StandardResponse { Success = true, Data = manureNutrientsData }))
+            : NotFound(new StandardResponse { Success = false, Message = $"Manure type with ID {manureNutrientsDto.ID} not found." });
     }
+}
 
     

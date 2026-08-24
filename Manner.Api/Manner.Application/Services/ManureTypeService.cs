@@ -51,42 +51,42 @@ namespace Manner.Application.Services
             return _mapper.Map<IEnumerable<ManureTypeDto>>(manureTypes);
         }
 
-        public async Task<ManureTypeDto> CalculateNutrieltsByDryMatterPercentageAsync(ManureTypeDto manureTypeDto)
+        public async Task<ManureNutrientsDto> CalculateNutrieltsByDryMatterPercentageAsync(ManureNutrientsDto manureNutrientsDto)
         {
-            CalculateNitrogenContent(manureTypeDto);
-            CalculateUricContent(manureTypeDto);
-            CalculateNH4NContent(manureTypeDto);
-            CalculatePContent(manureTypeDto);            
-            CalculateKContent(manureTypeDto);
-            CalculateSContent(manureTypeDto);
-            CalculateMgContent(manureTypeDto);
-            return await Task.FromResult(manureTypeDto);
+            CalculateNitrogenContent(manureNutrientsDto);
+            CalculateUricContent(manureNutrientsDto);
+            CalculateNH4NContent(manureNutrientsDto);
+            CalculatePContent(manureNutrientsDto);            
+            CalculateKContent(manureNutrientsDto);
+            CalculateSContent(manureNutrientsDto);
+            CalculateMgContent(manureNutrientsDto);
+            return await Task.FromResult(manureNutrientsDto);
         }
 
-        private static void CalculateNitrogenContent(ManureTypeDto manureTypeDto)
+        private static void CalculateNitrogenContent(ManureNutrientsDto manureNutrientsDto)
         {
-            switch (manureTypeDto.ID)
+            switch (manureNutrientsDto.ID)
             {
                 case (int)ManureTypes.BeefSlurry:
                 case (int)ManureTypes.DairySlurry:
                 case (int)ManureTypes.CattleSlurry:
                     {
-                        manureTypeDto.TotalN = (0.25 * manureTypeDto.DryMatter) + 1.1;
+                        manureNutrientsDto.TotalN = (0.25m * manureNutrientsDto.DryMatter) + 1.1m;
                     }
                     break;
                 case (int)ManureTypes.PigSlurry:
                     {
-                        manureTypeDto.TotalN = (0.39 * manureTypeDto.DryMatter) + 2.04;
+                        manureNutrientsDto.TotalN = (0.39m * manureNutrientsDto.DryMatter) + 2.04m;
                     }
                     break;
                 case (int)ManureTypes.PoultryManure:
                     {
-                        manureTypeDto.TotalN = (0.46 * manureTypeDto.DryMatter) + 0.2;
+                        manureNutrientsDto.TotalN = (0.46m * manureNutrientsDto.DryMatter) + 0.2m;
                     }
                     break;
                 case (int)ManureTypes.BroilerTurkeyLitter:
                     {
-                        manureTypeDto.TotalN = (0.44 * manureTypeDto.DryMatter) + 3.6;
+                        manureNutrientsDto.TotalN = (0.44m * manureNutrientsDto.DryMatter) + 3.6m;
                     }
                     break;
                 default:
@@ -94,18 +94,18 @@ namespace Manner.Application.Services
             }
         }
 
-        private static void CalculateUricContent(ManureTypeDto manureTypeDto)
+        private static void CalculateUricContent(ManureNutrientsDto manureNutrientsDto)
         {
-            switch (manureTypeDto.ID)
+            switch (manureNutrientsDto.ID)
             {
                 case (int)ManureTypes.PoultryManure:
                     {
-                        manureTypeDto.Uric = ((0.08 * manureTypeDto.DryMatter) + 4.54 - 0.2) * 0.55;
+                        manureNutrientsDto.Uric = ((0.08m * manureNutrientsDto.DryMatter) + 4.54m - 0.2m) * 0.55m;
                     }
                     break;
                 case (int)ManureTypes.BroilerTurkeyLitter:
                     {
-                        manureTypeDto.Uric = ((manureTypeDto.TotalN * 0.35) - 0.2) * 0.4;
+                        manureNutrientsDto.Uric = ((manureNutrientsDto.TotalN * 0.35m) - 0.2m) * 0.4m;
                     }
                     break;
                 default:
@@ -113,30 +113,30 @@ namespace Manner.Application.Services
             }
         }
 
-        private static void CalculateNH4NContent(ManureTypeDto manureTypeDto)
+        private static void CalculateNH4NContent(ManureNutrientsDto manureNutrientsDto)
         {
-            switch (manureTypeDto.ID)
+            switch (manureNutrientsDto.ID)
             {
                 case (int)ManureTypes.BeefSlurry:
                 case (int)ManureTypes.DairySlurry:
                 case (int)ManureTypes.CattleSlurry:
                     {
-                        manureTypeDto.NH4N = ((58.5 - 2.28 * manureTypeDto.DryMatter) / 100) * manureTypeDto.TotalN;
+                        manureNutrientsDto.NH4N = ((58.5m - 2.28m * manureNutrientsDto.DryMatter) / 100m) * manureNutrientsDto.TotalN;
                     }
                     break;
                 case (int)ManureTypes.PigSlurry:
                     {
-                        manureTypeDto.NH4N = ((82 - 3.03 * manureTypeDto.DryMatter) / 100) * manureTypeDto.TotalN;
+                        manureNutrientsDto.NH4N = ((82m - 3.03m * manureNutrientsDto.DryMatter) / 100m) * manureNutrientsDto.TotalN;
                     }
                     break;
                 case (int)ManureTypes.PoultryManure:
                     {
-                        manureTypeDto.NH4N = ((0.08 * manureTypeDto.DryMatter) + 4.54 - 0.2) * 0.45;
+                        manureNutrientsDto.NH4N = ((0.08m * manureNutrientsDto.DryMatter) + 4.54m - 0.2m) * 0.45m;
                     }
                     break;
                 case (int)ManureTypes.BroilerTurkeyLitter:
                     {
-                        manureTypeDto.NH4N = ((manureTypeDto.TotalN * 0.35) - 0.2) * 0.6;
+                        manureNutrientsDto.NH4N = ((manureNutrientsDto.TotalN * 0.35m) - 0.2m) * 0.6m;
                     }
                     break;
                 default:
@@ -144,30 +144,30 @@ namespace Manner.Application.Services
             }
         }
 
-        private static void CalculatePContent(ManureTypeDto manureTypeDto)
+        private static void CalculatePContent(ManureNutrientsDto manureNutrientsDto)
         {
-            switch (manureTypeDto.ID)
+            switch (manureNutrientsDto.ID)
             {
                 case (int)ManureTypes.BeefSlurry:
                 case (int)ManureTypes.DairySlurry:
                 case (int)ManureTypes.CattleSlurry:
                     {
-                        manureTypeDto.P2O5 = (0.15 * manureTypeDto.DryMatter) + 0.3;
+                        manureNutrientsDto.P2O5 = (0.15m * manureNutrientsDto.DryMatter) + 0.3m;
                     }
                     break;
                 case (int)ManureTypes.PigSlurry:
                     {
-                        manureTypeDto.P2O5 = (0.36 * manureTypeDto.DryMatter) + 0.04; //Was 0.4 * manureTypeDto.DryMatter + 0.2
+                        manureNutrientsDto.P2O5 = (0.36m * manureNutrientsDto.DryMatter) + 0.04m; //Was 0.4 * manureNutrientsDto.DryMatter + 0.2
                     }
                     break;
                 case (int)ManureTypes.PoultryManure:
                     {
-                        manureTypeDto.P2O5 = (0.22 * manureTypeDto.DryMatter) + 3.62; // Was 0.33 * manureTypeDto.DryMatter + 2.45
+                        manureNutrientsDto.P2O5 = (0.22m * manureNutrientsDto.DryMatter) + 3.62m; // Was 0.33 * manureNutrientsDto.DryMatter + 2.45
                     }
                     break;
                 case (int)ManureTypes.BroilerTurkeyLitter:
                     {
-                        manureTypeDto.P2O5 = (0.37 * manureTypeDto.DryMatter) + 2.8;
+                        manureNutrientsDto.P2O5 = (0.37m * manureNutrientsDto.DryMatter) + 2.8m;
                     }
                     break;
                 default:
@@ -176,31 +176,31 @@ namespace Manner.Application.Services
             }
         }
 
-        private static void CalculateKContent(ManureTypeDto manureTypeDto)
+        private static void CalculateKContent(ManureNutrientsDto manureNutrientsDto)
         {
-            switch (manureTypeDto.ID)
+            switch (manureNutrientsDto.ID)
             {
                 case (int)ManureTypes.BeefSlurry:
                 case (int)ManureTypes.DairySlurry:
                 case (int)ManureTypes.CattleSlurry:
                     {
-                        manureTypeDto.K2O = (0.22 * manureTypeDto.DryMatter) + 1.25; // Was 0.2 * manureTypeDto.DryMatter + 2
+                        manureNutrientsDto.K2O = (0.22m * manureNutrientsDto.DryMatter) + 1.25m; // Was 0.2 * manureNutrientsDto.DryMatter + 2
                     }
                     break;
                 case (int)ManureTypes.PigSlurry:
                     {
-                        manureTypeDto.K2O = (0.2 * manureTypeDto.DryMatter) + 1.44; // Was 0.2 * manureTypeDto.DryMatter + 1.6
+                        manureNutrientsDto.K2O = (0.2m * manureNutrientsDto.DryMatter) + 1.44m; // Was 0.2 * manureNutrientsDto.DryMatter + 1.6
 
                     }
                     break;
                 case (int)ManureTypes.PoultryManure:
                     {
-                        manureTypeDto.K2O = (0.3 * manureTypeDto.DryMatter) + 2.48; // Was 0.27 * manureTypeDto.DryMatter + 0.05
+                        manureNutrientsDto.K2O = (0.3m * manureNutrientsDto.DryMatter) + 2.48m; // Was 0.27 * manureNutrientsDto.DryMatter + 0.05
                     }
                     break;
                 case (int)ManureTypes.BroilerTurkeyLitter:
                     {
-                        manureTypeDto.K2O = (0.19 * manureTypeDto.DryMatter) + 6.6;
+                        manureNutrientsDto.K2O = (0.19m * manureNutrientsDto.DryMatter) + 6.6m;
                     }
                     break;
                 default:
@@ -208,30 +208,30 @@ namespace Manner.Application.Services
             }
         }
 
-        private static void CalculateSContent(ManureTypeDto manureTypeDto)
+        private static void CalculateSContent(ManureNutrientsDto manureNutrientsDto)
         {
-            switch (manureTypeDto.ID)
+            switch (manureNutrientsDto.ID)
             {
                 case (int)ManureTypes.BeefSlurry:
                 case (int)ManureTypes.DairySlurry:
                 case (int)ManureTypes.CattleSlurry:
                     {
-                        manureTypeDto.SO3 = (0.0875 * manureTypeDto.DryMatter) + 0.15;
+                        manureNutrientsDto.SO3 = (0.0875m * manureNutrientsDto.DryMatter) + 0.15m;
                     }
                     break;
                 case (int)ManureTypes.PigSlurry:
                     {
-                        manureTypeDto.SO3 = (0.125 * manureTypeDto.DryMatter) + 0.47;
+                        manureNutrientsDto.SO3 = (0.125m * manureNutrientsDto.DryMatter) + 0.47m;
                     }
                     break;
                 case (int)ManureTypes.PoultryManure:
                     {
-                        manureTypeDto.SO3 = (0.13 * manureTypeDto.DryMatter) + 0.39; // Was 0.11 * manureTypeDto.DryMatter + 0.15
+                        manureNutrientsDto.SO3 = (0.13m * manureNutrientsDto.DryMatter) + 0.39m; // Was 0.11 * manureNutrientsDto.DryMatter + 0.15
                     }
                     break;
                 case (int)ManureTypes.BroilerTurkeyLitter:
                     {
-                        manureTypeDto.SO3 = (0.14 * manureTypeDto.DryMatter) - 0.4;
+                        manureNutrientsDto.SO3 = (0.14m * manureNutrientsDto.DryMatter) - 0.4m;
                     }
                     break;
                 default:
@@ -239,30 +239,30 @@ namespace Manner.Application.Services
             }
         }
 
-        private static void CalculateMgContent(ManureTypeDto manureTypeDto)
+        private static void CalculateMgContent(ManureNutrientsDto manureNutrientsDto)
         {
-            switch (manureTypeDto.ID)
+            switch (manureNutrientsDto.ID)
             {
                 case (int)ManureTypes.BeefSlurry:
                 case (int)ManureTypes.DairySlurry:
                 case (int)ManureTypes.CattleSlurry:
                     {
-                        manureTypeDto.MgO = (0.0875 * manureTypeDto.DryMatter) + 0.04;
+                        manureNutrientsDto.MgO = (0.0875m * manureNutrientsDto.DryMatter) + 0.04m;
                     }
                     break;
                 case (int)ManureTypes.PigSlurry:
                     {
-                        manureTypeDto.MgO = (0.15 * manureTypeDto.DryMatter) + 0.1;
+                        manureNutrientsDto.MgO = (0.15m * manureNutrientsDto.DryMatter) + 0.1m;
                     }
                     break;
                 case (int)ManureTypes.PoultryManure:
                     {
-                        manureTypeDto.MgO = (0.08 * manureTypeDto.DryMatter) + 1.1;
+                        manureNutrientsDto.MgO = (0.08m * manureNutrientsDto.DryMatter) + 1.1m;
                     }
                     break;
                 case (int)ManureTypes.BroilerTurkeyLitter:
                     {
-                        manureTypeDto.MgO = (0.06 * manureTypeDto.DryMatter) + 0.8;
+                        manureNutrientsDto.MgO = (0.06m * manureNutrientsDto.DryMatter) + 0.8m;
                     }
                     break;
                 default:
