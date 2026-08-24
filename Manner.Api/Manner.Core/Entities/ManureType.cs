@@ -1,4 +1,5 @@
-﻿namespace Manner.Core.Entities;
+﻿using System;
+namespace Manner.Core.Entities;
 public class ManureType
 {
     public int ID { get; set; }

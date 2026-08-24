@@ -1,8 +1,11 @@
 ﻿using Manner.Application.DTOs;
+using Manner.Application.Enums;
 using Manner.Application.Interfaces;
+using Manner.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using static Manner.Application.Enums.Enumerations;
 
 namespace Manner.Api.Controllers;
 [ApiController]
@@ -10,13 +13,13 @@ namespace Manner.Api.Controllers;
 [Authorize]
 public class ManureTypeController : ControllerBase
 {
-    private readonly ILogger<ManureTypeController> _logger;    
-    private readonly IManureTypeService _manureTypeService;       
+    private readonly ILogger<ManureTypeController> _logger;
+    private readonly IManureTypeService _manureTypeService;
 
     public ManureTypeController(ILogger<ManureTypeController> logger, IManureTypeService manureTypeService)
     {
-        _logger = logger;        
-        _manureTypeService = manureTypeService;        
+        _logger = logger;
+        _manureTypeService = manureTypeService;
     }
 
     [HttpGet("manure-types")]
@@ -61,8 +64,8 @@ public class ManureTypeController : ControllerBase
 
     [HttpGet("manure-types/{id}")]
     [SwaggerOperation(
-        Summary = "Retrieve manure type by ID", 
-        Description = "Fetches a specific manure type by its unique ID.", 
+        Summary = "Retrieve manure type by ID",
+        Description = "Fetches a specific manure type by its unique ID.",
         Tags = ["Manure Types"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
@@ -70,10 +73,26 @@ public class ManureTypeController : ControllerBase
     public async Task<ActionResult<StandardResponse>> ManureTypes(int id)
     {
         _logger.LogTrace("ManureTypeController: manure-types/{Id} called.", id);
-        var type = await _manureTypeService.FetchByIdAsync(id);
-        return type != null
-            ? Ok(new StandardResponse { Success = true, Data = type })
+        ManureTypeDto? manureTypeDto = await _manureTypeService.FetchByIdAsync(id);
+        return manureTypeDto != null
+            ? Ok(new StandardResponse { Success = true, Data = manureTypeDto })
             : NotFound(new StandardResponse { Success = false, Message = $"Manure type with ID {id} not found." });
     }
 
+    [HttpPost("calculate-nutrients-by-dry-matter-percentage")]
+    [SwaggerOperation(
+        Summary = "Calculates Nutrients by Dry Matter percentage",
+        Description = "Calculates Nutrients by Dry Matter percentage.",
+        Tags = ["Manure Types"])]
+    [ProducesResponseType(typeof(StandardResponse), 200)]
+    [ProducesResponseType(400)]
+    public async Task<ActionResult<StandardResponse>> CalculateNutrientsBtDryMatterPercentage(ManureNutrientsDto manureNutrientsDto)
+    {
+        ManureNutrientsDto manureNutrientsData = await _manureTypeService.CalculateNutrieltsByDryMatterPercentageAsync(manureNutrientsDto);
+        return (manureNutrientsData != null)
+            ? await Task.FromResult(Ok(new StandardResponse { Success = true, Data = manureNutrientsData }))
+            : NotFound(new StandardResponse { Success = false, Message = $"Manure type with ID {manureNutrientsDto.ID} not found." });
+    }
 }
+
+    
