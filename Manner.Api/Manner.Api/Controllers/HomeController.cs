@@ -7,18 +7,23 @@ namespace Manner.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/")]
-public class HomeController : Controller
+#pragma warning disable S6931
+public class HomeController : ControllerBase
+#pragma warning restore S6931
 {
-    private readonly ILogger<MannerController> _logger;
+    private readonly ILogger<HomeController> _logger;
     private readonly IRainTypeService _rainTypeService;
-    public HomeController(ILogger<MannerController> logger, IRainTypeService rainTypeService)
+    public HomeController(ILogger<HomeController> logger, IRainTypeService rainTypeService)
     {
         _logger = logger;
         _rainTypeService = rainTypeService;
     }
 
     [HttpGet("/")]
-    [SwaggerOperation(Summary = "Health Check", Description = "Health Check of API.", Tags = ["Health Checks"])]
+    [SwaggerOperation(
+        Summary = "Health Check", 
+        Description = "Health Check of API.", 
+        Tags = ["Health Checks"])]
     [ProducesResponseType(typeof(StandardResponse), 200)]
     [ProducesResponseType(404)]
     public async Task<ActionResult<StandardResponse?>> Index()
@@ -48,7 +53,7 @@ public class HomeController : Controller
             ret.Success = false;
             ret.Message = "API is not OK";
             ret.Errors.Add(ex.Message);
-            _logger.LogCritical(ex.Message);
+            _logger.LogCritical(ex, ex.Message);
             return BadRequest(ex.Message);
         }
     }

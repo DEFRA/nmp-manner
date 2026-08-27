@@ -8,6 +8,7 @@ using Manner.Core.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -19,6 +20,10 @@ namespace Manner.Tests.Services
         private readonly Mock<IApplicationMethodRepository> _mockRepository;
         private readonly Mock<IMapper> _mockMapper;
         private readonly IApplicationMethodService _service;
+
+        private static readonly IReadOnlyCollection<string> ExpectedMethodNames = new ReadOnlyCollection<string>(
+            new[] { "Method 1", "Broadcast spreader" }
+        );
 
         public ApplicationMethodServiceTests()
         {
@@ -50,7 +55,7 @@ namespace Manner.Tests.Services
             // Assert
             result.Should().NotBeNull();
             result.Should().HaveCount(2); // Expect 2 methods
-            result.Select(r => r.Name).Should().Contain(new[] { "Method 1", "Broadcast spreader" });
+            result?.Select(r => r.Name).Should().Contain(ExpectedMethodNames);
         }
 
         // Test FetchByIdAsync()
@@ -71,8 +76,8 @@ namespace Manner.Tests.Services
 
             // Assert
             result.Should().NotBeNull();
-            result.ID.Should().Be(1);
-            result.Name.Should().Be("Method 1");
+            result?.ID.Should().Be(1);
+            result?.Name.Should().Be("Method 1");
         }
 
         // Test FetchByCriteriaAsync()
@@ -94,7 +99,7 @@ namespace Manner.Tests.Services
             // Assert
             result.Should().NotBeNull();
             result.Should().HaveCount(2); // Expect 2 methods
-            result.Select(r => r.Name).Should().Contain(new[] { "Method 1", "Broadcast spreader" });
+            result?.Select(r => r.Name).Should().Contain(ExpectedMethodNames);
         }
 
         // Helper method to get sample application methods

@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.2.0" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="3.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="3.0.0" />
@@ -33,6 +32,12 @@
     <ProjectReference Include="..\Manner.Application\Manner.Application.csproj" />
     <ProjectReference Include="..\Manner.Infrastructure.Configuration\Manner.Infrastructure.Configuration.csproj" />
     <ProjectReference Include="..\Manner.Infrastructure\Manner.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\Lib\AutoMapper.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

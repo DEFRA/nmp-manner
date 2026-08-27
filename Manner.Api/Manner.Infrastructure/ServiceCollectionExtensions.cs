@@ -1,62 +1,48 @@
 ﻿using Manner.Core.Attributes;
-using Manner.Core.Interfaces;
 using Manner.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace Manner.Infrastructure
-{  
+namespace Manner.Infrastructure;
 
-    public static class ServiceCollectionExtensions
+public static class ServiceCollectionExtensions
+{
+    public static IServiceCollection RegisterDependencies(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection RegisterDependencies(this IServiceCollection services, IConfiguration configuration)
+        Assembly assembly = Assembly.GetExecutingAssembly();
+
+        var typesWithAttribute = assembly.GetTypes()
+            .Where(type => type.GetCustomAttribute<RepositoryAttribute>() != null)
+            .ToList();
+
+        foreach (var type in typesWithAttribute)
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
+            var attribute = type.GetCustomAttribute<RepositoryAttribute>();
+            var interfaces = type.GetInterfaces();
 
-            var typesWithAttribute = assembly.GetTypes()
-                .Where(type => type.GetCustomAttribute<RepositoryAttribute>() != null)
-                .ToList();
-
-            foreach (var type in typesWithAttribute)
+            if (interfaces.Length > 0)
             {
-                var attribute = type.GetCustomAttribute<RepositoryAttribute>();
-                var interfaces = type.GetInterfaces();
-
-                if (interfaces.Length > 0)
-                {
-                    foreach (var item in interfaces)
-                    {
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-                        services.Add(new ServiceDescriptor(item, type, attribute.Lifetime));
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-                    }
-                }
-                else
+                foreach (var item in interfaces)
                 {
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-                    services.Add(new ServiceDescriptor(type, type, attribute.Lifetime));
+                    services.Add(new ServiceDescriptor(item, type, attribute.Lifetime));
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
                 }
             }
-
-            //// Find the implementation of IServiceRegistrar
-            //var registrarType = assembly.GetTypes()
-            //    .FirstOrDefault(t => typeof(IServiceRegistrar).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
-
-            //if (registrarType != null)
-            //{
-            //    // Create an instance of the registrar and call RegisterServices
-            //    var registrar = (IServiceRegistrar)Activator.CreateInstance(registrarType);
-            //    registrar?.RegisterServices(services, configuration);
-            //}
-
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("MannerApiConnection")));
-            
-            return services;
+            else
+            {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                services.Add(new ServiceDescriptor(type, type, attribute.Lifetime));
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            }
         }
-                
+        
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("MannerApiConnection")));
+        
+        return services;
     }
+            
 }

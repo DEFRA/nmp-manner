@@ -5,9 +5,6 @@ using Manner.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Manner.Infrastructure.Repositories
 {
@@ -18,13 +15,13 @@ namespace Manner.Infrastructure.Repositories
         private readonly ILogger<ManureTypeRepository> _logger = logger;
         public async Task<IEnumerable<ManureType>?> FetchAllAsync()
         {
-            _logger.LogTrace($"ManureTypeRepository : FetchAllAsync() callled");
+            _logger.LogTrace("ManureTypeRepository : FetchAllAsync() callled");
             return await _context.ManureTypes.ToListAsync();
         }
 
         public async Task<ManureType?> FetchByIdAsync(int id)
         {
-            _logger.LogTrace($"ManureTypeRepository : FetchByIdAsync({id}) callled");
+            _logger.LogTrace("ManureTypeRepository : FetchByIdAsync({Id}) callled", id);
             return await _context.ManureTypes.FirstOrDefaultAsync(a => a.ID == id);
         }
 
@@ -35,7 +32,7 @@ namespace Manner.Infrastructure.Repositories
             bool? highReadilyAvailableNitrogen = null,
             bool? isLiquid = null)
         {
-            _logger.LogTrace($"ManureTypeRepository : FetchByCriteriaAsync({manureGroupId},{manureTypeCategoryId},{countryId},{highReadilyAvailableNitrogen},{isLiquid}) callled");
+            _logger.LogTrace("ManureTypeRepository : FetchByCriteriaAsync({ManureGroupId},{ManureTypeCategoryId},{CountryId},{HighReadilyAvailableNitrogen},{IsLiquid}) callled", manureGroupId, manureTypeCategoryId, countryId, highReadilyAvailableNitrogen, isLiquid);
             IQueryable<ManureType> query = _context.ManureTypes;
 
             if (manureGroupId.HasValue)

@@ -14,13 +14,13 @@ public class TopSoilRepository(ILogger<TopSoilRepository> logger, ApplicationDbC
     private readonly ILogger<TopSoilRepository> _logger = logger;
     public async Task<IEnumerable<TopSoil>?> FetchAllAsync()
     {
-        _logger.LogTrace($"TopSoilRepository : FetchAllAsync() callled");
+        _logger.LogTrace("TopSoilRepository : FetchAllAsync() callled");
         return await _context.TopSoils.ToListAsync();
     }
 
     public async Task<TopSoil?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"TopSoilRepository : FetchByIdAsync({id}) callled");
+        _logger.LogTrace("TopSoilRepository : FetchByIdAsync({Id}) callled",id);
         return await _context.TopSoils.FirstOrDefaultAsync(a => a.ID == id);
     }
 }

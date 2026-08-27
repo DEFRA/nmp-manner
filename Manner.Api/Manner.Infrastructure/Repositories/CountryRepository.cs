@@ -14,13 +14,13 @@ public class CountryRepository(ILogger<CountryRepository> logger, ApplicationDbC
     private readonly ILogger<CountryRepository> _logger = logger;
     public async Task<IEnumerable<Country>?> FetchAllAsync()
     {
-        _logger.LogTrace($"CountryRepository : FetchAllAsync() callled");
+        _logger.LogTrace("CountryRepository : FetchAllAsync() callled");
         return await _context.Countries.ToListAsync();
     }
 
     public async Task<Country?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"CountryRepository : FetchByIdAsync({id}) callled");
+        _logger.LogTrace("CountryRepository : FetchByIdAsync({Id}) callled", id);
         return await _context.Countries.FirstOrDefaultAsync(a => a.ID == id);
     }
 }

@@ -17,19 +17,19 @@ public class ApplicationMethodService(ILogger<ApplicationMethodService> logger, 
 
     public async Task<IEnumerable<ApplicationMethodDto>?> FetchAllAsync()
     {
-        _logger.LogTrace($"ApplicationMethodService : FetchAllAsync callled");
+        _logger.LogTrace("ApplicationMethodService : FetchAllAsync callled");
         return _mapper.Map<IEnumerable<ApplicationMethodDto>>(await _applicationMethodRepository.FetchAllAsync());
     }
 
     public async Task<ApplicationMethodDto?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"ApplicationMethodService : FetchByIdAsync({id}) callled");
+        _logger.LogTrace("ApplicationMethodService : FetchByIdAsync({Id}) callled", id);
         return _mapper.Map<ApplicationMethodDto>(await _applicationMethodRepository.FetchByIdAsync(id));
     }
 
     public async Task<IEnumerable<ApplicationMethodDto>?> FetchByCriteriaAsync(bool? isLiquid = null, int? fieldType = null)
     {
-        _logger.LogTrace($"ApplicationMethodService : FetchByCriteriaAsync({isLiquid}, {fieldType}) callled");
+        _logger.LogTrace("ApplicationMethodService : FetchByCriteriaAsync({IsLiquid}, {FieldType}) callled", isLiquid, fieldType);
         var methods = await _applicationMethodRepository.FetchByCriteriaAsync(isLiquid, fieldType);
         return _mapper.Map<IEnumerable<ApplicationMethodDto>>(methods);
     }

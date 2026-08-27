@@ -1,0 +1,10 @@
+﻿CREATE TABLE [dbo].[Nutrients]
+(
+	[ID] INT NOT NULL IDENTITY(1,1),
+	[Name] NVARCHAR(255) NOT NULL,
+	[Symbol] NVARCHAR(4) NOT NULL,
+	[MeasurementUnit] NVARCHAR(20) NOT NULL,
+	[UnitRate] DECIMAL(18,2) NOT NULL,
+	[CurrencyCode] NVARCHAR(3) NOT NULL,
+	CONSTRAINT [PK_Nutrients] PRIMARY KEY ([ID])	
+)

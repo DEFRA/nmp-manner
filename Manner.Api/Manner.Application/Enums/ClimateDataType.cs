@@ -1,7 +1,7 @@
 ﻿namespace Manner.Application.Enums;
 public partial class Enumerations
 {
-    public enum ClimateDataType : int
+    public enum ClimateDataType
     {
         Rainfall = 1,
         ActualEvapotranspiration = 2,

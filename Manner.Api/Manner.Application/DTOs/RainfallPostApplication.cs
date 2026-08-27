@@ -1,5 +1,4 @@
 ﻿namespace Manner.Application.DTOs;
-
 public class Rainfall
 {
     public Rainfall()

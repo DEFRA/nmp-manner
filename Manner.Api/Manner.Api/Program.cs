@@ -4,12 +4,9 @@ using Manner.Api.Helpers;
 using Manner.Api.Security;
 using Manner.Api.Validations;
 using Manner.Infrastructure.Configuration;
-using Manner.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 

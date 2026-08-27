@@ -18,13 +18,13 @@ public class ManureGroupService(ILogger<ManureGroupService> logger, IManureGroup
 
     public async Task<IEnumerable<ManureGroupDto>?> FetchAllAsync()
     {
-        _logger.LogTrace($"ManureGroupService : FetchAllAsync() callled");
+        _logger.LogTrace("ManureGroupService : FetchAllAsync() callled");
         return _mapper.Map<IEnumerable<ManureGroupDto>>(await _manureGroupRepository.FetchAllAsync());
     }
 
     public async Task<ManureGroupDto?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"ManureGroupService : FetchByIdAsync({id}) callled");
+        _logger.LogTrace("ManureGroupService : FetchByIdAsync({Id}) callled", id);
         return _mapper.Map<ManureGroupDto>(await _manureGroupRepository.FetchByIdAsync(id));
     }
 }

@@ -11,119 +11,225 @@ using System.Runtime.Intrinsics.Arm;
 
 namespace Manner.Application.Services;
 [Service(ServiceLifetime.Transient)]
+#pragma warning disable S107
 public class CalculateResultService(
     ILogger<CalculateResultService> logger,
     IClimateRepository climateRepository,
     ICropTypeRepository cropTypeRepository,
     IManureTypeRepository manureTypeRepository,
     IMapper mapper,
-    IIncorporationMethodRepository incorporationMethodRepository,
     IIncorporationDelayRepository incorporationDelayRepository,
     ITopSoilRepository topSoilRepository,
     ISubSoilRepository subSoilRepository,
     IClimateTypeRepository climateTypeRepository) : ICalculateResultService
-{    
+#pragma warning restore S107
+{
     private readonly IClimateRepository _climateRepository = climateRepository;
     private readonly ICropTypeRepository _cropTypeRepository = cropTypeRepository;
     private readonly IManureTypeRepository _manureTypeRepository = manureTypeRepository;
     private readonly IMapper _mapper = mapper;
-    private readonly IIncorporationMethodRepository _incorporationMethodRepository = incorporationMethodRepository;
     private readonly IIncorporationDelayRepository _incorporationDelayRepository = incorporationDelayRepository;
     private readonly ITopSoilRepository _topSoilRepository = topSoilRepository;
     private readonly ISubSoilRepository _subSoilRepository = subSoilRepository;
     private readonly IClimateTypeRepository _climateTypeRepository = climateTypeRepository;
     private readonly ILogger<CalculateResultService> _logger = logger;
 
+
+
     public async Task<NutrientsResponse> CalculateNutrientsAsync(CalculateNutrientsRequest calculateNutrientsRequest)
     {
-        _logger.LogTrace($"CalculateResultService : CalculateNutrientsAsync() callled");
-        NutrientsResponse ret = new NutrientsResponse();
-        ret.FieldID = calculateNutrientsRequest.Field.FieldID;
-        ret.FieldName = calculateNutrientsRequest.Field.FieldName;
+        _logger.LogTrace("CalculateResultService : CalculateNutrientsAsync() called");
 
-        Outputs outputs = new Outputs();
-
-        ClimateDto climate = _mapper.Map<ClimateDto>(await _climateRepository.FetchByPostcodeAsync(calculateNutrientsRequest.Postcode));
-
-        CropTypeDto cropType = _mapper.Map<CropTypeDto>(await _cropTypeRepository.FetchByIdAsync(calculateNutrientsRequest.Field.CropTypeID));
-       
-        TopSoilDto topSoil = _mapper.Map<TopSoilDto>(await _topSoilRepository.FetchByIdAsync(calculateNutrientsRequest.Field.TopsoilID));
-        SubSoilDto subSoil = _mapper.Map<SubSoilDto>(await _subSoilRepository.FetchByIdAsync(calculateNutrientsRequest.Field.SubsoilID));
-        List<ClimateTypeDto> climateTypes = _mapper.Map<List<ClimateTypeDto>>(await _climateTypeRepository.FetchAllAsync());
-
-        int runType = calculateNutrientsRequest.RunType;
+        var context = await LoadCalculationContextAsync(calculateNutrientsRequest);
+        var totalOutputs = new Outputs();
 
         foreach (var application in calculateNutrientsRequest.ManureApplications)
-        {            
-            IncorporationDelayDto? incorporationDelay = _mapper.Map<IncorporationDelayDto>(await _incorporationDelayRepository.FetchByIdAsync(application.IncorporationDelayID));
-            ManureTypeDto manureType = _mapper.Map<ManureTypeDto>(await _manureTypeRepository.FetchByIdAsync(application.ManureDetails.ManureID));
-            manureType.TotalN = application.ManureDetails.TotalN ?? manureType.TotalN;
-            manureType.NH4N = application.ManureDetails.NH4N ?? manureType.NH4N;
-            manureType.DryMatter = application.ManureDetails.DryMatter ?? manureType.DryMatter;
-            manureType.Uric = application.ManureDetails.Uric ?? manureType.Uric;
-            manureType.NO3N = application.ManureDetails.NO3N ?? manureType.NO3N;
-            manureType.P2O5 = application.ManureDetails.P2O5 ?? manureType.P2O5;
-            manureType.K2O = application.ManureDetails.K2O ?? manureType.K2O;
-            manureType.SO3 = application.ManureDetails.SO3 ?? manureType.SO3;
-            manureType.MgO = application.ManureDetails.MgO ?? manureType.MgO;
-            
-            MannerCalculator calculator = new MannerCalculator(calculateNutrientsRequest.Field, climate, cropType, application, manureType, incorporationDelay, topSoil, subSoil, climateTypes, runType);
-            calculator.Calculate();
+        {
+            var calculator = await ExecuteCalculationAsync(calculateNutrientsRequest, application, context);
+            var applicationOutputs = CreateOutputs(calculator);
 
-            outputs.TotalNitrogenApplied += Math.Round(calculator.MannerEngine.TotalNitrogenApplied,0);
-            outputs.PotentialCropAvailableN += Math.Round(calculator.MannerEngine.PotentialCropAvailableN,0);
-            outputs.NH3NLoss += Math.Round(calculator.MannerEngine.NH3NLoss,0);
-            outputs.N2ONLoss += Math.Round(calculator.MannerEngine.N2ONLoss,0);
-            outputs.N2NLoss += Math.Round(calculator.MannerEngine.N2NLoss,0);
-            outputs.NO3NLoss += Math.Round(calculator.MannerEngine.NO3NLoss,0);
-            outputs.MineralisedN += Math.Round(calculator.MannerEngine.MineralisedN,0);
-            outputs.PotentialEconomicValue += Math.Round(calculator.MannerEngine.PotentialEconomicValue,0);
-            outputs.P2O5CropAvailable += Math.Round(calculator.MannerEngine.P2O5CropAvailable,0);
-            outputs.P2O5Total += Math.Round(calculator.MannerEngine.P2O5Total,0);
-            outputs.K2OCropAvailable += Math.Round(calculator.MannerEngine.K2OCropAvailable,0);
-            outputs.K2OTotal += Math.Round(calculator.MannerEngine.K2OTotal,0);
-            if (calculator.MannerEngine.SO3Total.HasValue)
-            {
-                var rounded = Math.Round(calculator.MannerEngine.SO3Total.Value, 0);
-                outputs.SO3Total = (outputs.SO3Total ?? 0) + rounded;
-            }
-            
-            if ( calculator.MannerEngine.SO3CropAvailable.HasValue)
-            {
-                var rounded = Math.Round(calculator.MannerEngine.SO3CropAvailable.Value, 0);
-                outputs.SO3CropAvailable = (outputs.SO3CropAvailable ?? 0) + rounded;                
-            }
-             
-            if (calculator.MannerEngine.MgOTotal.HasValue)
-            {
-                var rounded = Math.Round(calculator.MannerEngine.MgOTotal.Value, 0);
-                outputs.MgOTotal = (outputs.MgOTotal ?? 0) + rounded;                
-            }
-            
-            outputs.ResultantNAvailable += Math.Round(calculator.MannerEngine.ResultantNAvailable, 0);
-            outputs.ResultantNAvailableSecondCut += Math.Round(calculator.MannerEngine.ResultantNAvailableSecondCut, 0);
-            outputs.ResultantNAvailableYear2 += Math.Round(calculator.MannerEngine.ResultantNAvailableYear2, 0);
-            outputs.CropUptake += Math.Round(calculator.MannerEngine.CropUptake, 0);
+            AccumulateOutputs(totalOutputs, applicationOutputs);
         }
-        ret.TotalN = Convert.ToInt32(Math.Round(outputs.TotalNitrogenApplied,0));
-        ret.MineralisedN = Convert.ToInt32(Math.Round(outputs.MineralisedN,0));
-        ret.NitrateNLoss = Convert.ToInt32(Math.Round(outputs.NO3NLoss, 0));
-        ret.AmmoniaNLoss = Convert.ToInt32(Math.Round(outputs.NH3NLoss, 0));
-        ret.DenitrifiedNLoss = Convert.ToInt32(outputs.N2ONLoss + outputs.N2NLoss);
-        ret.CurrentCropAvailableN = Convert.ToInt32(Math.Round(outputs.ResultantNAvailable, 0));
-        ret.NextGrassNCropCurrentYear = Convert.ToInt32(Math.Round(outputs.ResultantNAvailableSecondCut, 0));
-        ret.FollowingCropYear2AvailableN = Convert.ToInt32(Math.Round(outputs.ResultantNAvailableYear2,0));
-        ret.NitrogenEfficiencePercentage = outputs.TotalNitrogenApplied == 0? 0: Convert.ToInt32(Math.Round((outputs.ResultantNAvailable + outputs.ResultantNAvailableSecondCut) * 100 / outputs.TotalNitrogenApplied, 0));
-        ret.TotalP2O5 = Convert.ToInt32(Math.Round(outputs.P2O5Total, 0));
-        ret.CropAvailableP2O5 = Convert.ToInt32(Math.Round(outputs.P2O5CropAvailable, 0));
-        ret.TotalK2O= Convert.ToInt32(Math.Round(outputs.K2OTotal, 0));
-        ret.CropAvailableK2O = Convert.ToInt32(Math.Round(outputs.K2OCropAvailable, 0));
-        ret.TotalSO3= Convert.ToInt32(outputs?.SO3Total);
-        ret.CropAvailableSO3 = outputs?.SO3CropAvailable == null? null : Convert.ToInt32(outputs?.SO3CropAvailable);
-        ret.TotalMgO= Convert.ToInt32(outputs?.MgOTotal);
 
-        return ret;
+        return CreateResponse(totalOutputs, calculateNutrientsRequest);
     }
 
+    private static void AccumulateOutputs(Outputs total, Outputs current)
+    {
+        total.TotalNitrogenApplied += current.TotalNitrogenApplied;
+        total.PotentialCropAvailableN += current.PotentialCropAvailableN;
+        total.NH3NLoss += current.NH3NLoss;
+        total.N2ONLoss += current.N2ONLoss;
+        total.N2NLoss += current.N2NLoss;
+        total.NO3NLoss += current.NO3NLoss;
+        total.DenitrifiedNLoss += current.DenitrifiedNLoss;
+        total.MineralisedN += current.MineralisedN;
+        total.PotentialEconomicValue += current.PotentialEconomicValue;
+        total.P2O5CropAvailable += current.P2O5CropAvailable;
+        total.P2O5Total += current.P2O5Total;
+        total.K2OCropAvailable += current.K2OCropAvailable;
+        total.K2OTotal += current.K2OTotal;
 
+        if (current.SO3Total.HasValue)
+        {
+            total.SO3Total = (total.SO3Total ?? 0) + current.SO3Total.Value;
+        }
+
+        if (current.SO3CropAvailable.HasValue)
+        {
+            total.SO3CropAvailable = (total.SO3CropAvailable ?? 0) + current.SO3CropAvailable.Value;
+        }
+
+        if (current.MgOTotal.HasValue)
+        {
+            total.MgOTotal = (total.MgOTotal ?? 0) + current.MgOTotal.Value;
+        }
+
+        total.ResultantNAvailable += current.ResultantNAvailable;
+        total.ResultantNAvailableSecondCut += current.ResultantNAvailableSecondCut;
+        total.ResultantNAvailableYear2 += current.ResultantNAvailableYear2;
+        total.CropUptake += current.CropUptake;
+    }
+    
+    private async Task<CalculationContext> LoadCalculationContextAsync(CalculateNutrientsRequest calculateNutrientsRequest)
+    {
+        return new CalculationContext
+        {
+            Climate = _mapper.Map<ClimateDto>(await _climateRepository.FetchByPostcodeAsync(calculateNutrientsRequest.Postcode)),
+            CropType = _mapper.Map<CropTypeDto>(await _cropTypeRepository.FetchByIdAsync(calculateNutrientsRequest.Field.CropTypeID)),
+            TopSoil = _mapper.Map<TopSoilDto>(await _topSoilRepository.FetchByIdAsync(calculateNutrientsRequest.Field.TopsoilID)),
+            SubSoil = _mapper.Map<SubSoilDto>(await _subSoilRepository.FetchByIdAsync(calculateNutrientsRequest.Field.SubsoilID)),
+            ClimateTypes = _mapper.Map<List<ClimateTypeDto>>(await _climateTypeRepository.FetchAllAsync()),
+            RunType = calculateNutrientsRequest.RunType
+        };
+    }
+
+    private async Task<ManureTypeDto> BuildManureTypeAsync(ManureApplication application)
+    {
+        var manure = _mapper.Map<ManureTypeDto>(await _manureTypeRepository.FetchByIdAsync(application.ManureDetails.ManureID));
+
+        manure.TotalN = application.ManureDetails.TotalN ?? manure.TotalN;
+        manure.NH4N = application.ManureDetails.NH4N ?? manure.NH4N;
+        manure.DryMatter = application.ManureDetails.DryMatter ?? manure.DryMatter;
+        manure.Uric = application.ManureDetails.Uric ?? manure.Uric;
+        manure.NO3N = application.ManureDetails.NO3N ?? manure.NO3N;
+        manure.P2O5 = application.ManureDetails.P2O5 ?? manure.P2O5;
+        manure.K2O = application.ManureDetails.K2O ?? manure.K2O;
+        manure.SO3 = application.ManureDetails.SO3 ?? manure.SO3;
+        manure.MgO = application.ManureDetails.MgO ?? manure.MgO;
+
+        return manure;
+    }
+
+    private async Task<MannerCalculator> ExecuteCalculationAsync( CalculateNutrientsRequest calculateNutrientsRequest, ManureApplication application, CalculationContext context)
+    {
+        var incorporationDelay = _mapper.Map<IncorporationDelayDto>(await _incorporationDelayRepository.FetchByIdAsync(application.IncorporationDelayID));
+
+        var manureType = await BuildManureTypeAsync(application);
+
+        var calculator = new MannerCalculator(new MannerCalculatorInput
+        {
+            Field = calculateNutrientsRequest.Field,
+            Climate = context.Climate,
+            CropType = context.CropType,
+            ManureApplication = application,
+            ManureType = manureType,
+            IncorporationDelay = incorporationDelay,
+            TopSoil = context.TopSoil,
+            SubSoil = context.SubSoil,
+            ClimateTypes = context.ClimateTypes,
+            RunType = context.RunType
+        });
+
+        calculator.Calculate();
+
+        return calculator;
+    }
+
+    private Outputs CreateOutputs(MannerCalculator calculator)
+    {
+        return new Outputs
+        {
+            TotalNitrogenApplied = calculator.MannerEngine.TotalNitrogenApplied,
+            PotentialCropAvailableN = calculator.MannerEngine.PotentialCropAvailableN,
+            NH3NLoss = calculator.MannerEngine.NH3NLoss,
+            N2ONLoss = calculator.MannerEngine.N2ONLoss,
+            N2NLoss = calculator.MannerEngine.N2NLoss,
+            NO3NLoss = calculator.MannerEngine.NO3NLoss,
+            DenitrifiedNLoss = calculator.MannerEngine.N2ONLoss + calculator.MannerEngine.N2NLoss,
+            MineralisedN = calculator.MannerEngine.MineralisedN,
+            PotentialEconomicValue = calculator.MannerEngine.PotentialEconomicValue,
+            P2O5CropAvailable = calculator.MannerEngine.P2O5CropAvailable,
+            P2O5Total = calculator.MannerEngine.P2O5Total,
+            K2OCropAvailable = calculator.MannerEngine.K2OCropAvailable,
+            K2OTotal = calculator.MannerEngine.K2OTotal,
+            SO3Total = calculator.MannerEngine.SO3Total is null
+                ? null
+                : calculator.MannerEngine.SO3Total.Value,
+            SO3CropAvailable = calculator.MannerEngine.SO3CropAvailable is null
+                ? null
+                : calculator.MannerEngine.SO3CropAvailable.Value,
+            MgOTotal = calculator.MannerEngine.MgOTotal is null
+                ? null
+                : calculator.MannerEngine.MgOTotal.Value,
+            ResultantNAvailable = calculator.MannerEngine.ResultantNAvailable,
+            ResultantNAvailableSecondCut = calculator.MannerEngine.ResultantNAvailableSecondCut,
+            ResultantNAvailableYear2 = calculator.MannerEngine.ResultantNAvailableYear2,
+            CropUptake = calculator.MannerEngine.CropUptake
+        };
+    }
+
+    private NutrientsResponse CreateResponse(Outputs output, CalculateNutrientsRequest request)
+    {
+        return new NutrientsResponse
+        {
+            FieldID = request.Field.FieldID,
+            FieldName = request.Field.FieldName,
+            TotalN = (int)Math.Round(output.TotalNitrogenApplied),
+            MineralisedN = (int)Math.Round(output.MineralisedN),
+            NitrateNLoss = (int)Math.Round(output.NO3NLoss),
+            AmmoniaNLoss = (int)Math.Round(output.NH3NLoss),
+            DenitrifiedNLoss = (int)Math.Round(output.DenitrifiedNLoss),
+            CurrentCropAvailableN = (int)Math.Round(output.ResultantNAvailable),
+            NextGrassNCropCurrentYear = (int)Math.Round(output.ResultantNAvailableSecondCut),
+            FollowingCropYear2AvailableN = (int)Math.Round(output.ResultantNAvailableYear2),
+            NitrogenEfficiencePercentage = CalculateNitrogenEfficiency(output, request.Field.CropTypeID == 1),
+            TotalP2O5 = (int)Math.Round(output.P2O5Total),
+            CropAvailableP2O5 = (int)Math.Round(output.P2O5CropAvailable),
+            TotalK2O = (int)Math.Round(output.K2OTotal),
+            CropAvailableK2O = (int)Math.Round(output.K2OCropAvailable),
+            TotalSO3 = output.SO3Total.HasValue ? (int)Math.Round(output.SO3Total.Value) : 0,
+            CropAvailableSO3 = output.SO3CropAvailable.HasValue ? (int)Math.Round(output.SO3CropAvailable.Value) : null,
+            TotalMgO = output.MgOTotal.HasValue ? (int)Math.Round(output.MgOTotal.Value) : 0
+        };
+    }
+
+    private static int CalculateNitrogenEfficiency(Outputs output, bool isGrass)
+    {
+        if (Math.Abs(output.TotalNitrogenApplied) < 0.0001)
+            return 0;
+
+        var available = isGrass
+            ? output.ResultantNAvailable + output.ResultantNAvailableSecondCut
+            : output.ResultantNAvailable;
+
+        return (int)Math.Round(available * 100 / output.TotalNitrogenApplied);
+    }
+
+    public async Task<List<NutrientsResponse>> CalculateNutrientsIndivisualApplicationsAsync(CalculateNutrientsRequest calculateNutrientsRequest)
+    {
+        var context = await LoadCalculationContextAsync(calculateNutrientsRequest);
+        var responses = new List<NutrientsResponse>();
+
+        foreach (var application in calculateNutrientsRequest.ManureApplications)
+        {
+            var calculator = await ExecuteCalculationAsync(calculateNutrientsRequest, application, context);
+
+            var outputs = CreateOutputs(calculator);
+
+            responses.Add(CreateResponse(outputs, calculateNutrientsRequest));
+        }
+
+        return responses;
+    }    
 }

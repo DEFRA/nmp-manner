@@ -2,12 +2,10 @@
 using Manner.Application.DTOs;
 using Manner.Application.Exceptions;
 using Manner.Application.Interfaces;
-using Manner.Application.Validators;
 using Manner.Core.Attributes;
 using Manner.Core.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Manner.Application.Services;
 
@@ -20,19 +18,19 @@ public class CropTypeService(ILogger<CropTypeService> logger, ICropTypeRepositor
 
     public async Task<IEnumerable<CropTypeDto>?> FetchAllAsync()
     {
-        _logger.LogTrace($"CropTypeService : FetchAllAsync() callled");
+        _logger.LogTrace("CropTypeService : FetchAllAsync() callled");
         return _mapper.Map<IEnumerable<CropTypeDto>>(await _cropTypeRepository.FetchAllAsync());
     }
 
     public async Task<CropTypeDto?> FetchByIdAsync(int id)
     {
-        _logger.LogTrace($"CropTypeService : FetchByIdAsync({id}) callled");
+        _logger.LogTrace("CropTypeService : FetchByIdAsync({Id}) callled", id);
         return _mapper.Map<CropTypeDto>(await _cropTypeRepository.FetchByIdAsync(id));
     }
 
     public async Task<AutumnCropNitrogenUptakeResponse> FetchCropUptakeFactorDefault(AutumnCropNitrogenUptakeRequest autumnCropNitrogenUptakeRequest)
     {
-        _logger.LogTrace($"CropTypeService : FetchCropUptakeFactorDefault({autumnCropNitrogenUptakeRequest.CropTypeId},{autumnCropNitrogenUptakeRequest.ApplicationMonth} ) callled");
+        _logger.LogTrace("CropTypeService : FetchCropUptakeFactorDefault({CropTypeId},{ApplicationMonth} ) callled", autumnCropNitrogenUptakeRequest.CropTypeId, autumnCropNitrogenUptakeRequest.ApplicationMonth);
         AutumnCropNitrogenUptakeResponse ret = new();
         ret.CropTypeId = autumnCropNitrogenUptakeRequest.CropTypeId;
         ret.CropType = "Others";

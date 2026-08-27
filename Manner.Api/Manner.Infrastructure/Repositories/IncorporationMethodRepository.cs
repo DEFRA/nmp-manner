@@ -5,9 +5,6 @@ using Manner.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Manner.Infrastructure.Repositories
 {
@@ -18,67 +15,75 @@ namespace Manner.Infrastructure.Repositories
         private readonly ILogger<IncorporationMethodRepository> _logger = logger;
         public async Task<IEnumerable<IncorporationMethod>?> FetchAllAsync()
         {
-            _logger.LogTrace($"IncorporationMethodRepository : FetchAllAsync() callled");
+            _logger.LogTrace("IncorporationMethodRepository : FetchAllAsync() callled");
             return await _context.IncorporationMethods.ToListAsync();
         }
 
         public async Task<IncorporationMethod?> FetchByIdAsync(int id)
         {
-            _logger.LogTrace($"IncorporationMethodRepository : FetchByIdAsync({id}) callled");
+            _logger.LogTrace("IncorporationMethodRepository : FetchByIdAsync({Id}) callled", id);
             return await _context.IncorporationMethods.FirstOrDefaultAsync(a => a.ID == id);
         }
 
         public async Task<IEnumerable<IncorporationMethod>?> FetchByAppMethodIdAsync(int methodId)
         {
-            _logger.LogTrace($"IncorporationMethodRepository : FetchByAppMethodIdAsync({methodId}) callled");
+            _logger.LogTrace("IncorporationMethodRepository : FetchByAppMethodIdAsync({MethodId}) callled", methodId);
             return await _context.IncorporationMethods
                 .Where(im => _context.Set<ApplicationMethodsIncorpMethods>()
                     .Any(link => link.ApplicationMethodID == methodId && link.IncorporationMethodID == im.ID))
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<IncorporationMethod>?> FetchByAppMethodIdAndApploicableForAsync(int methodId, string applicableFor)
+        public async Task<IEnumerable<IncorporationMethod>?> FetchByAppMethodIdAndApplicableForAsync(int methodId, string applicableFor)
         {
-            _logger.LogTrace($"IncorporationMethodRepository : FetchByAppMethodIdAndApploicableForAsync({methodId},{applicableFor}) callled");
+            _logger.LogTrace("IncorporationMethodRepository : FetchByAppMethodIdAndApplicableForAsync({MethodId},{ApplicableFor}) callled", methodId, applicableFor);
+            IQueryable<IncorporationMethod> baseQuery = GetByApplicationMethodQuery(methodId);
+
             if (string.IsNullOrWhiteSpace(applicableFor))
             {
-                return await _context.IncorporationMethods
-               .Where(im => _context.Set<ApplicationMethodsIncorpMethods>()
-                   .Any(link => link.ApplicationMethodID == methodId && link.IncorporationMethodID == im.ID))
-               .ToListAsync();
+                return await baseQuery.ToListAsync();
             }
-            else if (applicableFor.ToLower() == "null")
+
+            string normalizedApplicableFor = applicableFor.Trim();
+            if (normalizedApplicableFor.Equals("null", StringComparison.OrdinalIgnoreCase))
             {
-                return await _context.IncorporationMethods
-               .Where(im => _context.Set<ApplicationMethodsIncorpMethods>().Any(link => link.ApplicationMethodID == methodId && link.IncorporationMethodID == im.ID) 
-                            && (im.ApplicableForGrass == null || im.ApplicableForArableAndHorticulture == null))
-               .ToListAsync();
+                return await ApplyNullApplicableForFilter(baseQuery).ToListAsync();
             }
-            else if(applicableFor == "G")
+
+            return normalizedApplicableFor switch
             {
-                return await _context.IncorporationMethods
-               .Where(im => _context.Set<ApplicationMethodsIncorpMethods>()
-                   .Any(link => link.ApplicationMethodID == methodId && link.IncorporationMethodID == im.ID) && (im.ApplicableForGrass == applicableFor || im.ApplicableForGrass == "B"))
-               .ToListAsync();
-            }
-            else if (applicableFor =="A")
-            {
-                return await _context.IncorporationMethods
-               .Where(im => _context.Set<ApplicationMethodsIncorpMethods>()
-                   .Any(link => link.ApplicationMethodID == methodId && link.IncorporationMethodID == im.ID) && (im.ApplicableForArableAndHorticulture == applicableFor || im.ApplicableForArableAndHorticulture == "B"))
-               .ToListAsync();
-            }
-            else if (applicableFor == "B")
-            {
-                return await _context.IncorporationMethods
-               .Where(im => _context.Set<ApplicationMethodsIncorpMethods>()
-                   .Any(link => link.ApplicationMethodID == methodId && link.IncorporationMethodID == im.ID) && (im.ApplicableForGrass == applicableFor || im.ApplicableForArableAndHorticulture == applicableFor))
-               .ToListAsync();
-            }
-            else
-            {
-                return null;
-            }
+                "G" => await ApplyGrassFilter(baseQuery).ToListAsync(),
+                "A" => await ApplyArableFilter(baseQuery).ToListAsync(),
+                "B" => await ApplyBothFilter(baseQuery).ToListAsync(),
+                _ => null
+            };
+        }
+
+        private IQueryable<IncorporationMethod> GetByApplicationMethodQuery(int methodId)
+        {
+            return _context.IncorporationMethods
+                .Where(im => _context.Set<ApplicationMethodsIncorpMethods>()
+                    .Any(link => link.ApplicationMethodID == methodId && link.IncorporationMethodID == im.ID));
+        }
+
+        private static IQueryable<IncorporationMethod> ApplyNullApplicableForFilter(IQueryable<IncorporationMethod> query)
+        {
+            return query.Where(im => im.ApplicableForGrass == null || im.ApplicableForArableAndHorticulture == null);
+        }
+
+        private static IQueryable<IncorporationMethod> ApplyGrassFilter(IQueryable<IncorporationMethod> query)
+        {
+            return query.Where(im => im.ApplicableForGrass == "G" || im.ApplicableForGrass == "B");
+        }
+
+        private static IQueryable<IncorporationMethod> ApplyArableFilter(IQueryable<IncorporationMethod> query)
+        {
+            return query.Where(im => im.ApplicableForArableAndHorticulture == "A" || im.ApplicableForArableAndHorticulture == "B");
+        }
+
+        private static IQueryable<IncorporationMethod> ApplyBothFilter(IQueryable<IncorporationMethod> query)
+        {
+            return query.Where(im => im.ApplicableForGrass == "B" || im.ApplicableForArableAndHorticulture == "B");
         }
     }
 }
