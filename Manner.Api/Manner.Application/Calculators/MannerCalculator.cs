@@ -44,49 +44,35 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         string cropUse = _cropType?.Use ?? string.Empty;
         if (_manureType != null)
         {
-            this.CalculateNutrientsOutputsValues();
+                this.CalculateNutrientsOutputsValues();
 
-            // Available N
-            // --------------------------------------------------------------
-            double calculatedTotalN = (double)(_manureApplication.ApplicationRate.Value * _manureType.TotalN);
-            // Readily Available N applied (NH4-N and uric acid N)
-            // --------------------------------------------------------------
-            // 18 Jan 2013 - Lizzie says "CalcPot = AppRate * (TotalAmmN + TotalUricN + TotalNitrateN)"
-            double calculatedPotentialN = Convert.ToDouble(_manureApplication.ApplicationRate.Value * (_manureType.NH4N + _manureType.Uric + _manureType.NO3N));
+                // Available N and emissions - extracted into small pure helpers to reduce duplication
+                var available = CalculateAvailableN(_manureApplication.ApplicationRate.Value, _manureType);
+                var emissions = CalculateEmissions(available, cropUse, incorporationCumulativeHours);
 
-            double potentialNAvailable = (double)(_manureApplication.ApplicationRate.Value * (_manureType.NH4N + _manureType.Uric));
+                double calculatedTotalN = available.CalculatedTotalN;
+                double calculatedPotentialN = available.CalculatedPotentialN;
 
-            // Volatilised N
-            // --------------------------------------------------------------
-            double calculatedVolatilisedN = this.CalculateAmmoniaVolatilisation(potentialNAvailable, cropUse, incorporationCumulativeHours);
+                double calculatedVolatilisedN = emissions.VolatilisedN;
+                double calculatedN2O = emissions.CalculatedN2O;
+                double calculatedN2 = emissions.CalculatedN2;
 
-            // N2O Emission
-            // --------------------------------------------------------------
-            // N2O Emission is 1.74% of applied readily available N remaining following volatilisation
-            double n2oEmission = calculatedTotalN - calculatedVolatilisedN;
-            double calculatedN2O = this.CalculateN2OEmission(n2oEmission);
+                // Autumn Crop Uptake - crop N value in kg/ha which is subtracted before mineralisation and leaching
+                // Total nitrate N added here following conversation with F.Nicholson on 30/08/2006
+                mineralN2 = calculatedPotentialN - calculatedVolatilisedN - calculatedN2 - calculatedN2O;
+                if (mineralN2 < 0d)
+                    mineralN2 = 0d;
 
-            // N2 Emission
-            // --------------------------------------------------------------
-            double calculatedN2 = this.CalculateN2Emission(calculatedN2O);
+                double calculatedcropUptakeFactor = this.CalculateCropUptakeFactor(mineralN2, _manureApplication.ApplicationDate.Month);
 
-            // Autumn Crop Uptake - crop N value in kg/ha which is subtracted before mineralisation and leaching
-            // --------------------------------------------------------------
-            // Total nitrate N added here following conversation with F.Nicholson on 30/08/2006
-            mineralN2 = calculatedPotentialN - calculatedVolatilisedN - calculatedN2 - calculatedN2O;
-            if (mineralN2 < 0d)
-                mineralN2 = 0d;
-
-            double calculatedcropUptakeFactor = this.CalculateCropUptakeFactor(mineralN2, _manureApplication.ApplicationDate.Month);
-
-            if (mineralN2 < calculatedcropUptakeFactor)
-            {
-                mineralN3 = 0d;
-            }
-            else
-            {
-                mineralN3 = mineralN2 - calculatedcropUptakeFactor;
-            }
+                if (mineralN2 < calculatedcropUptakeFactor)
+                {
+                    mineralN3 = 0d;
+                }
+                else
+                {
+                    mineralN3 = mineralN2 - calculatedcropUptakeFactor;
+                }
 
             // Mineralised N
             // --------------------------------------------------------------
@@ -483,6 +469,35 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         var climateType = _climateTypes.FirstOrDefault(c => c.MonthNumber == month);
         iHer = Convert.ToDouble(climateType?.HER ?? 0m);
         return iHer;
+    }
+
+    private sealed record AvailableNResult(
+        double CalculatedTotalN,
+        double CalculatedPotentialN,
+        double PotentialNAvailable);
+
+    private sealed record EmissionResult(
+        double VolatilisedN,
+        double CalculatedN2O,
+        double CalculatedN2);
+
+    private static AvailableNResult CalculateAvailableN(decimal applicationRate, ManureTypeDto manureType)
+    {
+        // Readily available and total N calculations
+        double calculatedTotalN = Convert.ToDouble(applicationRate * manureType.TotalN);
+        double calculatedPotentialN = Convert.ToDouble(applicationRate * (manureType.NH4N + manureType.Uric + manureType.NO3N));
+        double potentialNAvailable = Convert.ToDouble(applicationRate * (manureType.NH4N + manureType.Uric));
+        return new AvailableNResult(calculatedTotalN, calculatedPotentialN, potentialNAvailable);
+    }
+
+    private EmissionResult CalculateEmissions(AvailableNResult available, string cropUse, int incorporationCumulativeHours)
+    {
+        double volatilised = CalculateAmmoniaVolatilisation(available.PotentialNAvailable, cropUse, incorporationCumulativeHours);
+        // N2O Emission base is remaining readily available N following volatilisation
+        double n2oEmission = available.CalculatedTotalN - volatilised;
+        double calculatedN2O = CalculateN2OEmission(n2oEmission);
+        double calculatedN2 = CalculateN2Emission(calculatedN2O);
+        return new EmissionResult(volatilised, calculatedN2O, calculatedN2);
     }
 
     private sealed record FinalResultsInput(
