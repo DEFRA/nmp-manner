@@ -1518,6 +1518,10 @@ public partial class Enumerations
             case ManureTypes.DigestateWholeCattleSlurryBased:
                 {
                     return "Digestate (whole), cattle slurry-based";
+                }            
+            case ManureTypes.LayerManure:
+                {
+                    return "Layer manure";
                 }
             default:
                 {
@@ -1728,6 +1732,10 @@ public partial class Enumerations
             case "Digestate (whole), cattle slurry-based":
                 {
                     return ManureTypes.DigestateWholeCattleSlurryBased;
+                }
+            case "Layer manure":
+                {
+                    return ManureTypes.LayerManure; // Newly added
                 }
 
             default:

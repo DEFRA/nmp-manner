@@ -89,6 +89,11 @@ namespace Manner.Application.Services
                         manureNutrientsDto.TotalN = (0.44m * manureNutrientsDto.DryMatter) + 3.6m;
                     }
                     break;
+                case (int)ManureTypes.LayerManure:
+                    {
+                        manureNutrientsDto.TotalN = (0.46m * manureNutrientsDto.DryMatter) + 0.2m;
+                    }
+                    break;
                 default:
                     break;
             }
@@ -106,6 +111,11 @@ namespace Manner.Application.Services
                 case (int)ManureTypes.BroilerTurkeyLitter:
                     {
                         manureNutrientsDto.Uric = ((manureNutrientsDto.TotalN * 0.35m) - 0.2m) * 0.4m;
+                    }
+                    break;
+                case (int)ManureTypes.LayerManure:
+                    {
+                        manureNutrientsDto.Uric = ((0.08m * manureNutrientsDto.DryMatter) + 4.54m - 0.2m) * 0.55m;
                     }
                     break;
                 default:
@@ -139,6 +149,11 @@ namespace Manner.Application.Services
                         manureNutrientsDto.NH4N = ((manureNutrientsDto.TotalN * 0.35m) - 0.2m) * 0.6m;
                     }
                     break;
+                case (int)ManureTypes.LayerManure:
+                    {
+                        manureNutrientsDto.NH4N = ((0.08m * manureNutrientsDto.DryMatter) + 4.54m - 0.2m) * 0.45m;
+                    }
+                    break;
                 default:
                     break;
             }
@@ -168,6 +183,11 @@ namespace Manner.Application.Services
                 case (int)ManureTypes.BroilerTurkeyLitter:
                     {
                         manureNutrientsDto.P2O5 = (0.37m * manureNutrientsDto.DryMatter) + 2.8m;
+                    }
+                    break;
+                case (int)ManureTypes.LayerManure:
+                    {
+                        manureNutrientsDto.P2O5 = (0.22m * manureNutrientsDto.DryMatter) + 3.62m; // Was 0.33 * manureNutrientsDto.DryMatter + 2.45
                     }
                     break;
                 default:
@@ -203,6 +223,11 @@ namespace Manner.Application.Services
                         manureNutrientsDto.K2O = (0.19m * manureNutrientsDto.DryMatter) + 6.6m;
                     }
                     break;
+                case (int)ManureTypes.LayerManure:
+                    {
+                        manureNutrientsDto.K2O = (0.3m * manureNutrientsDto.DryMatter) + 2.48m;
+                    }
+                    break;
                 default:
                     break;
             }
@@ -234,6 +259,11 @@ namespace Manner.Application.Services
                         manureNutrientsDto.SO3 = (0.14m * manureNutrientsDto.DryMatter) - 0.4m;
                     }
                     break;
+                case (int)ManureTypes.LayerManure:
+                    {
+                        manureNutrientsDto.SO3 = (0.13m * manureNutrientsDto.DryMatter) + 0.39m;
+                    }
+                    break;
                 default:
                     break;
             }
@@ -263,6 +293,11 @@ namespace Manner.Application.Services
                 case (int)ManureTypes.BroilerTurkeyLitter:
                     {
                         manureNutrientsDto.MgO = (0.06m * manureNutrientsDto.DryMatter) + 0.8m;
+                    }
+                    break;
+                case (int)ManureTypes.LayerManure:
+                    {
+                        manureNutrientsDto.MgO = (0.08m * manureNutrientsDto.DryMatter) + 1.1m;
                     }
                     break;
                 default:

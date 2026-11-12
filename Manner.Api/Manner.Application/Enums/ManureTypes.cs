@@ -58,7 +58,8 @@ public partial class Enumerations
         DigestateSeparatedFibreFoodBased = 50, // New from excel
         DigestateWholeFarmSourced = 51, // New from excel
         DigestateSeparatedLiquorFarmSourced = 52, // New from excel
-        DigestateSeparatedFibreFarmSourced = 53 // New from excel
+        DigestateSeparatedFibreFarmSourced = 53, // New from excel
+        LayerManure = 54 // New from excel
     }
 
     #endregion
