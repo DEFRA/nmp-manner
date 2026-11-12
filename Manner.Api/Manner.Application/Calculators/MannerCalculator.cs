@@ -1709,7 +1709,7 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
     {
         // EG Modification required to multiply mineralisation by 2 for poultry only.
         // some biosolids as set as manure category as poultry but these don't need the factor applied.
-        if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.BroilerTurkeyLitter || _manureType.ID == (int)Enums.Enumerations.ManureTypes.PoultryManure)
+        if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.BroilerTurkeyLitter || _manureType.ID == (int)Enums.Enumerations.ManureTypes.PoultryManure || _manureType.ID == (int)Enums.Enumerations.ManureTypes.LayerManure)
         {
             return 2d;
         }

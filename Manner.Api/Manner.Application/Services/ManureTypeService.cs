@@ -80,6 +80,7 @@ namespace Manner.Application.Services
                     }
                     break;
                 case (int)ManureTypes.PoultryManure:
+                case (int)ManureTypes.LayerManure:
                     {
                         manureNutrientsDto.TotalN = (0.46m * manureNutrientsDto.DryMatter) + 0.2m;
                     }
@@ -88,7 +89,7 @@ namespace Manner.Application.Services
                     {
                         manureNutrientsDto.TotalN = (0.44m * manureNutrientsDto.DryMatter) + 3.6m;
                     }
-                    break;
+                    break;               
                 default:
                     break;
             }
@@ -99,6 +100,7 @@ namespace Manner.Application.Services
             switch (manureNutrientsDto.ID)
             {
                 case (int)ManureTypes.PoultryManure:
+                case (int)ManureTypes.LayerManure:
                     {
                         manureNutrientsDto.Uric = ((0.08m * manureNutrientsDto.DryMatter) + 4.54m - 0.2m) * 0.55m;
                     }
@@ -107,7 +109,7 @@ namespace Manner.Application.Services
                     {
                         manureNutrientsDto.Uric = ((manureNutrientsDto.TotalN * 0.35m) - 0.2m) * 0.4m;
                     }
-                    break;
+                    break;                
                 default:
                     break;
             }
@@ -130,6 +132,7 @@ namespace Manner.Application.Services
                     }
                     break;
                 case (int)ManureTypes.PoultryManure:
+                case (int)ManureTypes.LayerManure:
                     {
                         manureNutrientsDto.NH4N = ((0.08m * manureNutrientsDto.DryMatter) + 4.54m - 0.2m) * 0.45m;
                     }
@@ -138,7 +141,7 @@ namespace Manner.Application.Services
                     {
                         manureNutrientsDto.NH4N = ((manureNutrientsDto.TotalN * 0.35m) - 0.2m) * 0.6m;
                     }
-                    break;
+                    break;                
                 default:
                     break;
             }
@@ -161,6 +164,7 @@ namespace Manner.Application.Services
                     }
                     break;
                 case (int)ManureTypes.PoultryManure:
+                case (int)ManureTypes.LayerManure:
                     {
                         manureNutrientsDto.P2O5 = (0.22m * manureNutrientsDto.DryMatter) + 3.62m; // Was 0.33 * manureNutrientsDto.DryMatter + 2.45
                     }
@@ -169,7 +173,7 @@ namespace Manner.Application.Services
                     {
                         manureNutrientsDto.P2O5 = (0.37m * manureNutrientsDto.DryMatter) + 2.8m;
                     }
-                    break;
+                    break;                
                 default:
 
                     break;
@@ -194,6 +198,7 @@ namespace Manner.Application.Services
                     }
                     break;
                 case (int)ManureTypes.PoultryManure:
+                case (int)ManureTypes.LayerManure:
                     {
                         manureNutrientsDto.K2O = (0.3m * manureNutrientsDto.DryMatter) + 2.48m; // Was 0.27 * manureNutrientsDto.DryMatter + 0.05
                     }
@@ -202,7 +207,7 @@ namespace Manner.Application.Services
                     {
                         manureNutrientsDto.K2O = (0.19m * manureNutrientsDto.DryMatter) + 6.6m;
                     }
-                    break;
+                    break;                
                 default:
                     break;
             }
@@ -225,6 +230,7 @@ namespace Manner.Application.Services
                     }
                     break;
                 case (int)ManureTypes.PoultryManure:
+                case (int)ManureTypes.LayerManure:
                     {
                         manureNutrientsDto.SO3 = (0.13m * manureNutrientsDto.DryMatter) + 0.39m; // Was 0.11 * manureNutrientsDto.DryMatter + 0.15
                     }
@@ -233,7 +239,7 @@ namespace Manner.Application.Services
                     {
                         manureNutrientsDto.SO3 = (0.14m * manureNutrientsDto.DryMatter) - 0.4m;
                     }
-                    break;
+                    break;               
                 default:
                     break;
             }
@@ -255,6 +261,7 @@ namespace Manner.Application.Services
                         manureNutrientsDto.MgO = (0.15m * manureNutrientsDto.DryMatter) + 0.1m;
                     }
                     break;
+                case (int)ManureTypes.LayerManure:
                 case (int)ManureTypes.PoultryManure:
                     {
                         manureNutrientsDto.MgO = (0.08m * manureNutrientsDto.DryMatter) + 1.1m;
@@ -264,7 +271,7 @@ namespace Manner.Application.Services
                     {
                         manureNutrientsDto.MgO = (0.06m * manureNutrientsDto.DryMatter) + 0.8m;
                     }
-                    break;
+                    break;                
                 default:
                     break;
             }
