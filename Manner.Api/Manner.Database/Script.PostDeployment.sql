@@ -2852,7 +2852,7 @@ BEGIN
 END
 GO
 
-IF NOT EXISTS (SELECT 1 FROM [dbo.ManureTypes] WHERE [ID] = 54)
+IF NOT EXISTS (SELECT 1 FROM [dbo].[ManureTypes] WHERE [ID] = 54)
 BEGIN
     SET IDENTITY_INSERT [dbo].[ManureTypes] ON
     INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (54, N'Layer manure', 1, 2, 2, 1, 0, CAST(35.00 AS Decimal(18, 2)), CAST(28.00 AS Decimal(18, 2)), CAST(4.00 AS Decimal(18, 2)), CAST(5.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(17.00 AS Decimal(18, 2)), CAST(21.00 AS Decimal(18, 2)), CAST(8.20 AS Decimal(18, 2)), CAST(3.90 AS Decimal(18, 2)), 60, 90, CAST(52.30 AS Decimal(18, 2)), 10, 8,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(60 AS Decimal(18, 2)),30,1, 10)
