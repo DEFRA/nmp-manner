@@ -1053,10 +1053,8 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         {
             return 0d;
         }
-
-        double dN2Emission;
-        dN2Emission = calculatedN2O * 2.9d;
-        return dN2Emission;
+                 
+        return calculatedN2O * 2.9d;
     }
 
     /// <summary>
