@@ -887,11 +887,7 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
     private bool IsCattleSluryButRemoveAdjustment()
     {
         // If the selected manure is Other Liquid Materials 
-        return _manureType.ID == (int)Enums.Enumerations.ManureTypes.OtherLiquidMaterials
-            || _manureType.ID == (int)Enums.Enumerations.ManureTypes.DistilleryPotale
-            || _manureType.ID == (int)Enums.Enumerations.ManureTypes.DistilleryEffluentSludge
-            || _manureType.ID == (int)Enums.Enumerations.ManureTypes.BreweryWashWater
-            || _manureType.ID == (int)Enums.Enumerations.ManureTypes.OtherLiquidMaterials;
+        return _manureType.ID == (int)Enums.Enumerations.ManureTypes.OtherLiquidMaterials;
     }
 
     private bool IsCattleOrLiquidSludge()
