@@ -123,12 +123,12 @@ namespace Manner.Application.Services
                 case (int)ManureTypes.DairySlurry:
                 case (int)ManureTypes.CattleSlurry:
                     {
-                        manureNutrientsDto.NH4N = ((58.5m - 2.28m * manureNutrientsDto.DryMatter) / 100m) * manureNutrientsDto.TotalN;
+                        manureNutrientsDto.NH4N = ((58.5m - (2.28m * manureNutrientsDto.DryMatter)) / 100m) * manureNutrientsDto.TotalN;
                     }
                     break;
                 case (int)ManureTypes.PigSlurry:
                     {
-                        manureNutrientsDto.NH4N = ((82m - 3.03m * manureNutrientsDto.DryMatter) / 100m) * manureNutrientsDto.TotalN;
+                        manureNutrientsDto.NH4N = ((82m - (3.03m * manureNutrientsDto.DryMatter)) / 100m) * manureNutrientsDto.TotalN;
                     }
                     break;
                 case (int)ManureTypes.PoultryManure:

@@ -528,7 +528,7 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         _outputs.P2O5CropAvailable = Convert.ToDouble(_manureType.P2O5 * _manureApplication.ApplicationRate.Value * percentageP2O5Available);
         _outputs.K2OTotal = Convert.ToDouble(_manureType.K2O * _manureApplication.ApplicationRate.Value);
         var percentageK2OCropAvailable = _manureType.K2OAvailable / 100m;
-        _outputs.K2OCropAvailable = Convert.ToDouble(_manureType.K2O * _manureApplication.ApplicationRate.Value * percentageK2OCropAvailable);
+        _outputs.K2OCropAvailable = Convert.ToDouble(_manureType.K2O * _manureApplication.ApplicationRate.Value * percentageK2OCropAvailable);        
         _outputs.MgOTotal = Convert.ToDouble(_manureType.MgO * _manureApplication.ApplicationRate.Value);
         _outputs.SO3Total = Convert.ToDouble(_manureType.SO3 * _manureApplication.ApplicationRate.Value);
         _outputs.SO3CropAvailable = CalculateSO3CropAvailable();
@@ -637,7 +637,15 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
 
     private double ApplySoilMoistureAdjustment(double pvn0)
     {
-        
+        // changes 04/11/2026 ' Other - Liquid materials should not have Soil Moisture adjustment or Landuse
+        if (IsCattleSluryButRemoveAdjustment())
+        {
+            return pvn0;
+        }
+        // Soil moisture adjustment (cattle slurry and liquid digested sludge only)
+        //------------------------------------------------------------------------
+        // If the selected manure is cattle slurry or liquid digested sludge and the soil moisture status is dry then
+
         if (!IsCattleOrLiquidSludge())
         {
             return pvn0;
@@ -653,8 +661,17 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
 
     private double ApplyLandUseAdjustment(double pvn1, string cropuse)
     {
-        if (!IsCattleOrLiquidSludge())
+        //REMOVED SEASONAL ADJUSTMENT BECAUSE IT DIDN'T SEEM TO ALLOW FOR SOIL MOISTURE
+        //WHICH HAS A GREATER EFFECT THAN SEASON - UPDATED TECHNICAL GUIDE
+        if (IsCattleSluryButRemoveAdjustment())
         {
+            return pvn1;
+        }
+        //Land use adjustment(cattle slurry and liquid digested sludge only)
+        //------------------------------------------------------------------------
+        //If the selected manure is cattle slurry or liquid digested sludge and the land use is arable
+
+        if (!IsCattleOrLiquidSludge())        {
             return pvn1;
         }
 
@@ -685,8 +702,7 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
             return ((8.3d * (double)_manureType.DryMatter + 50.2d) / 100d) * pvn2;
         }
 
-        if (_manureType.ManureTypeCategoryID ==
-            (int)Enums.Enumerations.ManureCategory.PigSlurry)
+        if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry)
         {
             return ((12.3d * (double)_manureType.DryMatter + 50.8d) / 100d) * pvn2;
         }
@@ -866,6 +882,12 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
 
             _ => 14.9d
         };
+    }
+
+    private bool IsCattleSluryButRemoveAdjustment()
+    {
+        // If the selected manure is Other Liquid Materials 
+        return _manureType.ID == (int)Enums.Enumerations.ManureTypes.OtherLiquidMaterials;
     }
 
     private bool IsCattleOrLiquidSludge()
