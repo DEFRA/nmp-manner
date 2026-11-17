@@ -13,8 +13,6 @@
 GO
 
 DECLARE @Territory NVARCHAR(20)=N'EnglandWalesScotland';
-
-
 IF NOT EXISTS (SELECT 1 FROM [dbo].[Climates])
 BEGIN
     SET IDENTITY_INSERT [dbo].[Climates] ON 
@@ -2743,15 +2741,19 @@ BEGIN
     INSERT [dbo].[Climates] ([ID], [Territory], [PostCode], [East], [North], [Altitude], [MeanMinJan], [MeanMinFeb], [MeanMinMar], [MeanMinApr], [MeanMinMay], [MeanMinJun], [MeanMinJul], [MeanMinAug], [MeanMinSep], [MeanMinOct], [MeanMinNov], [MeanMinDec], [MeanMaxJan], [MeanMaxFeb], [MeanMaxMar], [MeanMaxApr], [MeanMaxMay], [MeanMaxJun], [MeanMaxJul], [MeanMaxAug], [MeanMaxSep], [MeanMaxOct], [MeanMaxNov], [MeanMaxDec], [MeanTotalRainFallJan], [MeanTotalRainFallFeb], [MeanTotalRainFallMar], [MeanTotalRainFallApr], [MeanTotalRainFallMay], [MeanTotalRainFallJun], [MeanTotalRainFallJul], [MeanTotalRainFallAug], [MeanTotalRainFallSep], [MeanTotalRainFallOct], [MeanTotalRainFallNov], [MeanTotalRainFallDec], [MeanSunHoursJan], [MeanSunHoursFeb], [MeanSunHoursMar], [MeanSunHoursApr], [MeanSunHoursMay], [MeanSunHoursJun], [MeanSunHoursJul], [MeanSunHoursAug], [MeanSunHoursSep], [MeanSunHoursOct], [MeanSunHoursNov], [MeanSunHoursDec], [MeanRainDaysJan], [MeanRainDaysFeb], [MeanRainDaysMar], [MeanRainDaysApr], [MeanRainDaysMay], [MeanRainDaysJun], [MeanRainDaysJul], [MeanRainDaysAug], [MeanRainDaysSep], [MeanRainDaysOct], [MeanRainDaysNov], [MeanRainDaysDec], [MeanWindSpeedJan], [MeanWindSpeedFeb], [MeanWindSpeedMar], [MeanWindSpeedApr], [MeanWindSpeedMay], [MeanWindSpeedJun], [MeanWindSpeedJul], [MeanWindSpeedAug], [MeanWindSpeedSep], [MeanWindSpeedOct], [MeanWindSpeedNov], [MeanWindSpeedDec]) VALUES (2723, @Territory, N'ZE3', 439686, 1111280, CAST(31.300000000 AS Decimal(18, 9)), CAST(3.238714134 AS Decimal(18, 9)), CAST(2.924220272 AS Decimal(18, 9)), CAST(3.244798864 AS Decimal(18, 9)), CAST(4.599757625 AS Decimal(18, 9)), CAST(6.384298663 AS Decimal(18, 9)), CAST(8.566788012 AS Decimal(18, 9)), CAST(10.633497300 AS Decimal(18, 9)), CAST(10.968492600 AS Decimal(18, 9)), CAST(9.705547210 AS Decimal(18, 9)), CAST(7.651111864 AS Decimal(18, 9)), CAST(5.311412304 AS Decimal(18, 9)), CAST(3.597427199 AS Decimal(18, 9)), CAST(6.844662113 AS Decimal(18, 9)), CAST(6.593590321 AS Decimal(18, 9)), CAST(7.287794421 AS Decimal(18, 9)), CAST(8.698291825 AS Decimal(18, 9)), CAST(10.807397530 AS Decimal(18, 9)), CAST(12.768975320 AS Decimal(18, 9)), CAST(14.600617930 AS Decimal(18, 9)), CAST(15.000383130 AS Decimal(18, 9)), CAST(13.341961430 AS Decimal(18, 9)), CAST(11.050198120 AS Decimal(18, 9)), CAST(8.895491508 AS Decimal(18, 9)), CAST(7.335716924 AS Decimal(18, 9)), CAST(109.223292900 AS Decimal(18, 9)), CAST(90.793104730 AS Decimal(18, 9)), CAST(90.297259920 AS Decimal(18, 9)), CAST(58.806384730 AS Decimal(18, 9)), CAST(42.560132960 AS Decimal(18, 9)), CAST(45.353016990 AS Decimal(18, 9)), CAST(51.583043380 AS Decimal(18, 9)), CAST(74.134324040 AS Decimal(18, 9)), CAST(80.577358250 AS Decimal(18, 9)), CAST(113.124260800 AS Decimal(18, 9)), CAST(120.918886200 AS Decimal(18, 9)), CAST(116.085307300 AS Decimal(18, 9)), CAST(31.233662470 AS Decimal(18, 9)), CAST(60.961831560 AS Decimal(18, 9)), CAST(102.516512800 AS Decimal(18, 9)), CAST(147.650926200 AS Decimal(18, 9)), CAST(207.352804400 AS Decimal(18, 9)), CAST(162.237636000 AS Decimal(18, 9)), CAST(138.723624700 AS Decimal(18, 9)), CAST(148.415176400 AS Decimal(18, 9)), CAST(112.672055500 AS Decimal(18, 9)), CAST(77.907703790 AS Decimal(18, 9)), CAST(40.364619660 AS Decimal(18, 9)), CAST(22.510114690 AS Decimal(18, 9)), CAST(19.657285010 AS Decimal(18, 9)), CAST(16.546393560 AS Decimal(18, 9)), CAST(16.512190540 AS Decimal(18, 9)), CAST(12.027432930 AS Decimal(18, 9)), CAST(10.399871360 AS Decimal(18, 9)), CAST(9.513478206 AS Decimal(18, 9)), CAST(10.462282370 AS Decimal(18, 9)), CAST(11.765412610 AS Decimal(18, 9)), CAST(15.538468680 AS Decimal(18, 9)), CAST(18.952076760 AS Decimal(18, 9)), CAST(18.800875200 AS Decimal(18, 9)), CAST(20.133728150 AS Decimal(18, 9)), CAST(9.487073549 AS Decimal(18, 9)), CAST(9.149679814 AS Decimal(18, 9)), CAST(8.638700739 AS Decimal(18, 9)), CAST(7.330344776 AS Decimal(18, 9)), CAST(6.509689503 AS Decimal(18, 9)), CAST(6.007722478 AS Decimal(18, 9)), CAST(5.579100773 AS Decimal(18, 9)), CAST(5.874341810 AS Decimal(18, 9)), CAST(7.110480336 AS Decimal(18, 9)), CAST(8.350399577 AS Decimal(18, 9)), CAST(9.000462240 AS Decimal(18, 9)), CAST(8.816245035 AS Decimal(18, 9)))
     SET IDENTITY_INSERT [dbo].[Climates] OFF
 END
-
 GO
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[Countries])
 BEGIN
     SET IDENTITY_INSERT [dbo].[Countries] ON
-    INSERT INTO [Countries] (ID,Name) values(1,'England/Wales')
-    INSERT INTO [Countries] (ID,Name) values(2,'Scotland')
-    INSERT INTO [Countries] (ID,Name) values(3,'All')
+    INSERT INTO [Countries] 
+    (
+    ID,[Name]
+    ) 
+    VALUES
+    (1,'England/Wales'),
+    (2,'Scotland'),
+    (3,'All')
     SET IDENTITY_INSERT [dbo].[Countries] OFF
 END
 
@@ -2760,25 +2762,34 @@ GO
 IF NOT EXISTS (SELECT 1 FROM [dbo].[CropTypes])
 BEGIN
     DECLARE @Arable NVARCHAR(10)=N'Arable';
-    INSERT [dbo].[CropTypes] ([ID], [Name], [Use], [CropUptakeFactor]) VALUES (1, N'Grass', N'Grass', 20)
-    INSERT [dbo].[CropTypes] ([ID], [Name], [Use], [CropUptakeFactor]) VALUES (2, N'Winter cereal, early sown', @Arable, 10)
-    INSERT [dbo].[CropTypes] ([ID], [Name], [Use], [CropUptakeFactor]) VALUES (3, N'Winter cereal, late sown', @Arable, 5)
-    INSERT [dbo].[CropTypes] ([ID], [Name], [Use], [CropUptakeFactor]) VALUES (4, N'Winter oilseed rape, early established', @Arable, 20)
-    INSERT [dbo].[CropTypes] ([ID], [Name], [Use], [CropUptakeFactor]) VALUES (5, N'Winter oilseed rape, late established', @Arable, 10)
-    INSERT [dbo].[CropTypes] ([ID], [Name], [Use], [CropUptakeFactor]) VALUES (6, N'Spring cereal/oilseed rape', @Arable, 0)
-    INSERT [dbo].[CropTypes] ([ID], [Name], [Use], [CropUptakeFactor]) VALUES (7, N'Potatoes/maize', @Arable, 0)
-    INSERT [dbo].[CropTypes] ([ID], [Name], [Use], [CropUptakeFactor]) VALUES (8, N'Sugar beet', @Arable, 0)
-    INSERT [dbo].[CropTypes] ([ID], [Name], [Use], [CropUptakeFactor]) VALUES (9, N'Other', @Arable, 0)
+    INSERT [dbo].[CropTypes] 
+    (
+    [ID], [Name], [Use], [CropUptakeFactor]
+    ) 
+    VALUES  (1, N'Grass', N'Grass', 20),
+            (2, N'Winter cereal, early sown', @Arable, 10),
+            (3, N'Winter cereal, late sown', @Arable, 5),
+            (4, N'Winter oilseed rape, early established', @Arable, 20),
+            (5, N'Winter oilseed rape, late established', @Arable, 10),
+            (6, N'Spring cereal/oilseed rape', @Arable, 0),
+            (7, N'Potatoes/maize', @Arable, 0),
+            (8, N'Sugar beet', @Arable, 0),
+            (9, N'Other', @Arable, 0)
 END
 GO
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[ManureGroups])
 BEGIN
     SET IDENTITY_INSERT [dbo].[ManureGroups] ON
-    INSERT [dbo].[ManureGroups] ([ID], [Name],[SortOrder]) VALUES (1, N'Livestock manure',1)
-    INSERT [dbo].[ManureGroups] ([ID], [Name],[SortOrder]) VALUES (2, N'Biosolids',2)
-    INSERT [dbo].[ManureGroups] ([ID], [Name],[SortOrder]) VALUES (3, N'Another type of organic material',4)
-    INSERT [dbo].[ManureGroups] ([ID], [Name],[SortOrder]) VALUES (4, N'Digestate',3)
+    INSERT [dbo].[ManureGroups] 
+    (
+    [ID], [Name],[SortOrder]
+    ) 
+    VALUES 
+    (1, N'Livestock manure',1),
+    (2, N'Biosolids',2),
+    (3, N'Another type of organic material',4),
+    (4, N'Digestate',3)
     SET IDENTITY_INSERT [dbo].[ManureGroups] OFF
 END
 
@@ -2786,13 +2797,17 @@ GO
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[ManureTypeCategories])
 BEGIN
-    INSERT [dbo].[ManureTypeCategories] ([ID], [Name]) VALUES (1, N'FYM')
-    INSERT [dbo].[ManureTypeCategories] ([ID], [Name]) VALUES (2, N'Poultry')
-    INSERT [dbo].[ManureTypeCategories] ([ID], [Name]) VALUES (3, N'Cattle Slurry')
-    INSERT [dbo].[ManureTypeCategories] ([ID], [Name]) VALUES (4, N'Pig Slurry')
-    INSERT [dbo].[ManureTypeCategories] ([ID], [Name]) VALUES (5, N'Solid Sludge')
-    INSERT [dbo].[ManureTypeCategories] ([ID], [Name]) VALUES (6, N'Liquid Sludge')
-    INSERT [dbo].[ManureTypeCategories] ([ID], [Name]) VALUES (7, N'None')
+    INSERT [dbo].[ManureTypeCategories] 
+    (
+    [ID], [Name]
+    ) 
+    VALUES (1, N'FYM'),
+           (2, N'Poultry'),
+           (3, N'Cattle Slurry'),
+           (4, N'Pig Slurry'),
+           (5, N'Solid Sludge'),
+           (6, N'Liquid Sludge'),
+           (7, N'None')
 END
 
 GO
@@ -2800,54 +2815,59 @@ GO
 IF NOT EXISTS (SELECT 1 FROM [dbo].[ManureTypes])
 BEGIN
     SET IDENTITY_INSERT [dbo].[ManureTypes] ON
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (0, N'Cattle farmyard manure - fresh', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(1.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(3.20 AS Decimal(18, 2)), CAST(9.40 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0, 1)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (1, N'Cattle farmyard manure - old', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(0.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(3.20 AS Decimal(18, 2)), CAST(9.40 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0, 2)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (2, N'Pig farmyard manure - fresh', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(7.00 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(8.00 AS Decimal(18, 2)), CAST(3.40 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),10,0, 3)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (3, N'Pig farmyard manure - old', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(7.00 AS Decimal(18, 2)), CAST(0.90 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(8.00 AS Decimal(18, 2)), CAST(3.40 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),10,0, 4)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (4, N'Sheep farmyard manure - fresh', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(7.00 AS Decimal(18, 2)), CAST(1.40 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(3.20 AS Decimal(18, 2)), CAST(8.00 AS Decimal(18, 2)), CAST(4.00 AS Decimal(18, 2)), CAST(2.80 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0,5)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (5, N'Sheep farmyard manure - lld', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(7.00 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(3.20 AS Decimal(18, 2)), CAST(8.00 AS Decimal(18, 2)), CAST(4.00 AS Decimal(18, 2)), CAST(2.80 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0,6)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (6, N'Duck farmyard manure - fresh', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(6.50 AS Decimal(18, 2)), CAST(1.60 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(5.50 AS Decimal(18, 2)), CAST(7.50 AS Decimal(18, 2)), CAST(2.60 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0, 7)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (7, N'Duck farmyard manure - old', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(6.50 AS Decimal(18, 2)), CAST(0.90 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(5.50 AS Decimal(18, 2)), CAST(7.50 AS Decimal(18, 2)), CAST(2.60 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0, 8)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (8, N'Poultry manure', 1, 2, 3, 1, 0, CAST(60.00 AS Decimal(18, 2)), CAST(28.00 AS Decimal(18, 2)), CAST(4.00 AS Decimal(18, 2)), CAST(5.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(17.00 AS Decimal(18, 2)), CAST(21.00 AS Decimal(18, 2)), CAST(8.20 AS Decimal(18, 2)), CAST(5.90 AS Decimal(18, 2)), 60, 90, CAST(52.30 AS Decimal(18, 2)), 6, 4,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(60 AS Decimal(18, 2)),30,1, 9)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (12, N'Pig slurry', 1, 4, 3, 1, 1, CAST(4.00 AS Decimal(18, 2)), CAST(3.60 AS Decimal(18, 2)), CAST(2.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.50 AS Decimal(18, 2)), CAST(2.20 AS Decimal(18, 2)), CAST(0.70 AS Decimal(18, 2)), CAST(0.70 AS Decimal(18, 2)), 50, 90, CAST(25.50 AS Decimal(18, 2)), 30, 25,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(45 AS Decimal(18, 2)),50,1,14)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (13, N'Separated cattle slurry - strainer box', 1, 3, 3, 1, 1, CAST(1.50 AS Decimal(18, 2)), CAST(1.50 AS Decimal(18, 2)), CAST(0.80 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.30 AS Decimal(18, 2)), CAST(1.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(32.40 AS Decimal(18, 2)), 30, 25,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(45 AS Decimal(18, 2)),40,1,15)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (14, N'Separated cattle slurry - weeping wall', 1, 3, 3, 1, 1, CAST(3.00 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.50 AS Decimal(18, 2)), CAST(2.30 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(32.40 AS Decimal(18, 2)), 30, 25,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(45 AS Decimal(18, 2)),40,1,16)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (15, N'Separated cattle slurry - mechanical separator', 1, 3, 3, 1, 1, CAST(4.00 AS Decimal(18, 2)), CAST(3.00 AS Decimal(18, 2)), CAST(1.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.20 AS Decimal(18, 2)), CAST(2.80 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(32.40 AS Decimal(18, 2)), 30, 25,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(45 AS Decimal(18, 2)),40,1,17)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (16, N'Separated cattle slurry - solid portion', 1, 1, 3, 0, 0, CAST(20.00 AS Decimal(18, 2)), CAST(4.00 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), CAST(3.30 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0,18)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (17, N'Separated pig slurry - solid portion', 1, 1, 3, 0, 0, CAST(20.00 AS Decimal(18, 2)), CAST(5.00 AS Decimal(18, 2)), CAST(1.30 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(3.70 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),10,0,20)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (18, N'Separated pig slurry - liquid portion', 1, 4, 3, 1, 1, CAST(3.00 AS Decimal(18, 2)), CAST(3.60 AS Decimal(18, 2)), CAST(2.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.10 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(25.50 AS Decimal(18, 2)), 30, 25,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(45 AS Decimal(18, 2)),50,1,19)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (19, N'Dirty water', 1, 3, 3, 0, 1, CAST(0.50 AS Decimal(18, 2)), CAST(0.50 AS Decimal(18, 2)), CAST(0.30 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), 50, 100, CAST(32.40 AS Decimal(18, 2)), 40, 40,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(45 AS Decimal(18, 2)),10,0,21)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (21, N'Biosolids - digested cake', 2, 2, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(11.00 AS Decimal(18, 2)), CAST(1.60 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(11.00 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), CAST(8.20 AS Decimal(18, 2)), CAST(1.60 AS Decimal(18, 2)), 50, 90, CAST(52.30 AS Decimal(18, 2)), 20, 20,CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),CAST(35 AS Decimal(18, 2)),NULL,0,22)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (22, N'Biosolids - thermally dried', 2, 2, 3, 0, 0, CAST(95.00 AS Decimal(18, 2)), CAST(40.00 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(55.00 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), CAST(23.00 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), 50, 90, CAST(52.30 AS Decimal(18, 2)), 6, 6,CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),CAST(35 AS Decimal(18, 2)),NULL,0,23)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (24, N'Green compost', 3, 1, 3, 0, 0, CAST(60.00 AS Decimal(18, 2)), CAST(7.50 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(3.00 AS Decimal(18, 2)), CAST(6.80 AS Decimal(18, 2)), CAST(2.60 AS Decimal(18, 2)), CAST(3.40 AS Decimal(18, 2)), 50, 80, CAST(68.30 AS Decimal(18, 2)), 20, 20,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,33)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (23, N'Biosolids - lime stabilised', 2, 2, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(8.50 AS Decimal(18, 2)), CAST(0.90 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(7.00 AS Decimal(18, 2)), CAST(0.80 AS Decimal(18, 2)), CAST(7.40 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), 50, 90, CAST(52.30 AS Decimal(18, 2)), 20, 20,CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),CAST(35 AS Decimal(18, 2)),NULL,0,24)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (26, N'Food waste - general', 3, 4, 3, 0, 1, CAST(5.00 AS Decimal(18, 2)), CAST(1.60 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.70 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(25.50 AS Decimal(18, 2)), 40, 40,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,37)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (27, N'Food waste - dairy', 3, 4, 3, 0, 1, CAST(4.00 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.80 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(25.50 AS Decimal(18, 2)), 40, 40,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,38)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (28, N'Food waste - soft drinks', 3, 4, 3, 0, 1, CAST(4.00 AS Decimal(18, 2)), CAST(0.30 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(25.50 AS Decimal(18, 2)), 40, 40,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,39)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (29, N'Food waste - brewing', 3, 4, 3, 0, 1, CAST(7.00 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.80 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(25.50 AS Decimal(18, 2)), 40, 40,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,40)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (30, N'Horse farmyard manure', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(5.00 AS Decimal(18, 2)), CAST(0.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(5.00 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(1.60 AS Decimal(18, 2)), CAST(1.50 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0, 11)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (31, N'Biosolids - thermally hydrolysed', 2, 2, 2, 0, 0, CAST(30.00 AS Decimal(18, 2)), CAST(10.00 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(10.00 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), CAST(3.50 AS Decimal(18, 2)), CAST(1.50 AS Decimal(18, 2)), 50, 90, CAST(52.30 AS Decimal(18, 2)), 20, 20,CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),CAST(35 AS Decimal(18, 2)),NULL,0,26)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (32, N'Green/Food compost', 3, 1, 3, 0, 0, CAST(60.00 AS Decimal(18, 2)), CAST(11.00 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(4.90 AS Decimal(18, 2)), CAST(8.00 AS Decimal(18, 2)), CAST(5.10 AS Decimal(18, 2)), CAST(3.40 AS Decimal(18, 2)), 50, 80, CAST(68.30 AS Decimal(18, 2)), 20, 20,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,34)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (33, N'Paper crumble - chemically/physcially treated', 3, 1, 3, 0, 0, CAST(40.00 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.40 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), CAST(1.40 AS Decimal(18, 2)), 50, 90, CAST(0.00 AS Decimal(18, 2)), 30, 30,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,35)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (34, N'Paper crumble - biologically treated', 3, 1, 3, 0, 0, CAST(30.00 AS Decimal(18, 2)), CAST(7.50 AS Decimal(18, 2)), CAST(0.80 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(3.80 AS Decimal(18, 2)), CAST(0.40 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), 50, 90, CAST(0.00 AS Decimal(18, 2)), 30, 30,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,36)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (35, N'Spent mushroom compost', 3, 1, 3, 0, 0, CAST(35.00 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(5.00 AS Decimal(18, 2)), CAST(9.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(68.30 AS Decimal(18, 2)), 30, 30,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,41)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (36, N'Water treatment cake', 3, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(3.40 AS Decimal(18, 2)), CAST(0.40 AS Decimal(18, 2)), CAST(5.50 AS Decimal(18, 2)), CAST(0.80 AS Decimal(18, 2)), 50, 90, CAST(68.30 AS Decimal(18, 2)), 40, 40,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,42)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (37, N'Distillery pot ale', 3, 4, 2, 0, 1, CAST(5.00 AS Decimal(18, 2)), CAST(2.50 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), CAST(1.10 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), 50, 90, CAST(25.50 AS Decimal(18, 2)), 30, 30,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,43)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (38, N'Distillery effluent/sludge', 3, 4, 2, 0, 1, CAST(2.50 AS Decimal(18, 2)), CAST(1.50 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.30 AS Decimal(18, 2)), CAST(0.40 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), 50, 90, CAST(25.50 AS Decimal(18, 2)), 30, 30,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,44)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (39, N'Brewery wash water', 3, 4, 2, 0, 1, CAST(1.00 AS Decimal(18, 2)), CAST(0.30 AS Decimal(18, 2)), CAST(0.04 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(25.50 AS Decimal(18, 2)), 50, 50,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,45)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (40, N'Straw mulch', 3, 7, 3, 0, 0, CAST(90.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.20 AS Decimal(18, 2)), CAST(9.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.30 AS Decimal(18, 2)), 50, 90, CAST(0.00 AS Decimal(18, 2)), 50, 0,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,46)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (41, N'Goat farmyard manure', 1, 1, 3, 0, 0, CAST(40.00 AS Decimal(18, 2)), CAST(9.50 AS Decimal(18, 2)), CAST(0.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(4.50 AS Decimal(18, 2)), CAST(12.00 AS Decimal(18, 2)), CAST(2.80 AS Decimal(18, 2)), CAST(1.90 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 20, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0,12)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (42, N'Biosolids - composted', 2, 2, 3, 0, 0, CAST(40.00 AS Decimal(18, 2)), CAST(11.00 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(10.00 AS Decimal(18, 2)), CAST(3.00 AS Decimal(18, 2)), CAST(6.10 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), 50, 90, CAST(52.30 AS Decimal(18, 2)), 20, 20,CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),CAST(35 AS Decimal(18, 2)),NULL,0,25)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (43, N'Other - Solid materials', 3, 1, 3, 0, 0, CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 25,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,47)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (44, N'Other - Liquid materials', 3, 3, 3, 0, 1, CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(32.40 AS Decimal(18, 2)), 30, 25,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,48)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (45, N'Cattle slurry', 1, 3, 3, 1, 1, CAST(6.00 AS Decimal(18, 2)), CAST(2.60 AS Decimal(18, 2)), CAST(1.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.20 AS Decimal(18, 2)), CAST(2.50 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), 50, 90, CAST(32.40 AS Decimal(18, 2)), 30, 25,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(45 AS Decimal(18, 2)),40,1, 13)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (46, N'Digestate - whole food based', 4, 4, 3, 1, 1, CAST(4.10 AS Decimal(18, 2)), CAST(4.80 AS Decimal(18, 2)), CAST(4.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.10 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), CAST(0.70 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), 50, 80, CAST(45.50 AS Decimal(18, 2)), 25, 20,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,30)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (49, N'Digestate - separated liquor food based', 4, 4, 3, 1, 1, CAST(3.80 AS Decimal(18, 2)), CAST(4.50 AS Decimal(18, 2)), CAST(3.80 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), CAST(2.80 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), 50, 80, CAST(45.50 AS Decimal(18, 2)), 25, 20,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,31)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (50, N'Digestate - separated fibre food based', 4, 1, 3, 0, 0, CAST(27.00 AS Decimal(18, 2)), CAST(8.90 AS Decimal(18, 2)), CAST(2.60 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(10.20 AS Decimal(18, 2)), CAST(3.00 AS Decimal(18, 2)), CAST(4.10 AS Decimal(18, 2)), CAST(2.20 AS Decimal(18, 2)), 50, 80, CAST(68.30 AS Decimal(18, 2)), 20, 20,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,32)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (51, N'Digestate - whole farm sourced', 4, 4, 3, 1, 1, CAST(5.50 AS Decimal(18, 2)), CAST(3.60 AS Decimal(18, 2)), CAST(2.30 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.70 AS Decimal(18, 2)), CAST(4.40 AS Decimal(18, 2)), CAST(0.80 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), 50, 80, CAST(25.50 AS Decimal(18, 2)), 25, 20,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,27)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (52, N'Digestate - separated liquor farm sourced', 4, 4, 3, 1, 1, CAST(3.00 AS Decimal(18, 2)), CAST(1.90 AS Decimal(18, 2)), CAST(1.30 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), CAST(2.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.40 AS Decimal(18, 2)), 50, 80, CAST(25.50 AS Decimal(18, 2)), 25, 20,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,28)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (53, N'Digestate - separated fibre farm sourced', 4, 1, 3, 0, 0, CAST(24.00 AS Decimal(18, 2)), CAST(5.60 AS Decimal(18, 2)), CAST(1.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(4.70 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(2.10 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), 50, 80, CAST(68.30 AS Decimal(18, 2)), 20, 20,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,29)
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (54, N'Layer manure', 1, 2, 2, 1, 0, CAST(35.00 AS Decimal(18, 2)), CAST(28.00 AS Decimal(18, 2)), CAST(4.00 AS Decimal(18, 2)), CAST(5.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(17.00 AS Decimal(18, 2)), CAST(21.00 AS Decimal(18, 2)), CAST(8.20 AS Decimal(18, 2)), CAST(3.90 AS Decimal(18, 2)), 60, 90, CAST(52.30 AS Decimal(18, 2)), 10, 8,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(60 AS Decimal(18, 2)),30,1, 10)
+    INSERT INTO dbo.ManureTypes
+        (
+            [ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]
+        )
+        VALUES
+            (0, N'Cattle farmyard manure - fresh', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(1.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(3.20 AS Decimal(18, 2)), CAST(9.40 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0, 1),
+            (1, N'Cattle farmyard manure - old', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(0.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(3.20 AS Decimal(18, 2)), CAST(9.40 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0, 2),
+            (2, N'Pig farmyard manure - fresh', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(7.00 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(8.00 AS Decimal(18, 2)), CAST(3.40 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),10,0, 3),
+            (3, N'Pig farmyard manure - old', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(7.00 AS Decimal(18, 2)), CAST(0.90 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(8.00 AS Decimal(18, 2)), CAST(3.40 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),10,0, 4),
+            (4, N'Sheep farmyard manure - fresh', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(7.00 AS Decimal(18, 2)), CAST(1.40 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(3.20 AS Decimal(18, 2)), CAST(8.00 AS Decimal(18, 2)), CAST(4.00 AS Decimal(18, 2)), CAST(2.80 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0,5),
+            (5, N'Sheep farmyard manure - lld', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(7.00 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(3.20 AS Decimal(18, 2)), CAST(8.00 AS Decimal(18, 2)), CAST(4.00 AS Decimal(18, 2)), CAST(2.80 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0,6),
+            (6, N'Duck farmyard manure - fresh', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(6.50 AS Decimal(18, 2)), CAST(1.60 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(5.50 AS Decimal(18, 2)), CAST(7.50 AS Decimal(18, 2)), CAST(2.60 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0, 7),
+            (7, N'Duck farmyard manure - old', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(6.50 AS Decimal(18, 2)), CAST(0.90 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(5.50 AS Decimal(18, 2)), CAST(7.50 AS Decimal(18, 2)), CAST(2.60 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0, 8),
+            (8, N'Poultry manure', 1, 2, 3, 1, 0, CAST(60.00 AS Decimal(18, 2)), CAST(28.00 AS Decimal(18, 2)), CAST(4.00 AS Decimal(18, 2)), CAST(5.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(17.00 AS Decimal(18, 2)), CAST(21.00 AS Decimal(18, 2)), CAST(8.20 AS Decimal(18, 2)), CAST(5.90 AS Decimal(18, 2)), 60, 90, CAST(52.30 AS Decimal(18, 2)), 6, 4,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(60 AS Decimal(18, 2)),30,1, 9),
+            (12, N'Pig slurry', 1, 4, 3, 1, 1, CAST(4.00 AS Decimal(18, 2)), CAST(3.60 AS Decimal(18, 2)), CAST(2.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.50 AS Decimal(18, 2)), CAST(2.20 AS Decimal(18, 2)), CAST(0.70 AS Decimal(18, 2)), CAST(0.70 AS Decimal(18, 2)), 50, 90, CAST(25.50 AS Decimal(18, 2)), 30, 25,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(45 AS Decimal(18, 2)),50,1,14),
+            (13, N'Separated cattle slurry - strainer box', 1, 3, 3, 1, 1, CAST(1.50 AS Decimal(18, 2)), CAST(1.50 AS Decimal(18, 2)), CAST(0.80 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.30 AS Decimal(18, 2)), CAST(1.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(32.40 AS Decimal(18, 2)), 30, 25,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(45 AS Decimal(18, 2)),40,1,15),
+            (14, N'Separated cattle slurry - weeping wall', 1, 3, 3, 1, 1, CAST(3.00 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.50 AS Decimal(18, 2)), CAST(2.30 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(32.40 AS Decimal(18, 2)), 30, 25,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(45 AS Decimal(18, 2)),40,1,16),
+            (15, N'Separated cattle slurry - mechanical separator', 1, 3, 3, 1, 1, CAST(4.00 AS Decimal(18, 2)), CAST(3.00 AS Decimal(18, 2)), CAST(1.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.20 AS Decimal(18, 2)), CAST(2.80 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(32.40 AS Decimal(18, 2)), 30, 25,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(45 AS Decimal(18, 2)),40,1,17),
+            (16, N'Separated cattle slurry - solid portion', 1, 1, 3, 0, 0, CAST(20.00 AS Decimal(18, 2)), CAST(4.00 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), CAST(3.30 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0,18),
+            (17, N'Separated pig slurry - solid portion', 1, 1, 3, 0, 0, CAST(20.00 AS Decimal(18, 2)), CAST(5.00 AS Decimal(18, 2)), CAST(1.30 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(3.70 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),10,0,20),
+            (18, N'Separated pig slurry - liquid portion', 1, 4, 3, 1, 1, CAST(3.00 AS Decimal(18, 2)), CAST(3.60 AS Decimal(18, 2)), CAST(2.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.10 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(25.50 AS Decimal(18, 2)), 30, 25,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(45 AS Decimal(18, 2)),50,1,19),
+            (19, N'Dirty water', 1, 3, 3, 0, 1, CAST(0.50 AS Decimal(18, 2)), CAST(0.50 AS Decimal(18, 2)), CAST(0.30 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), 50, 100, CAST(32.40 AS Decimal(18, 2)), 40, 40,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(45 AS Decimal(18, 2)),10,0,21),
+            (21, N'Biosolids - digested cake', 2, 2, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(11.00 AS Decimal(18, 2)), CAST(1.60 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(11.00 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), CAST(8.20 AS Decimal(18, 2)), CAST(1.60 AS Decimal(18, 2)), 50, 90, CAST(52.30 AS Decimal(18, 2)), 20, 20,CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),CAST(35 AS Decimal(18, 2)),NULL,0,22),
+            (22, N'Biosolids - thermally dried', 2, 2, 3, 0, 0, CAST(95.00 AS Decimal(18, 2)), CAST(40.00 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(55.00 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), CAST(23.00 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), 50, 90, CAST(52.30 AS Decimal(18, 2)), 6, 6,CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),CAST(35 AS Decimal(18, 2)),NULL,0,23),
+            (24, N'Green compost', 3, 1, 3, 0, 0, CAST(60.00 AS Decimal(18, 2)), CAST(7.50 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(3.00 AS Decimal(18, 2)), CAST(6.80 AS Decimal(18, 2)), CAST(2.60 AS Decimal(18, 2)), CAST(3.40 AS Decimal(18, 2)), 50, 80, CAST(68.30 AS Decimal(18, 2)), 20, 20,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,33),
+            (23, N'Biosolids - lime stabilised', 2, 2, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(8.50 AS Decimal(18, 2)), CAST(0.90 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(7.00 AS Decimal(18, 2)), CAST(0.80 AS Decimal(18, 2)), CAST(7.40 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), 50, 90, CAST(52.30 AS Decimal(18, 2)), 20, 20,CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),CAST(35 AS Decimal(18, 2)),NULL,0,24),
+            (26, N'Food waste - general', 3, 4, 3, 0, 1, CAST(5.00 AS Decimal(18, 2)), CAST(1.60 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.70 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(25.50 AS Decimal(18, 2)), 40, 40,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,37),
+            (27, N'Food waste - dairy', 3, 4, 3, 0, 1, CAST(4.00 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.80 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(25.50 AS Decimal(18, 2)), 40, 40,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,38),
+            (28, N'Food waste - soft drinks', 3, 4, 3, 0, 1, CAST(4.00 AS Decimal(18, 2)), CAST(0.30 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(25.50 AS Decimal(18, 2)), 40, 40,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,39),
+            (29, N'Food waste - brewing', 3, 4, 3, 0, 1, CAST(7.00 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.80 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(25.50 AS Decimal(18, 2)), 40, 40,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,40),
+            (30, N'Horse farmyard manure', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(5.00 AS Decimal(18, 2)), CAST(0.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(5.00 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(1.60 AS Decimal(18, 2)), CAST(1.50 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0, 11),
+            (31, N'Biosolids - thermally hydrolysed', 2, 2, 2, 0, 0, CAST(30.00 AS Decimal(18, 2)), CAST(10.00 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(10.00 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), CAST(3.50 AS Decimal(18, 2)), CAST(1.50 AS Decimal(18, 2)), 50, 90, CAST(52.30 AS Decimal(18, 2)), 20, 20,CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),CAST(35 AS Decimal(18, 2)),NULL,0,26),
+            (32, N'Green/Food compost', 3, 1, 3, 0, 0, CAST(60.00 AS Decimal(18, 2)), CAST(11.00 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(4.90 AS Decimal(18, 2)), CAST(8.00 AS Decimal(18, 2)), CAST(5.10 AS Decimal(18, 2)), CAST(3.40 AS Decimal(18, 2)), 50, 80, CAST(68.30 AS Decimal(18, 2)), 20, 20,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,34),
+            (33, N'Paper crumble - chemically/physcially treated', 3, 1, 3, 0, 0, CAST(40.00 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.40 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), CAST(1.40 AS Decimal(18, 2)), 50, 90, CAST(0.00 AS Decimal(18, 2)), 30, 30,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,35),
+            (34, N'Paper crumble - biologically treated', 3, 1, 3, 0, 0, CAST(30.00 AS Decimal(18, 2)), CAST(7.50 AS Decimal(18, 2)), CAST(0.80 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(3.80 AS Decimal(18, 2)), CAST(0.40 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), 50, 90, CAST(0.00 AS Decimal(18, 2)), 30, 30,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,36),
+            (35, N'Spent mushroom compost', 3, 1, 3, 0, 0, CAST(35.00 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(5.00 AS Decimal(18, 2)), CAST(9.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(68.30 AS Decimal(18, 2)), 30, 30,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,41),
+            (36, N'Water treatment cake', 3, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(3.40 AS Decimal(18, 2)), CAST(0.40 AS Decimal(18, 2)), CAST(5.50 AS Decimal(18, 2)), CAST(0.80 AS Decimal(18, 2)), 50, 90, CAST(68.30 AS Decimal(18, 2)), 40, 40,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,42),
+            (37, N'Distillery pot ale', 3, 4, 2, 0, 1, CAST(5.00 AS Decimal(18, 2)), CAST(2.50 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), CAST(1.10 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), 50, 90, CAST(25.50 AS Decimal(18, 2)), 30, 30,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,43),
+            (38, N'Distillery effluent/sludge', 3, 4, 2, 0, 1, CAST(2.50 AS Decimal(18, 2)), CAST(1.50 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.30 AS Decimal(18, 2)), CAST(0.40 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), 50, 90, CAST(25.50 AS Decimal(18, 2)), 30, 30,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,44),
+            (39, N'Brewery wash water', 3, 4, 2, 0, 1, CAST(1.00 AS Decimal(18, 2)), CAST(0.30 AS Decimal(18, 2)), CAST(0.04 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(25.50 AS Decimal(18, 2)), 50, 50,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,45),
+            (40, N'Straw mulch', 3, 7, 3, 0, 0, CAST(90.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.20 AS Decimal(18, 2)), CAST(9.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.30 AS Decimal(18, 2)), 50, 90, CAST(0.00 AS Decimal(18, 2)), 50, 0,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,46),
+            (41, N'Goat farmyard manure', 1, 1, 3, 0, 0, CAST(40.00 AS Decimal(18, 2)), CAST(9.50 AS Decimal(18, 2)), CAST(0.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(4.50 AS Decimal(18, 2)), CAST(12.00 AS Decimal(18, 2)), CAST(2.80 AS Decimal(18, 2)), CAST(1.90 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 20, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0,12),
+            (42, N'Biosolids - composted', 2, 2, 3, 0, 0, CAST(40.00 AS Decimal(18, 2)), CAST(11.00 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(10.00 AS Decimal(18, 2)), CAST(3.00 AS Decimal(18, 2)), CAST(6.10 AS Decimal(18, 2)), CAST(2.00 AS Decimal(18, 2)), 50, 90, CAST(52.30 AS Decimal(18, 2)), 20, 20,CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),CAST(35 AS Decimal(18, 2)),NULL,0,25),
+            (43, N'Other - Solid materials', 3, 1, 3, 0, 0, CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 25,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,47),
+            (44, N'Other - Liquid materials', 3, 3, 3, 0, 1, CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), 50, 90, CAST(32.40 AS Decimal(18, 2)), 30, 25,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,48),
+            (45, N'Cattle slurry', 1, 3, 3, 1, 1, CAST(6.00 AS Decimal(18, 2)), CAST(2.60 AS Decimal(18, 2)), CAST(1.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.20 AS Decimal(18, 2)), CAST(2.50 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), 50, 90, CAST(32.40 AS Decimal(18, 2)), 30, 25,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(45 AS Decimal(18, 2)),40,1, 13),
+            (46, N'Digestate - whole food based', 4, 4, 3, 1, 1, CAST(4.10 AS Decimal(18, 2)), CAST(4.80 AS Decimal(18, 2)), CAST(4.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.10 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), CAST(0.70 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), 50, 80, CAST(45.50 AS Decimal(18, 2)), 25, 20,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,30),
+            (49, N'Digestate - separated liquor food based', 4, 4, 3, 1, 1, CAST(3.80 AS Decimal(18, 2)), CAST(4.50 AS Decimal(18, 2)), CAST(3.80 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), CAST(2.80 AS Decimal(18, 2)), CAST(1.00 AS Decimal(18, 2)), CAST(0.20 AS Decimal(18, 2)), 50, 80, CAST(45.50 AS Decimal(18, 2)), 25, 20,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,31),
+            (50, N'Digestate - separated fibre food based', 4, 1, 3, 0, 0, CAST(27.00 AS Decimal(18, 2)), CAST(8.90 AS Decimal(18, 2)), CAST(2.60 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(10.20 AS Decimal(18, 2)), CAST(3.00 AS Decimal(18, 2)), CAST(4.10 AS Decimal(18, 2)), CAST(2.20 AS Decimal(18, 2)), 50, 80, CAST(68.30 AS Decimal(18, 2)), 20, 20,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,32),
+            (51, N'Digestate - whole farm sourced', 4, 4, 3, 1, 1, CAST(5.50 AS Decimal(18, 2)), CAST(3.60 AS Decimal(18, 2)), CAST(2.30 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(1.70 AS Decimal(18, 2)), CAST(4.40 AS Decimal(18, 2)), CAST(0.80 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), 50, 80, CAST(25.50 AS Decimal(18, 2)), 25, 20,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,27),
+            (52, N'Digestate - separated liquor farm sourced', 4, 4, 3, 1, 1, CAST(3.00 AS Decimal(18, 2)), CAST(1.90 AS Decimal(18, 2)), CAST(1.30 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.60 AS Decimal(18, 2)), CAST(2.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.40 AS Decimal(18, 2)), 50, 80, CAST(25.50 AS Decimal(18, 2)), 25, 20,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,28),
+            (53, N'Digestate - separated fibre farm sourced', 4, 1, 3, 0, 0, CAST(24.00 AS Decimal(18, 2)), CAST(5.60 AS Decimal(18, 2)), CAST(1.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(4.70 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(2.10 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), 50, 80, CAST(68.30 AS Decimal(18, 2)), 20, 20,CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),CAST(0 AS Decimal(18, 2)),NULL,0,29),
+            (54, N'Layer manure', 1, 2, 2, 1, 0, CAST(35.00 AS Decimal(18, 2)), CAST(28.00 AS Decimal(18, 2)), CAST(4.00 AS Decimal(18, 2)), CAST(5.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(17.00 AS Decimal(18, 2)), CAST(21.00 AS Decimal(18, 2)), CAST(8.20 AS Decimal(18, 2)), CAST(3.90 AS Decimal(18, 2)), 60, 90, CAST(52.30 AS Decimal(18, 2)), 10, 8,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(60 AS Decimal(18, 2)),30,1, 10);
     SET IDENTITY_INSERT [dbo].[ManureTypes] OFF
 END
 GO
@@ -2855,10 +2875,14 @@ GO
 IF NOT EXISTS (SELECT 1 FROM [dbo].[ManureTypes] WHERE [ID] = 54)
 BEGIN
     SET IDENTITY_INSERT [dbo].[ManureTypes] ON
-    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]) VALUES (54, N'Layer manure', 1, 2, 2, 1, 0, CAST(35.00 AS Decimal(18, 2)), CAST(28.00 AS Decimal(18, 2)), CAST(4.00 AS Decimal(18, 2)), CAST(5.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(17.00 AS Decimal(18, 2)), CAST(21.00 AS Decimal(18, 2)), CAST(8.20 AS Decimal(18, 2)), CAST(3.90 AS Decimal(18, 2)), 60, 90, CAST(52.30 AS Decimal(18, 2)), 10, 8,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(60 AS Decimal(18, 2)),30,1, 10)
+    INSERT [dbo].[ManureTypes] 
+    (
+    [ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]
+    ) 
+    VALUES 
+    (54, N'Layer manure', 1, 2, 2, 1, 0, CAST(35.00 AS Decimal(18, 2)), CAST(28.00 AS Decimal(18, 2)), CAST(4.00 AS Decimal(18, 2)), CAST(5.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(17.00 AS Decimal(18, 2)), CAST(21.00 AS Decimal(18, 2)), CAST(8.20 AS Decimal(18, 2)), CAST(3.90 AS Decimal(18, 2)), 60, 90, CAST(52.30 AS Decimal(18, 2)), 10, 8,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(60 AS Decimal(18, 2)),30,1, 10)
     SET IDENTITY_INSERT [dbo].[ManureTypes] OFF    
 END
-
     UPDATE [dbo].[ManureTypes] SET [SortOrder] = 1 WHERE [ID] = 0
     UPDATE [dbo].[ManureTypes] SET [SortOrder] = 2 WHERE [ID] = 1
     UPDATE [dbo].[ManureTypes] SET [SortOrder] = 3 WHERE [ID] = 2
@@ -2913,12 +2937,17 @@ GO
 IF NOT EXISTS (SELECT 1 FROM [dbo].[ApplicationMethods])
 BEGIN
     SET IDENTITY_INSERT [dbo].[ApplicationMethods] ON
-    INSERT [dbo].[ApplicationMethods] ([ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]) VALUES (2, N'Broadcast spreader', N'B', N'B',5)
-    INSERT [dbo].[ApplicationMethods] ([ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]) VALUES (3, N'Deep injection (25 to 30cm)', N'L', N'L', 7)
-    INSERT [dbo].[ApplicationMethods] ([ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]) VALUES (4, N'Shallow injection (5 to 7cm)', N'L', N'L', 6)
-    INSERT [dbo].[ApplicationMethods] ([ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]) VALUES (5, N'Band spreader - trailing hose', NULL, N'L', 2)
-    INSERT [dbo].[ApplicationMethods] ([ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]) VALUES (6, N'Band spreader - trailing shoe (short grass i.e. less than or equal to 7cm)', N'L', NULL,3)
-    INSERT [dbo].[ApplicationMethods] ([ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]) VALUES (7, N'Band spreader - trailing shoe (long grass i.e. greater than 7cm)', N'L', NULL,4)
+    INSERT [dbo].[ApplicationMethods] 
+    (
+    [ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]
+    ) 
+    VALUES 
+    (2, N'Broadcast spreader', N'B', N'B',5),
+    (3, N'Deep injection (25 to 30cm)', N'L', N'L', 7),
+    (4, N'Shallow injection (5 to 7cm)', N'L', N'L', 6),
+    (5, N'Band spreader - trailing hose', NULL, N'L', 2),
+    (6, N'Band spreader - trailing shoe (short grass i.e. less than or equal to 7cm)', N'L', NULL,3),
+    (7, N'Band spreader - trailing shoe (long grass i.e. greater than 7cm)', N'L', NULL,4)
     SET IDENTITY_INSERT [dbo].[ApplicationMethods] OFF
 END
 
@@ -2927,13 +2956,18 @@ GO
 IF NOT EXISTS (SELECT 1 FROM [dbo].[IncorporationMethods])
 BEGIN
     SET IDENTITY_INSERT [dbo].[IncorporationMethods] ON
-    INSERT [dbo].[IncorporationMethods] ([ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]) VALUES (1, N'Shallow injection', NULL, NULL,1)
-    INSERT [dbo].[IncorporationMethods] ([ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]) VALUES (2, N'Deep injection', NULL, NULL,2)
-    INSERT [dbo].[IncorporationMethods] ([ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]) VALUES (3, N'Tine cultivator', N'B', N'B',5)
-    INSERT [dbo].[IncorporationMethods] ([ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]) VALUES (4, N'Discs', N'B', N'B',4)
-    INSERT [dbo].[IncorporationMethods] ([ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]) VALUES (5, N'Rotary cultivator', N'B', N'B',6)
-    INSERT [dbo].[IncorporationMethods] ([ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]) VALUES (6, N'Plough', N'B', N'B',3)
-    INSERT [dbo].[IncorporationMethods] ([ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]) VALUES (7, N'Not incorporated', N'B', N'B',7)
+    INSERT [dbo].[IncorporationMethods] 
+    (
+    [ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]
+    ) 
+    VALUES 
+    (1, N'Shallow injection', NULL, NULL,1),
+    (2, N'Deep injection', NULL, NULL,2),
+    (3, N'Tine cultivator', N'B', N'B',5),
+    (4, N'Discs', N'B', N'B',4),
+    (5, N'Rotary cultivator', N'B', N'B',6),
+    (6, N'Plough', N'B', N'B',3),
+    (7, N'Not incorporated', N'B', N'B',7)
     SET IDENTITY_INSERT [dbo].[IncorporationMethods] OFF
 END
 
@@ -2943,23 +2977,28 @@ GO
 IF NOT EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays])
 BEGIN
     SET IDENTITY_INSERT [dbo].[IncorporationDelays] ON
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (1, N'N/A', 0, 0, NULL)
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (2, N'Less than 2 hours', 1, 2, N'A')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (3, N'2 to 4 hours', 3, 4, N'A')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (4, N'4 to 6 hours', 5, 6, N'A')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (5, N'6 to 12 hours', 9, 12, N'A')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (6, N'12 to 24 hours', 18, 24, N'A')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (7, N'1 to 2 days', 36, 48, N'A')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (8, N'3 to 5 days', 96, 120, N'S')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (9, N'3 to 5 days', 96, 120, N'P')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (10, N'3 to 7 days', 120, 168, N'L')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (11, N'6 to 12 days', 216, 288, N'S')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (12, N'6 to 12 days', 216, 288, N'P')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (13, N'More than 7 days', 1000, 10000, N'L')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (14, N'More than 12 days', 1000, 10000, N'S')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (15, N'12 to 32 days', 528, 768, N'P')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (16, N'More than 32 days', 1000, 10000, N'P')
-    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) VALUES (17, N'Not incorporated', 1000, 9999, NULL)
+    INSERT [dbo].[IncorporationDelays] 
+    (
+    [ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]
+    ) 
+    VALUES 
+    (1, N'N/A', 0, 0, NULL),
+    (2, N'Less than 2 hours', 1, 2, N'A'),
+    (3, N'2 to 4 hours', 3, 4, N'A'),
+    (4, N'4 to 6 hours', 5, 6, N'A'),
+    (5, N'6 to 12 hours', 9, 12, N'A'),
+    (6, N'12 to 24 hours', 18, 24, N'A'),
+    (7, N'1 to 2 days', 36, 48, N'A'),
+    (8, N'3 to 5 days', 96, 120, N'S'),
+    (9, N'3 to 5 days', 96, 120, N'P'),
+    (10, N'3 to 7 days', 120, 168, N'L'),
+    (11, N'6 to 12 days', 216, 288, N'S'),
+    (12, N'6 to 12 days', 216, 288, N'P'),
+    (13, N'More than 7 days', 1000, 10000, N'L'),
+    (14, N'More than 12 days', 1000, 10000, N'S'),
+    (15, N'12 to 32 days', 528, 768, N'P'),
+    (16, N'More than 32 days', 1000, 10000, N'P'),
+    (17, N'Not incorporated', 1000, 9999, NULL)
     SET IDENTITY_INSERT [dbo].[IncorporationDelays] OFF
 END
 
@@ -2967,103 +3006,118 @@ GO
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[IncorpMethodsIncorpDelays])
 BEGIN
-    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (1, 1)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (2, 1)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 2)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 3)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 4)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 5)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 6)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 7)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 8)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 9)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 10)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 11)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 12)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 13)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 14)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 15)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (3, 16)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 2)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 3)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 4)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 5)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 6)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 7)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 8)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 9)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 10)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 11)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 12)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 13)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 14)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 15)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (4, 16)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 2)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 3)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 4)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 5)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 6)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 7)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 8)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 9)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 10)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 11)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 12)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 13)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 14)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 15)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (5, 16)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 2)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 3)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 4)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 5)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 6)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 7)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 8)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 9)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 10)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 11)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 12)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 13)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 14)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 15)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (6, 16)
-INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) VALUES (7, 17)
+    INSERT [dbo].[IncorpMethodsIncorpDelays] 
+    (
+    [IncorporationMethodID], [IncorporationDelayID]
+    ) 
+    VALUES 
+    (1, 1),
+    (2, 1),
+    (3, 2),
+    (3, 3),
+    (3, 4),
+    (3, 5),
+    (3, 6),
+    (3, 7),
+    (3, 8),
+    (3, 9),
+    (3, 10),
+    (3, 11),
+    (3, 12),
+    (3, 13),
+    (3, 14),
+    (3, 15),
+    (3, 16),
+    (4, 2),
+    (4, 3),
+    (4, 4),
+    (4, 5),
+    (4, 6),
+    (4, 7),
+    (4, 8),
+    (4, 9),
+    (4, 10),
+    (4, 11),
+    (4, 12),
+    (4, 13),
+    (4, 14),
+    (4, 15),
+    (4, 16),
+    (5, 2),
+    (5, 3),
+    (5, 4),
+    (5, 5),
+    (5, 6),
+    (5, 7),
+    (5, 8),
+    (5, 9),
+    (5, 10),
+    (5, 11),
+    (5, 12),
+    (5, 13),
+    (5, 14),
+    (5, 15),
+    (5, 16),
+    (6, 2),
+    (6, 3),
+    (6, 4),
+    (6, 5),
+    (6, 6),
+    (6, 7),
+    (6, 8),
+    (6, 9),
+    (6, 10),
+    (6, 11),
+    (6, 12),
+    (6, 13),
+    (6, 14),
+    (6, 15),
+    (6, 16),
+    (7, 17)
 END
 
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[ApplicationMethodsIncorpMethods])
 BEGIN
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (2, 3)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (2, 4)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (2, 5)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (2, 6)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (2, 7)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (3, 2)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (4, 1)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (5, 3)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (5, 4)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (5, 5)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (5, 6)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (5, 7)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (6, 3)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (6, 4)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (6, 5)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (6, 6)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (6, 7)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (7, 3)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (7, 4)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (7, 5)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (7, 6)
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) VALUES (7, 7)
+    INSERT [dbo].[ApplicationMethodsIncorpMethods] 
+    (
+    [ApplicationMethodID], [IncorporationMethodID]
+    ) 
+    VALUES 
+    (2, 3),
+    (2, 4),
+    (2, 5),
+    (2, 6),
+    (2, 7),
+    (3, 2),
+    (4, 1),
+    (5, 3),
+    (5, 4),
+    (5, 5),
+    (5, 6),
+    (5, 7),
+    (6, 3),
+    (6, 4),
+    (6, 5),
+    (6, 6),
+    (6, 7),
+    (7, 3),
+    (7, 4),
+    (7, 5),
+    (7, 6),
+    (7, 7)
 END
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[MoistureTypes])
 BEGIN
     SET IDENTITY_INSERT [dbo].[MoistureTypes] ON 
-    INSERT [dbo].[MoistureTypes] ([ID], [Name]) VALUES (1, N'Dry')
-    INSERT [dbo].[MoistureTypes] ([ID], [Name]) VALUES (2, N'Moist')
+    INSERT [dbo].[MoistureTypes] 
+    (
+    [ID], [Name]
+    ) 
+    VALUES 
+    (1, N'Dry'),
+    (2, N'Moist')
     SET IDENTITY_INSERT [dbo].[MoistureTypes] OFF
 END
 
@@ -3072,18 +3126,28 @@ GO
 IF NOT EXISTS (SELECT 1 FROM [dbo].[RainTypes])
 BEGIN
     SET IDENTITY_INSERT [dbo].[RainTypes] ON 
-    INSERT [dbo].[RainTypes] ([ID], [Name], [RainInMM]) VALUES (1, N'No rainfall within 6 hours of application', 0)
-    INSERT [dbo].[RainTypes] ([ID], [Name], [RainInMM]) VALUES (2, N'Light rain (less than 5mm) within 6 hours of applicatio', 4)
-    INSERT [dbo].[RainTypes] ([ID], [Name], [RainInMM]) VALUES (3, N'Heavy rain (greater than or equal to 5mm) within 6 hours of application', 6)
+    INSERT [dbo].[RainTypes] 
+    (
+    [ID], [Name], [RainInMM]
+    ) 
+    VALUES 
+    (1, N'No rainfall within 6 hours of application', 0),
+    (2, N'Light rain (less than 5mm) within 6 hours of applicatio', 4),
+    (3, N'Heavy rain (greater than or equal to 5mm) within 6 hours of application', 6)
     SET IDENTITY_INSERT [dbo].[RainTypes] OFF
 END
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[Windspeeds])
 BEGIN
     SET IDENTITY_INSERT [dbo].[Windspeeds] ON 
-    INSERT [dbo].[Windspeeds] ([ID], [Name], [FromScale], [ToScale]) VALUES (1, N'Calm/gentle (0 to 3 Beaufort scale)', 0, 3)
-    INSERT [dbo].[Windspeeds] ([ID], [Name], [FromScale], [ToScale]) VALUES (2, N'Moderate (4 to 5 Beaufort scale)', 4, 5)
-    INSERT [dbo].[Windspeeds] ([ID], [Name], [FromScale], [ToScale]) VALUES (3, N'Strong breeze (6 to 7 Beaufort scale)', 6, 7)
+    INSERT [dbo].[Windspeeds] 
+    (
+    [ID], [Name], [FromScale], [ToScale]
+    ) 
+    VALUES 
+    (1, N'Calm/gentle (0 to 3 Beaufort scale)', 0, 3),
+    (2, N'Moderate (4 to 5 Beaufort scale)', 4, 5),
+    (3, N'Strong breeze (6 to 7 Beaufort scale)', 6, 7)
     SET IDENTITY_INSERT [dbo].[Windspeeds] OFF
 END
 GO
@@ -3158,9 +3222,7 @@ BEGIN
     UPDATE [dbo].[SubSoils] SET [Name] = @OrganicMatter WHERE ID=13
 END
 
-
 GO
-
 IF NOT EXISTS (SELECT 1 FROM [dbo].[ClimateTypes])
 BEGIN
     SET IDENTITY_INSERT [dbo].[ClimateTypes] ON 
@@ -3218,6 +3280,5 @@ IF  EXISTS (SELECT 1 FROM [dbo].[NutrientProducts] WHERE ID=2 AND [NAME]=N'Calci
 BEGIN
     UPDATE [dbo].[NutrientProducts] SET [Name] = N'Urea' , [NutrientPercentage] = 46 WHERE ID=2  
 END
-
 
 GO
