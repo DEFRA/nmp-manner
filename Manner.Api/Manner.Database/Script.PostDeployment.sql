@@ -2921,7 +2921,7 @@ END
     UPDATE [dbo].[ManureTypes] SET [SortOrder] = 28, [K2OAvailable] = 90 WHERE [ID] = 52 --updated
     UPDATE [dbo].[ManureTypes] SET [SortOrder] = 29, [K2OAvailable] = 90 WHERE [ID] = 53 --updated
     UPDATE [dbo].[ManureTypes] SET 
-    [DryMatter] = 60, 
+    [DryMatter] = 35, 
     [TotalN] = CAST(16.30 AS Decimal(18, 2)), 
     [NH4N] = CAST(03.20 AS Decimal(18, 2)), 
     [Uric] = CAST(03.90 AS Decimal(18, 2)), 
