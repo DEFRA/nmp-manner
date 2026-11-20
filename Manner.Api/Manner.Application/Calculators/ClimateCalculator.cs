@@ -255,7 +255,6 @@ public class ClimateCalculator
 
         for (k = 0; k <= 11; k++)
         {
-
             switch (k)
             {
                 case 0:

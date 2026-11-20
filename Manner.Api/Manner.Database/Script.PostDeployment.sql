@@ -2758,31 +2758,21 @@ BEGIN
     (2723, @Territory, N'ZE3', 439686, 1111280, CAST(31.300000000 AS Decimal(18, 9)), CAST(3.238714134 AS Decimal(18, 9)), CAST(2.924220272 AS Decimal(18, 9)), CAST(3.244798864 AS Decimal(18, 9)), CAST(4.599757625 AS Decimal(18, 9)), CAST(6.384298663 AS Decimal(18, 9)), CAST(8.566788012 AS Decimal(18, 9)), CAST(10.633497300 AS Decimal(18, 9)), CAST(10.968492600 AS Decimal(18, 9)), CAST(9.705547210 AS Decimal(18, 9)), CAST(7.651111864 AS Decimal(18, 9)), CAST(5.311412304 AS Decimal(18, 9)), CAST(3.597427199 AS Decimal(18, 9)), CAST(6.844662113 AS Decimal(18, 9)), CAST(6.593590321 AS Decimal(18, 9)), CAST(7.287794421 AS Decimal(18, 9)), CAST(8.698291825 AS Decimal(18, 9)), CAST(10.807397530 AS Decimal(18, 9)), CAST(12.768975320 AS Decimal(18, 9)), CAST(14.600617930 AS Decimal(18, 9)), CAST(15.000383130 AS Decimal(18, 9)), CAST(13.341961430 AS Decimal(18, 9)), CAST(11.050198120 AS Decimal(18, 9)), CAST(8.895491508 AS Decimal(18, 9)), CAST(7.335716924 AS Decimal(18, 9)), CAST(109.223292900 AS Decimal(18, 9)), CAST(90.793104730 AS Decimal(18, 9)), CAST(90.297259920 AS Decimal(18, 9)), CAST(58.806384730 AS Decimal(18, 9)), CAST(42.560132960 AS Decimal(18, 9)), CAST(45.353016990 AS Decimal(18, 9)), CAST(51.583043380 AS Decimal(18, 9)), CAST(74.134324040 AS Decimal(18, 9)), CAST(80.577358250 AS Decimal(18, 9)), CAST(113.124260800 AS Decimal(18, 9)), CAST(120.918886200 AS Decimal(18, 9)), CAST(116.085307300 AS Decimal(18, 9)), CAST(31.233662470 AS Decimal(18, 9)), CAST(60.961831560 AS Decimal(18, 9)), CAST(102.516512800 AS Decimal(18, 9)), CAST(147.650926200 AS Decimal(18, 9)), CAST(207.352804400 AS Decimal(18, 9)), CAST(162.237636000 AS Decimal(18, 9)), CAST(138.723624700 AS Decimal(18, 9)), CAST(148.415176400 AS Decimal(18, 9)), CAST(112.672055500 AS Decimal(18, 9)), CAST(77.907703790 AS Decimal(18, 9)), CAST(40.364619660 AS Decimal(18, 9)), CAST(22.510114690 AS Decimal(18, 9)), CAST(19.657285010 AS Decimal(18, 9)), CAST(16.546393560 AS Decimal(18, 9)), CAST(16.512190540 AS Decimal(18, 9)), CAST(12.027432930 AS Decimal(18, 9)), CAST(10.399871360 AS Decimal(18, 9)), CAST(9.513478206 AS Decimal(18, 9)), CAST(10.462282370 AS Decimal(18, 9)), CAST(11.765412610 AS Decimal(18, 9)), CAST(15.538468680 AS Decimal(18, 9)), CAST(18.952076760 AS Decimal(18, 9)), CAST(18.800875200 AS Decimal(18, 9)), CAST(20.133728150 AS Decimal(18, 9)), CAST(9.487073549 AS Decimal(18, 9)), CAST(9.149679814 AS Decimal(18, 9)), CAST(8.638700739 AS Decimal(18, 9)), CAST(7.330344776 AS Decimal(18, 9)), CAST(6.509689503 AS Decimal(18, 9)), CAST(6.007722478 AS Decimal(18, 9)), CAST(5.579100773 AS Decimal(18, 9)), CAST(5.874341810 AS Decimal(18, 9)), CAST(7.110480336 AS Decimal(18, 9)), CAST(8.350399577 AS Decimal(18, 9)), CAST(9.000462240 AS Decimal(18, 9)), CAST(8.816245035 AS Decimal(18, 9)))
     SET IDENTITY_INSERT [dbo].[Climates] OFF
 END
-GO
 
+GO
 IF NOT EXISTS (SELECT 1 FROM [dbo].[Countries])
 BEGIN
     SET IDENTITY_INSERT [dbo].[Countries] ON
-    INSERT INTO [Countries] 
-    (
-    ID,[Name]
-    ) 
-    VALUES
-    (1,'England/Wales'),
-    (2,'Scotland'),
-    (3,'All')
+    INSERT INTO [Countries] (ID,[Name]) 
+    VALUES (1,'England/Wales'), (2,'Scotland'), (3,'All')
     SET IDENTITY_INSERT [dbo].[Countries] OFF
 END
 
 GO
-
 IF NOT EXISTS (SELECT 1 FROM [dbo].[CropTypes])
 BEGIN
     DECLARE @Arable NVARCHAR(10)=N'Arable';
-    INSERT [dbo].[CropTypes] 
-    (
-    [ID], [Name], [Use], [CropUptakeFactor]
-    ) 
+    INSERT [dbo].[CropTypes] ([ID], [Name], [Use], [CropUptakeFactor]) 
     VALUES  (1, N'Grass', N'Grass', 20),
             (2, N'Winter cereal, early sown', @Arable, 10),
             (3, N'Winter cereal, late sown', @Arable, 5),
@@ -2793,31 +2783,23 @@ BEGIN
             (8, N'Sugar beet', @Arable, 0),
             (9, N'Other', @Arable, 0)
 END
-GO
 
+GO
 IF NOT EXISTS (SELECT 1 FROM [dbo].[ManureGroups])
 BEGIN
     SET IDENTITY_INSERT [dbo].[ManureGroups] ON
-    INSERT [dbo].[ManureGroups] 
-    (
-    [ID], [Name],[SortOrder]
-    ) 
-    VALUES 
-    (1, N'Livestock manure',1),
-    (2, N'Biosolids',2),
-    (3, N'Another type of organic material',4),
-    (4, N'Digestate',3)
+    INSERT [dbo].[ManureGroups] ([ID], [Name],[SortOrder]) 
+    VALUES  (1, N'Livestock manure',1),
+            (2, N'Biosolids',2),
+            (3, N'Another type of organic material',4),
+            (4, N'Digestate',3)
     SET IDENTITY_INSERT [dbo].[ManureGroups] OFF
 END
 
 GO
-
 IF NOT EXISTS (SELECT 1 FROM [dbo].[ManureTypeCategories])
 BEGIN
-    INSERT [dbo].[ManureTypeCategories] 
-    (
-    [ID], [Name]
-    ) 
+    INSERT [dbo].[ManureTypeCategories] ([ID], [Name]) 
     VALUES (1, N'FYM'),
            (2, N'Poultry'),
            (3, N'Cattle Slurry'),
@@ -2828,16 +2810,11 @@ BEGIN
 END
 
 GO
-
 IF NOT EXISTS (SELECT 1 FROM [dbo].[ManureTypes])
 BEGIN
     SET IDENTITY_INSERT [dbo].[ManureTypes] ON
-    INSERT INTO dbo.ManureTypes
-        (
-            [ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]
-        )
-        VALUES
-            (0, N'Cattle farmyard manure - fresh', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(1.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(3.20 AS Decimal(18, 2)), CAST(9.40 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0, 1),
+    INSERT INTO dbo.ManureTypes ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder])
+    VALUES  (0, N'Cattle farmyard manure - fresh', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(1.20 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(3.20 AS Decimal(18, 2)), CAST(9.40 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0, 1),
             (1, N'Cattle farmyard manure - old', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(0.50 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(3.20 AS Decimal(18, 2)), CAST(9.40 AS Decimal(18, 2)), CAST(2.40 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),10,0, 2),
             (2, N'Pig farmyard manure - fresh', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(7.00 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(8.00 AS Decimal(18, 2)), CAST(3.40 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),10,0, 3),
             (3, N'Pig farmyard manure - old', 1, 1, 3, 0, 0, CAST(25.00 AS Decimal(18, 2)), CAST(7.00 AS Decimal(18, 2)), CAST(0.90 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(0.10 AS Decimal(18, 2)), CAST(6.00 AS Decimal(18, 2)), CAST(8.00 AS Decimal(18, 2)), CAST(3.40 AS Decimal(18, 2)), CAST(1.80 AS Decimal(18, 2)), 60, 90, CAST(68.30 AS Decimal(18, 2)), 30, 20,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(25 AS Decimal(18, 2)),10,0, 4),
@@ -2892,12 +2869,8 @@ GO
 IF NOT EXISTS (SELECT 1 FROM [dbo].[ManureTypes] WHERE [ID] = 54)
 BEGIN
     SET IDENTITY_INSERT [dbo].[ManureTypes] ON
-    INSERT [dbo].[ManureTypes] 
-    (
-    [ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder]
-    ) 
-    VALUES 
-    (54, N'Layer manure', 1, 2, 2, 1, 0, CAST(35.00 AS Decimal(18, 2)), CAST(16.30 AS Decimal(18, 2)), CAST(3.20 AS Decimal(18, 2)), CAST(3.90 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(11.30 AS Decimal(18, 2)), CAST(13.00 AS Decimal(18, 2)), CAST(4.90 AS Decimal(18, 2)), CAST(3.90 AS Decimal(18, 2)), 60, 90, CAST(52.30 AS Decimal(18, 2)), 10, 8,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(60 AS Decimal(18, 2)),30,1, 10);
+    INSERT [dbo].[ManureTypes] ([ID], [Name], [ManureGroupID], [ManureTypeCategoryID], [CountryID], [HighReadilyAvailableNitrogen], [IsLiquid], [DryMatter], [TotalN], [NH4N], [Uric], [NO3N], [P2O5], [K2O], [SO3], [MgO], [P2O5Available], [K2OAvailable], [NMaxConstant], [ApplicationRateArable], [ApplicationRateGrass], [SO3AvaiableAutumnOther], [SO3AvaiableAutumnOsrGrass], [SO3AvailableSpring],[PercentOfTotalNForUseInNmaxCalculation],[IsSlurry],[SortOrder])
+    VALUES (54, N'Layer manure', 1, 2, 2, 1, 0, CAST(35.00 AS Decimal(18, 2)), CAST(16.30 AS Decimal(18, 2)), CAST(3.20 AS Decimal(18, 2)), CAST(3.90 AS Decimal(18, 2)), CAST(0.00 AS Decimal(18, 2)), CAST(11.30 AS Decimal(18, 2)), CAST(13.00 AS Decimal(18, 2)), CAST(4.90 AS Decimal(18, 2)), CAST(3.90 AS Decimal(18, 2)), 60, 90, CAST(52.30 AS Decimal(18, 2)), 10, 8,CAST(7.5 AS Decimal(18, 2)),CAST(15 AS Decimal(18, 2)),CAST(60 AS Decimal(18, 2)),30,1, 10);
     SET IDENTITY_INSERT [dbo].[ManureTypes] OFF    
 END
     UPDATE [dbo].[ManureTypes] SET [SortOrder] = 1 WHERE [ID] = 0
@@ -2992,203 +2965,94 @@ GO
 IF NOT EXISTS (SELECT 1 FROM [dbo].[IncorporationMethods])
 BEGIN
     SET IDENTITY_INSERT [dbo].[IncorporationMethods] ON
-    INSERT [dbo].[IncorporationMethods] 
-    (
-    [ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]
-    ) 
-    VALUES 
-    (1, N'Shallow injection', NULL, NULL,1),
-    (2, N'Deep injection', NULL, NULL,2),
-    (3, N'Tine cultivator', N'B', N'B',5),
-    (4, N'Discs', N'B', N'B',4),
-    (5, N'Rotary cultivator', N'B', N'B',6),
-    (6, N'Plough', N'B', N'B',3),
-    (7, N'Not incorporated', N'B', N'B',7)
+    INSERT [dbo].[IncorporationMethods] ([ID], [Name], [ApplicableForGrass], [ApplicableForArableAndHorticulture],[SortOrder]) 
+    VALUES  (1, N'Shallow injection', NULL, NULL,1),
+            (2, N'Deep injection', NULL, NULL,2),
+            (3, N'Tine cultivator', N'B', N'B',5),
+            (4, N'Discs', N'B', N'B',4),
+            (5, N'Rotary cultivator', N'B', N'B',6),
+            (6, N'Plough', N'B', N'B',3),
+            (7, N'Not incorporated', N'B', N'B',7)
     SET IDENTITY_INSERT [dbo].[IncorporationMethods] OFF
 END
 
 GO
-
-
 IF NOT EXISTS (SELECT 1 FROM [dbo].[IncorporationDelays])
 BEGIN
     SET IDENTITY_INSERT [dbo].[IncorporationDelays] ON
-    INSERT [dbo].[IncorporationDelays] 
-    (
-    [ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]
-    ) 
-    VALUES 
-    (1, N'N/A', 0, 0, NULL),
-    (2, N'Less than 2 hours', 1, 2, N'A'),
-    (3, N'2 to 4 hours', 3, 4, N'A'),
-    (4, N'4 to 6 hours', 5, 6, N'A'),
-    (5, N'6 to 12 hours', 9, 12, N'A'),
-    (6, N'12 to 24 hours', 18, 24, N'A'),
-    (7, N'1 to 2 days', 36, 48, N'A'),
-    (8, N'3 to 5 days', 96, 120, N'S'),
-    (9, N'3 to 5 days', 96, 120, N'P'),
-    (10, N'3 to 7 days', 120, 168, N'L'),
-    (11, N'6 to 12 days', 216, 288, N'S'),
-    (12, N'6 to 12 days', 216, 288, N'P'),
-    (13, N'More than 7 days', 1000, 10000, N'L'),
-    (14, N'More than 12 days', 1000, 10000, N'S'),
-    (15, N'12 to 32 days', 528, 768, N'P'),
-    (16, N'More than 32 days', 1000, 10000, N'P'),
-    (17, N'Not incorporated', 1000, 9999, NULL)
+    INSERT [dbo].[IncorporationDelays] ([ID], [Name], [Hours], [CumulativeHours], [ApplicableFor]) 
+    VALUES  (1, N'N/A', 0, 0, NULL),
+            (2, N'Less than 2 hours', 1, 2, N'A'),
+            (3, N'2 to 4 hours', 3, 4, N'A'),
+            (4, N'4 to 6 hours', 5, 6, N'A'),
+            (5, N'6 to 12 hours', 9, 12, N'A'),
+            (6, N'12 to 24 hours', 18, 24, N'A'),
+            (7, N'1 to 2 days', 36, 48, N'A'),
+            (8, N'3 to 5 days', 96, 120, N'S'),
+            (9, N'3 to 5 days', 96, 120, N'P'),
+            (10, N'3 to 7 days', 120, 168, N'L'),
+            (11, N'6 to 12 days', 216, 288, N'S'),
+            (12, N'6 to 12 days', 216, 288, N'P'),
+            (13, N'More than 7 days', 1000, 10000, N'L'),
+            (14, N'More than 12 days', 1000, 10000, N'S'),
+            (15, N'12 to 32 days', 528, 768, N'P'),
+            (16, N'More than 32 days', 1000, 10000, N'P'),
+            (17, N'Not incorporated', 1000, 9999, NULL)
     SET IDENTITY_INSERT [dbo].[IncorporationDelays] OFF
 END
 
 GO
-
 IF NOT EXISTS (SELECT 1 FROM [dbo].[IncorpMethodsIncorpDelays])
 BEGIN
-    INSERT [dbo].[IncorpMethodsIncorpDelays] 
-    (
-    [IncorporationMethodID], [IncorporationDelayID]
-    ) 
-    VALUES 
-    (1, 1),
-    (2, 1),
-    (3, 2),
-    (3, 3),
-    (3, 4),
-    (3, 5),
-    (3, 6),
-    (3, 7),
-    (3, 8),
-    (3, 9),
-    (3, 10),
-    (3, 11),
-    (3, 12),
-    (3, 13),
-    (3, 14),
-    (3, 15),
-    (3, 16),
-    (4, 2),
-    (4, 3),
-    (4, 4),
-    (4, 5),
-    (4, 6),
-    (4, 7),
-    (4, 8),
-    (4, 9),
-    (4, 10),
-    (4, 11),
-    (4, 12),
-    (4, 13),
-    (4, 14),
-    (4, 15),
-    (4, 16),
-    (5, 2),
-    (5, 3),
-    (5, 4),
-    (5, 5),
-    (5, 6),
-    (5, 7),
-    (5, 8),
-    (5, 9),
-    (5, 10),
-    (5, 11),
-    (5, 12),
-    (5, 13),
-    (5, 14),
-    (5, 15),
-    (5, 16),
-    (6, 2),
-    (6, 3),
-    (6, 4),
-    (6, 5),
-    (6, 6),
-    (6, 7),
-    (6, 8),
-    (6, 9),
-    (6, 10),
-    (6, 11),
-    (6, 12),
-    (6, 13),
-    (6, 14),
-    (6, 15),
-    (6, 16),
-    (7, 17)
+    INSERT [dbo].[IncorpMethodsIncorpDelays] ([IncorporationMethodID], [IncorporationDelayID]) 
+    VALUES  (1, 1),(2, 1),(3, 2),(3, 3),(3, 4),(3, 5),(3, 6),(3, 7),(3, 8),(3, 9),(3, 10),(3, 11),(3, 12),
+            (3, 13),(3, 14),(3, 15),(3, 16),(4, 2),(4, 3),(4, 4),(4, 5),(4, 6),(4, 7),(4, 8),(4, 9), (4, 10),
+            (4, 11), (4, 12), (4, 13), (4, 14), (4, 15), (4, 16), (5, 2), (5, 3), (5, 4), (5, 5), (5, 6),
+            (5, 7), (5, 8), (5, 9), (5, 10), (5, 11), (5, 12), (5, 13), (5, 14), (5, 15), (5, 16), (6, 2),
+            (6, 3), (6, 4), (6, 5), (6, 6), (6, 7), (6, 8), (6, 9), (6, 10), (6, 11), (6, 12), (6, 13), (6, 14),
+            (6, 15), (6, 16), (7, 17)
 END
 
-
+GO
 IF NOT EXISTS (SELECT 1 FROM [dbo].[ApplicationMethodsIncorpMethods])
 BEGIN
-    INSERT [dbo].[ApplicationMethodsIncorpMethods] 
-    (
-    [ApplicationMethodID], [IncorporationMethodID]
-    ) 
-    VALUES 
-    (2, 3),
-    (2, 4),
-    (2, 5),
-    (2, 6),
-    (2, 7),
-    (3, 2),
-    (4, 1),
-    (5, 3),
-    (5, 4),
-    (5, 5),
-    (5, 6),
-    (5, 7),
-    (6, 3),
-    (6, 4),
-    (6, 5),
-    (6, 6),
-    (6, 7),
-    (7, 3),
-    (7, 4),
-    (7, 5),
-    (7, 6),
-    (7, 7)
+    INSERT [dbo].[ApplicationMethodsIncorpMethods] ([ApplicationMethodID], [IncorporationMethodID]) 
+    VALUES (2, 3),(2, 4),(2, 5),(2, 6),(2, 7),(3, 2),(4, 1),(5, 3),(5, 4),(5, 5),(5, 6),(5, 7), (6, 3),
+           (6, 4),(6, 5),(6, 6),(6, 7),(7, 3),(7, 4),(7, 5),(7, 6),(7, 7)
 END
 
+GO
 IF NOT EXISTS (SELECT 1 FROM [dbo].[MoistureTypes])
 BEGIN
     SET IDENTITY_INSERT [dbo].[MoistureTypes] ON 
-    INSERT [dbo].[MoistureTypes] 
-    (
-    [ID], [Name]
-    ) 
-    VALUES 
-    (1, N'Dry'),
-    (2, N'Moist')
+    INSERT [dbo].[MoistureTypes] ([ID], [Name]) 
+    VALUES (1, N'Dry'),(2, N'Moist')
     SET IDENTITY_INSERT [dbo].[MoistureTypes] OFF
 END
 
 GO
-
 IF NOT EXISTS (SELECT 1 FROM [dbo].[RainTypes])
 BEGIN
     SET IDENTITY_INSERT [dbo].[RainTypes] ON 
-    INSERT [dbo].[RainTypes] 
-    (
-    [ID], [Name], [RainInMM]
-    ) 
-    VALUES 
-    (1, N'No rainfall within 6 hours of application', 0),
-    (2, N'Light rain (less than 5mm) within 6 hours of applicatio', 4),
-    (3, N'Heavy rain (greater than or equal to 5mm) within 6 hours of application', 6)
+    INSERT [dbo].[RainTypes] ([ID], [Name], [RainInMM]) 
+    VALUES  (1, N'No rainfall within 6 hours of application', 0),
+            (2, N'Light rain (less than 5mm) within 6 hours of applicatio', 4),
+            (3, N'Heavy rain (greater than or equal to 5mm) within 6 hours of application', 6)
     SET IDENTITY_INSERT [dbo].[RainTypes] OFF
 END
 
+GO
 IF NOT EXISTS (SELECT 1 FROM [dbo].[Windspeeds])
 BEGIN
     SET IDENTITY_INSERT [dbo].[Windspeeds] ON 
-    INSERT [dbo].[Windspeeds] 
-    (
-    [ID], [Name], [FromScale], [ToScale]
-    ) 
-    VALUES 
-    (1, N'Calm/gentle (0 to 3 Beaufort scale)', 0, 3),
-    (2, N'Moderate (4 to 5 Beaufort scale)', 4, 5),
-    (3, N'Strong breeze (6 to 7 Beaufort scale)', 6, 7)
+    INSERT [dbo].[Windspeeds] ([ID], [Name], [FromScale], [ToScale]) 
+    VALUES  (1, N'Calm/gentle (0 to 3 Beaufort scale)', 0, 3),
+            (2, N'Moderate (4 to 5 Beaufort scale)', 4, 5),
+            (3, N'Strong breeze (6 to 7 Beaufort scale)', 6, 7)
     SET IDENTITY_INSERT [dbo].[Windspeeds] OFF
 END
+
 GO
-
-
 DECLARE @OrganicMatter NVARCHAR(150)=N'Organic (10-20% organic matter)';
 
 -- Populating TopSoils table with relevant data
