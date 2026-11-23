@@ -1,6 +1,9 @@
 ﻿using Manner.Application.DTOs;
 using Manner.Application.Enums;
 using Manner.Application.Interfaces;
+using static Manner.Application.Enums.Enumerations;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace Manner.Application.Calculators;
@@ -35,7 +38,7 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
     public void Calculate()
     {
         CalculateClimate();
-        var mineralN1 = default(double);
+        double mineralN1;
         double mineralN2;
         double mineralN3;
         double mineralN4; // manure N remaining after losses through NH3 volatilisation + any nitrate N in the original manure application
@@ -44,49 +47,35 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         string cropUse = _cropType?.Use ?? string.Empty;
         if (_manureType != null)
         {
-            this.CalculateNutrientsOutputsValues();
+                this.CalculateNutrientsOutputsValues();
 
-            // Available N
-            // --------------------------------------------------------------
-            double calculatedTotalN = (double)(_manureApplication.ApplicationRate.Value * _manureType.TotalN);
-            // Readily Available N applied (NH4-N and uric acid N)
-            // --------------------------------------------------------------
-            // 18 Jan 2013 - Lizzie says "CalcPot = AppRate * (TotalAmmN + TotalUricN + TotalNitrateN)"
-            double calculatedPotentialN = Convert.ToDouble(_manureApplication.ApplicationRate.Value * (_manureType.NH4N + _manureType.Uric + _manureType.NO3N));
+                // Available N and emissions - extracted into small pure helpers to reduce duplication
+                var available = CalculateAvailableN(_manureApplication.ApplicationRate.Value, _manureType);
+                var emissions = CalculateEmissions(available, cropUse, incorporationCumulativeHours);
 
-            double potentialNAvailable = (double)(_manureApplication.ApplicationRate.Value * (_manureType.NH4N + _manureType.Uric));
+                double calculatedTotalN = available.CalculatedTotalN;
+                double calculatedPotentialN = available.CalculatedPotentialN;
 
-            // Volatilised N
-            // --------------------------------------------------------------
-            double calculatedVolatilisedN = this.CalculateAmmoniaVolatilisation(potentialNAvailable, cropUse, incorporationCumulativeHours);
+                double calculatedVolatilisedN = emissions.VolatilisedN;
+                double calculatedN2O = emissions.CalculatedN2O;
+                double calculatedN2 = emissions.CalculatedN2;
 
-            // N2O Emission
-            // --------------------------------------------------------------
-            // N2O Emission is 1.74% of applied readily available N remaining following volatilisation
-            double n2oEmission = calculatedTotalN - calculatedVolatilisedN;
-            double calculatedN2O = this.CalculateN2OEmission(n2oEmission);
+                // Autumn Crop Uptake - crop N value in kg/ha which is subtracted before mineralisation and leaching
+                // Total nitrate N added here following conversation with F.Nicholson on 30/08/2006
+                mineralN2 = calculatedPotentialN - calculatedVolatilisedN - calculatedN2 - calculatedN2O;
+                if (mineralN2 < 0d)
+                    mineralN2 = 0d;
 
-            // N2 Emission
-            // --------------------------------------------------------------
-            double calculatedN2 = this.CalculateN2Emission(calculatedN2O);
+                double calculatedcropUptakeFactor = this.CalculateCropUptakeFactor(mineralN2, _manureApplication.ApplicationDate.Month);
 
-            // Autumn Crop Uptake - crop N value in kg/ha which is subtracted before mineralisation and leaching
-            // --------------------------------------------------------------
-            // Total nitrate N added here following conversation with F.Nicholson on 30/08/2006
-            mineralN2 = calculatedPotentialN - calculatedVolatilisedN - calculatedN2 - calculatedN2O;
-            if (mineralN2 < 0d)
-                mineralN2 = 0d;
-
-            double calculatedcropUptakeFactor = this.CalculateCropUptakeFactor(mineralN2, _manureApplication.ApplicationDate.Month);
-
-            if (mineralN2 < calculatedcropUptakeFactor)
-            {
-                mineralN3 = 0d;
-            }
-            else
-            {
-                mineralN3 = mineralN2 - calculatedcropUptakeFactor;
-            }
+                if (mineralN2 < calculatedcropUptakeFactor)
+                {
+                    mineralN3 = 0d;
+                }
+                else
+                {
+                    mineralN3 = mineralN2 - calculatedcropUptakeFactor;
+                }
 
             // Mineralised N
             // --------------------------------------------------------------
@@ -100,16 +89,13 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
             mineralN1 = mineralisedResult.MineralN1;
 
             mineralN4 = mineralN3 + mineralN1;
+
             // Leached N
             // -------------------------------------------------------------
             // Calculate soil volumetric water content
             double vmWaterTopSoil = _topSoil.VolumetricMeasure;
             double vmWaterTotal = vmWaterTopSoil + _subSoil.VolumetricMeasure;
-
             double calculatedLeachedN = CalculateLeachedN(mineralN4, vmWaterTotal, vmWaterTopSoil);
-#pragma warning disable S1481
-            double nMineralised4 = mineralN4 - calculatedLeachedN;
-#pragma warning restore S1481
 
             // Modification required to multiply mineralisation by 2 for poultry only.
             calculatedMineralisedN *= ApplyMineralisationFactor();
@@ -194,8 +180,8 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
     private void CalculateRainfall(DateOnly applicationDate, DateOnly endSoilDrainageDate)
     {
         // DO NOT ADD ONE MONTH TO THE DATE OF APPLICATION TO MIMIC EXISTING CODE AND MANNER PAPER
-        DateTime appDate = new DateTime(applicationDate.Year, applicationDate.Month, applicationDate.Day, 0, 0, 0, DateTimeKind.Local);
-        DateTime endDate = new DateTime(endSoilDrainageDate.Year, endSoilDrainageDate.Month, endSoilDrainageDate.Day, 0, 0, 0, DateTimeKind.Local);
+        DateTime appDate = new (applicationDate.Year, applicationDate.Month, applicationDate.Day, 0, 0, 0, DateTimeKind.Local);
+        DateTime endDate = new (endSoilDrainageDate.Year, endSoilDrainageDate.Month, endSoilDrainageDate.Day, 0, 0, 0, DateTimeKind.Local);
 
         // #### NOTE -    Any manure application AFTER 31/07/98 is associated with the next years End of Soil Drainage
         if ((endDate - appDate).Days <= 0)
@@ -485,6 +471,35 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         return iHer;
     }
 
+    private sealed record AvailableNResult(
+        double CalculatedTotalN,
+        double CalculatedPotentialN,
+        double PotentialNAvailable);
+
+    private sealed record EmissionResult(
+        double VolatilisedN,
+        double CalculatedN2O,
+        double CalculatedN2);
+
+    private static AvailableNResult CalculateAvailableN(decimal applicationRate, ManureTypeDto manureType)
+    {
+        // Readily available and total N calculations
+        double calculatedTotalN = Convert.ToDouble(applicationRate * manureType.TotalN);
+        double calculatedPotentialN = Convert.ToDouble(applicationRate * (manureType.NH4N + manureType.Uric + manureType.NO3N));
+        double potentialNAvailable = Convert.ToDouble(applicationRate * (manureType.NH4N + manureType.Uric));
+        return new AvailableNResult(calculatedTotalN, calculatedPotentialN, potentialNAvailable);
+    }
+
+    private EmissionResult CalculateEmissions(AvailableNResult available, string cropUse, int incorporationCumulativeHours)
+    {
+        double volatilised = CalculateAmmoniaVolatilisation(available.PotentialNAvailable, cropUse, incorporationCumulativeHours);
+        // N2O Emission base is remaining readily available N following volatilisation
+        double n2oEmission = available.CalculatedTotalN - volatilised;
+        double calculatedN2O = CalculateN2OEmission(n2oEmission);
+        double calculatedN2 = CalculateN2Emission(calculatedN2O);
+        return new EmissionResult(volatilised, calculatedN2O, calculatedN2);
+    }
+
     private sealed record FinalResultsInput(
         double CalculatedTotalN,
         double CalculatedPotentialN,
@@ -513,7 +528,7 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         _outputs.P2O5CropAvailable = Convert.ToDouble(_manureType.P2O5 * _manureApplication.ApplicationRate.Value * percentageP2O5Available);
         _outputs.K2OTotal = Convert.ToDouble(_manureType.K2O * _manureApplication.ApplicationRate.Value);
         var percentageK2OCropAvailable = _manureType.K2OAvailable / 100m;
-        _outputs.K2OCropAvailable = Convert.ToDouble(_manureType.K2O * _manureApplication.ApplicationRate.Value * percentageK2OCropAvailable);
+        _outputs.K2OCropAvailable = Convert.ToDouble(_manureType.K2O * _manureApplication.ApplicationRate.Value * percentageK2OCropAvailable);        
         _outputs.MgOTotal = Convert.ToDouble(_manureType.MgO * _manureApplication.ApplicationRate.Value);
         _outputs.SO3Total = Convert.ToDouble(_manureType.SO3 * _manureApplication.ApplicationRate.Value);
         _outputs.SO3CropAvailable = CalculateSO3CropAvailable();
@@ -601,19 +616,33 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
 
     private double CalculateAmmoniaVolatilisation(double potentialNAvailable, string cropuse, int incorporationCumulativeHours)
     {
+        //Potentially Volatilisable N - step 0
         double pvn0 = potentialNAvailable * ((double)_manureType.NMaxConstant / 100);
+        //Potentially volatilisable N - step 1
+        // soil moisture status(cattle slurry only) - step 2
         // Soil moisture adjustment (cattle slurry and liquid digested sludge only)
         double pvn1 = ApplySoilMoistureAdjustment(pvn0);
-
+        // land use adjustment (cattle slurry only) - step 3
         double pvn2 = ApplyLandUseAdjustment(pvn1, cropuse);
+        // dry matter adjustment (slurry only) - step 4
         double pvn3 = ApplyDryMatterAdjustment(pvn2);
+        //application technique adjustment(slurry only) - step 5
         double pvn4 = ApplyApplicationTechniqueAdjustment(pvn3);
+        
+        //wind-speed adjustment (slurry only) - step 6
         double pvn5 = ApplyWindSpeedAdjustment(pvn4);
-
+        
+        //temporary rainfall adjustment(slurry only) - step 7
+        //final rainfall adjustment (slurry only) - step 7
         (double pvn7, double temp1) = ApplyRainfallAdjustment(pvn5, incorporationCumulativeHours);
 
+        //incorporation timing(all manures) -step 8
+        //(PVN7 - amount of ammonia lost up to the point of incorporation)
+        // PVN8 figure adjusted for incorporation technique
+        // data consistent with the current version of NARSES
         (double pvn8, double temp2) = ApplyIncorporationTimingAdjustment(pvn7, incorporationCumulativeHours);
 
+        //incorporation technique (all manures)        
         double pvn9 = ApplyIncorporationTechniqueAdjustment(pvn8);
 
         // Total ammonia lost (kg/ha)
@@ -622,7 +651,15 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
 
     private double ApplySoilMoistureAdjustment(double pvn0)
     {
-        
+        // changes 04/11/2026 ' Other - Liquid materials should not have Soil Moisture adjustment or Landuse
+        if (IsCattleSluryButRemoveAdjustment())
+        {
+            return pvn0;
+        }
+        // Soil moisture adjustment (cattle slurry and liquid digested sludge only)
+        //------------------------------------------------------------------------
+        // If the selected manure is cattle slurry or liquid digested sludge and the soil moisture status is dry then
+
         if (!IsCattleOrLiquidSludge())
         {
             return pvn0;
@@ -638,8 +675,17 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
 
     private double ApplyLandUseAdjustment(double pvn1, string cropuse)
     {
-        if (!IsCattleOrLiquidSludge())
+        //REMOVED SEASONAL ADJUSTMENT BECAUSE IT DIDN'T SEEM TO ALLOW FOR SOIL MOISTURE
+        //WHICH HAS A GREATER EFFECT THAN SEASON - UPDATED TECHNICAL GUIDE
+        if (IsCattleSluryButRemoveAdjustment())
         {
+            return pvn1;
+        }
+        //Land use adjustment(cattle slurry and liquid digested sludge only)
+        //------------------------------------------------------------------------
+        //If the selected manure is cattle slurry or liquid digested sludge and the land use is arable
+
+        if (!IsCattleOrLiquidSludge())        {
             return pvn1;
         }
 
@@ -656,11 +702,18 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         return pvn1;
     }
 
+    //Dry matter adjustment (slurry or liquid digested sludge only)
+    //-------------------------------------------------------------------------
     private double ApplyDryMatterAdjustment(double pvn2)
     {
+        if(IsPigSluryButRemoveAdjustment())
+        {
+            return pvn2;
+        }
+
         bool isMoist = _manureApplication.TopsoilMoistureID == (int)Enums.Enumerations.TopsoilMoistures.Moist;
 
-        if (!isMoist)
+        if (!isMoist )
         {
             return pvn2;
         }
@@ -670,8 +723,7 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
             return ((8.3d * (double)_manureType.DryMatter + 50.2d) / 100d) * pvn2;
         }
 
-        if (_manureType.ManureTypeCategoryID ==
-            (int)Enums.Enumerations.ManureCategory.PigSlurry)
+        if (_manureType.ManureTypeCategoryID == (int)Enums.Enumerations.ManureCategory.PigSlurry)
         {
             return ((12.3d * (double)_manureType.DryMatter + 50.8d) / 100d) * pvn2;
         }
@@ -853,6 +905,27 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         };
     }
 
+    private bool IsCattleSluryButRemoveAdjustment()
+    {
+        // If the selected manure is Other Liquid Materials 
+        return _manureType.ID == (int)Enums.Enumerations.ManureTypes.OtherLiquidMaterials;
+    }
+
+    private bool IsPigSluryButRemoveAdjustment()
+    {
+        return (_manureType.ID == (int)Enums.Enumerations.ManureTypes.PigSlurrySeparatedLiquid
+            || _manureType.ID == (int)Enums.Enumerations.ManureTypes.WasteFoodGeneral
+            || _manureType.ID == (int)Enums.Enumerations.ManureTypes.WasteFoodBrewing
+            || _manureType.ID == (int)Enums.Enumerations.ManureTypes.DistilleryPotale
+            || _manureType.ID == (int)Enums.Enumerations.ManureTypes.DistilleryEffluentSludge
+            || _manureType.ID == (int)Enums.Enumerations.ManureTypes.BreweryWashWater
+            || _manureType.ID == (int)Enums.Enumerations.ManureTypes.OtherLiquidMaterials
+            || _manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateSeparatedLiquorFoodBased
+            || _manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateWholeFarmSourced
+            || _manureType.ID == (int)Enums.Enumerations.ManureTypes.DigestateSeparatedLiquorFarmSourced);
+    }
+    
+
     private bool IsCattleOrLiquidSludge()
     {
         // If the selected manure is cattle slurry or liquid digested sludge 
@@ -940,17 +1013,15 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
     }
 
     private static bool IsN2OEmissionZero(ManureTypeDto manureType)
-    {
-        bool isZero = false;
-        isZero = manureType.ID == (int)Enumerations.ManureTypes.BiosolidsComposted ||
+    {        
+        return manureType.ID == (int)Enumerations.ManureTypes.BiosolidsComposted ||
                 manureType.ID == (int)Enumerations.ManureTypes.WaterTreatmentCake ||
                 manureType.ID == (int)Enumerations.ManureTypes.StrawMulch ||
                 manureType.ID == (int)Enumerations.ManureTypes.BiosolidsThermallyDried ||
                 manureType.ID == (int)Enumerations.ManureTypes.GreenCompost ||
                 manureType.ID == (int)Enumerations.ManureTypes.GreenFoodCompost ||
-                manureType.ID == (int)Enumerations.ManureTypes.MushroomCompost || IsPaperCrumble(manureType.ID);
-        
-                return isZero;
+                manureType.ID == (int)Enumerations.ManureTypes.MushroomCompost || IsPaperCrumble(manureType.ID);       
+                
     }
 
     private double CalculateN2OEmission(double mineralN1)
@@ -1038,10 +1109,8 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
         {
             return 0d;
         }
-
-        double dN2Emission;
-        dN2Emission = calculatedN2O * 2.9d;
-        return dN2Emission;
+                 
+        return calculatedN2O * 2.9d;
     }
 
     /// <summary>
@@ -1694,7 +1763,7 @@ public class MannerCalculator(MannerCalculatorInput input) : IMannerCalculator
     {
         // EG Modification required to multiply mineralisation by 2 for poultry only.
         // some biosolids as set as manure category as poultry but these don't need the factor applied.
-        if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.BroilerTurkeyLitter || _manureType.ID == (int)Enums.Enumerations.ManureTypes.PoultryManure)
+        if (_manureType.ID == (int)Enums.Enumerations.ManureTypes.BroilerTurkeyLitter || _manureType.ID == (int)Enums.Enumerations.ManureTypes.PoultryManure || _manureType.ID == (int)Enums.Enumerations.ManureTypes.LayerManure)
         {
             return 2d;
         }
