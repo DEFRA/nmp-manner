@@ -2943,7 +2943,7 @@ END
         
 GO
 
-select * from ManureTypes
+SELECT * FROM ManureTypes
 UPDATE [dbo].[ManureTypes]
 SET [Name] = CASE [ID]
     WHEN 0 THEN N'Cattle farmyard manure - Fresh'
